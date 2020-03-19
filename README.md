@@ -1,2 +1,2 @@
-# Learn
-Repository for the learning content
+# Training Days
+
