@@ -1,0 +1,121 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of storage account"
+            }
+        },
+        "functionAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of resizer function"
+            },
+            "minLength": 5
+        },
+        "applicationInsightsName": {
+            "type": "string"
+        },
+        "serviceBusNamespaceName": {
+            "type": "string"
+        },
+        "commonResGroup": {
+            "type": "string"
+        },
+        "cosmosDbAccount": {
+            "type": "string"
+        },
+        "taname": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "taFunctionName": "[parameters('functionAppName')]",
+        "taEndpoint": "[concat('https://', parameters('taname'), '.cognitiveservices.azure.com')]",
+        "consumpltionPlanName": "[concat(parameters('functionAppName'), '-plan')]",
+        "location": "[resourceGroup().location]",
+        "sbVersion": "2017-04-01",
+        "sbScmVisitReportTopicListenAuthRule": "scmvrtopiclisten",
+        "sbScmVisitReportTopic": "scmvrtopic",
+        "sbScmVisitReportTopicListenAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicListenAuthRule'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[variables('consumpltionPlanName')]",
+            "location": "[variables('location')]",
+            "kind": "linux",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic"
+            },
+            "properties": {
+                "name": "[variables('consumpltionPlanName')]",
+                "computeMode": "Dynamic",
+                "reserved": true
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp,linux",
+            "name": "[variables('taFunctionName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('consumpltionPlanName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('consumpltionPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId(parameters('commonResGroup'), 'Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                        },
+                        {
+                            "name": "ServiceBusConnectionString",
+                            "value": "[replace(listKeys(variables('sbScmVisitReportTopicListenAuthRuleId'), variables('sbVersion')).primaryConnectionString, concat('EntityPath=', variables('sbScmVisitReportTopic')), '')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "node"
+                        },
+                        {
+                            "name": "WEBSITE_NODE_DEFAULT_VERSION",
+                            "value": "~10"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~2"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId(parameters('commonResGroup'), 'Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "COSMOSDB",
+                            "value": "[reference(resourceId(parameters('commonResGroup'), 'Microsoft.DocumentDb/databaseAccounts', parameters('cosmosDbAccount')), '2015-04-08').documentEndpoint]"
+                        },
+                        {
+                            "name": "COSMOSKEY",
+                            "value": "[listKeys(resourceId(parameters('commonResGroup'), 'Microsoft.DocumentDb/databaseAccounts', parameters('cosmosDbAccount')), '2015-04-08').primaryMasterKey]"
+                        },
+                        {
+                            "name": "TA_SUBSCRIPTIONENDPOINT",
+                            "value": "[variables('taEndpoint')]"
+                        },
+                        {
+                            "name": "TA_SUBSCRIPTION_KEY",
+                            "value": "[listKeys(resourceId(parameters('commonResGroup'), 'Microsoft.CognitiveServices/accounts', parameters('taname')), '2017-04-18').key1]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

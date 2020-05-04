@@ -1,0 +1,23 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday3scmresourcesapi-dev
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: storageAccountName
+    value: adcd3scmresourcesdev
+  - name: resizerFunctionName
+    value: adcday3scmresizer-dev
+  - name: applicationInsightsName
+    value: appinsightsscmd3-dev
+  - name: serviceBusNamespaceName
+    value: adcd3sb-dev

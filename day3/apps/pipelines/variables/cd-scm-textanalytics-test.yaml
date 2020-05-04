@@ -1,0 +1,23 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-TEST
+  - name: resourceGroupNameFunc
+    value: ADC-DAY3-SCM-FUNC-TEST
+  - name: location
+    value: westeurope
+  - name: taname
+    value: adccognitive-test
+  - name: tatier
+    value: S0
+  - name: storageAccountName
+    value: adccognitivesatest
+  - name: functionAppName
+    value: adctextanalyticsfunc-test
+  - name: applicationInsightsName
+    value: appinsightsscmd3-test
+  - name: cosmosDbAccount
+    value: adcd3cosmos-test
+  - name: serviceBusNamespaceName
+    value: adcd3sb-test

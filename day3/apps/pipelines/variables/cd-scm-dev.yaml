@@ -1,0 +1,23 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday3scmapi-dev
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: applicationInsightsName
+    value: appinsightsscmd3-dev
+  - name: sqlServerName
+    value: adcd3sqlserverdev
+  - name: sqlDatabaseName
+    value: scmcontactsdb
+  - name: serviceBusNamespaceName
+    value: adcd3sb-dev

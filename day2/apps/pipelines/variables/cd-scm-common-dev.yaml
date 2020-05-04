@@ -1,0 +1,9 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY2-SCM-DEV
+  - name: location
+    value: eastus2
+  - name: applicationInsightsName
+    value: appinsightsscmd2-dev

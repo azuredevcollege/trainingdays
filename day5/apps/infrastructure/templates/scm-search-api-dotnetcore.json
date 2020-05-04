@@ -1,0 +1,268 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appPlanSKU": {
+            "type": "string",
+            "defaultValue": "B1",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is S1"
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            },
+            "minLength": 5
+        },
+        "use32bitworker": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use 32bit worker process or not. Some App Service Plan SKUs does only allow 32bit e.g. D1"
+            }
+        },
+        "alwaysOn": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use alwaysOn for the App Service Pan or not? Some App Service Plan SKUs does not support it e.g. D1"
+            }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of storage account"
+            }
+        },
+        "functionAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of resizer function"
+            },
+            "minLength": 5
+        },
+        "applicationInsightsName": {
+            "type": "string"
+        },
+        "serviceBusNamespaceName": {
+            "type": "string"
+        },
+        "azureSearchServiceName": {
+            "type": "string"
+        },
+        "azureSearchSKU": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "free",
+                "basic",
+                "standard",
+                "standard2",
+                "standard3"
+            ]
+        },
+        "azureSearchReplicaCount": {
+            "type": "int",
+            "minValue": 1,
+            "maxValue": 12,
+            "defaultValue": 1
+        },
+        "azureSearchPartitionCount": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "aadInstance": {
+            "type": "string"
+        },
+        "aadClientId": {
+            "type": "string"
+        },
+        "aadTenantId": {
+            "type": "string"
+        },
+        "aadDomain": {
+            "type": "string"
+        },
+        "aadClientIdUri": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "webAppPortalName": "[parameters('webAppName')]",
+        "appServicePlanName": "[concat(parameters('webAppName'), '-plan')]",
+        "indexerFunctionName": "[parameters('functionAppName')]",
+        "consumpltionPlanName": "[concat(parameters('functionAppName'), '-plan')]",
+        "location": "[resourceGroup().location]",
+        "indexername": "scmcontacts",
+        "sbVersion": "2017-04-01",
+        "sbScmContactTopicListenAuthRule": "scmtopiclisten",
+        "sbScmContactTopic": "scmtopic",
+        "sbScmContactTopicListenAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicListenAuthRule'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-08-19",
+            "type": "Microsoft.Search/searchServices",
+            "name": "[parameters('azureSearchServiceName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[toLower(parameters('azureSearchSKU'))]"
+            },
+            "properties": {
+                "replicaCount": "[parameters('azureSearchReplicaCount')]",
+                "partitionCount": "[parameters('azureSearchPartitionCount')]"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[variables('location')]",
+            "apiVersion": "2019-04-01",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {
+            }
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "kind": "app",
+            "name": "[variables('appServicePlanName')]",
+            "location": "[variables('location')]",
+            "properties": {
+            },
+            "dependsOn": [
+            ],
+            "sku": {
+                "name": "[parameters('appPlanSKU')]"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "api",
+            "name": "[variables('webAppPortalName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "httpsOnly": true,
+                "clientAffinityEnabled": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+            ]
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/web')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+            ],
+            "properties": {
+                "alwaysOn": "[parameters('alwaysOn')]",
+                "use32BitWorkerProcess": "[parameters('use32bitworker')]",
+                "cors": {
+                    "allowedOrigins": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/appsettings')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Search/searchServices', parameters('azureSearchServiceName'))]"
+            ],
+            "properties": {
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                "ContactSearchOptions__IndexName": "[variables('indexername')]",
+                "ContactSearchOptions__ServiceName": "[parameters('azureSearchServiceName')]",
+                "ContactSearchOptions__AdminApiKey": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('azureSearchServiceName')), '2015-08-19').primaryKey]",
+                "AzureAdOptions__Instance": "[parameters('aadInstance')]",
+                "AzureAdOptions__Domain": "[parameters('aadDomain')]",
+                "AzureAdOptions__TenantId": "[parameters('aadTenantId')]",
+                "AzureAdOptions__ClientId": "[parameters('aadClientId')]",
+                "AzureAdOptions__ClientIdUri": "[parameters('aadClientIdUri')]"
+            }
+        },
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[variables('consumpltionPlanName')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic"
+            },
+            "properties": {
+                "name": "[variables('consumpltionPlanName')]",
+                "computeMode": "Dynamic"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
+            "name": "[variables('indexerFunctionName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('consumpltionPlanName'))]",
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]",
+                "[resourceId('Microsoft.Search/searchServices', parameters('azureSearchServiceName'))]"
+            ],
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('consumpltionPlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsDashboard",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+                        },
+                        {
+                            "name": "ServiceBusConnectionString",
+                            "value": "[replace(listKeys(variables('sbScmContactTopicListenAuthRuleId'), variables('sbVersion')).primaryConnectionString, concat('EntityPath=', variables('sbScmContactTopic')), '')]"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet"
+                        },
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~3"
+                        },
+                        {
+                            "name": "ContactIndexerOptions__IndexName",
+                            "value": "[variables('indexername')]"
+                        },
+                        {
+                            "name": "ContactIndexerOptions__ServiceName",
+                            "value": "[parameters('azureSearchServiceName')]"
+                        },
+                        {
+                            "name": "ContactIndexerOptions__AdminApiKey",
+                            "value": "[listAdminKeys(resourceId('Microsoft.Search/searchServices', parameters('azureSearchServiceName')), '2015-08-19').primaryKey]"
+                        },
+                        {
+                            "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                            "value": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

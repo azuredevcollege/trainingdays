@@ -1,0 +1,25 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-TEST
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday5scmapi-test
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: applicationInsightsName
+    value: appinsightsscmd5-test
+  - name: sqlServerName
+    value: adcd5sqlservertest
+  - name: sqlDatabaseName
+    value: scmcontactsdb
+  - name: serviceBusNamespaceName
+    value: adcd5sb-test
+  - name: aadInstance
+    value: "https://login.microsoftonline.com"

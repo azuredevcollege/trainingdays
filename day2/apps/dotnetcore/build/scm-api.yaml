@@ -1,0 +1,27 @@
+parameters:
+  buildConfiguration: release
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Acquire .NET Core Sdk 3.1.x'
+    inputs:
+      packageType: Sdk
+      version: 3.1.x
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: 'day2/apps/dotnetcore/Scm/**/*.csproj'
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: 'day2/apps/dotnetcore/Scm/**/*.csproj'
+      arguments: --configuration ${{ parameters.buildConfiguration }}
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: day2/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj
+      arguments: --configuration ${{ parameters.buildConfiguration }} --output $(build.artifactstagingdirectory)
+      zipAfterPublish: True

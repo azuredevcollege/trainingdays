@@ -1,0 +1,47 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day2/apps/infrastructure/templates/scm-common.json
+      - day2/apps/pipelines/cd-scm-common.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-common.yaml
+        parameters:
+          artifactDropName: drop
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-common.yaml
+        parameters:
+          name: Deploy Scm Common
+          variablesFile: ../variables/cd-scm-common-dev.yaml
+          environmentName: ADC-DAY2-SCM-DEV
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Development
+
+    jobs:
+      - template: jobs/deploy-scm-common.yaml
+        parameters:
+          name: Deploy Scm Common
+          variablesFile: ../variables/cd-scm-common-test.yaml
+          environmentName: ADC-DAY2-SCM-TEST
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop

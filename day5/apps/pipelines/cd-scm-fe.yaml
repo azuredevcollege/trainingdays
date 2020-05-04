@@ -1,0 +1,54 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day5/apps/frontend/*
+      - day5/apps/infrastructure/templates/scm-fe.json
+      - day5/apps/pipelines/cd-scm-fe.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-fe.yaml
+        parameters:
+          artifactDropName: drop
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-fe.yaml
+        parameters:
+          name: Deploy Scm Frontend
+          variablesFile: ../variables/cd-scm-fe-dev.yaml
+          aadVariableGroupName: Day5-AAD-Dev
+          environmentName: ADC-DAY5-SCM-DEV
+          azureSubscription: ${{ variables.azureSubscription }}
+          artifactDropName: drop
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Development
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    jobs:
+      - template: jobs/deploy-scm-fe.yaml
+        parameters:
+          name: Deploy Scm Frontend
+          variablesFile: ../variables/cd-scm-fe-test.yaml
+          aadVariableGroupName: Day5-AAD-Test
+          environmentName: ADC-DAY5-SCM-TEST
+          azureSubscription: ${{ variables.azureSubscription }}
+          artifactDropName: drop

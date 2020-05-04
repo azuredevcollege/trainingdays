@@ -1,0 +1,50 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day2/apps/dotnetcore/Scm/*
+      - day2/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day2/apps/pipelines/cd-scm.yaml
+
+variables:
+  configuration: release
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-api.yaml
+        parameters:
+          configuration: $(configuration)
+          artifactDropName: drop
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-api.yaml
+        parameters:
+          name: Deploy Scm Api
+          variablesFile: ../variables/cd-scm-dev.yaml
+          environmentName: ADC-DAY2-SCM-DEV
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Development
+
+    jobs:
+      - template: jobs/deploy-scm-api.yaml
+        parameters:
+          name: Deploy Scm Api
+          variablesFile: ../variables/cd-scm-test.yaml
+          environmentName: ADC-DAY2-SCM-TEST
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop

@@ -1,0 +1,23 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-DEV
+  - name: resourceGroupNameFunc
+    value: ADC-DAY5-SCM-FUNC-DEV
+  - name: location
+    value: westeurope
+  - name: taname
+    value: adccognitive5-dev
+  - name: tatier
+    value: S0
+  - name: storageAccountName
+    value: adccognitivesadev5
+  - name: functionAppName
+    value: adctextanalyticsfunc5-dev
+  - name: applicationInsightsName
+    value: appinsightsscmd5-dev
+  - name: cosmosDbAccount
+    value: adcd5cosmos-dev
+  - name: serviceBusNamespaceName
+    value: adcd5sb-dev

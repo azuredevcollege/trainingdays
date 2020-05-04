@@ -1,0 +1,35 @@
+parameters:
+  buildConfiguration: release
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Acquire .NET Core Sdk 3.1.x'
+    inputs:
+      packageType: Sdk
+      version: 3.1.x
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: "day2/apps/dotnetcore/Scm.Resources/**/*.csproj"
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: "day2/apps/dotnetcore/Scm.Resources/**/*.csproj"
+      arguments: --configuration ${{ parameters.buildConfiguration }}
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/Adc.Scm.Resources.Api.csproj
+      arguments: --configuration ${{ parameters.buildConfiguration }} --output $(build.artifactstagingdirectory)
+      zipAfterPublish: True
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/Adc.Scm.Resources.ImageResizer.csproj
+      arguments: --configuration ${{ parameters.buildConfiguration }} --output $(build.artifactstagingdirectory)
+      zipAfterPublish: True

@@ -1,0 +1,19 @@
+parameters:
+  artifactDropName: drop
+
+jobs:
+  - job: Build
+    displayName: Build Scm Common
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day2/apps/infrastructure/templates
+          contents: |
+            scm-common.json
+          targetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactDropName }}

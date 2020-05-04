@@ -1,0 +1,13 @@
+{
+  "name": "textanalytics",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@azure/cosmos": "^3.5.1",
+    "axios": "^0.19.0"
+  },
+  "devDependencies": {}
+}

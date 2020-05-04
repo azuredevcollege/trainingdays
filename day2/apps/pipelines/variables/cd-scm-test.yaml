@@ -1,0 +1,17 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY2-SCM-TEST
+  - name: location
+    value: eastus2
+  - name: apiAppName
+    value: adcday2scmapi-test
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: applicationInsightsName
+    value: appinsightsscmd2-test

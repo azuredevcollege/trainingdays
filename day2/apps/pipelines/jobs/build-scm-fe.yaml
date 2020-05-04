@@ -1,0 +1,25 @@
+parameters:
+  artifactDropName: drop
+
+jobs:
+  - job: Build
+    displayName: Build Scm Frontend
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../frontend/build/scm-fe.yaml
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: 'day2/apps/frontend/scmfe/dist'
+          Contents: '**'
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day2/apps/infrastructure/templates
+          contents: |
+            scm-fe.json
+          targetFolder: $(Build.ArtifactStagingDirectory)/templates
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactDropName }}

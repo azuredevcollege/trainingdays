@@ -1,0 +1,50 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day2/apps/dotnetcore/Scm.Resources/*
+      - day2/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
+      - day2/apps/pipelines/cd-scm-resources.yaml
+
+variables:
+  configuration: release
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-resources-api.yaml
+        parameters:
+          configuration: $(configuration)
+          artifactDropName: drop
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-resources-api.yaml
+        parameters:
+          name: Deploy Scm Resources Api
+          variablesFile: ../variables/cd-scm-resources-dev.yaml
+          environmentName: ADC-DAY2-SCM-DEV
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Development
+
+    jobs:
+      - template: jobs/deploy-scm-resources-api.yaml
+        parameters:
+          name: Deploy Scm Resources Api
+          variablesFile: ../variables/cd-scm-resources-test.yaml
+          environmentName: ADC-DAY2-SCM-TEST
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop

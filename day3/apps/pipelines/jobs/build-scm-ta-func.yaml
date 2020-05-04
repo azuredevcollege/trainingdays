@@ -1,0 +1,20 @@
+parameters:
+  artifactDropName: drop
+jobs:
+  - job: Build
+    displayName: Build TextAnalytics Function
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../nodejs/build/scm-ta-function.yaml
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day3/apps/infrastructure/templates
+          contents: |
+            scm-textanalytics-nodejs-common.json
+            scm-textanalytics-nodejs-infra.json
+          targetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactDropName }}

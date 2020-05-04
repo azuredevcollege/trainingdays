@@ -1,0 +1,56 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day5/apps/dotnetcore/Scm.Search/*
+      - day5/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+      - day5/apps/pipelines/cd-scm-search.yaml
+
+variables:
+  configuration: release
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-search-api.yaml
+        parameters:
+          configuration: $(configuration)
+          artifactDropName: drop
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-search-api.yaml
+        parameters:
+          name: Deploy Scm Search Api
+          variablesFile: ../variables/cd-scm-search-dev.yaml
+          aadVariableGroupName: Day5-AAD-Dev
+          environmentName: ADC-DAY5-SCM-DEV
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+
+  - stage: Test
+    displayName: Test
+    dependsOn: Development
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+
+    jobs:
+      - template: jobs/deploy-scm-search-api.yaml
+        parameters:
+          name: Deploy Scm Search Api
+          variablesFile: ../variables/cd-scm-search-test.yaml
+          aadVariableGroupName: Day5-AAD-Test
+          environmentName: ADC-DAY5-SCM-TEST
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop

@@ -1,0 +1,27 @@
+GET https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize
+?client_id=APPLICATION_ID
+&response_type=id_token
+&redirect_uri=http://localhost:5001/api/tokenecho
+&response_mode=form_post
+&scope=openid%20profile
+&nonce=1234
+
+###
+
+GET https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize
+?client_id=APPLICATION_ID
+&response_type=id_token
+&redirect_uri=http%3A%2F%2Flocalhost%3A5001%2Fapi%2Ftokenechofragment
+&response_mode=fragment
+&scope=openid%20profile
+&nonce=1234
+
+###
+GET https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize
+?client_id=APPLICATION_ID
+&response_type=id_token+token
+&redirect_uri=http%3A%2F%2Flocalhost%3A5001%2Fapi%2Ftokenechofragment
+&response_mode=fragment
+&scope=openid%20profile%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Read%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Create%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Update%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Delete
+&nonce=1234
+  

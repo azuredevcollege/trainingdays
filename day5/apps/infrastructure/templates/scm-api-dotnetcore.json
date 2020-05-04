@@ -1,0 +1,199 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sku": {
+            "type": "string",
+            "defaultValue": "B1",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is S1"
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            },
+            "minLength": 5
+        },
+        "use32bitworker": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use 32bit worker process or not. Some App Service Plan SKUs does only allow 32bit e.g. D1"
+            }
+        },
+        "alwaysOn": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use alwaysOn for the App Service Pan or not? Some App Service Plan SKUs does not support it e.g. D1"
+            }
+        },
+        "applicationInsightsName": {
+            "type": "string"
+        },
+        "sqlServerName": {
+            "type": "string"
+        },
+        "sqlUserName": {
+            "type": "string"
+        },
+        "sqlPassword": {
+            "type": "securestring"
+        },
+        "sqlDatabaseName": {
+            "type": "string"
+        },
+        "serviceBusNamespaceName": {
+            "type": "string"
+        },
+        "aadInstance": {
+            "type": "string"
+        },
+        "aadClientId": {
+            "type": "string"
+        },
+        "aadTenantId": {
+            "type": "string"
+        },
+        "aadDomain": {
+            "type": "string"
+        },
+        "aadClientIdUri": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "webAppPortalName": "[parameters('webAppName')]",
+        "appServicePlanName": "[concat(parameters('webAppName'), '-plan')]",
+        "location": "[resourceGroup().location]",
+        "sbVersion": "2017-04-01",
+        "sbScmContactTopicSendAuthRule": "scmtopicsend",
+        "sbScmContactTopic": "scmtopic",
+        "sbScmContactTopicSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicSendAuthRule'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "kind": "app",
+            "name": "[variables('appServicePlanName')]",
+            "location": "[variables('location')]",
+            "properties": {
+            },
+            "dependsOn": [
+            ],
+            "sku": {
+                "name": "[parameters('sku')]"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "api",
+            "name": "[variables('webAppPortalName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "httpsOnly": true,
+                "clientAffinityEnabled": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+            ]
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/web')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+            ],
+            "properties": {
+                "alwaysOn": "[parameters('alwaysOn')]",
+                "use32BitWorkerProcess": "[parameters('use32bitworker')]",
+                "cors": {
+                    "allowedOrigins": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/appsettings')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+            ],
+            "properties": {
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                "EventServiceOptions__ServiceBusConnectionString": "[listKeys(variables('sbScmContactTopicSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]",
+                "AzureAdOptions__Instance": "[parameters('aadInstance')]",
+                "AzureAdOptions__Domain": "[parameters('aadDomain')]",
+                "AzureAdOptions__TenantId": "[parameters('aadTenantId')]",
+                "AzureAdOptions__ClientId": "[parameters('aadClientId')]",
+                "AzureAdOptions__ClientIdUri": "[parameters('aadClientIdUri')]"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/connectionstrings')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+            ],
+            "properties": {
+                "DefaultConnectionString": {
+                    "value": "[concat('Server=tcp:',reference(parameters('sqlserverName')).fullyQualifiedDomainName,',1433;Initial Catalog=',parameters('sqlDatabaseName'),';Persist Security Info=False;User ID=',reference(parameters('sqlserverName')).administratorLogin,';Password=',parameters('sqlPassword'),';MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;')]",
+                    "type": "SQLAzure"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers",
+            "name": "[parameters('sqlServerName')]",
+            "location": "[variables('location')]",
+            "apiVersion": "2015-05-01-preview",
+            "kind": "v12.0",
+            "properties": {
+                "administratorLogin": "[parameters('sqlUserName')]",
+                "administratorLoginPassword": "[parameters('sqlPassword')]",
+                "version": "12.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "name": "[concat(parameters('sqlServerName'), '/', parameters('sqlDatabaseName'))]",
+            "location": "[variables('location')]",
+            "apiVersion": "2017-03-01-preview",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/', parameters('sqlServerName'))]"
+            ],
+            "sku": {
+                "name": "Basic",
+                "tier": "Basic",
+                "capacity": 5
+            },
+            "kind": "v12.0,user"
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('sqlServerName'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlServerName'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

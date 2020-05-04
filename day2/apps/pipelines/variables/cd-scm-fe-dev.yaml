@@ -1,0 +1,15 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY2-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: storageAccountName
+    value: scmvuefedev
+  - name: spaEndpoint
+    value: "https://adcday2scmapi-dev.azurewebsites.net/"
+  - name: resourcesEndpoint
+    value: "https://adcday2scmresourcesapi-dev.azurewebsites.net/"
+  - name: applicationInsightsName
+    value: appinsightsscmd2-dev

@@ -1,0 +1,20 @@
+trigger: none
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day2/apps/frontend/*
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - job: Build
+        displayName: Build Frontend Components
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - template: ../frontend/build/scm-fe.yaml

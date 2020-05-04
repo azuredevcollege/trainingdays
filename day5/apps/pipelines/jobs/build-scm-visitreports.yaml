@@ -1,0 +1,26 @@
+parameters:
+  artifactDropName: drop
+  buildNumber: ""
+  containerRegistryServiceConnection: ""
+jobs:
+  - job: Build
+    displayName: Build Scm Frontend
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../nodejs/build/scm-visitreports.yaml
+        parameters:
+          buildNumber: ${{ parameters.buildNumber }}
+          publishDockerImage: true
+          containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day5/apps/infrastructure/templates
+          contents: |
+            scm-visitreport-nodejs-db.json
+            scm-visitreport-nodejs-infra.json
+          targetFolder: $(Build.ArtifactStagingDirectory)
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactDropName }}

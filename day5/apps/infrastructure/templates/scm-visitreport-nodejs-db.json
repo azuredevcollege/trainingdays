@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "cosmosDbAccount": {
+            "type": "string"
+        },
+        "cosmosDatabaseName": {
+            "type": "string"
+        },
+        "cosmosDatabaseContainerName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('cosmosDbAccount'), '/', parameters('cosmosDatabaseName'))]",
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2019-08-01",
+            "location": "[variables('location')]",
+            "properties": {
+                "resource": {
+                    "id": "[parameters('cosmosDatabaseName')]"
+                },
+                "options": {
+                    "throughput": 400
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "name": "[concat(parameters('cosmosDbAccount'), '/', parameters('cosmosDatabaseName'), '/', parameters('cosmosDatabaseContainerName'))]",
+            "apiVersion": "2019-08-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('cosmosDbAccount'), parameters('cosmosDatabaseName'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "[parameters('cosmosDatabaseContainerName')]",
+                    "partitionKey": {
+                        "paths": [
+                            "/type"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

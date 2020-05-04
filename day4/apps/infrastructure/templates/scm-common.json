@@ -1,0 +1,333 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "applicationInsightsName": {
+            "type": "string"
+        },
+        "serviceBusNamespaceName": {
+            "type": "string"
+        },
+        "serviceBusSKU": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+            ],
+            "defaultValue": "Standard"
+        },
+        "cosmosDbAccountName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "defaultSASKeyName": "RootManageSharedAccessKey",
+        "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
+        "sbVersion": "2017-04-01",
+        "sbThumbnailsQueueName": "thumbnails",
+        "sbThumbnailsSendRule": "thumbnailssend",
+        "sbThumbnailsListenRule": "thumbnailslisten",
+        "sbThumbnailSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbThumbnailsQueueName'), variables('sbThumbnailsSendRule'))]",
+        "sbThumbnailListenAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbThumbnailsQueueName'), variables('sbThumbnailsListenRule'))]",
+        "sbScmContactTopic": "scmtopic",
+        "sbScmContactTopicSearchSubscription": "scmcontactsearch",
+        "sbScmContactTopicVisitReportSubscription": "scmcontactvisitreport",
+        "sbScmContactTopicId": "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'))]",
+        "sbScmContactTopicSendAuthRule": "scmtopicsend",
+        "sbScmContactTopicListenAuthRule": "scmtopiclisten",
+        "sbScmContactTopicSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicSendAuthRule'))]",
+        "sbScmContactTopicListenAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicListenAuthRule'))]",
+        "sbScmVisitReportTopic": "scmvrtopic",
+        "sbScmVisitReportTopicTextAnalyticsSubscription": "scmvisitreporttextanalytics",
+        "sbScmVisitReportTopicId": "[resourceId('Microsoft.ServiceBus/namespaces/topics', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'))]",
+        "sbScmVisitReportTopicSendAuthRule": "scmvrtopicsend",
+        "sbScmVisitReportTopicListenAuthRule": "scmvrtopiclisten",
+        "sbScmVisitReportTopicSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicSendAuthRule'))]",
+        "sbScmVisitReportTopicListenAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicListenAuthRule'))]",
+        "cosmosAccountId": "[resourceId('Microsoft.DocumentDb/databaseAccounts', parameters('cosmosDbAccountName'))]",
+        "cosmosVersion": "2019-08-01"
+    },
+    "resources": [
+        {
+            "name": "[parameters('applicationInsightsName')]",
+            "type": "Microsoft.Insights/components",
+            "apiVersion": "2015-05-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+            },
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web"
+            }
+        },
+        {
+            "apiVersion": "2017-04-01",
+            "name": "[parameters('serviceBusNamespaceName')]",
+            "type": "Microsoft.ServiceBus/namespaces",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[parameters('serviceBusSKU')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2017-04-01",
+                    "type": "queues",
+                    "name": "[variables('sbThumbnailsQueueName')]",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
+                    ],
+                    "properties": {
+                        "lockDuration": "PT5M",
+                        "maxSizeInMegabytes": 1024,
+                        "requiresDuplicateDetection": false,
+                        "requiresSession": false,
+                        "defaultMessageTimeToLive": "P2D",
+                        "deadLetteringOnMessageExpiration": true,
+                        "duplicateDetectionHistoryTimeWindow": "PT10M",
+                        "maxDeliveryCount": 10,
+                        "autoDeleteOnIdle": "P2D",
+                        "enablePartitioning": false,
+                        "enableExpress": false
+                    },
+                    "resources": [
+                        {
+                            "type": "authorizationRules",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbThumbnailsListenRule')]",
+                            "location": "West Europe",
+                            "dependsOn": [
+                                "[variables('sbThumbnailsQueueName')]"
+                            ],
+                            "properties": {
+                                "rights": [
+                                    "Listen"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "authorizationRules",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbThumbnailsSendRule')]",
+                            "location": "West Europe",
+                            "dependsOn": [
+                                "[variables('sbThumbnailsQueueName')]"
+                            ],
+                            "properties": {
+                                "rights": [
+                                    "Send"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "topics",
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('sbScmContactTopic')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
+                    ],
+                    "properties": {
+                        "defaultMessageTimeToLive": "P2D",
+                        "maxSizeInMegabytes": 1024,
+                        "requiresDuplicateDetection": false,
+                        "duplicateDetectionHistoryTimeWindow": "PT10M",
+                        "enableBatchedOperations": false,
+                        "supportOrdering": false,
+                        "autoDeleteOnIdle": "P2D",
+                        "enablePartitioning": false,
+                        "enableExpress": false
+                    },
+                    "resources": [
+                        {
+                            "type": "authorizationRules",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbScmContactTopicListenAuthRule')]",
+                            "dependsOn": [
+                                "[variables('sbScmContactTopic')]"
+                            ],
+                            "properties": {
+                                "rights": [
+                                    "Listen"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "authorizationRules",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbScmContactTopicSendAuthRule')]",
+                            "dependsOn": [
+                                "[variables('sbScmContactTopic')]"
+                            ],
+                            "properties": {
+                                "rights": [
+                                    "Send"
+                                ]
+                            }
+                        },
+                        {
+                            "type": "subscriptions",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbScmContactTopicSearchSubscription')]",
+                            "dependsOn": [
+                                "[variables('sbScmContactTopic')]"
+                            ],
+                            "properties": {
+                                "lockDuration": "PT5M",
+                                "requiresSession": true,
+                                "defaultMessageTimeToLive": "P2D",
+                                "deadLetteringOnMessageExpiration": true,
+                                "maxDeliveryCount": 10,
+                                "enableBatchedOperations": false,
+                                "autoDeleteOnIdle": "P2D"
+                            }
+                        },
+                        {
+                            "type": "subscriptions",
+                            "apiVersion": "2017-04-01",
+                            "name": "[variables('sbScmContactTopicVisitReportSubscription')]",
+                            "dependsOn": [
+                                "[variables('sbScmContactTopicId')]"
+                            ],
+                            "properties": {
+                                "lockDuration": "PT5M",
+                                "requiresSession": false,
+                                "defaultMessageTimeToLive": "P2D",
+                                "deadLetteringOnMessageExpiration": true,
+                                "maxDeliveryCount": 10,
+                                "enableBatchedOperations": false,
+                                "autoDeleteOnIdle": "P2D"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts",
+            "apiVersion": "2019-08-01",
+            "name": "[parameters('cosmosDbAccountName')]",
+            "location": "[resourceGroup().location]",
+            "kind": "GlobalDocumentDB",
+            "properties": {
+                "consistencyPolicy": {
+                    "defaultConsistencyLevel": "Eventual"
+                },
+                "databaseAccountOfferType": "Standard",
+                "locations": [
+                    {
+                        "locationName": "[resourceGroup().location]",
+                        "failoverPriority": 0,
+                        "isZoneRedundant": false
+                    }
+                ],
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false
+            }
+        },
+        {
+            "type": "Microsoft.ServiceBus/namespaces/topics",
+            "apiVersion": "2017-04-01",
+            "name": "[concat(parameters('serviceBusNamespaceName'), '/', variables('sbScmVisitReportTopic'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceBus/namespaces', parameters('serviceBusNamespaceName'))]"
+            ],
+            "properties": {
+                "defaultMessageTimeToLive": "P2D",
+                "maxSizeInMegabytes": 1024,
+                "requiresDuplicateDetection": false,
+                "duplicateDetectionHistoryTimeWindow": "PT10M",
+                "enableBatchedOperations": false,
+                "supportOrdering": false,
+                "autoDeleteOnIdle": "P2D",
+                "enablePartitioning": false,
+                "enableExpress": false
+            },
+            "resources": [
+                {
+                    "type": "authorizationRules",
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('sbScmVisitReportTopicListenAuthRule')]",
+                    "dependsOn": [
+                        "[variables('sbScmVisitReportTopicId')]"
+                    ],
+                    "properties": {
+                        "rights": [
+                            "Listen"
+                        ]
+                    }
+                },
+                {
+                    "type": "authorizationRules",
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('sbScmVisitReportTopicSendAuthRule')]",
+                    "dependsOn": [
+                        "[variables('sbScmVisitReportTopicId')]"
+                    ],
+                    "properties": {
+                        "rights": [
+                            "Send"
+                        ]
+                    }
+                },
+                {
+                    "apiVersion": "2017-04-01",
+                    "name": "[variables('sbScmVisitReportTopicTextAnalyticsSubscription')]",
+                    "type": "Subscriptions",
+                    "dependsOn": [
+                        "[variables('sbScmVisitReportTopic')]"
+                    ],
+                    "properties": {
+                        "lockDuration": "PT5M",
+                        "requiresSession": false,
+                        "defaultMessageTimeToLive": "P2D",
+                        "deadLetteringOnMessageExpiration": true,
+                        "maxDeliveryCount": 10,
+                        "enableBatchedOperations": false,
+                        "autoDeleteOnIdle": "P2D"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {
+        "NamespaceDefaultConnectionString": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "DefaultSharedAccessPolicyPrimaryKey": {
+            "type": "string",
+            "value": "[listkeys(variables('defaultAuthRuleResourceId'), variables('sbVersion')).primaryKey]"
+        },
+        "ThumbnailSendRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbThumbnailSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ThumbnailListenRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbThumbnailListenAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ScmContactTopicListenRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbScmContactTopicListenAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ScmContactTopicSendRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbScmContactTopicSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ScmVisitReportTopicListenRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbScmVisitReportTopicListenAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "ScmVisitReportTopicSendRuleConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('sbScmVisitReportTopicSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]"
+        },
+        "CosmosDbConnectionString": {
+            "type": "string",
+            "value": "[listKeys(variables('cosmosAccountId'), variables('cosmosVersion')).primaryMasterKey]"
+        }
+    }
+}

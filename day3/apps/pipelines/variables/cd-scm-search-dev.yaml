@@ -1,0 +1,31 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday3scmrsearchapi-dev
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: storageAccountName
+    value: adcd3scmsearchdev
+  - name: indexerFunctionName
+    value: adcday3scmindexer-dev
+  - name: applicationInsightsName
+    value: appinsightsscmd3-dev
+  - name: serviceBusNamespaceName
+    value: adcd3sb-dev
+  - name: azureSearchServiceName
+    value: adcd3search-dev
+  - name: azureSearchSKU
+    value: basic
+  - name: azureSearchReplicaCount
+    value: 1
+  - name: azureSearchPartitionCount
+    value: 1

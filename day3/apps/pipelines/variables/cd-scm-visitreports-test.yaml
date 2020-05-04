@@ -1,0 +1,25 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-TEST
+  - name: resourceGroupNameTux
+    value: ADC-DAY3-SCM-TUX-TEST
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday3scmvr-test
+  - name: appServicePlanSKU
+    value: Standard
+  - name: appServicePlanSKUCode
+    value: B1
+  - name: applicationInsightsName
+    value: appinsightsscmd3-test
+  - name: cosmosDbAccount
+    value: adcd3cosmos-test
+  - name: cosmosDatabaseName
+    value: scmvisitreports
+  - name: cosmosDatabaseContainerName
+    value: visitreports
+  - name: serviceBusNamespaceName
+    value: adcd3sb-test

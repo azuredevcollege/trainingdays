@@ -1,0 +1,452 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appPrefix": {
+            "type": "string"
+        },
+        "apiHostingPlanName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "apiSkuName": {
+            "type": "string",
+            "defaultValue": "S1",
+            "allowedValues": [
+                "S1",
+                "S2",
+                "S3",
+                "P1",
+                "P2",
+                "P3",
+                "P4"
+            ]
+        },
+        "apiSkuCapacity": {
+            "type": "int",
+            "defaultValue": 1,
+            "minValue": 1
+        },
+        "administratorLogin": {
+            "type": "string"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        },
+        "databaseName": {
+            "type": "string"
+        },
+        "collation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "edition": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Premium"
+            ]
+        },
+        "maxSizeBytes": {
+            "type": "string",
+            "defaultValue": "1073741824"
+        },
+        "requestedServiceObjectiveName": {
+            "type": "string",
+            "defaultValue": "Basic",
+            "allowedValues": [
+                "Basic",
+                "S0",
+                "S1",
+                "S2",
+                "P1",
+                "P2",
+                "P3"
+            ],
+            "metadata": {
+                "description": "Describes the performance level for Edition"
+            }
+        }
+    },
+    "variables": {
+        "prefix": "[parameters('appPrefix')]",
+        "apiSiteName": "[concat(variables('prefix'), 'api')]",
+        "appInsightsName": "[concat(variables('prefix'), 'AppInsights')]",
+        "searchAppName": "[toLower(concat(variables('prefix'), 'Search'))]",
+        "RedisCache": {
+            "Name": "[concat(variables('prefix'), 'redis')]",
+            "SKUName": "Standard",
+            "SKUFamily": "C",
+            "SKUCapacity": 1,
+            "WebAppRedisSettingText": ",abortConnect=false,ssl=true,password="
+        },
+        "cacheInstanceName": "appcache",
+        "sqlserverName": "[concat(variables('prefix'), 'sqlmaster')]",
+        "storageName": "[concat(variables('prefix'), 'store')]",
+        "endpointName": "[concat(variables('prefix'), 'cdn')]",
+        "profileName": "[concat(variables('prefix'), 'cdnprofile')]"
+    },
+    "resources": [{
+            "name": "[variables('storageName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-01-01",
+            "sku": {
+                "name": "Standard_LRS",
+                "tier": "Standard"
+            },
+            "kind": "BlobStorage",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "Storage Blobs / CDN backend"
+            },
+            "properties": {
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "name": "[variables('profileName')]",
+            "type": "Microsoft.Cdn/profiles",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2016-04-02",
+            "tags": {
+                "displayName": "CDN"
+            },
+            "sku": {
+                "name": "Standard_Akamai"
+            },
+            "properties": {},
+            "resources": [{
+                "apiVersion": "2016-04-02",
+                "name": "[variables('endpointName')]",
+                "type": "endpoints",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Cdn/profiles/', variables('profileName'))]",
+                    "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageName'))]"
+                ],
+                "location": "[resourceGroup().location]",
+                "tags": {
+                    "displayName": "CDN Endpoint"
+                },
+                "properties": {
+                    "originHostHeader": "[replace(replace(reference(resourceId('Microsoft.Storage/storageAccounts',variables('storageName')),'2015-06-15').primaryEndpoints.blob,'https://',''),'/','')]",
+                    "isHttpAllowed": true,
+                    "isHttpsAllowed": true,
+                    "queryStringCachingBehavior": "IgnoreQueryString",
+                    "contentTypesToCompress": ["text/plain", "text/html", "text/css", "application/x-javascript", "text/javascript"],
+                    "isCompressionEnabled": true,
+                    "origins": [{
+                        "name": "origin1",
+                        "properties": {
+                            "hostName": "[replace(replace(reference(resourceId('Microsoft.Storage/storageAccounts',variables('storageName')),'2015-06-15').primaryEndpoints.blob,'https://',''),'/','')]"
+                        }
+                    }]
+                }
+            }]
+        },
+        {
+            "type": "Microsoft.Cache/Redis",
+            "name": "[variables('RedisCache').Name]",
+            "apiVersion": "2016-04-01",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "Redis Cache"
+            },
+            "properties": {
+                "redisVersion": "3.0",
+                "sku": {
+                    "name": "[variables('RedisCache').SKUName]",
+                    "family": "[variables('RedisCache').SKUFamily]",
+                    "capacity": "[variables('RedisCache').SKUCapacity]"
+                },
+                "enableNonSslPort": false,
+                "redisConfiguration": {
+                    "maxclients": "256"
+                }
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2015-08-19",
+            "name": "[variables('searchAppName')]",
+            "type": "Microsoft.Search/searchServices",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "replicaCount": "1",
+                "partitionCount": "1",
+                "hostingMode": "default"
+            },
+            "sku": {
+                "name": "basic"
+            },
+            "tags": {
+                "displayName": "Search Service"
+            }
+        },
+        {
+            "name": "[variables('sqlserverName')]",
+            "type": "Microsoft.Sql/servers",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "SqlServer"
+            },
+            "apiVersion": "2014-04-01-preview",
+            "properties": {
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]"
+            },
+            "resources": [{
+                    "name": "[parameters('databaseName')]",
+                    "type": "databases",
+                    "location": "[resourceGroup().location]",
+                    "tags": {
+                        "displayName": "Database"
+                    },
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+                    ],
+                    "properties": {
+                        "edition": "[parameters('edition')]",
+                        "collation": "[parameters('collation')]",
+                        "maxSizeBytes": "[parameters('maxSizeBytes')]",
+                        "requestedServiceObjectiveName": "[parameters('requestedServiceObjectiveName')]"
+                    }
+                },
+                {
+                    "type": "firewallrules",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))]"
+                    ],
+                    "location": "[resourceGroup().location]",
+                    "name": "AllowAllWindowsAzureIps",
+                    "properties": {
+                        "endIpAddress": "0.0.0.0",
+                        "startIpAddress": "0.0.0.0"
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('apiHostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "HostingPlan API"
+            },
+            "sku": {
+                "name": "[parameters('apiSkuName')]",
+                "capacity": "[parameters('apiSkuCapacity')]"
+            },
+            "properties": {
+                "name": "[parameters('apiHostingPlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[variables('apiSiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Cache/Redis/', variables('RedisCache').Name)]",
+                "[resourceId('Microsoft.Search/searchServices/', variables('searchAppName'))]",
+                "[resourceId('Microsoft.Cdn/profiles/', variables('profileName'))]",
+                "[resourceId('Microsoft.Web/serverFarms/', parameters('apiHostingPlanName'))]"
+            ],
+            "tags": {
+                "displayName": "Web / API"
+            },
+            "properties": {
+                "name": "[variables('apiSiteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('apiHostingPlanName'))]",
+                "clientAffinityEnabled": false
+            },
+            "resources": [{
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "connectionstrings",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites/', variables('apiSiteName'))]"
+                    ],
+                    "properties": {
+                        "masterdata": {
+                            "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('administratorLogin'), '@', variables('sqlserverName'), ';Password=', parameters('administratorLoginPassword'), ';')]",
+                            "type": "SQLServer"
+                        },
+                        "redis": {
+                            "value": "[concat(reference(resourceId('Microsoft.Cache/Redis', variables('RedisCache').Name)).hostName, variables('RedisCache').WebAppRedisSettingText, listKeys(resourceId('Microsoft.Cache/Redis', variables('RedisCache').Name), '2015-08-01').primaryKey)]",
+                            "type": "Custom"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "appsettings",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites/', variables('apiSiteName'))]"
+                    ],
+                    "properties": {
+                        "Redis:InstanceName": "[variables('cacheInstanceName')]",
+                        "ApplicationInsights:InstrumentationKey": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2015-05-01').InstrumentationKey]",
+                        "Search:ServiceName": "[variables('searchAppName')]",
+                        "Search:Key": "[listAdminKeys(resourceId('Microsoft.Search/searchServices/', variables('searchAppName')), '2015-08-19').primaryKey]",
+                        "Storage:AccountName": "[variables('storageName')]",
+                        "Storage:AccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageName')), '2015-06-15').key1]",
+                        "CDN:Hostname": "[reference(resourceId('Microsoft.Cdn/profiles/endpoints',variables('profileName'),variables('endpointName')),'2016-04-02').hostName]"
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "web",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites/', variables('apiSiteName'))]"
+                    ],
+                    "properties": {
+                        "use32BitWorkerProcess": false,
+                        "alwaysOn": true,
+                        "phpVersion": "",
+                        "defaultDocuments": []
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[concat(variables('apiSiteName'), '/staging')]",
+            "type": "Microsoft.Web/sites/slots",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/Sites', variables('apiSiteName'))]"
+            ],
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]": "Resource",
+                "displayName": "Slot Web / API"
+            },
+            "properties": {
+                "name": "[concat(variables('apiSiteName'), '(staging)')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]",
+                "clientAffinityEnabled": false
+            },
+            "resources": [{
+                    "apiVersion": "2015-08-01",
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/Sites/', variables('apiSiteName'), '/slots/staging')]"
+                    ],
+                    "properties": {
+                        "masterdata": {
+                            "value": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.Sql/servers/', variables('sqlserverName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('databaseName'), ';User Id=', parameters('administratorLogin'), '@', variables('sqlserverName'), ';Password=', parameters('administratorLoginPassword'), ';')]",
+                            "type": "SQLServer"
+                        },
+                        "redis": {
+                            "value": "[concat(reference(resourceId('Microsoft.Cache/Redis', variables('RedisCache').Name)).hostName, variables('RedisCache').WebAppRedisSettingText, listKeys(resourceId('Microsoft.Cache/Redis', variables('RedisCache').Name), '2015-08-01').primaryKey)]",
+                            "type": "Custom"
+                        }
+                    }
+                },
+                {
+                    "apiVersion": "2015-08-01",
+                    "type": "config",
+                    "name": "web",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/Sites/', variables('apiSiteName'), '/slots/staging')]"
+                    ],
+                    "properties": {
+                        "use32BitWorkerProcess": false,
+                        "alwaysOn": true,
+                        "phpVersion": "",
+                        "defaultDocuments": []
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2014-04-01",
+            "name": "[concat(parameters('apiHostingPlanName'), '-', resourceGroup().name)]",
+            "type": "Microsoft.Insights/autoscalesettings",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]": "Resource",
+                "displayName": "AutoScaleSettings Web / API"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]"
+            ],
+            "properties": {
+                "profiles": [{
+                    "name": "Default",
+                    "capacity": {
+                        "minimum": 1,
+                        "maximum": 2,
+                        "default": 1
+                    },
+                    "rules": [{
+                            "metricTrigger": {
+                                "metricName": "CpuPercentage",
+                                "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]",
+                                "timeGrain": "PT1M",
+                                "statistic": "Average",
+                                "timeWindow": "PT10M",
+                                "timeAggregation": "Average",
+                                "operator": "GreaterThan",
+                                "threshold": 80.0
+                            },
+                            "scaleAction": {
+                                "direction": "Increase",
+                                "type": "ChangeCount",
+                                "value": 1,
+                                "cooldown": "PT10M"
+                            }
+                        },
+                        {
+                            "metricTrigger": {
+                                "metricName": "CpuPercentage",
+                                "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]",
+                                "timeGrain": "PT1M",
+                                "statistic": "Average",
+                                "timeWindow": "PT1H",
+                                "timeAggregation": "Average",
+                                "operator": "LessThan",
+                                "threshold": 60.0
+                            },
+                            "scaleAction": {
+                                "direction": "Decrease",
+                                "type": "ChangeCount",
+                                "value": 1,
+                                "cooldown": "PT1H"
+                            }
+                        }
+                    ]
+                }],
+                "enabled": false,
+                "name": "[concat(parameters('apiHostingPlanName'), '-', resourceGroup().name)]",
+                "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('apiHostingPlanName'))]"
+            }
+        },
+        {
+            "apiVersion": "2014-04-01",
+            "name": "[variables('appInsightsName')]",
+            "type": "Microsoft.Insights/components",
+            "location": "West Europe",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/', variables('apiSiteName'))]"
+            ],
+            "tags": {
+                "displayName": "AppInsightsComponent"
+            },
+            "properties": {
+                "ApplicationId": "[variables('apiSiteName')]"
+            }
+        }
+    ],
+    "outputs": {}
+}

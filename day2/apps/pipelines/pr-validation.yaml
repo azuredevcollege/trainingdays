@@ -1,0 +1,28 @@
+trigger: none
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day2/apps/dotnetcore/*
+
+variables:
+  configuration: release
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - job: Build
+        displayName: Build Scm Components
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - template: ../dotnetcore/build/scm-api.yaml
+            parameters:
+              buildConfiguration: $(configuration)
+          - template: ../dotnetcore/build/scm-resources-api.yaml
+            parameters:
+              buildConfiguration: $(configuration)

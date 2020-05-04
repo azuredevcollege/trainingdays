@@ -1,0 +1,25 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday5scmresourcesapi-dev
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: storageAccountName
+    value: adcd5scmresourcesdev
+  - name: resizerFunctionName
+    value: adcday5scmresizer-dev
+  - name: applicationInsightsName
+    value: appinsightsscmd5-dev
+  - name: serviceBusNamespaceName
+    value: adcd5sb-dev
+  - name: aadInstance
+    value: "https://login.microsoftonline.com"

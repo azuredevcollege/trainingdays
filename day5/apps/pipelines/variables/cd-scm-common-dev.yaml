@@ -1,0 +1,15 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: applicationInsightsName
+    value: appinsightsscmd5-dev
+  - name: serviceBusNamespaceName
+    value: adcd5sb-dev
+  - name: serviceBusSKU
+    value: Standard
+  - name: cosmosDbAccountName
+    value: adcd5cosmos-dev

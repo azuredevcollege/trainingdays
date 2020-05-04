@@ -1,0 +1,103 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sku": {
+            "type": "string",
+            "defaultValue": "B1",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is S1"
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            },
+            "minLength": 5
+        },
+        "use32bitworker": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use 32bit worker process or not. Some App Service Plan SKUs does only allow 32bit e.g. D1"
+            }
+        },
+        "alwaysOn": {
+            "type": "bool",
+            "metadata": {
+                "description": "Use alwaysOn for the App Service Pan or not? Some App Service Plan SKUs does not support it e.g. D1"
+            }
+        },
+        "applicationInsightsName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "webAppPortalName": "[parameters('webAppName')]",
+        "appServicePlanName": "[concat(parameters('webAppName'), '-plan')]",
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2018-02-01",
+            "type": "Microsoft.Web/serverfarms",
+            "kind": "app",
+            "name": "[variables('appServicePlanName')]",
+            "location": "[variables('location')]",
+            "properties": {
+            },
+            "dependsOn": [
+            ],
+            "sku": {
+                "name": "[parameters('sku')]"
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites",
+            "kind": "api",
+            "name": "[variables('webAppPortalName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "httpsOnly": true,
+                "clientAffinityEnabled": false
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+            ]
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/web')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+            ],
+            "properties": {
+                "alwaysOn": "[parameters('alwaysOn')]",
+                "use32BitWorkerProcess": "[parameters('use32bitworker')]",
+                "cors": {
+                    "allowedOrigins": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-11-01",
+            "type": "Microsoft.Web/sites/config",
+            "name": "[concat(variables('webAppPortalName'), '/appsettings')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('webAppPortalName'))]"
+            ],
+            "properties": {
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

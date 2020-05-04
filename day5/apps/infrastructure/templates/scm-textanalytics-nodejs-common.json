@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of storage account"
+            }
+        },
+        "taname": {
+            "type": "string"
+        },
+        "tatier": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[variables('location')]",
+            "apiVersion": "2019-04-01",
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "kind": "StorageV2",
+            "properties": {
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2017-04-18",
+            "name": "[parameters('taname')]",
+            "location": "[variables('location')]",
+            "sku": {
+                "name": "[parameters('tatier')]"
+            },
+            "kind": "TextAnalytics",
+            "properties": {
+                "customSubDomainName": "[parameters('taname')]"
+            }
+        }
+    ],
+    "outputs": {
+    }
+}

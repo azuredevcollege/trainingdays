@@ -1,0 +1,45 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string"
+        },
+        "accountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS"
+        },
+        "kind": {
+            "type": "string",
+            "defaultValue": "StorageV2"
+        },
+        "accessTier": {
+            "type": "string",
+            "defaultValue": "Hot"
+        },
+        "supportsHttpsTrafficOnly": {
+            "type": "bool",
+            "defaultValue": true
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accessTier": "[parameters('accessTier')]",
+                "supportsHttpsTrafficOnly": "[parameters('supportsHttpsTrafficOnly')]"
+            },
+            "dependsOn": [],
+            "sku": {
+                "name": "[parameters('accountType')]"
+            },
+            "kind": "[parameters('kind')]",
+            "tags": {}
+        }
+    ],
+    "outputs": {}
+}

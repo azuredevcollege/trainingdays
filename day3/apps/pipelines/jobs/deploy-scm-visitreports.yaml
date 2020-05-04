@@ -1,0 +1,54 @@
+parameters:
+  name: ""
+  variablesFile: ""
+  environmentName: ""
+  azureSubscription: ""
+  artifactDropName: drop
+  variableGroupName: ""
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables:
+      - group: ${{ parameters.variableGroupName }}
+      - template: ${{ parameters.variablesFile }}
+    pool:
+      vmImage: ${{ variables.vmImage }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceGroupDeployment@2
+              displayName: 'Create/update Infrastructure for CosmosDB'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupName }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-visitreport-nodejs-db.json
+                overrideParameters: >
+                  -cosmosDbAccount ${{variables.cosmosDbAccount}} -cosmosDatabaseName ${{ variables.cosmosDatabaseName }} -cosmosDatabaseContainerName ${{ variables.cosmosDatabaseContainerName }}
+            - task: AzureResourceGroupDeployment@2
+              displayName: 'Create/update Infrastructure for Linux WebApp'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupNameTux }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-visitreport-nodejs-infra.json
+                overrideParameters: >
+                  -sku ${{ variables.appServicePlanSKU }} -skuCode ${{ variables.appServicePlanSKUCode }} -webAppName ${{ variables.apiAppName }} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }} -cosmosDbAccount ${{variables.cosmosDbAccount}}
+                  -serviceBusNamespaceName ${{ variables.serviceBusNamespaceName }} -commonResGroup ${{ variables.resourceGroupName }}
+            - task: AzureWebApp@1
+              displayName: 'Deploy Nodejs App'
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                appType: webAppLinux
+                appName: ${{ variables.apiAppName }}
+                runtimeStack: 'NODE|12.9'
+                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.VisitReports.zip
+                startUpCommand: 'npm run start'

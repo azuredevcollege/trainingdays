@@ -1,0 +1,19 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY3-SCM-TEST
+  - name: location
+    value: westeurope
+  - name: storageAccountName
+    value: scmvuefedthreetest
+  - name: spaEndpoint
+    value: "https://adcday3scmapi-test.azurewebsites.net/"
+  - name: resourcesEndpoint
+    value: "https://adcday3scmresourcesapi-test.azurewebsites.net/"
+  - name: searchEndpoint
+    value: "https://adcday3scmrsearchapi-test.azurewebsites.net"
+  - name: reportsEndpoint
+    value: "https://adcday3scmvr-test.azurewebsites.net"
+  - name: applicationInsightsName
+    value: appinsightsscmd3-test
