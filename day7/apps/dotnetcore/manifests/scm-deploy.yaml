@@ -1,0 +1,77 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scm-deploy 
+  labels:
+    application: scmcontacts
+    service: scmapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: scmapi
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: scmapi
+    spec:
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "10m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+          image: azuredevcollege.azurecr.io/adcday5/scmapi:20200302.1
+          env:
+            - name: ConnectionStrings__DefaultConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SQLDBCONNECTIONSTRING
+            - name: AzureAdOptions__Domain
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADDOMAIN            
+            - name: AzureAdOptions__TenantId
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADTENANTID
+            - name: AzureAdOptions__ClientId
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADCLIENTID
+            - name: AzureAdOptions__ClientIdUri
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADCLIENTIDURI
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+            - name: EventServiceOptions__ServiceBusConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: CONTACTSSENDCONNSTR
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 5000
+      imagePullSecrets:
+      - name: regcred

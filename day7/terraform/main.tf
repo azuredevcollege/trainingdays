@@ -5,8 +5,8 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "tfstateadcsa"
+    resource_group_name  = "adc-tfstate-rg"
+    storage_account_name = "tfstateadadc"
     container_name       = "tfstate"
     key                  = "org.terraform.tfstate"
   }
@@ -203,6 +203,32 @@ resource "azurerm_key_vault_secret" "visitreports_listen_connectionstring" {
 resource "azurerm_key_vault_secret" "visitreports_send_connectionstring" {
   name         = "${var.prefix}VRSENDCONNSTR"
   value        = "${base64encode(module.messaging.visitreports_send_connectionstring)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
+# AAD Infos
+
+resource "azurerm_key_vault_secret" "aad_domain" {
+  name         = "${var.prefix}AADDOMAIN"
+  value        = "${base64encode(var.aaddomain)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
+resource "azurerm_key_vault_secret" "aad_tenantid" {
+  name         = "${var.prefix}AADTENANTID"
+  value        = "${base64encode(var.aadtenantid)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
+resource "azurerm_key_vault_secret" "aad_clientid" {
+  name         = "${var.prefix}AADCLIENTID"
+  value        = "${base64encode(var.aadclientid)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
+resource "azurerm_key_vault_secret" "aad_clientiduri" {
+  name         = "${var.prefix}AADCLIENTIDURI"
+  value        = "${base64encode(var.aadclientiduri)}"
   key_vault_id = "${module.common.keyvaultid}"
 }
 

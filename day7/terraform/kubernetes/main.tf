@@ -19,6 +19,8 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
+  kubernetes_version = "1.16.7"
+
   tags = {
     environment = "${var.env}"
   }
