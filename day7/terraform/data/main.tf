@@ -67,6 +67,14 @@ resource "azurerm_sql_database" "sqldb" {
   }
 }
 
+resource "azurerm_sql_firewall_rule" "sqldb" {
+  name                = "FirewallRule1"
+  resource_group_name = "${var.resource_group_name}"
+  server_name         = azurerm_sql_server.sqlsrv.name
+  start_ip_address    = "0.0.0.0"
+  end_ip_address      = "0.0.0.0"
+}
+
 # SEARCH
 
 resource "azurerm_search_service" "search" {
