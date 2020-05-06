@@ -1,0 +1,74 @@
+parameters:
+  name: ''
+  variablesFile: ''
+  environmentName: ''
+  azureSubscription: ''
+  artifactDropName: drop
+  aadVariableGroupName: ""
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables: 
+      - template: ${{ parameters.variablesFile }}
+      - name: appinsightsKey
+        value: ""
+      - group: ${{ parameters.aadVariableGroupName }}
+    pool:
+      vmImage: ${{ variables.vmImage }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceGroupDeployment@2
+              displayName: Deploy Storage Account
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: 'Create Or Update Resource Group'
+                resourceGroupName: ${{ variables.resourceGroupName }}
+                location: ${{ variables.location }}
+                templateLocation: 'Linked artifact'
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/templates/scm-fe.json
+                overrideParameters: -storageAccountName ${{ variables.storageAccountName }}
+            - task: AzureCLI@2
+              displayName: Enable static website hosting
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az storage blob service-properties update --account-name ${{ variables.storageAccountName }} --static-website  --index-document index.html --404-document index.html
+            - task: AzureCLI@2
+              displayName: Display static website URL
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az storage account show -n ${{ variables.storageAccountName }} --query "primaryEndpoints.web" --output tsv
+            - task: AzureCLI@2
+              displayName: Set AppInsights Instrumentation Key
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  echo "##vso[task.setvariable variable=variables.appinsightsKey]`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`"
+            - task: AzureCLI@2
+              displayName: Configure endpoint within SPA settings.js
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  echo "var uisettings = { \"tenantId\": \"$(aadTenantId)\", \"audience\": \"$(aadApiClientIdUri)\", \"clientId\": \"$(aadFrontendClientId)\", \"enableStats\": true, \"endpoint\": \"${{ variables.spaEndpoint }}\", \"resourcesEndpoint\": \"${{ variables.resourcesEndpoint }}\", \"searchEndpoint\": \"${{ variables.searchEndpoint }}\", \"reportsEndpoint\": \"${{ variables.reportsEndpoint }}\", \"aiKey\": \"`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist/settings/settings.js
+            - task: AzureCLI@2
+              displayName: Copy SPA to blob storage
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az storage blob upload-batch -d '$web' --account-name ${{ variables.storageAccountName }} -s $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist
+            

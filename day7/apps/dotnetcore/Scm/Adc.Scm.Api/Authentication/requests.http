@@ -1,0 +1,7 @@
+GET https://login.microsoftonline.com/<TenantId>/oauth2/v2.0/authorize
+?client_id=<App ID>
+&response_type=id_token+token
+&redirect_uri=http://localhost:5001/api/tokenechofragment
+&response_mode=fragment
+&scope=openid profile http://scmapi-dev/Contacts.Read http://scmapi-dev/Contacts.Create http://scmapi-dev/Contacts.Update http://scmapi-dev/Contacts.Delete http://scmapi-dev/VisitReports.Read
+&nonce=1234

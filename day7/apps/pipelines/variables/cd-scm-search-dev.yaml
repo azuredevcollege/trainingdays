@@ -1,0 +1,33 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY7-SCM-DEV
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday7scmrsearchapi-dev
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: storageAccountName
+    value: adcd7scmsearchdev
+  - name: indexerFunctionName
+    value: adcday7scmindexer-dev
+  - name: applicationInsightsName
+    value: appinsightsscmd7-dev
+  - name: serviceBusNamespaceName
+    value: adcd7sb-dev
+  - name: azureSearchServiceName
+    value: adcd7search-dev
+  - name: azureSearchSKU
+    value: basic
+  - name: azureSearchReplicaCount
+    value: 1
+  - name: azureSearchPartitionCount
+    value: 1
+  - name: aadInstance
+    value: "https://login.microsoftonline.com"

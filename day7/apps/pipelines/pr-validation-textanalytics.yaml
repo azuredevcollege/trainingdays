@@ -1,0 +1,20 @@
+trigger: none
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day7/apps/nodejs/textanalytics/*
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+    - job: Build
+      displayName: Build Scm Textanalytics
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - template: ../nodejs/build/scm-ta-function.yaml

@@ -1,0 +1,44 @@
+parameters:
+  name: ""
+  variablesFile: ""
+  environmentName: ""
+  azureSubscription: ""
+  artifactDropName: drop
+  variableGroupName: ""
+  aadVariableGroupName: ""
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables:
+      - group: ${{ parameters.variableGroupName }}
+      - group: ${{ parameters.aadVariableGroupName }}
+      - template: ${{ parameters.variablesFile }}
+    pool:
+      vmImage: ${{ variables.vmImage }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceGroupDeployment@2
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupName }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-api-dotnetcore.json
+                overrideParameters: >
+                  -sku ${{ variables.appServicePlanSKU }} -webAppName ${{ variables.apiAppName }} 
+                  -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{variables.sqlServerName}} 
+                  -sqlDatabaseName ${{ variables.sqlDatabaseName }} -sqlUserName $(sqlAdminUser) -sqlPassword $(sqlAdminPassword) 
+                  -serviceBusNamespaceName ${{ variables.serviceBusNamespaceName }} -aadInstance ${{ variables.aadInstance }}
+                  -aadClientId $(aadApiClientId) -aadTenantId $(aadTenantId) -aadDomain $(aadDomain) -aadClientIdUri $(aadApiClientIdUri)
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                appType: apiApp
+                webAppName: ${{ variables.apiAppName }}
+                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Api.zip
