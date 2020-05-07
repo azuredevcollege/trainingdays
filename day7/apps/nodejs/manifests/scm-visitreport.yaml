@@ -1,0 +1,77 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scm-visitreport 
+  labels:
+    application: scmcontacts
+    service: scmvisitreport
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: scmvisitreport
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: scmvisitreport
+    spec:
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi:20200302.1
+          env:
+            - name: COSMOSDB
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSENDPOINT
+            - name: CUSTOMCONNSTR_COSMOSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSPRIMARYKEY
+            - name: CUSTOMCONNSTR_SBVRTOPIC_CONNSTR
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: VRSENDCONNSTR
+            - name: CUSTOMCONNSTR_SBCONTACTSTOPIC_CONNSTR
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: CONTACTSLISTENCONNSTR
+            - name: TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADTENANTID
+            - name: AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADCLIENTIDURI
+            - name: APPINSIGHTS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 3000
+      imagePullSecrets:
+      - name: regcred
