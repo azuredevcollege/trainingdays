@@ -1,6 +1,6 @@
 import { getHttpClient } from "../../utils/http-client";
 
-const BASE_PATH = "/contacts";
+const BASE_PATH = "/";
 
 const state = {
     contacts: [],
@@ -60,7 +60,7 @@ const actions = {
     read({ commit, dispatch, rootGetters }, id) {
         dispatch("wait/start", "apicall", { root: true });
         var client = getHttpClient(rootGetters["auth/accessToken"]);
-        return client.get(`${BASE_PATH}/${id}`).then(response => {
+        return client.get(`${BASE_PATH}${id}`).then(response => {
             commit("setContact", response.data);
             dispatch("wait/end", "apicall", { root: true });
         }).catch(err => {
@@ -79,7 +79,7 @@ const actions = {
     update({ dispatch, rootGetters }, payload) {
         dispatch("wait/start", "apicall", { root: true });
         var client = getHttpClient(rootGetters["auth/accessToken"]);
-        return client.put(`${BASE_PATH}/${payload.id}`, payload).then(() => {
+        return client.put(`${BASE_PATH}${payload.id}`, payload).then(() => {
             dispatch("wait/end", "apicall", { root: true });
             dispatch("notifications/addMessage", { type: "success", message: "Contact successfully updated.", read: false }, { root: true });
             return dispatch("read", payload.id);
@@ -120,7 +120,7 @@ const actions = {
     delete({ dispatch, rootGetters }, id) {
         dispatch("wait/start", "apicall", { root: true });
         var client = getHttpClient(rootGetters["auth/accessToken"]);
-        return client.delete(`${BASE_PATH}/${id}`).then(() => {
+        return client.delete(`${BASE_PATH}${id}`).then(() => {
             dispatch("notifications/addMessage", { type: "success", message: "Contact successfully deleted.", read: false }, { root: true });
             dispatch("wait/end", "apicall", { root: true });
         }).catch(err => {

@@ -8,12 +8,12 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-headers: "Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language"
     nginx.ingress.kubernetes.io/cors-max-age: "600"
     nginx.ingress.kubernetes.io/proxy-body-size: "12m"
-    nginx.ingress.kubernetes.io/rewrite-target: "/contacts"
+    nginx.ingress.kubernetes.io/rewrite-target: "/contacts/$2"
 spec:
   rules:
   - http:
       paths:
-      - path: /api/contacts
+      - path: /api/contacts(/|$)(.*)
         backend:
           serviceName: contacts
           servicePort: 8080
