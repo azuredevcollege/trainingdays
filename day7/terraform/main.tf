@@ -168,6 +168,12 @@ resource "azurerm_key_vault_secret" "resources_primary_connection_string" {
   key_vault_id = "${module.common.keyvaultid}"
 }
 
+resource "azurerm_key_vault_secret" "funcs_primary_connection_string" {
+  name         = "${var.prefix}FUNCTIONSCONNECTIONSTRING"
+  value        = "${base64encode(module.storage.funcs_primary_connection_string)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
 # Messaging
 
 resource "azurerm_key_vault_secret" "thumbnail_listen_connectionstring" {
@@ -185,6 +191,12 @@ resource "azurerm_key_vault_secret" "thumbnail_send_connectionstring" {
 resource "azurerm_key_vault_secret" "contacts_listen_connectionstring" {
   name         = "${var.prefix}CONTACTSLISTENCONNSTR"
   value        = "${base64encode(module.messaging.contacts_listen_connectionstring)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
+resource "azurerm_key_vault_secret" "contacts_listen_with_entity_connectionstring" {
+  name         = "${var.prefix}CONTACTSLISTENENTITYCONNSTR"
+  value        = "${base64encode(module.messaging.contacts_listen_with_entity_connectionstring)}"
   key_vault_id = "${module.common.keyvaultid}"
 }
 

@@ -1,10 +1,10 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: scm-visitreport 
+  name: scm-search-function-deploy 
   labels:
     application: scmcontacts
-    service: scmvisitreport
+    service: scmsearchfunc
 spec:
   replicas: 2
   strategy:
@@ -17,12 +17,12 @@ spec:
   selector:
     matchLabels:
       application: scmcontacts
-      service: scmvisitreport
+      service: scmsearchfunc
   template:
     metadata:
       labels:
         application: scmcontacts
-        service: scmvisitreport
+        service: scmsearchfunc
     spec:
       containers:
         - name: application
@@ -33,45 +33,44 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi:20200302.1
+          image: azuredevcollege.azurecr.io/adcday7/scmsearchindexer:20200507.1
           env:
-            - name: COSMOSDB
+            - name: AzureWebJobsDashboard
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: COSMOSENDPOINT
-            - name: CUSTOMCONNSTR_COSMOSKEY
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: AzureWebJobsStorage
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: COSMOSPRIMARYKEY
-            - name: CUSTOMCONNSTR_SBVRTOPIC_CONNSTR
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: ServiceBusConnectionString
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: VRSENDCONNSTR
-            - name: CUSTOMCONNSTR_SBCONTACTSTOPIC_CONNSTR
+                  key: CONTACTSLISTENCONNSTR
+            - name: FUNCTIONS_WORKER_RUNTIME
+              value: dotnet
+            - name: FUNCTIONS_EXTENSION_VERSION
+              value: "~3"
+            - name: ContactIndexerOptions__IndexName
+              value: scmcontacts
+            - name: ContactIndexerOptions__ServiceName
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: CONTACTSLISTENENTITYCONNSTR
-            - name: TENANT_ID
+                  key: SEARCHNAME
+            - name: ContactIndexerOptions__AdminApiKey
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: AADTENANTID
-            - name: AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADCLIENTIDURI
-            - name: APPINSIGHTS_KEY
+                  key: SEARCHPRIMARYKEY
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
-          ports:
-          - containerPort: 3000
       imagePullSecrets:
       - name: regcred

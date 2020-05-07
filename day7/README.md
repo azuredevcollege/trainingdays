@@ -22,5 +22,6 @@ helm install clstr-ingress stable/nginx-ingress --set rbac.create=true,controlle
 
 Secret / Docker Reg
 
-kubectl create secret docker-registry regcred --docker-server=azuredevcollege.azurecr.io --docker-username=azuredevcollege --docker-password=l0EJXNQ4IfU1XX/VkS62OMoerhBEukf6 --docker-email=christian.dennig@azuredevcollege.com -n dev
+Dashboard
 
+https://github.com/vmware-tanzu/octant/releases

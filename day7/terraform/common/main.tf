@@ -15,6 +15,7 @@ resource "azurerm_application_insights" "appinsights" {
   location            = "${var.location}"
   resource_group_name = "${var.resource_group_name}"
   application_type    = "web"
+  retention_in_days   = 90
   tags = {
     environment = "${var.env}"
   }
@@ -85,7 +86,7 @@ resource "azurerm_key_vault" "keyvault" {
 }
 
 output "ai_instrumentation_key" {
-  value = "${azurerm_application_insights.appinsights.instrumentation_key}"
+  value       = "${azurerm_application_insights.appinsights.instrumentation_key}"
   description = "Application Insights Instrumentation Key"
 }
 

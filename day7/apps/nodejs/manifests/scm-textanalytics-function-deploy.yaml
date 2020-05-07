@@ -1,10 +1,10 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: scm-visitreport 
+  name: scm-textanalytics-function-deploy 
   labels:
     application: scmcontacts
-    service: scmvisitreport
+    service: scmtextanalyticsfunc
 spec:
   replicas: 2
   strategy:
@@ -17,12 +17,12 @@ spec:
   selector:
     matchLabels:
       application: scmcontacts
-      service: scmvisitreport
+      service: scmtextanalyticsfunc
   template:
     metadata:
       labels:
         application: scmcontacts
-        service: scmvisitreport
+        service: scmtextanalyticsfunc
     spec:
       containers:
         - name: application
@@ -33,45 +33,45 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi:20200302.1
+          image:  azuredevcollege.azurecr.io/adcday7/scmtextanalytics:20200507.1
           env:
+            - name: AzureWebJobsStorage
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: ServiceBusConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: VRLISTENCONNSTR
+            - name: FUNCTIONS_WORKER_RUNTIME
+              value: node
             - name: COSMOSDB
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
                   key: COSMOSENDPOINT
-            - name: CUSTOMCONNSTR_COSMOSKEY
+            - name: COSMOSKEY
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
                   key: COSMOSPRIMARYKEY
-            - name: CUSTOMCONNSTR_SBVRTOPIC_CONNSTR
+            - name: TA_SUBSCRIPTIONENDPOINT
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: VRSENDCONNSTR
-            - name: CUSTOMCONNSTR_SBCONTACTSTOPIC_CONNSTR
+                  key: TAENDPOINT
+            - name: TA_SUBSCRIPTION_KEY
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: CONTACTSLISTENENTITYCONNSTR
-            - name: TENANT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADTENANTID
-            - name: AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADCLIENTIDURI
-            - name: APPINSIGHTS_KEY
+                  key: TAKEY
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
-          ports:
-          - containerPort: 3000
       imagePullSecrets:
       - name: regcred

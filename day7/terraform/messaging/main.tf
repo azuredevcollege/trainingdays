@@ -124,13 +124,13 @@ resource "azurerm_servicebus_subscription" "visitreports_textanalytics" {
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.visitreports.name
   max_delivery_count  = 10
-  requires_session    = true
+  requires_session    = false
 }
 
 # Outputs
 
 output "thumbnail_listen_connectionstring" {
-  value = azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.primary_connection_string
+  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.name};SharedAccessKey=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.primary_key}"
 }
 
 output "thumbnail_send_connectionstring" {
@@ -141,14 +141,22 @@ output "contacts_send_connectionstring" {
   value = azurerm_servicebus_topic_authorization_rule.topic_contacts_send.primary_connection_string
 }
 
-output "contacts_listen_connectionstring" {
+output "contacts_listen_with_entity_connectionstring" {
   value = azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_connection_string
+}
+
+output "contacts_listen_connectionstring" {
+  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_key}"
 }
 
 output "visitreports_send_connectionstring" {
   value = azurerm_servicebus_topic_authorization_rule.topic_visitreports_send.primary_connection_string
 }
 
-output "visitreports_listen_connectionstring" {
+output "visitreports_listen_connectionstring_old" {
   value = azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_connection_string
+}
+
+output "visitreports_listen_connectionstring" {
+  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_key}"
 }
