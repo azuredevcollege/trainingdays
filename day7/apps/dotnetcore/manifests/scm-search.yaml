@@ -1,10 +1,10 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: scm-deploy 
+  name: scm-search 
   labels:
     application: scmcontacts
-    service: scmapi
+    service: scmsearch
 spec:
   replicas: 2
   strategy:
@@ -17,12 +17,12 @@ spec:
   selector:
     matchLabels:
       application: scmcontacts
-      service: scmapi
+      service: scmsearch
   template:
     metadata:
       labels:
         application: scmcontacts
-        service: scmapi
+        service: scmsearch
     spec:
       containers:
         - name: application
@@ -33,13 +33,20 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmapi:20200302.1
+          image: azuredevcollege.azurecr.io/adcday5/scmsearchapi:20200302.1
           env:
-            - name: ConnectionStrings__DefaultConnectionString
+            - name: ContactSearchOptions__ServiceName
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: SQLDBCONNECTIONSTRING
+                  key: SEARCHNAME
+            - name: ContactSearchOptions__AdminApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SEARCHPRIMARYKEY
+            - name: ContactSearchOptions__IndexName
+              value: scmcontacts
             - name: AzureAdOptions__Domain
               valueFrom:
                 secretKeyRef:
@@ -65,11 +72,6 @@ spec:
                 secretKeyRef:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
-            - name: EventServiceOptions__ServiceBusConnectionString
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: CONTACTSSENDCONNSTR
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 5000

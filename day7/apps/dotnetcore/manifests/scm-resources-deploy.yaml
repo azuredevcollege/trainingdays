@@ -1,10 +1,10 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: scm-deploy 
+  name: scm-resources-deploy 
   labels:
     application: scmcontacts
-    service: scmapi
+    service: scmresourcesapi
 spec:
   replicas: 2
   strategy:
@@ -17,12 +17,12 @@ spec:
   selector:
     matchLabels:
       application: scmcontacts
-      service: scmapi
+      service: scmresourcesapi
   template:
     metadata:
       labels:
         application: scmcontacts
-        service: scmapi
+        service: scmresourcesapi
     spec:
       containers:
         - name: application
@@ -33,13 +33,26 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmapi:20200302.1
+          image: azuredevcollege.azurecr.io/adcday5/scmresourceapi:20200302.1
           env:
-            - name: ConnectionStrings__DefaultConnectionString
+            - name: ImageStoreOptions__StorageAccountConnectionString
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: SQLDBCONNECTIONSTRING
+                  key: RESOURCESCONNECTIONSTRING
+            - name: ImageStoreOptions__ImageContainer
+              value: rawimages
+            - name: ImageStoreOptions__ThumbnailContainer
+              value: thumbnails
+            - name: ServiceBusQueueOptions__ThumbnailQueueConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: THUMBNAILSENDCONNSTR
+            - name: ServiceBusQueueOptions__ImageContainer
+              value: rawimages
+            - name: ServiceBusQueueOptions__ThumbnailContainer
+              value: thumbnails
             - name: AzureAdOptions__Domain
               valueFrom:
                 secretKeyRef:
@@ -65,11 +78,6 @@ spec:
                 secretKeyRef:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
-            - name: EventServiceOptions__ServiceBusConnectionString
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: CONTACTSSENDCONNSTR
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 5000
