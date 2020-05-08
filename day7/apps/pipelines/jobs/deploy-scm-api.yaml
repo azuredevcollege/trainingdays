@@ -35,13 +35,13 @@ jobs:
                 action: createSecret
                 secretName: regcred
                 namespace: ${{ parameters.clusterNamespace }}
-                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
+                # kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
             - task: KubernetesManifest@0
               displayName: Deploy secrets to Kubernetes cluster
               inputs:
                 action: deploy
-                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
+                # kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 namespace: ${{ parameters.clusterNamespace }}
                 manifests: |
                   $(Pipeline.Workspace)/secrets/secrets.yaml
@@ -50,7 +50,7 @@ jobs:
               inputs:
                 action: deploy
                 namespace: ${{ parameters.clusterNamespace }}
-                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
+                # kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 manifests: |
                   $(Pipeline.Workspace)/manifests/scm-deploy.yaml
                   $(Pipeline.Workspace)/manifests/scm-ingress.yaml
