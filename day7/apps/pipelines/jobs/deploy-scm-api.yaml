@@ -15,7 +15,7 @@ jobs:
       - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
       vmImage: "ubuntu-latest"
-    environment: ${{ parameters.environmentName }}
+    environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
         deploy:
