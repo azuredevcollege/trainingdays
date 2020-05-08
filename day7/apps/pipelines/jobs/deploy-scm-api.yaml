@@ -47,18 +47,18 @@ jobs:
                 dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
             - task: KubernetesManifest@0
               displayName: Deploy secrets to Kubernetes cluster
-              kubernetesServiceConnection: ${{ parameters.k8sConnection }}
               inputs:
                 action: deploy
+                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 namespace: ${{ parameters.clusterNamespace }}
                 manifests: |
                   $(System.ArtifactsDirectory)/secrets/secrets.yml
             - task: KubernetesManifest@0
               displayName: Deploy to Kubernetes cluster
-              kubernetesServiceConnection: ${{ parameters.k8sConnection }}
               inputs:
                 action: deploy
                 namespace: ${{ parameters.clusterNamespace }}
+                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 manifests: |
                   $(System.ArtifactsDirectory)/manifests/scm-deploy.yml
                   $(System.ArtifactsDirectory)/manifests/scm-ingress.yml
