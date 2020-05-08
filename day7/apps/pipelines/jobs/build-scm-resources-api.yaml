@@ -1,12 +1,11 @@
 parameters:
   configuration: release
-  artifactDropName: drop
-  buildNumber: ""
-  containerRegistryServiceConnection: ""
+  buildNumber: ''
+  containerRegistryServiceConnection: ''
 
 jobs:
   - job: Build
-    displayName: Build Scm Resource Api
+    displayName: Build Scm Resources Api
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -16,13 +15,3 @@ jobs:
           buildNumber: ${{ parameters.buildNumber }}
           publishDockerImage: true
           containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: day7/apps/infrastructure/templates
-          contents: |
-            scm-resources-api-dotnetcore.json
-          targetFolder: $(Build.ArtifactStagingDirectory)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifactName: ${{ parameters.artifactDropName }}

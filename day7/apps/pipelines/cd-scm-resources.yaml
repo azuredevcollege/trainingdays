@@ -6,7 +6,6 @@ trigger:
   paths:
     include:
       - day7/apps/dotnetcore/Scm.Resources/*
-      - day7/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
       - day7/apps/pipelines/cd-scm-resources.yaml
 
 variables:
@@ -22,7 +21,6 @@ stages:
       - template: jobs/build-scm-resources-api.yaml
         parameters:
           configuration: $(configuration)
-          artifactDropName: drop
           buildNumber: $(Build.BuildNumber)
           containerRegistryServiceConnection: $(containerRegistry)
 
@@ -34,23 +32,9 @@ stages:
       - template: jobs/deploy-scm-resources-api.yaml
         parameters:
           name: Deploy Scm Resources Api
-          variablesFile: ../variables/cd-scm-resources-dev.yaml
-          aadVariableGroupName: Day7-AAD-Dev
+          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
           azureSubscription: $(azureSubscription)
-          artifactDropName: drop
-
-  - stage: Test
-    displayName: Test
-    dependsOn: Development
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    jobs:
-      - template: jobs/deploy-scm-resources-api.yaml
-        parameters:
-          name: Deploy Scm Resources Api
-          variablesFile: ../variables/cd-scm-resources-test.yaml
-          aadVariableGroupName: Day7-AAD-Test
-          environmentName: ADC-DAY7-SCM-TEST
-          azureSubscription: $(azureSubscription)
-          artifactDropName: drop
+          containerRegistry: $(containerRegistry)
+          clusterNamespace: dev
