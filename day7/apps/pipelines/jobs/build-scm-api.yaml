@@ -16,12 +16,6 @@ jobs:
           buildNumber: ${{ parameters.buildNumber }}
           publishDockerImage: true
           containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: day7/apps/infrastructure/templates
-          contents: |
-            scm-api-dotnetcore.json
-          targetFolder: $(Build.ArtifactStagingDirectory)
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)
