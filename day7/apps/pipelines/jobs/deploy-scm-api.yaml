@@ -22,7 +22,7 @@ jobs:
           steps:
             - task: replacetokens@3
               inputs:
-                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yml
+                targetFiles: $(Pipeline.Workspace)/secrets.yml
                 encoding: "auto"
                 writeBOM: true
                 actionOnMissing: "warn"
