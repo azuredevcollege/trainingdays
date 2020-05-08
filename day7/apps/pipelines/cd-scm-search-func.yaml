@@ -5,8 +5,8 @@ trigger:
       - master
   paths:
     include:
-      - day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/*
-      - day7/apps/pipelines/cd-scm-search.yaml
+      - day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/*
+      - day7/apps/pipelines/cd-scm-search-func.yaml
 
 variables:
   configuration: release
@@ -18,7 +18,7 @@ stages:
     displayName: Build
 
     jobs:
-      - template: jobs/build-scm-search-api.yaml
+      - template: jobs/build-scm-search-func.yaml
         parameters:
           configuration: $(configuration)
           buildNumber: $(Build.BuildNumber)
@@ -29,9 +29,9 @@ stages:
     dependsOn: Build
 
     jobs:
-      - template: jobs/deploy-scm-search-api.yaml
+      - template: jobs/deploy-scm-search-func.yaml
         parameters:
-          name: Deploy Scm Search Api
+          name: Deploy Scm Search Indexer Function
           keyVaultVariableGroupName: Day7-KeyVault-Dev
           buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV

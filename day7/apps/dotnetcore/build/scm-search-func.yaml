@@ -1,0 +1,38 @@
+parameters:
+  buildConfiguration: release
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
+steps:
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
+    inputs:
+      repository: adcday7/scmsearchindexer
+      command: build
+      dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/Dockerfile
+      buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Publish Docker image
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      repository: adcday7/scmsearchindexer
+      command: buildAndPush
+      dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/Dockerfile
+      buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish secrets file
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: secrets
+      targetPath: day7/apps/infrastructure/manifests/secrets.yaml
+  - task: PublishPipelineArtifact@1
+    displayName: Publish manifest files
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: manifests
+      targetPath: day7/apps/dotnetcore/manifests/scmsearchfunc
