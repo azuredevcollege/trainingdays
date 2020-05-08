@@ -22,7 +22,7 @@ jobs:
           steps:
             - task: replacetokens@3
               inputs:
-                targetFiles: $(Pipeline.Workspace)/secrets.yml
+                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
                 encoding: "auto"
                 writeBOM: true
                 actionOnMissing: "warn"
@@ -44,7 +44,7 @@ jobs:
                 kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 namespace: ${{ parameters.clusterNamespace }}
                 manifests: |
-                  $(Pipeline.Workspace)/secrets/secrets.yml
+                  $(Pipeline.Workspace)/secrets/secrets.yaml
             - task: KubernetesManifest@0
               displayName: Deploy to Kubernetes cluster
               inputs:
@@ -52,9 +52,9 @@ jobs:
                 namespace: ${{ parameters.clusterNamespace }}
                 kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 manifests: |
-                  $(Pipeline.Workspace)/manifests/scm-deploy.yml
-                  $(Pipeline.Workspace)/manifests/scm-ingress.yml
-                  $(Pipeline.Workspace)/manifests/scm-svc.yml
+                  $(Pipeline.Workspace)/manifests/scm-deploy.yaml
+                  $(Pipeline.Workspace)/manifests/scm-ingress.yaml
+                  $(Pipeline.Workspace)/manifests/scm-svc.yaml
                 imagePullSecrets: |
                   regcred
                 containers: |
