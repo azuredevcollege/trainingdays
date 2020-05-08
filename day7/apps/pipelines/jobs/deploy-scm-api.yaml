@@ -6,6 +6,7 @@ parameters:
   containerRegistry: ""
   clusterNamespace: ""
   buildNumber: ""
+  k8sConnection: ""
 
 jobs:
   - deployment: Deploy
@@ -42,9 +43,11 @@ jobs:
                 action: createSecret
                 secretName: regcred
                 namespace: ${{ parameters.clusterNamespace }}
+                kubernetesServiceConnection: ${{ parameters.k8sConnection }}
                 dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
             - task: KubernetesManifest@0
               displayName: Deploy secrets to Kubernetes cluster
+              kubernetesServiceConnection: ${{ parameters.k8sConnection }}
               inputs:
                 action: deploy
                 namespace: ${{ parameters.clusterNamespace }}
@@ -52,6 +55,7 @@ jobs:
                   $(System.ArtifactsDirectory)/secrets/secrets.yml
             - task: KubernetesManifest@0
               displayName: Deploy to Kubernetes cluster
+              kubernetesServiceConnection: ${{ parameters.k8sConnection }}
               inputs:
                 action: deploy
                 namespace: ${{ parameters.clusterNamespace }}

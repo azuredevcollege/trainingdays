@@ -12,6 +12,7 @@ variables:
   configuration: release
   azureSubscription: AzureDeveloperCollege
   containerRegistry: ADC-ContainerRegistry
+  k8sConnection: ADC-DAY7-SCM-DEV-adcday7k8sdev-dev-1588922905287
 
 stages:
   - stage: Build
@@ -37,4 +38,5 @@ stages:
           environmentName: ADC-DAY7-SCM-DEV
           azureSubscription: $(azureSubscription)
           containerRegistry: $(containerRegistry)
+          k8sConnection: $(k8sConnection)
           clusterNamespace: dev
