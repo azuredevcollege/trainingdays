@@ -5,14 +5,14 @@ parameters:
   azureSubscription: ""
   artifactDropName: drop
   variableGroupName: ""
-  aadVariableGroupName: ""
+  keyVaultVariableGroupName: ""
 
 jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
       - group: ${{ parameters.variableGroupName }}
-      - group: ${{ parameters.aadVariableGroupName }}
+      - group: ${{ parameters.keyVaultVariableGroupName }}
       - template: ${{ parameters.variablesFile }}
     pool:
       vmImage: ${{ variables.vmImage }}
