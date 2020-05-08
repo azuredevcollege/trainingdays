@@ -6,12 +6,12 @@ trigger:
   paths:
     include:
       - day7/apps/nodejs/textanalytics/*
-      - day7/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
-      - day7/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
       - day7/apps/pipelines/cd-scm-textanalytics.yaml
 
 variables:
+  configuration: release
   azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
 
 stages:
   - stage: Build
@@ -20,7 +20,9 @@ stages:
     jobs:
       - template: jobs/build-scm-ta-func.yaml
         parameters:
-          artifactDropName: drop
+          configuration: $(configuration)
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
 
   - stage: Development
     displayName: Development
@@ -29,24 +31,10 @@ stages:
     jobs:
       - template: jobs/deploy-scm-ta-func.yaml
         parameters:
-          name: Deploy Scm Textanalytics
-          variablesFile: ../variables/cd-scm-textanalytics-dev.yaml
-          variableGroupName: Day7-VariableGroup
+          name: Deploy Scm Textanalytics Function
+          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
           azureSubscription: $(azureSubscription)
-          artifactDropName: drop
-
-  - stage: Test
-    displayName: Test
-    dependsOn: Development
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    jobs:
-      - template: jobs/deploy-scm-ta-func.yaml
-        parameters:
-          name: Deploy Scm Textanalytics
-          variablesFile: ../variables/cd-scm-textanalytics-test.yaml
-          variableGroupName: Day7-VariableGroup
-          environmentName: ADC-DAY7-SCM-TEST
-          azureSubscription: $(azureSubscription)
-          artifactDropName: drop
+          containerRegistry: $(containerRegistry)
+          clusterNamespace: dev

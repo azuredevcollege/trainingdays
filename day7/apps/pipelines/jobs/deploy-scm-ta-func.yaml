@@ -1,53 +1,54 @@
 parameters:
   name: ""
-  variablesFile: ""
   environmentName: ""
-  azureSubscription: ""
-  artifactDropName: drop
-  variableGroupName: ""
+  keyVaultVariableGroupName: ""
+  containerRegistry: ""
+  clusterNamespace: ""
+  buildNumber: ""
 
 jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
-      - group: ${{ parameters.variableGroupName }}
-      - template: ${{ parameters.variablesFile }}
+      - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: ${{ variables.vmImage }}
-    environment: ${{ parameters.environmentName }}
+      vmImage: "ubuntu-latest"
+    environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
         deploy:
           steps:
-            - task: AzureResourceGroupDeployment@2
-              displayName: 'Create/update Common Services'
+            - task: replacetokens@3
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                action: "Create Or Update Resource Group"
-                resourceGroupName: ${{ variables.resourceGroupName }}
-                location: ${{ variables.location }}
-                templateLocation: "Linked artifact"
-                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-textanalytics-nodejs-common.json
-                overrideParameters: >
-                  -taname ${{variables.taname}} -storageAccountName ${{ variables.storageAccountName }} -tatier ${{variables.tatier}}
-            - task: AzureResourceGroupDeployment@2
-              displayName: 'Create/update Infrastructure for Linux TextAnalytics Function'
+                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Create imagePullSecret
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                action: "Create Or Update Resource Group"
-                resourceGroupName: ${{ variables.resourceGroupNameFunc }}
-                location: ${{ variables.location }}
-                templateLocation: "Linked artifact"
-                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-textanalytics-nodejs-infra.json
-                overrideParameters: >
-                  -functionAppName ${{ variables.functionAppName }} -storageAccountName ${{ variables.storageAccountName }} 
-                  -applicationInsightsName ${{ variables.applicationInsightsName }} -cosmosDbAccount ${{variables.cosmosDbAccount}}
-                  -serviceBusNamespaceName ${{ variables.serviceBusNamespaceName }} -commonResGroup ${{ variables.resourceGroupName }}
-                  -taname ${{ variables.taname }}
-            - task: AzureFunctionApp@1
-              displayName: 'Deploy TextAnalytics Function App'
+                action: createSecret
+                secretName: regcred
+                namespace: ${{ parameters.clusterNamespace }}
+                dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
+            - task: KubernetesManifest@0
+              displayName: Deploy secrets to Kubernetes cluster
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                appType: functionAppLinux
-                appName: ${{ variables.functionAppName }}
-                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.TaFunc.zip
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/secrets/secrets.yaml
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/scm-textanalytics-func-deploy.yaml
+                imagePullSecrets: |
+                  regcred
+                containers: |
+                  azuredevcollege.azurecr.io/adcday7/scmtextanalytics:${{ parameters.buildNumber }}

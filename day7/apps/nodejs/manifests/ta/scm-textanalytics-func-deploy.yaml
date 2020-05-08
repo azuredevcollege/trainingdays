@@ -33,7 +33,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image:  azuredevcollege.azurecr.io/adcday7/scmtextanalytics:20200507.1
+          image:  azuredevcollege.azurecr.io/adcday7/scmtextanalytics
           env:
             - name: AzureWebJobsStorage
               valueFrom:
@@ -73,5 +73,3 @@ spec:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
-      imagePullSecrets:
-      - name: regcred

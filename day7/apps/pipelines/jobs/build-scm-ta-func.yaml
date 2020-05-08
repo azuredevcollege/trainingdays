@@ -1,20 +1,17 @@
 parameters:
-  artifactDropName: drop
+  configuration: release
+  buildNumber: ''
+  containerRegistryServiceConnection: ''
+
 jobs:
   - job: Build
-    displayName: Build TextAnalytics Function
+    displayName: Build Scm TextAnalytics Function
     pool:
       vmImage: ubuntu-latest
     steps:
       - template: ../../nodejs/build/scm-ta-function.yaml
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: day7/apps/infrastructure/templates
-          contents: |
-            scm-textanalytics-nodejs-common.json
-            scm-textanalytics-nodejs-infra.json
-          targetFolder: $(Build.ArtifactStagingDirectory)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifactName: ${{ parameters.artifactDropName }}
+        parameters:
+          buildConfiguration: ${{ parameters.configuration }}
+          buildNumber: ${{ parameters.buildNumber }}
+          publishDockerImage: true
+          containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}

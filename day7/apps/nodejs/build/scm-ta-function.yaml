@@ -1,19 +1,38 @@
+parameters:
+  buildConfiguration: release
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
 steps:
-  - task: NodeTool@0
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
     inputs:
-      versionSpec: '10.x'
-    displayName: 'Install Node.js'
-  - task: Bash@3
+      repository: adcday7/scmtextanalytics
+      command: build
+      dockerfile: day7/apps/nodejs/textanalytics/Dockerfile
+      buildContext: day7/apps/nodejs/textanalytics
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Publish Docker image
+    condition: ${{ parameters.publishDockerImage }}
     inputs:
-      workingDirectory: '$(Build.SourcesDirectory)/day7/apps/nodejs/textanalytics'
-      targetType: 'inline'
-      displayName: 'npm install'
-      script: npm install
-  - task: ArchiveFiles@2
-    displayName: 'Archive build files'
+      repository: adcday7/scmtextanalytics
+      command: buildAndPush
+      dockerfile: day7/apps/nodejs/textanalytics/Dockerfile
+      buildContext: day7/apps/nodejs/textanalytics
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish secrets file
+    condition: ${{ parameters.publishDockerImage }}
     inputs:
-      rootFolderOrFile: '$(Build.SourcesDirectory)/day7/apps/nodejs/textanalytics'
-      includeRootFolder: false
-      archiveType: zip
-      archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.TaFunc.zip
-      replaceExistingArchive: true
+      artifactName: secrets
+      targetPath: day7/apps/infrastructure/manifests/secrets.yaml
+  - task: PublishPipelineArtifact@1
+    displayName: Publish manifest files
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: manifests
+      targetPath: day7/apps/nodejs/manifests/ta
