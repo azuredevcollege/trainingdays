@@ -13,7 +13,7 @@ jobs:
     variables:
       - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: ${{ variables.vmImage }}
+      vmImage: "ubuntu-latest"
     environment: ${{ parameters.environmentName }}
     strategy:
       runOnce:
