@@ -1,7 +1,6 @@
 parameters:
   configuration: release
   buildNumber: ''
-  artifactDropName: drop
   containerRegistryServiceConnection: ''
 
 jobs:
@@ -16,7 +15,3 @@ jobs:
           buildNumber: ${{ parameters.buildNumber }}
           publishDockerImage: true
           containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifactName: ${{ parameters.artifactDropName }}

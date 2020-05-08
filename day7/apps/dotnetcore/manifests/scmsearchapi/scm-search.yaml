@@ -33,7 +33,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmsearchapi:20200302.1
+          image: azuredevcollege.azurecr.io/adcday7/scmsearchapi
           env:
             - name: ContactSearchOptions__ServiceName
               valueFrom:
@@ -75,5 +75,3 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 5000
-      imagePullSecrets:
-      - name: regcred

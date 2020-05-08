@@ -1,19 +1,17 @@
 parameters:
   name: ""
-  variablesFile: ""
   environmentName: ""
   azureSubscription: ""
-  artifactDropName: drop
-  variableGroupName: ""
   keyVaultVariableGroupName: ""
+  containerRegistry: ""
+  clusterNamespace: ""
+  buildNumber: ""
 
 jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
-      - group: ${{ parameters.variableGroupName }}
       - group: ${{ parameters.keyVaultVariableGroupName }}
-      - template: ${{ parameters.variablesFile }}
     pool:
       vmImage: ${{ variables.vmImage }}
     environment: ${{ parameters.environmentName }}
@@ -21,24 +19,47 @@ jobs:
       runOnce:
         deploy:
           steps:
-            - task: AzureResourceGroupDeployment@2
+            - task: DownloadPipelineArtifact@1
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                action: "Create Or Update Resource Group"
-                resourceGroupName: ${{ variables.resourceGroupName }}
-                location: ${{ variables.location }}
-                templateLocation: "Linked artifact"
-                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-api-dotnetcore.json
-                overrideParameters: >
-                  -sku ${{ variables.appServicePlanSKU }} -webAppName ${{ variables.apiAppName }} 
-                  -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
-                  -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{variables.sqlServerName}} 
-                  -sqlDatabaseName ${{ variables.sqlDatabaseName }} -sqlUserName $(sqlAdminUser) -sqlPassword $(sqlAdminPassword) 
-                  -serviceBusNamespaceName ${{ variables.serviceBusNamespaceName }} -aadInstance ${{ variables.aadInstance }}
-                  -aadClientId $(aadApiClientId) -aadTenantId $(aadTenantId) -aadDomain $(aadDomain) -aadClientIdUri $(aadApiClientIdUri)
-            - task: AzureRmWebAppDeployment@4
+                artifactName: "manifests"
+                downloadPath: "$(System.ArtifactsDirectory)/manifests"
+            - task: DownloadPipelineArtifact@1
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                appType: apiApp
-                webAppName: ${{ variables.apiAppName }}
-                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Api.zip
+                artifactName: "secrets"
+                downloadPath: "$(System.ArtifactsDirectory)/secrets"
+            - task: replacetokens@3
+              inputs:
+                targetFiles: "$(System.ArtifactsDirectory)/secrets/secrets.yml"
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Create imagePullSecret
+              inputs:
+                action: createSecret
+                secretName: regcred
+                namespace: ${{ parameters.clusterNamespace }}
+                dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
+            - task: KubernetesManifest@0
+              displayName: Deploy secrets to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(System.ArtifactsDirectory)/secrets/secrets.yml
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(System.ArtifactsDirectory)/manifests/scm-deploy.yml
+                  $(System.ArtifactsDirectory)/manifests/scm-ingress.yml
+                  $(System.ArtifactsDirectory)/manifests/scm-svc.yml
+                imagePullSecrets: |
+                  regcred
+                containers: |
+                  azuredevcollege.azurecr.io/adcday7/scmapi:${{ parameters.buildNumber }}
