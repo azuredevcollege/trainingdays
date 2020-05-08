@@ -33,7 +33,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday7/scmresimgindexer:20200507.1
+          image: azuredevcollege.azurecr.io/adcday7/scmresimgindexer
           env:
             - name: AzureWebJobsDashboard
               valueFrom:
@@ -67,5 +67,3 @@ spec:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
-      imagePullSecrets:
-      - name: regcred

@@ -5,8 +5,8 @@ trigger:
       - master
   paths:
     include:
-      - day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/*
-      - day7/apps/pipelines/cd-scm-resources.yaml
+      - day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/*
+      - day7/apps/pipelines/cd-scm-resources-func.yaml
 
 variables:
   configuration: release
@@ -18,7 +18,7 @@ stages:
     displayName: Build
 
     jobs:
-      - template: jobs/build-scm-resources-api.yaml
+      - template: jobs/build-scm-resources-func.yaml
         parameters:
           configuration: $(configuration)
           buildNumber: $(Build.BuildNumber)
@@ -29,9 +29,9 @@ stages:
     dependsOn: Build
 
     jobs:
-      - template: jobs/deploy-scm-resources-api.yaml
+      - template: jobs/deploy-scm-resources-func.yaml
         parameters:
-          name: Deploy Scm Resources Api
+          name: Deploy Scm Resources Indexer Function
           keyVaultVariableGroupName: Day7-KeyVault-Dev
           buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
