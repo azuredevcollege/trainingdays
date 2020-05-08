@@ -9,7 +9,7 @@ steps:
     displayName: Build Docker image
     condition: eq(${{ parameters.publishDockerImage }}, false)
     inputs:
-      repository: adcday7/scmresourceapi
+      repository: adcday7/scmsearchapi
       command: build
       dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
       buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
@@ -18,7 +18,7 @@ steps:
     displayName: Build and Publish Docker image
     condition: ${{ parameters.publishDockerImage }}
     inputs:
-      repository: adcday7/scmresourceapi
+      repository: adcday7/scmsearchapi
       command: buildAndPush
       dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
       buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
@@ -35,4 +35,4 @@ steps:
     condition: ${{ parameters.publishDockerImage }}
     inputs:
       artifactName: manifests
-      targetPath: day7/apps/dotnetcore/manifests/scmsearchsapi
+      targetPath: day7/apps/dotnetcore/manifests/scmsearchapi
