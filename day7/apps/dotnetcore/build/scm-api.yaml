@@ -26,11 +26,13 @@ steps:
       tags: ${{ parameters.buildNumber }}
   - task: PublishPipelineArtifact@1
     displayName: Publish secrets file
+    condition: ${{ parameters.publishDockerImage }}
     inputs:
       artifactName: secrets
       targetPath: day7/apps/infrastructure/manifests/secrets.yaml
   - task: PublishPipelineArtifact@1
     displayName: Publish manifest files
+    condition: ${{ parameters.publishDockerImage }}
     inputs:
       artifactName: manifests
       targetPath: day7/apps/dotnetcore/manifests/scmapi
