@@ -1,54 +1,56 @@
 parameters:
   name: ""
-  variablesFile: ""
   environmentName: ""
-  azureSubscription: ""
-  aadVariableGroupName: ""
-  artifactDropName: drop
+  keyVaultVariableGroupName: ""
+  containerRegistry: ""
+  clusterNamespace: ""
+  buildNumber: ""
 
 jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
-      - group: ${{ parameters.aadVariableGroupName }}
-      - template: ${{ parameters.variablesFile }}
+      - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: ${{ variables.vmImage }}
-    environment: ${{ parameters.environmentName }}
+      vmImage: "ubuntu-latest"
+    environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
         deploy:
           steps:
-            - task: AzureResourceGroupDeployment@2
+            - task: replacetokens@3
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                action: "Create Or Update Resource Group"
-                resourceGroupName: ${{ variables.resourceGroupName }}
-                location: ${{ variables.location }}
-                templateLocation: "Linked artifact"
-                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-search-api-dotnetcore.json
-                overrideParameters: >
-                  -appPlanSKU ${{ variables.appServicePlanSKU }} -webAppName ${{ variables.apiAppName }} 
-                  -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
-                  -storageAccountName ${{ variables.storageAccountName }} -functionAppName ${{ variables.indexerFunctionName }} 
-                  -applicationInsightsName ${{ variables.applicationInsightsName }} 
-                  -serviceBusNamespaceName ${{ variables.serviceBusNamespaceName }}
-                  -azureSearchServiceName ${{ variables.azureSearchServiceName }}
-                  -azureSearchSKU ${{ variables.azureSearchSKU }}
-                  -azureSearchReplicaCount ${{ variables.azureSearchReplicaCount }}
-                  -azureSearchPartitionCount ${{ variables.azureSearchPartitionCount }}
-                  -aadInstance ${{ variables.aadInstance }}
-                  -aadClientId $(aadApiClientId) -aadTenantId $(aadTenantId) 
-                  -aadDomain $(aadDomain) -aadClientIdUri $(aadApiClientIdUri)
-            - task: AzureRmWebAppDeployment@4
+                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Create imagePullSecret
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                appType: apiApp
-                webAppName: ${{ variables.apiAppName }}
-                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Search.Api.zip
-            - task: AzureRmWebAppDeployment@4
+                action: createSecret
+                secretName: regcred
+                namespace: ${{ parameters.clusterNamespace }}
+                dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
+            - task: KubernetesManifest@0
+              displayName: Deploy secrets to Kubernetes cluster
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                appType: apiApp
-                webAppName: ${{ variables.indexerFunctionName }}
-                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Search.Indexer.zip
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/secrets/secrets.yaml
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/scm-search-deploy.yaml
+                  $(Pipeline.Workspace)/manifests/scm-search-ingress.yaml
+                  $(Pipeline.Workspace)/manifests/scm-search-svc.yaml
+                imagePullSecrets: |
+                  regcred
+                containers: |
+                  azuredevcollege.azurecr.io/adcday7/scmsearchapi:${{ parameters.buildNumber }}
