@@ -24,6 +24,7 @@ spec:
         application: scmcontacts
         service: scmsearchfunc
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: application
           resources:
