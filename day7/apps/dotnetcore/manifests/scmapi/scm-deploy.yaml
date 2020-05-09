@@ -24,6 +24,7 @@ spec:
         application: scmcontacts
         service: scmapi
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: application
           resources:
