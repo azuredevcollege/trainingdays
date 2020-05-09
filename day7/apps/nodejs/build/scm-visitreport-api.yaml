@@ -1,28 +1,10 @@
 parameters:
+  buildConfiguration: release
   buildNumber: ""
   publishDockerImage: true
   containerRegistryServiceConnection: ""
 
 steps:
-  - task: NodeTool@0
-    inputs:
-      versionSpec: "12.x"
-    displayName: "Install Node.js"
-  - task: Bash@3
-    inputs:
-      workingDirectory: "$(Build.SourcesDirectory)/day7/apps/nodejs/visitreport"
-      targetType: "inline"
-      displayName: "npm install"
-      script: npm install
-  - task: ArchiveFiles@2
-    displayName: "Archive build files"
-    inputs:
-      rootFolderOrFile: "$(Build.SourcesDirectory)/day7/apps/nodejs/visitreport"
-      includeRootFolder: false
-      archiveType: zip
-      archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.VisitReports.zip
-      replaceExistingArchive: true
-
   - task: Docker@2
     displayName: Build Docker image
     condition: eq(${{ parameters.publishDockerImage }}, false)
@@ -33,7 +15,7 @@ steps:
       buildContext: day7/apps/nodejs/visitreport
       tags: ${{parameters.buildNumber}}
   - task: Docker@2
-    displayName: Build and Puish Docker image
+    displayName: Build and Publish Docker image
     condition: ${{ parameters.publishDockerImage }}
     inputs:
       repository: adcday7/scmvisitreportsapi
@@ -42,3 +24,15 @@ steps:
       buildContext: day7/apps/nodejs/visitreport
       containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
       tags: ${{ parameters.buildNumber }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish secrets file
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: secrets
+      targetPath: day7/apps/infrastructure/manifests/secrets.yaml
+  - task: PublishPipelineArtifact@1
+    displayName: Publish manifest files
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: manifests
+      targetPath: day7/apps/nodejs/manifests/visitreport

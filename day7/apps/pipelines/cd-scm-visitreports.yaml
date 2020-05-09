@@ -6,11 +6,10 @@ trigger:
   paths:
     include:
       - day7/apps/nodejs/visitreport/*
-      - day7/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
-      - day7/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
       - day7/apps/pipelines/cd-scm-visitreports.yaml
 
 variables:
+  configuration: release
   azureSubscription: AzureDeveloperCollege
   containerRegistry: ADC-ContainerRegistry
 
@@ -19,9 +18,9 @@ stages:
     displayName: Build
 
     jobs:
-      - template: jobs/build-scm-visitreports.yaml
+      - template: jobs/build-scm-visitreports-api.yaml
         parameters:
-          artifactDropName: drop
+          configuration: $(configuration)
           buildNumber: $(Build.BuildNumber)
           containerRegistryServiceConnection: $(containerRegistry)
 
@@ -30,28 +29,12 @@ stages:
     dependsOn: Build
 
     jobs:
-      - template: jobs/deploy-scm-visitreports.yaml
+      - template: jobs/deploy-scm-visitreports-api.yaml
         parameters:
-          name: Deploy Scm Visitreports
-          variablesFile: ../variables/cd-scm-visitreports-dev.yaml
-          variableGroupName: Day7-VariableGroup
-          aadVariableGroupName: Day7-AAD-Dev
+          name: Deploy Scm Search Api
+          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
           azureSubscription: $(azureSubscription)
-          artifactDropName: drop
-
-  - stage: Test
-    displayName: Test
-    dependsOn: Development
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    jobs:
-      - template: jobs/deploy-scm-visitreports.yaml
-        parameters:
-          name: Deploy Scm Visitreports
-          variablesFile: ../variables/cd-scm-visitreports-test.yaml
-          variableGroupName: Day7-VariableGroup
-          aadVariableGroupName: Day7-AAD-Test
-          environmentName: ADC-DAY7-SCM-TEST
-          azureSubscription: $(azureSubscription)
-          artifactDropName: drop
+          containerRegistry: $(containerRegistry)
+          clusterNamespace: dev

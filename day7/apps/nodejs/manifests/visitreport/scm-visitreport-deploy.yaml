@@ -33,7 +33,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi:20200302.1
+          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi
           env:
             - name: COSMOSDB
               valueFrom:
@@ -73,5 +73,3 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 3000
-      imagePullSecrets:
-      - name: regcred
