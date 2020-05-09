@@ -31,7 +31,7 @@ stages:
     jobs:
       - template: jobs/deploy-scm-visitreports-api.yaml
         parameters:
-          name: Deploy Scm Search Api
+          name: Deploy Scm VisitReports Api
           keyVaultVariableGroupName: Day7-KeyVault-Dev
           buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
