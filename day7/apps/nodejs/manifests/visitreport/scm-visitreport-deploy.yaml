@@ -33,7 +33,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday5/scmvisitreportsapi
+          image: azuredevcollege.azurecr.io/adcday7/scmvisitreportsapi
           env:
             - name: COSMOSDB
               valueFrom:
