@@ -4,7 +4,7 @@ parameters:
 
 jobs:
   - job: Build
-    displayName: Build Scm Api
+    displayName: Build Scm Frontend
     pool:
       vmImage: ubuntu-latest
     steps:
