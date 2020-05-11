@@ -244,6 +244,17 @@ resource "azurerm_key_vault_secret" "aad_clientiduri" {
   key_vault_id = "${module.common.keyvaultid}"
 }
 
+resource "azurerm_key_vault_secret" "aad_frontend_clientid" {
+  name         = "${var.prefix}AADFECLIENTID"
+  value        = "${base64encode(var.aadfeclientid)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+resource "azurerm_key_vault_secret" "hostname" {
+  name         = "${var.prefix}HOSTNAME"
+  value        = "${base64encode(var.hostname)}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
+
 output "staticwebsite_primary_web_endpoint" {
   value = "${module.storage.staticwebsite_primary_web_endpoint}"
 }

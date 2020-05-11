@@ -80,6 +80,20 @@ resource "azurerm_key_vault" "keyvault" {
     ]
   }
 
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = "30674010-37e8-4dbe-b01a-c39beefb3a95"
+
+    secret_permissions = [
+      "get",
+      "list",
+    ]
+    certificate_permissions = [
+    ]
+    key_permissions = [
+    ]
+  }
+
   tags = {
     environment = "${var.env}"
   }

@@ -41,6 +41,15 @@ variable "aadclientid" {
   type    = "string"
   default = "ed5ba88a-334a-4841-8a8d-f08d36afe8b8"
 }
+
+variable "aadfeclientid" {
+  type    = "string"
+  default = "b4de1272-4d3e-4193-ab79-3aaca2527a3a"
+}
+variable "hostname" {
+  type    = "string"
+  default = "52-232-4-29.nip.io"
+}
 variable "aadclientiduri" {
   type    = "string"
   default = "http://scmapi-dev"
