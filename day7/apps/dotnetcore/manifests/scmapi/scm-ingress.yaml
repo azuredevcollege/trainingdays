@@ -9,9 +9,16 @@ metadata:
     nginx.ingress.kubernetes.io/cors-max-age: "600"
     nginx.ingress.kubernetes.io/proxy-body-size: "12m"
     nginx.ingress.kubernetes.io/rewrite-target: "/contacts/$2"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  tls:
+    - hosts:
+        - 52-232-4-29.nip.io
+      secretName: tls-secret
   rules:
-  - http:
+  - host: 52-232-4-29.nip.io
+    http:
       paths:
       - path: /api/contacts(/|$)(.*)
         backend:
