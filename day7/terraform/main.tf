@@ -109,6 +109,11 @@ resource "azurerm_key_vault_secret" "appinsights" {
   value        = "${base64encode(module.common.ai_instrumentation_key)}"
   key_vault_id = "${module.common.keyvaultid}"
 }
+resource "azurerm_key_vault_secret" "appinsights_decoded" {
+  name         = "${var.prefix}APPINSIGHTSKEYDEC"
+  value        = "${module.common.ai_instrumentation_key}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
 
 # Data
 
@@ -231,6 +236,11 @@ resource "azurerm_key_vault_secret" "aad_tenantid" {
   value        = "${base64encode(var.aadtenantid)}"
   key_vault_id = "${module.common.keyvaultid}"
 }
+resource "azurerm_key_vault_secret" "aad_tenantid_decoded" {
+  name         = "${var.prefix}AADTENANTIDDEC"
+  value        = "${var.aadtenantid}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
 
 resource "azurerm_key_vault_secret" "aad_clientid" {
   name         = "${var.prefix}AADCLIENTID"
@@ -243,15 +253,20 @@ resource "azurerm_key_vault_secret" "aad_clientiduri" {
   value        = "${base64encode(var.aadclientiduri)}"
   key_vault_id = "${module.common.keyvaultid}"
 }
+resource "azurerm_key_vault_secret" "aad_clientiduri_decoded" {
+  name         = "${var.prefix}AADCLIENTIDURIDEC"
+  value        = "${var.aadclientiduri}"
+  key_vault_id = "${module.common.keyvaultid}"
+}
 
 resource "azurerm_key_vault_secret" "aad_frontend_clientid" {
   name         = "${var.prefix}AADFECLIENTID"
-  value        = "${base64encode(var.aadfeclientid)}"
+  value        = "${var.aadfeclientid}"
   key_vault_id = "${module.common.keyvaultid}"
 }
 resource "azurerm_key_vault_secret" "hostname" {
   name         = "${var.prefix}HOSTNAME"
-  value        = "${base64encode(var.hostname)}"
+  value        = "${var.hostname}"
   key_vault_id = "${module.common.keyvaultid}"
 }
 

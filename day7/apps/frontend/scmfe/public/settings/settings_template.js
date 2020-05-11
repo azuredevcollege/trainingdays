@@ -1,11 +1,11 @@
 var uisettings = {
-    "endpoint": "https://adcday7scmapi-dev.azurewebsites.net/",
-    "resourcesEndpoint": "https://adcday7scmresourcesapi-dev.azurewebsites.net/",
-    "searchEndpoint": "https://adcday7scmrsearchapi-dev.azurewebsites.net/",
-    "reportsEndpoint": "https://adcday7scmreports-dev.azurewebsites.net/",
-    "enableStats": false,
-    "aiKey": "",
-    "clientId": "",
-    "tenantId": "",
-    "audience": "http://scmapi-dev"
+    "endpoint": "https://#{adcday7HOSTNAME}#/api/contacts/",
+    "resourcesEndpoint": "https://#{adcday7HOSTNAME}#/api/resources/",
+    "searchEndpoint": "https://#{adcday7HOSTNAME}#/api/search/",
+    "reportsEndpoint": "https://#{adcday7HOSTNAME}#/api/visitreports/",
+    "enableStats": true,
+    "aiKey": "#{adcday7APPINSIGHTSKEY}#",
+    "clientId": "#{adcday7AADFECLIENTID}#",
+    "tenantId": "#{adcday7AADTENANTID}#",
+    "audience": "#{adcday7AADCLIENTIDURI}#"
 }
