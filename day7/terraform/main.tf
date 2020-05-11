@@ -266,10 +266,6 @@ resource "azurerm_key_vault_secret" "aad_frontend_clientid" {
 }
 resource "azurerm_key_vault_secret" "hostname" {
   name         = "${var.prefix}HOSTNAME"
-  value        = "${var.hostname}"
+  value        = "${module.kubernetes.nip_hostname}"
   key_vault_id = "${module.common.keyvaultid}"
-}
-
-output "staticwebsite_primary_web_endpoint" {
-  value = "${module.storage.staticwebsite_primary_web_endpoint}"
 }
