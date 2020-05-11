@@ -4,16 +4,6 @@ parameters:
   containerRegistryServiceConnection: ""
 
 steps:
-  - task: Npm@1
-    inputs:
-      command: "install"
-      workingDir: "day7/apps/frontend/scmfe"
-  - task: Npm@1
-    inputs:
-      command: "custom"
-      workingDir: "day7/apps/frontend/scmfe"
-      customCommand: "run build"
-
   - task: Docker@2
     displayName: Build Docker image
     condition: eq(${{ parameters.publishDockerImage }}, false)
@@ -33,3 +23,9 @@ steps:
       buildContext: day7/apps/frontend/scmfe
       containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
       tags: ${{ parameters.buildNumber }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish manifest and secret files
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: manifests
+      targetPath: day7/apps/frontend/manifests/scmfe

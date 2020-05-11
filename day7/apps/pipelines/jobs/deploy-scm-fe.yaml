@@ -1,74 +1,56 @@
 parameters:
-  name: ''
-  variablesFile: ''
-  environmentName: ''
-  azureSubscription: ''
-  artifactDropName: drop
-  aadVariableGroupName: ""
+  name: ""
+  environmentName: ""
+  keyVaultVariableGroupName: ""
+  containerRegistry: ""
+  clusterNamespace: ""
+  buildNumber: ""
 
 jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
-    variables: 
-      - template: ${{ parameters.variablesFile }}
-      - name: appinsightsKey
-        value: ""
-      - group: ${{ parameters.aadVariableGroupName }}
+    variables:
+      - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: ${{ variables.vmImage }}
-    environment: ${{ parameters.environmentName }}
+      vmImage: "ubuntu-latest"
+    environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
         deploy:
           steps:
-            - task: AzureResourceGroupDeployment@2
-              displayName: Deploy Storage Account
+            - task: replacetokens@3
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                action: 'Create Or Update Resource Group'
-                resourceGroupName: ${{ variables.resourceGroupName }}
-                location: ${{ variables.location }}
-                templateLocation: 'Linked artifact'
-                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/templates/scm-fe.json
-                overrideParameters: -storageAccountName ${{ variables.storageAccountName }}
-            - task: AzureCLI@2
-              displayName: Enable static website hosting
+                targetFiles: $(Pipeline.Workspace)/manifests/ui-secret.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Create imagePullSecret
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  az storage blob service-properties update --account-name ${{ variables.storageAccountName }} --static-website  --index-document index.html --404-document index.html
-            - task: AzureCLI@2
-              displayName: Display static website URL
+                action: createSecret
+                secretName: regcred
+                namespace: ${{ parameters.clusterNamespace }}
+                dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
+            - task: KubernetesManifest@0
+              displayName: Deploy secrets to Kubernetes cluster
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  az storage account show -n ${{ variables.storageAccountName }} --query "primaryEndpoints.web" --output tsv
-            - task: AzureCLI@2
-              displayName: Set AppInsights Instrumentation Key
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/ui-secret.yaml
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
               inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  echo "##vso[task.setvariable variable=variables.appinsightsKey]`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`"
-            - task: AzureCLI@2
-              displayName: Configure endpoint within SPA settings.js
-              inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  echo "var uisettings = { \"tenantId\": \"$(aadTenantId)\", \"audience\": \"$(aadApiClientIdUri)\", \"clientId\": \"$(aadFrontendClientId)\", \"enableStats\": true, \"endpoint\": \"${{ variables.spaEndpoint }}\", \"resourcesEndpoint\": \"${{ variables.resourcesEndpoint }}\", \"searchEndpoint\": \"${{ variables.searchEndpoint }}\", \"reportsEndpoint\": \"${{ variables.reportsEndpoint }}\", \"aiKey\": \"`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist/settings/settings.js
-            - task: AzureCLI@2
-              displayName: Copy SPA to blob storage
-              inputs:
-                azureSubscription: ${{ parameters.azureSubscription }}
-                scriptType: 'bash'
-                scriptLocation: 'inlineScript'
-                inlineScript: |
-                  az storage blob upload-batch -d '$web' --account-name ${{ variables.storageAccountName }} -s $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist
-            
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/scmfe-deployment.yaml
+                  $(Pipeline.Workspace)/manifests/scmfe-ingress.yaml
+                  $(Pipeline.Workspace)/manifests/scmfe-svc.yaml
+                imagePullSecrets: |
+                  regcred
+                containers: |
+                  azuredevcollege.azurecr.io/adcday7/scmfe:${{ parameters.buildNumber }}

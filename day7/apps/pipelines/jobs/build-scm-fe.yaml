@@ -1,11 +1,10 @@
 parameters:
-  artifactDropName: drop
   buildNumber: ""
   containerRegistryServiceConnection: ""
 
 jobs:
   - job: Build
-    displayName: Build Scm Frontend
+    displayName: Build Scm Api
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -14,18 +13,3 @@ jobs:
           buildNumber: ${{ parameters.buildNumber }}
           publishDockerImage: true
           containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
-      - task: CopyFiles@2
-        inputs:
-          SourceFolder: "day7/apps/frontend/scmfe/dist"
-          Contents: "**"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)/dist"
-      - task: CopyFiles@2
-        inputs:
-          sourceFolder: day7/apps/infrastructure/templates
-          contents: |
-            scm-fe.json
-          targetFolder: $(Build.ArtifactStagingDirectory)/templates
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifactName: ${{ parameters.artifactDropName }}
