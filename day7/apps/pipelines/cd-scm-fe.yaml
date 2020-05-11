@@ -6,7 +6,6 @@ trigger:
   paths:
     include:
       - day7/apps/frontend/*
-      - day7/apps/infrastructure/templates/scm-fe.json
       - day7/apps/pipelines/cd-scm-fe.yaml
 
 variables:
@@ -20,7 +19,6 @@ stages:
     jobs:
       - template: jobs/build-scm-fe.yaml
         parameters:
-          artifactDropName: drop
           buildNumber: $(Build.BuildNumber)
           containerRegistryServiceConnection: $(containerRegistry)
 
@@ -31,24 +29,10 @@ stages:
     jobs:
       - template: jobs/deploy-scm-fe.yaml
         parameters:
-          name: Deploy Scm Frontend
-          variablesFile: ../variables/cd-scm-fe-dev.yaml
-          aadVariableGroupName: Day7-AAD-Dev
+          name: Deploy Scm Api
+          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          buildNumber: $(Build.BuildNumber)
           environmentName: ADC-DAY7-SCM-DEV
-          azureSubscription: ${{ variables.azureSubscription }}
-          artifactDropName: drop
-
-  - stage: Test
-    displayName: Test
-    dependsOn: Development
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    jobs:
-      - template: jobs/deploy-scm-fe.yaml
-        parameters:
-          name: Deploy Scm Frontend
-          variablesFile: ../variables/cd-scm-fe-test.yaml
-          aadVariableGroupName: Day7-AAD-Test
-          environmentName: ADC-DAY7-SCM-TEST
-          azureSubscription: ${{ variables.azureSubscription }}
-          artifactDropName: drop
+          azureSubscription: $(azureSubscription)
+          containerRegistry: $(containerRegistry)
+          clusterNamespace: dev
