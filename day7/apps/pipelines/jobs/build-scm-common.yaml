@@ -1,17 +1,42 @@
 parameters:
-  artifactDropName: drop
+  artifactDropName: terraformplan
+  environmentServiceNameAzureRM: ""
+  keyVaultVariableGroupName: ""
 
 jobs:
   - job: Build
-    displayName: Build Scm Common
+    displayName: Build Scm Common / Infrstructure
+    variables:
+      - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
       vmImage: ubuntu-latest
     steps:
+      - task: TerraformInstaller@0
+        inputs:
+          terraformVersion: '0.12.3'
+      - task: TerraformTaskV1@0
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
+          backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
+          backendAzureRmResourceGroupName: 'adc-tfstate-rg'
+          backendAzureRmStorageAccountName: 'tfstateadadc'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: ${{ variables.tfstoragekey }}
+      - task: TerraformTaskV1@0
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
+          commandOptions: '-out=tfplan'
+          environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
+
       - task: CopyFiles@2
         inputs:
-          sourceFolder: day7/apps/infrastructure/templates
+          sourceFolder: $(System.DefaultWorkingDirectory)/day7/terraform
           contents: |
-            scm-common.json
+            tfplan
           targetFolder: $(Build.ArtifactStagingDirectory)
       - task: PublishPipelineArtifact@1
         inputs:
