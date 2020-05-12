@@ -2,6 +2,7 @@ parameters:
   artifactDropName: terraformplan
   environmentServiceNameAzureRM: ""
   variableGroupName: ""
+  aadVariableGroupName: ""
   environmentName: ADC-DAY7-SCM-DEV
   prefix: adcday7
   env: dev
@@ -11,29 +12,30 @@ jobs:
     displayName: Build Scm Common / Infrstructure
     variables:
       - group: ${{ parameters.variableGroupName }}
+      - group: ${{ parameters.aadVariableGroupName }}
     pool:
       vmImage: ubuntu-latest
     steps:
       - task: TerraformInstaller@0
         displayName: Install Terraform
         inputs:
-          terraformVersion: '0.12.24'
+          terraformVersion: "0.12.24"
       - task: TerraformTaskV1@0
         displayName: Terraform Init
         inputs:
-          provider: 'azurerm'
-          command: 'init'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
+          provider: "azurerm"
+          command: "init"
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
           backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
-          backendAzureRmResourceGroupName: 'adc-tfstate-rg'
-          backendAzureRmStorageAccountName: 'tfstateadadc'
-          backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey:  $(tfstoragekey)
+          backendAzureRmResourceGroupName: $(tfresourcegroup)
+          backendAzureRmStorageAccountName: $(tfstorageaccount)
+          backendAzureRmContainerName: $(tfcontainer)
+          backendAzureRmKey: $(tfstoragekey)
       - task: TerraformTaskV1@0
         displayName: Terraform Apply
         inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
-          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -auto-approve'
+          provider: "azurerm"
+          command: "apply"
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
