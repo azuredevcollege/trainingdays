@@ -30,17 +30,17 @@ jobs:
           backendAzureRmContainerName: 'tfstate'
           backendAzureRmKey:  $(tfstoragekey)
       - task: TerraformTaskV1@0
-        displayName: Terraform Plan
-        inputs:
-          provider: 'azurerm'
-          command: 'plan'
-          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
-          commandOptions: '-out=tfplan -var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}"'
-          environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
-      - task: TerraformTaskV1@0
         displayName: Terraform Apply
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          commandOptions: 'tfplan'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
+          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
+      # - task: TerraformTaskV1@0
+      #   displayName: Terraform Apply
+      #   inputs:
+      #     provider: 'azurerm'
+      #     command: 'apply'
+      #     commandOptions: 'tfplan'
+      #     environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
