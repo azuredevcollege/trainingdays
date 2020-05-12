@@ -113,3 +113,10 @@ spec:
         backend:
           serviceName: contacts
           servicePort: 8080
+
+DevOps:
+
+Replace Tokens
+Terraform Task
+
+Replace Variable for Terraform state / container

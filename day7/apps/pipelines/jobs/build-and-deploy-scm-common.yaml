@@ -37,10 +37,3 @@ jobs:
           workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
           commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
-      # - task: TerraformTaskV1@0
-      #   displayName: Terraform Apply
-      #   inputs:
-      #     provider: 'azurerm'
-      #     command: 'apply'
-      #     commandOptions: 'tfplan'
-      #     environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
