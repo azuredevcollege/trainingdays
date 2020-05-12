@@ -15,9 +15,11 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - task: TerraformInstaller@0
+        displayName: Install Terraform
         inputs:
-          terraformVersion: '0.12.3'
+          terraformVersion: '0.12.24'
       - task: TerraformTaskV1@0
+        displayName: Terraform Init
         inputs:
           provider: 'azurerm'
           command: 'init'
@@ -28,6 +30,7 @@ jobs:
           backendAzureRmContainerName: 'tfstate'
           backendAzureRmKey:  $(tfstoragekey)
       - task: TerraformTaskV1@0
+        displayName: Terraform Plan
         inputs:
           provider: 'azurerm'
           command: 'plan'
@@ -35,8 +38,9 @@ jobs:
           commandOptions: '-out=tfplan -var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}"'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
       - task: TerraformTaskV1@0
+        displayName: Terraform Apply
         inputs:
           provider: 'azurerm'
           command: 'apply'
-          commandOptions: './tfplan'
+          commandOptions: 'tfplan'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
