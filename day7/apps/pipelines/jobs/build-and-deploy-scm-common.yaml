@@ -2,6 +2,9 @@ parameters:
   artifactDropName: terraformplan
   environmentServiceNameAzureRM: ""
   variableGroupName: ""
+  environmentName: ADC-DAY7-SCM-DEV
+  prefix: adcday7
+  env: dev
 
 jobs:
   - job: Build
@@ -29,16 +32,11 @@ jobs:
           provider: 'azurerm'
           command: 'plan'
           workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
-          commandOptions: '-out=tfplan'
+          commandOptions: '-out=tfplan -var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}"'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
-
-      - task: CopyFiles@2
+      - task: TerraformTaskV1@0
         inputs:
-          sourceFolder: $(System.DefaultWorkingDirectory)/day7/terraform
-          contents: |
-            tfplan
-          targetFolder: $(Build.ArtifactStagingDirectory)
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.ArtifactStagingDirectory)
-          artifactName: ${{ parameters.artifactDropName }}
+          provider: 'azurerm'
+          command: 'apply'
+          commandOptions: './tfplan'
+          environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
