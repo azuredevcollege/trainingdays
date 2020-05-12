@@ -23,7 +23,7 @@ jobs:
           backendAzureRmResourceGroupName: 'adc-tfstate-rg'
           backendAzureRmStorageAccountName: 'tfstateadadc'
           backendAzureRmContainerName: 'tfstate'
-          backendAzureRmKey: ${{ variables.tfstoragekey }}
+          backendAzureRmKey:  $(tfstoragekey)
       - task: TerraformTaskV1@0
         inputs:
           provider: 'azurerm'
