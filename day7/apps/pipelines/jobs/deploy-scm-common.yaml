@@ -18,5 +18,5 @@ jobs:
               inputs:
                 provider: 'azurerm'
                 command: 'apply'
-                commandOptions: './${{ parameters.artifactDropName }}/tfplan -auto-approve'
+                commandOptions: './${{ parameters.artifactDropName }}/tfplan'
                 environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
