@@ -19,21 +19,20 @@ stages:
       - template: jobs/build-scm-common.yaml
         parameters:
           artifactDropName: terraformplan
-          keyVaultVariableGroupName: Day7-VariableGroup
+          variableGroupName: Day7-VariableGroup
           environmentServiceNameAzureRM: $(azureSubscription)
 
-  # - stage: Development
-  #   displayName: Development
-  #   dependsOn: Build
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
 
-  #   jobs:
-  #     - template: jobs/deploy-scm-common.yaml
-  #       parameters:
-  #         name: Deploy Scm Common
-  #         variablesFile: ../variables/cd-scm-common-dev.yaml
-  #         environmentName: ADC-DAY7-SCM-DEV
-  #         azureSubscription: $(azureSubscription)
-  #         artifactDropName: drop
+    jobs:
+      - template: jobs/deploy-scm-common.yaml
+        parameters:
+          name: Deploy Scm Common / Infrastructure
+          environmentName: ADC-DAY7-SCM-DEV
+          environmentServiceNameAzureRM: $(azureSubscription)
+          artifactDropName: terraformplan
 
   # - stage: Test
   #   displayName: Test

@@ -1,13 +1,13 @@
 parameters:
   artifactDropName: terraformplan
   environmentServiceNameAzureRM: ""
-  keyVaultVariableGroupName: ""
+  variableGroupName: ""
 
 jobs:
   - job: Build
     displayName: Build Scm Common / Infrstructure
     variables:
-      - group: ${{ parameters.keyVaultVariableGroupName }}
+      - group: ${{ parameters.variableGroupName }}
     pool:
       vmImage: ubuntu-latest
     steps:
