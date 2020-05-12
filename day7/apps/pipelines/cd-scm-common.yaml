@@ -5,7 +5,7 @@ trigger:
       - master
   paths:
     include:
-      - day7/apps/infrastructure/templates/scm-common.json
+      - day7/terraform/*
       - day7/apps/pipelines/cd-scm-common.yaml
 
 variables:
