@@ -64,15 +64,19 @@ resource "azurerm_public_ip" "ingress_ip" {
   sku                 = "Standard"
 }
 
-resource "local_file" "kubeconfig" {
-  sensitive_content = "${azurerm_kubernetes_cluster.k8s.kube_config_raw}"
-  filename          = "./kubecfg"
-}
+# resource "local_file" "kubeconfig" {
+#   sensitive_content = "${azurerm_kubernetes_cluster.k8s.kube_config_raw}"
+#   filename          = "./kubecfg"
+# }
 
 provider "helm" {
   kubernetes {
-    load_config_file = true
-    config_path      = "${local_file.kubeconfig.filename}"
+    load_config_file       = false
+    host                   = azurerm_kubernetes_cluster.k8s.kube_config.0.host
+    client_certificate     = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate)
+    client_key             = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_key)
+    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.cluster_ca_certificate)
+    config_path            = "ensure-that-we-never-read-kube-config-from-home-dir"
   }
 }
 
