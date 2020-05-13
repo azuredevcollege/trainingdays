@@ -2,6 +2,7 @@ parameters:
   artifactDropName: terraformplan
   environmentServiceNameAzureRM: ""
   variableGroupName: ""
+  aadVariableGroupName: ""
   environmentName: ADC-DAY7-SCM-DEV
   prefix: adcday7
   env: dev
@@ -30,11 +31,11 @@ jobs:
           backendAzureRmContainerName: $(tfcontainer)
           backendAzureRmKey: $(tfstoragekey)
       - task: TerraformTaskV1@0
-        displayName: Terraform Apply
+        displayName: Terraform Destroy
         inputs:
           provider: "azurerm"
           command: "destroy"
           workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
-          commandOptions: '-auto-approve'
+          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
 

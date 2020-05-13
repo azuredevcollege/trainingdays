@@ -13,6 +13,7 @@ stages:
         parameters:
           artifactDropName: terraformplan
           variableGroupName: Day7-VariableGroup
+          aadVariableGroupName: Day7-AAD-Dev
           environmentName: ADC-DAY7-SCM-DEV
           prefix: adcday7
           env: dev
