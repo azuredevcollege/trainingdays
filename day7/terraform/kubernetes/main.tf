@@ -84,20 +84,11 @@ provider "helm" {
   }
 }
 
-data "helm_repository" "stable" {
-  name = "stable"
-  url  = "https://kubernetes-charts.storage.googleapis.com/"
-}
-
-data "helm_repository" "jetstack" {
-  name = "jetstack"
-  url  = "https://charts.jetstack.io"
-}
-
 resource "helm_release" "ingress" {
-  name      = "clstr-ingress"
-  chart     = "stable/nginx-ingress"
-  namespace = kubernetes_namespace.ingress.metadata[0].name
+  name       = "clstr-ingress"
+  chart      = "stable/nginx-ingress"
+  repository = "https://kubernetes-charts.storage.googleapis.com/"
+  namespace  = kubernetes_namespace.ingress.metadata[0].name
 
   set {
     name  = "rbac.create"
@@ -120,10 +111,11 @@ resource "helm_release" "ingress" {
 }
 
 resource "helm_release" "cert-manager" {
-  name      = "cert-manager"
-  chart     = "jetstack/cert-manager"
-  namespace = kubernetes_namespace.cert_manager.metadata[0].name
-  version   = "v0.15.0"
+  name       = "cert-manager"
+  repository = "https://charts.jetstack.io"
+  chart      = "jetstack/cert-manager"
+  namespace  = kubernetes_namespace.cert_manager.metadata[0].name
+  version    = "v0.15.0"
 
   set {
     name  = "installCRDs"
