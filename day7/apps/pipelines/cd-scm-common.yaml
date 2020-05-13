@@ -1,0 +1,29 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day7/terraform/*
+      - day7/apps/infrastructure/manifests/cluster-issuer-prod.yaml
+      - day7/apps/infrastructure/manifests/cluster-issuer-staging.yaml
+      - day7/apps/pipelines/cd-scm-common.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build and Deploy (DEV)
+
+    jobs:
+      - template: jobs/build-and-deploy-scm-common.yaml
+        parameters:
+          artifactDropName: terraformplan
+          variableGroupName: Day7-VariableGroup
+          aadVariableGroupName: Day7-AAD-Dev
+          environmentName: ADC-DAY7-SCM-DEV
+          prefix: adcday7
+          env: dev
+          environmentServiceNameAzureRM: $(azureSubscription)

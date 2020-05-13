@@ -1,0 +1,31 @@
+parameters:
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
+steps:
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
+    inputs:
+      repository: adcday7/scmfe
+      command: build
+      dockerfile: day7/apps/frontend/scmfe/Dockerfile
+      buildContext: day7/apps/frontend/scmfe
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Puish Docker image
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      repository: adcday7/scmfe
+      command: buildAndPush
+      dockerfile: day7/apps/frontend/scmfe/Dockerfile
+      buildContext: day7/apps/frontend/scmfe
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}
+  - task: PublishPipelineArtifact@1
+    displayName: Publish manifest and secret files
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      artifactName: manifests
+      targetPath: day7/apps/frontend/manifests/scmfe

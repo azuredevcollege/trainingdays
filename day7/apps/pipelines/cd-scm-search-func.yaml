@@ -1,0 +1,40 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/*
+      - day7/apps/pipelines/cd-scm-search-func.yaml
+
+variables:
+  configuration: release
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-search-func.yaml
+        parameters:
+          configuration: $(configuration)
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-search-func.yaml
+        parameters:
+          name: Deploy Scm Search Indexer Function
+          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          buildNumber: $(Build.BuildNumber)
+          environmentName: ADC-DAY7-SCM-DEV
+          azureSubscription: $(azureSubscription)
+          containerRegistry: $(containerRegistry)
+          clusterNamespace: dev

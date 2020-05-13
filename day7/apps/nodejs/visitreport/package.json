@@ -1,0 +1,38 @@
+{
+  "name": "scm.contacts.visitreport",
+  "version": "1.0.0",
+  "description": "Visit-Report service for Azure App Dev College",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CSA-OCP-GER/azure-developer-college.git"
+  },
+  "keywords": [
+    "azure",
+    "nodejs"
+  ],
+  "author": "Christian Dennig / dechrist@microsoft.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/CSA-OCP-GER/azure-developer-college/issues"
+  },
+  "homepage": "https://github.com/CSA-OCP-GER/azure-developer-college#readme",
+  "dependencies": {
+    "@azure/cosmos": "^3.5.3",
+    "@azure/service-bus": "^1.1.1",
+    "applicationinsights": "^1.6.0",
+    "dotenv": "^8.2.0",
+    "fastify": "^2.11.0",
+    "fastify-cors": "^3.0.1",
+    "fastify-plugin": "^1.6.0",
+    "fastify-swagger": "^2.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.6.0",
+    "lodash": "^4.17.15",
+    "moment": "^2.24.0",
+    "uuid": "^3.3.3"
+  }
+}

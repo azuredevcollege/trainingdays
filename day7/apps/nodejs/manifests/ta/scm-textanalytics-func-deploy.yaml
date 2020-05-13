@@ -1,0 +1,76 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scm-textanalytics-function-deploy 
+  labels:
+    application: scmcontacts
+    service: scmtextanalyticsfunc
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: scmtextanalyticsfunc
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: scmtextanalyticsfunc
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          image:  azuredevcollege.azurecr.io/adcday7/scmtextanalytics
+          env:
+            - name: AzureWebJobsStorage
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: ServiceBusConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: VRLISTENCONNSTR
+            - name: FUNCTIONS_WORKER_RUNTIME
+              value: node
+            - name: COSMOSDB
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSENDPOINT
+            - name: COSMOSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSPRIMARYKEY
+            - name: TA_SUBSCRIPTIONENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: TAENDPOINT
+            - name: TA_SUBSCRIPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: TAKEY
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent

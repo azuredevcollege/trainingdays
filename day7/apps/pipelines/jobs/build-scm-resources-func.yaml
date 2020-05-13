@@ -1,0 +1,17 @@
+parameters:
+  configuration: release
+  buildNumber: ''
+  containerRegistryServiceConnection: ''
+
+jobs:
+  - job: Build
+    displayName: Build Scm Resources Indexer Function
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../dotnetcore/build/scm-resources-func.yaml
+        parameters:
+          buildConfiguration: ${{ parameters.configuration }}
+          buildNumber: ${{ parameters.buildNumber }}
+          publishDockerImage: true
+          containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}

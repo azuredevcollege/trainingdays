@@ -1,0 +1,23 @@
+trigger: none
+pr:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day7/apps/frontend/*
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - job: Build
+        displayName: Build Frontend Components
+        pool:
+          vmImage: ubuntu-latest
+        steps:
+          - template: ../frontend/build/scm-fe.yaml
+            parameters:
+              buildNumber: $(Build.BuildNumber)
+              publishDockerImage: false
