@@ -1,46 +1,54 @@
 variable "location" {
-  type    = "string"
+  type    = string
   default = "westeurope"
 }
+
 variable "prefix" {
-  type    = "string"
+  type    = string
   default = "adcday7"
 }
+
 variable "env" {
-  type    = "string"
+  type    = string
   default = "dev"
 }
 
 variable "cosmosdbname" {
-  type    = "string"
+  type    = string
   default = "scmvisitreports"
 }
+
 variable "cosmoscontainername" {
-  type    = "string"
+  type    = string
   default = "visitreports"
 }
 
 variable "sqldbusername" {
-  type    = "string"
+  type    = string
   default = "adcsqladmin"
 }
+
 variable "sqldbpassword" {
-  type    = "string"
+  type = string
 }
 
 variable "aaddomain" {
-  type    = "string"
+  type = string
 }
+
 variable "aadtenantid" {
-  type    = "string"
+  type = string
 }
+
 variable "aadclientid" {
-  type    = "string"
+  type = string
 }
 
 variable "aadfeclientid" {
-  type    = "string"
+  type = string
 }
+
 variable "aadclientiduri" {
-  type    = "string"
+  type = string
 }
+

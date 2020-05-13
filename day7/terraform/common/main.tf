@@ -1,4 +1,3 @@
-
 provider "azurerm" {
   version = "~> 2.6.0"
   features {
@@ -8,23 +7,24 @@ provider "azurerm" {
   }
 }
 
-data "azurerm_client_config" "current" {}
+data "azurerm_client_config" "current" {
+}
 
 resource "azurerm_application_insights" "appinsights" {
   name                = "${var.prefix}ai${var.env}"
-  location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
   application_type    = "web"
   retention_in_days   = 90
   tags = {
-    environment = "${var.env}"
+    environment = var.env
   }
 }
 
 resource "azurerm_key_vault" "keyvault" {
   name                        = "${var.prefix}kv${var.env}"
-  location                    = "${var.location}"
-  resource_group_name         = "${var.resource_group_name}"
+  location                    = var.location
+  resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = data.azurerm_client_config.current.tenant_id
   soft_delete_enabled         = true
@@ -44,7 +44,7 @@ resource "azurerm_key_vault" "keyvault" {
       "recover",
       "restore",
       "set",
-      "delete"
+      "delete",
     ]
     certificate_permissions = [
       "create",
@@ -76,7 +76,7 @@ resource "azurerm_key_vault" "keyvault" {
       "unwrapKey",
       "update",
       "verify",
-      "wrapKey"
+      "wrapKey",
     ]
   }
 
@@ -95,16 +95,17 @@ resource "azurerm_key_vault" "keyvault" {
   }
 
   tags = {
-    environment = "${var.env}"
+    environment = var.env
   }
 }
 
 output "ai_instrumentation_key" {
-  value       = "${azurerm_application_insights.appinsights.instrumentation_key}"
+  value       = azurerm_application_insights.appinsights.instrumentation_key
   description = "Application Insights Instrumentation Key"
 }
 
 output "keyvaultid" {
-  value       = "${azurerm_key_vault.keyvault.id}"
+  value       = azurerm_key_vault.keyvault.id
   description = "KeyVault ID"
 }
+

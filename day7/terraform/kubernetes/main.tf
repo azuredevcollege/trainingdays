@@ -1,12 +1,13 @@
 provider "azurerm" {
   version = "~> 2.6.0"
-  features {}
+  features {
+  }
 }
 
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                = "${var.prefix}k8s${var.env}"
-  location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
   dns_prefix          = "${var.prefix}k8s${var.env}"
   network_profile {
     network_plugin    = "kubenet"
@@ -26,21 +27,25 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   kubernetes_version = "1.16.7"
 
   tags = {
-    environment = "${var.env}"
+    environment = var.env
   }
 }
 
 provider "kubernetes" {
-  load_config_file       = "false"
-  host                   = "${azurerm_kubernetes_cluster.k8s.fqdn}"
-  client_certificate     = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate)}"
-  client_key             = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_key)}"
-  cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.cluster_ca_certificate)}"
+  load_config_file = "false"
+  host             = azurerm_kubernetes_cluster.k8s.fqdn
+  client_certificate = base64decode(
+    azurerm_kubernetes_cluster.k8s.kube_config[0].client_certificate,
+  )
+  client_key = base64decode(azurerm_kubernetes_cluster.k8s.kube_config[0].client_key)
+  cluster_ca_certificate = base64decode(
+    azurerm_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate,
+  )
 }
 
 resource "kubernetes_namespace" "appns" {
   metadata {
-    name = "${var.env}"
+    name = var.env
   }
 }
 
@@ -58,25 +63,24 @@ resource "kubernetes_namespace" "cert_manager" {
 
 resource "azurerm_public_ip" "ingress_ip" {
   name                = "${var.prefix}ingressip${var.env}"
-  location            = "${var.location}"
-  resource_group_name = "${azurerm_kubernetes_cluster.k8s.node_resource_group}"
+  location            = var.location
+  resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
   allocation_method   = "Static"
   sku                 = "Standard"
 }
 
-# resource "local_file" "kubeconfig" {
-#   sensitive_content = "${azurerm_kubernetes_cluster.k8s.kube_config_raw}"
-#   filename          = "./kubecfg"
-# }
-
 provider "helm" {
   kubernetes {
-    load_config_file       = false
-    host                   = azurerm_kubernetes_cluster.k8s.kube_config.0.host
-    client_certificate     = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_certificate)
-    client_key             = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.client_key)
-    cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.k8s.kube_config.0.cluster_ca_certificate)
-    config_path            = "ensure-that-we-never-read-kube-config-from-home-dir"
+    load_config_file = false
+    host             = azurerm_kubernetes_cluster.k8s.kube_config[0].host
+    client_certificate = base64decode(
+      azurerm_kubernetes_cluster.k8s.kube_config[0].client_certificate,
+    )
+    client_key = base64decode(azurerm_kubernetes_cluster.k8s.kube_config[0].client_key)
+    cluster_ca_certificate = base64decode(
+      azurerm_kubernetes_cluster.k8s.kube_config[0].cluster_ca_certificate,
+    )
+    config_path = "ensure-that-we-never-read-kube-config-from-home-dir"
   }
 }
 
@@ -93,7 +97,7 @@ data "helm_repository" "jetstack" {
 resource "helm_release" "ingress" {
   name      = "clstr-ingress"
   chart     = "stable/nginx-ingress"
-  namespace = "${kubernetes_namespace.ingress.metadata[0].name}"
+  namespace = kubernetes_namespace.ingress.metadata[0].name
 
   set {
     name  = "rbac.create"
@@ -106,19 +110,19 @@ resource "helm_release" "ingress" {
   }
   set {
     name  = "controller.service.loadBalancerIP"
-    value = "${azurerm_public_ip.ingress_ip.ip_address}"
+    value = azurerm_public_ip.ingress_ip.ip_address
   }
 
   set {
     name  = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/azure-load-balancer-resource-group"
-    value = "${azurerm_kubernetes_cluster.k8s.node_resource_group}"
+    value = azurerm_kubernetes_cluster.k8s.node_resource_group
   }
 }
 
 resource "helm_release" "cert-manager" {
   name      = "cert-manager"
   chart     = "jetstack/cert-manager"
-  namespace = "${kubernetes_namespace.cert_manager.metadata[0].name}"
+  namespace = kubernetes_namespace.cert_manager.metadata[0].name
   version   = "v0.15.0"
 
   set {
@@ -143,3 +147,4 @@ resource "helm_release" "cert-manager" {
 output "nip_hostname" {
   value = "${replace(azurerm_public_ip.ingress_ip.ip_address, ".", "-")}.nip.io"
 }
+

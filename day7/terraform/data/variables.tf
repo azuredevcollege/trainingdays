@@ -1,25 +1,32 @@
 variable "location" {
-  type = "string"
+  type = string
 }
+
 variable "prefix" {
-  type = "string"
+  type = string
 }
+
 variable "env" {
-  type = "string"
+  type = string
 }
+
 variable "resource_group_name" {
-  type = "string"
+  type = string
 }
+
 variable "cosmosdbname" {
-  type = "string"
+  type = string
 }
+
 variable "cosmoscontainername" {
-  type = "string"
+  type = string
 }
 
 variable "sqldbusername" {
-  type = "string"
+  type = string
 }
+
 variable "sqldbpassword" {
-  type = "string"
+  type = string
 }
+

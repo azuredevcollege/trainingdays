@@ -1,16 +1,17 @@
 provider "azurerm" {
   version = "~> 2.6.0"
-  features {}
+  features {
+  }
 }
 
 resource "azurerm_servicebus_namespace" "sbn" {
   name                = "${var.prefix}sbn${var.env}"
-  location            = "${var.location}"
-  resource_group_name = "${var.resource_group_name}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
   sku                 = "Standard"
 
   tags = {
-    environment = "${var.env}"
+    environment = var.env
   }
 }
 
@@ -18,7 +19,7 @@ resource "azurerm_servicebus_namespace" "sbn" {
 
 resource "azurerm_servicebus_queue" "queue_thumbnails" {
   name                = "thumbnails"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }
 
@@ -26,7 +27,7 @@ resource "azurerm_servicebus_queue_authorization_rule" "queue_thumbnails_listen"
   name                = "thumbnailslisten"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   queue_name          = azurerm_servicebus_queue.queue_thumbnails.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
 
   listen = true
   send   = false
@@ -37,7 +38,7 @@ resource "azurerm_servicebus_queue_authorization_rule" "queue_thumbnails_send" {
   name                = "thumbnailssend"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   queue_name          = azurerm_servicebus_queue.queue_thumbnails.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
 
   listen = false
   send   = true
@@ -48,7 +49,7 @@ resource "azurerm_servicebus_queue_authorization_rule" "queue_thumbnails_send" {
 
 resource "azurerm_servicebus_topic" "contacts" {
   name                = "scmtopic"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }
 
@@ -56,7 +57,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_contacts_listen" {
   name                = "scmtopiclisten"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   listen              = true
   send                = false
   manage              = false
@@ -66,7 +67,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_contacts_send" {
   name                = "scmtopicsend"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   listen              = false
   send                = true
   manage              = false
@@ -74,7 +75,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_contacts_send" {
 
 resource "azurerm_servicebus_subscription" "contacts_search" {
   name                = "scmcontactsearch"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
   max_delivery_count  = 10
@@ -83,7 +84,7 @@ resource "azurerm_servicebus_subscription" "contacts_search" {
 
 resource "azurerm_servicebus_subscription" "contacts_visitreport" {
   name                = "scmcontactvisitreport"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
   max_delivery_count  = 10
@@ -94,7 +95,7 @@ resource "azurerm_servicebus_subscription" "contacts_visitreport" {
 
 resource "azurerm_servicebus_topic" "visitreports" {
   name                = "scmvrtopic"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }
 
@@ -102,7 +103,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_visitreports_liste
   name                = "scmvrtopiclisten"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.visitreports.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   listen              = true
   send                = false
   manage              = false
@@ -112,7 +113,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_visitreports_send"
   name                = "scmvrtopicsend"
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.visitreports.name
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   listen              = false
   send                = true
   manage              = false
@@ -120,7 +121,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_visitreports_send"
 
 resource "azurerm_servicebus_subscription" "visitreports_textanalytics" {
   name                = "scmvisitreporttextanalytics"
-  resource_group_name = "${var.resource_group_name}"
+  resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.visitreports.name
   max_delivery_count  = 10
@@ -160,3 +161,4 @@ output "visitreports_listen_connectionstring_old" {
 output "visitreports_listen_connectionstring" {
   value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_key}"
 }
+

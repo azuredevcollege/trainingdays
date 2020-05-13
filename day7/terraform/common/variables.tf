@@ -1,13 +1,16 @@
 variable "location" {
-    type = "string"
+  type = string
 }
+
 variable "prefix" {
-    type = "string"
+  type = string
 }
+
 variable "env" {
-    type = "string"
+  type = string
 }
 
 variable "resource_group_name" {
-    type = "string"
+  type = string
 }
+
