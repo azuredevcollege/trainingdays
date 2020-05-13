@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
       - day7/apps/nodejs/visitreport/*
+      - day7/apps/nodejs/manifests/visitreport/*
       - day7/apps/pipelines/cd-scm-visitreports.yaml
 
 variables:

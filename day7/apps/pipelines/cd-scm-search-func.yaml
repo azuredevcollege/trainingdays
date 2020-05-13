@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
       - day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/*
+      - day7/apps/dotnetcore/manifests/scmsearchfunc/*
       - day7/apps/pipelines/cd-scm-search-func.yaml
 
 variables:

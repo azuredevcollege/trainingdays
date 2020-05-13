@@ -6,6 +6,7 @@ trigger:
   paths:
     include:
       - day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/*
+      - day7/apps/dotnetcore/manifests/scmresourcesapi/*
       - day7/apps/pipelines/cd-scm-resources.yaml
 
 variables:
