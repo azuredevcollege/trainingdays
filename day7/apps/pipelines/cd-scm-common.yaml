@@ -6,6 +6,8 @@ trigger:
   paths:
     include:
       - day7/terraform/*
+      - day7/apps/infrastructure/manifests/cluster-issuer-prod.yaml
+      - day7/apps/infrastructure/manifests/cluster-issuer-staging.yaml
       - day7/apps/pipelines/cd-scm-common.yaml
 
 variables:
