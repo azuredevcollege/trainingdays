@@ -14,10 +14,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - 52-232-4-29.nip.io
+        - #{adcday7HOSTNAME}#
       secretName: tls-secret
   rules:
-  - host: 52-232-4-29.nip.io
+  - host: #{adcday7HOSTNAME}#
     http:
       paths:
       - path: /api/resources(/|$)(.*)

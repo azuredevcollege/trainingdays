@@ -19,6 +19,7 @@ jobs:
         deploy:
           steps:
             - task: replacetokens@3
+              displayName: Replace tokens in secrets.yaml
               inputs:
                 targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
                 encoding: "auto"
@@ -41,6 +42,16 @@ jobs:
                 namespace: ${{ parameters.clusterNamespace }}
                 manifests: |
                   $(Pipeline.Workspace)/secrets/secrets.yaml
+            - task: replacetokens@3
+              displayName: Replace tokens in ingress file
+              inputs:
+                targetFiles: $(Pipeline.Workspace)/manifests/scm-ingress.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
             - task: KubernetesManifest@0
               displayName: Deploy to Kubernetes cluster
               inputs:
