@@ -86,7 +86,7 @@ provider "helm" {
 
 resource "helm_release" "ingress" {
   name       = "clstr-ingress"
-  chart      = "stable/nginx-ingress"
+  chart      = "nginx-ingress"
   repository = "https://kubernetes-charts.storage.googleapis.com/"
   namespace  = kubernetes_namespace.ingress.metadata[0].name
 
@@ -113,7 +113,7 @@ resource "helm_release" "ingress" {
 resource "helm_release" "cert-manager" {
   name       = "cert-manager"
   repository = "https://charts.jetstack.io"
-  chart      = "jetstack/cert-manager"
+  chart      = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata[0].name
   version    = "v0.15.0"
 
