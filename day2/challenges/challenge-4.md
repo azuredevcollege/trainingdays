@@ -417,7 +417,7 @@ When the deployment has finished, check your resource group and open the "Deploy
 Remove the sample resource groups for the basic/basic+ and large infra services.
 
 ```shell
-$ az group delete -n armbasic-rg
-$ az group delete -n armbasicplus-rg
+$ az group delete -n basicarm-rg
+$ az group delete -n basicplusarm-rg
 $ az group delete -n complexarm-rg
 ```
