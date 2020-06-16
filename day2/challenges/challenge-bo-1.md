@@ -9,7 +9,7 @@ Now it's time to get familiar with our sample application. You will now clone th
 Clone the repository to your local machine. Run this command from a blank folder.
 
 ```shell
-$ git clone https://github.com/CSA-OCP-GER/azure-developer-college.git
+$ git clone https://github.com/azuredevcollege/trainingdays.git
 
 Cloning into 'azure-developer-college'...
 remote: Enumerating objects: 236, done.
