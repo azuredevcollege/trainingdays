@@ -1,3 +1,4 @@
 title: Azure Developer College
 patterns: ['**/*.md']
 base: /trainingdays/
+dest: docs
