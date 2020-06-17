@@ -38,7 +38,7 @@
 
 -> the GW setup will take approx 30 mins. to create -> come back later...  
 When your **GW has** been assigned a **public IP** address then you know **it is online**.  
-![VPN GW with public IP](vpnGWPIP.png)
+![VPN GW with public IP](./vpnGWPIP.png)
 
 ## [Azure] Create a Local Network Gateway ##
 The purpose of this task is to tell azure how to contact the onpremise firewall:  
@@ -79,12 +79,12 @@ Open a browser and navigate to: https://192.168.0.100:444 -> ignore certificate 
 ```
    IPFire -> Services -> IPSec -> 'Connection Status and -Control' -> Add
 ```
-![IPFire: Add a connection](vpn0.PNG)
+![IPFire: Add a connection](./vpn0.png)
 
 ```
    "Net-to-Net Virtual Private Network" -> Add
 ```
-![IPFire: add Net-to-Net connection](vpn1.PNG)
+![IPFire: add Net-to-Net connection](./vpn1.png)
 
 | Parameter Name | Values  |
 |---|---|
@@ -94,22 +94,22 @@ Open a browser and navigate to: https://192.168.0.100:444 -> ignore certificate 
 | Remote subnet | **_%Address Range of the virtual network in azure with mask% (e.g. 10.1.0.0/255.255.0.0)_** |
 | Use a pre-shared key | **_Shared Key you used in azure before_**|
 
-![IPFire: connection settings](vpn2.PNG) 
+![IPFire: connection settings](./vpn2.png) 
 **Save**
 
 **Click on the pencil symbol and choose 'Advanced'**:
-![IPFire: Advanced cipher settings](vpn3.PNG) 
+![IPFire: Advanced cipher settings](./vpn3.png) 
 
 Select the **following algorithms / suites for the connection**:
-![IPFire: connection settings](vpn4.PNG)  
+![IPFire: connection settings](./vpn4.png)  
 **select Always on** then **Save**
 
 **Tick checkbox to enable connection** - connection status should go to green:
-![IPFire: connection settings](vpn5.PNG) 
+![IPFire: connection settings](./vpn5.png) 
 
 **Now let's ping your azure vm** (e.g. vmweb01) under its private ip (probably: 10.1.0.4) from onpremise.  
 Do you receive a response?  
 You might need to allow ping first  
-![Enable ping in azure vm](EnablePingInAzureVM.PNG) )
+![Enable ping in azure vm](./EnablePingInAzureVM.png) )
 
 [back](../../README.md) 
