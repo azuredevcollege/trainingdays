@@ -28,7 +28,7 @@ Here's the overview of the training week. Happy hacking!
 
 ## Azure Boards
 
-![Azure Boards](./images/Azure&#32;Boards.svg)
+![Azure Boards](./images/AzureBoards.svg)
 
 The Trainer-Team uses Azure Boards to plan and track work.
 
@@ -36,7 +36,7 @@ The Trainer-Team uses Azure Boards to plan and track work.
 
 ## Azure Pipelines
 
-![Azure Pipelines](./images/Azure&#32;Pipelines.svg)
+![Azure Pipelines](./images/AzurePipelines.svg)
 
 All building blocks of the Azure Developer College are constantly and consistently deployed to Azure with Azure Pipelines.
 
