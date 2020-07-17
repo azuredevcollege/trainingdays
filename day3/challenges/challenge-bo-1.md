@@ -32,7 +32,7 @@ Database Properties:
 - SKU: Basic
 - Location: *West Europe*
 - Create a new server in *West Europe*
-- Networking Tab: make sure **Allow Azure services and resources to access this server** is set to **true**.
+- Networking Tab: *Connectivity => Public* and **Allow Azure services and resources to access this server** is set to **YES**.
 
 Leave all other settings as proposed by Azure.
 
