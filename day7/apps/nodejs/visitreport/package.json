@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CSA-OCP-GER/azure-developer-college.git"
+    "url": "git+https://github.com/azuredevcollege/trainingdays.git"
   },
   "keywords": [
     "azure",
@@ -17,9 +17,9 @@
   "author": "Christian Dennig / dechrist@microsoft.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/CSA-OCP-GER/azure-developer-college/issues"
+    "url": "https://github.com/azuredevcollege/trainingdays/issues"
   },
-  "homepage": "https://github.com/CSA-OCP-GER/azure-developer-college#readme",
+  "homepage": "https://github.com/azuredevcollege/trainingdays#readme",
   "dependencies": {
     "@azure/cosmos": "^3.5.3",
     "@azure/service-bus": "^1.1.1",

@@ -11,7 +11,7 @@
 
 ## Import the Azure Developer College GitHub repository to your Azure Repo
 
-Open your browser and navigate to [Azure Developer College on GitHub](https://github.com/CSA-OCP-GER/azure-developer-college). Click the green "Clone or download" button and copy the 
+Open your browser and navigate to the [Azure Developer College Training Days on GitHub](https://github.com/azuredevcollege/trainingdays). Click the green "Clone or download" button and copy the
 https url.
 
 ![Clone GitHub](./images/clone-adc-github.png)
