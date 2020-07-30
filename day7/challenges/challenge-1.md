@@ -104,11 +104,21 @@ We can apply the configuration using the following line:
 $ kubectl apply -f dashboard-admin.yaml
 ```
 
+We need to discover the created users secret access token, to gain access to the dashboard.
+
 ```zsh
-$ kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+$ kubectl -n kubernetes-dashboard get secret
 ```
 
-Copy the token for the next step.
+Find the secret that belongs to the `admin-user` and let kubectl `describe` it to see the content of the secret:
+
+```zsh
+$ kubectl -n kubernetes-dashboard describe secret admin-user-token-smw2j
+```
+
+> Watch out! You token will have a differnet random 5 character suffix.
+
+Copy the token to your clipboard for the next step.
 
 Now we start the kubernetes proxy to access the remote api safely on our local machine:
 
