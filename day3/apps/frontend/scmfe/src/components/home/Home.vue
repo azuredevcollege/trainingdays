@@ -26,8 +26,14 @@
           <p>Source Code can be found at:</p>
           <v-card class="elevation-0" color="transparent">
             <v-card-actions class="justify-center">
-              <a href="https://github.com/CSA-OCP-GER/azure-developer-college" target="_blank">
-                <v-img :max-width="120" :src="require('../../assets/octocat_sm.png')" />
+              <a
+                href="https://github.com/azuredevcollege/trainingdays"
+                target="_blank"
+              >
+                <v-img
+                  :max-width="120"
+                  :src="require('../../assets/octocat_sm.png')"
+                />
               </a>
             </v-card-actions>
           </v-card>
