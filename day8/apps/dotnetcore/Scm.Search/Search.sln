@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29503.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adc.Scm.Search.Api", "Adc.Scm.Search.Api\Adc.Scm.Search.Api.csproj", "{D779E3E2-8242-4CB9-AC43-6E5ED5AFC9E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Adc.Scm.Search.Indexer", "Adc.Scm.Search.Indexer\Adc.Scm.Search.Indexer.csproj", "{F76AE222-4760-4A7D-A01A-DFB4546CAB5A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D779E3E2-8242-4CB9-AC43-6E5ED5AFC9E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D779E3E2-8242-4CB9-AC43-6E5ED5AFC9E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D779E3E2-8242-4CB9-AC43-6E5ED5AFC9E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D779E3E2-8242-4CB9-AC43-6E5ED5AFC9E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F76AE222-4760-4A7D-A01A-DFB4546CAB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F76AE222-4760-4A7D-A01A-DFB4546CAB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F76AE222-4760-4A7D-A01A-DFB4546CAB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F76AE222-4760-4A7D-A01A-DFB4546CAB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AFDB836A-2DE4-4668-BDEC-03265AE31EE0}
+	EndGlobalSection
+EndGlobal

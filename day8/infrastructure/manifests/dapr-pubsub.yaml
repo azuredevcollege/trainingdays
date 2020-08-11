@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: messagebus
+spec:
+  type: pubsub.azure.servicebus
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        name: SERVICEBUSCONNECTIONSTRING
+        key: SERVICEBUSCONNECTIONSTRING
+    - name: numConcurrentHandlers
+      value: "1" 
+auth:
+  secretStore: keyvault

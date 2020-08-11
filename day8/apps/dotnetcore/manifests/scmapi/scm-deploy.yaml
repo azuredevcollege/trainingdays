@@ -1,0 +1,62 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scm-deploy 
+  labels:
+    application: scmcontacts
+    service: scmapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: scmapi
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: scmapi
+        aadpodidbinding: keyvault-identity
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/id: "scmapi"
+        dapr.io/port: "5000"
+    spec:
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          image: m009/scmapi:0.11
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
+          - name: DAPR_GRPC_PORT
+            value: "50001"
+          ports:
+          - name: app-port
+            containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: app-port
+            failureThreshold: 1
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: app-port
+            failureThreshold: 30
+            periodSeconds: 10

@@ -1,0 +1,15 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: thumbnail-queue
+spec:
+  type: bindings.azure.servicebusqueues
+  metadata:
+    - name: connectionString
+      secretKeyRef:
+        name: SERVICEBUSCONNECTIONSTRING
+        key: SERVICEBUSCONNECTIONSTRING
+    - name: queueName
+      value: "thumbnails"
+auth:
+  secretStore: keyvault

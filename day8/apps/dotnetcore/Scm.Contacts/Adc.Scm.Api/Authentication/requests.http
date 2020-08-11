@@ -1,0 +1,11 @@
+GET https://login.microsoftonline.com/b26f693d-3f41-4f90-b67c-69b1ea396820/oauth2/v2.0/authorize
+?client_id=b4de1272-4d3e-4193-ab79-3aaca2527a3a
+&response_type=id_token+token
+&redirect_uri=http://localhost:5001/api/tokenechofragment
+&response_mode=fragment
+&scope=openid profile http://scmapi-dev/Contacts.Read http://scmapi-dev/Contacts.Create http://scmapi-dev/Contacts.Update http://scmapi-dev/Contacts.Delete http://scmapi-dev/VisitReports.Read
+&nonce=1234 
+
+curl --request GET \
+  --url 'https://login.microsoftonline.com/b26f693d-3f41-4f90-b67c-69b1ea396820/oauth2/v2.0/authorize?client_id=b4de1272-4d3e-4193-ab79-3aaca2527a3a&response_type=id_token%20token&redirect_uri=http%3A%2F%2Flocalhost%3A5001%2Fapi%2Ftokenechofragment&response_mode=fragment&scope=openid%20profile%20http%3A%2F%2Fscmapi-dev%2FContacts.Read%20http%3A%2F%2Fscmapi-dev%2FContacts.Create%20http%3A%2F%2Fscmapi-dev%2FContacts.Update%20http%3A%2F%2Fscmapi-dev%2FContacts.Delete%20http%3A%2F%2Fscmapi-dev%2FVisitReports.Read&nonce=1234' \
+  --header 'user-agent: vscode-restclient'
