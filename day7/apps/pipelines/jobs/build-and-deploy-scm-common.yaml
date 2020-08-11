@@ -19,7 +19,7 @@ jobs:
       - task: TerraformInstaller@0
         displayName: Install Terraform
         inputs:
-          terraformVersion: "0.12.24"
+          terraformVersion: "0.12.26"
       - task: TerraformTaskV1@0
         displayName: Terraform Init
         inputs:
