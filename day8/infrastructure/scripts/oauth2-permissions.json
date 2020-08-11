@@ -1,0 +1,98 @@
+[
+    {
+        "adminConsentDescription": "Allows the app to delete VisitReports of the signed-in user",
+        "adminConsentDisplayName": "Delete VisitReports",
+        "id": "08cfa2e8-dec9-446f-b9b5-a681209caa8c",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to delete your VisitReports",
+        "userConsentDisplayName": "Delete VisitReports",
+        "value": "VisitReports.Delete"
+    },
+    {
+        "adminConsentDescription": "Allows the app to update VisitReports of the signed-in user",
+        "adminConsentDisplayName": "Update VisitReports",
+        "id": "e0c5d25a-4a99-484a-b9f0-a9369cccf4cb",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to update your VisitReports",
+        "userConsentDisplayName": "Update VisitReports",
+        "value": "VisitReports.Update"
+    },
+    {
+        "adminConsentDescription": "Allows the app to create VisitReports for the signed-in user",
+        "adminConsentDisplayName": "Create VisitReports",
+        "id": "663aef6a-7703-422d-b4d8-80e2e4a1e763",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to create VisitReports",
+        "userConsentDisplayName": "Create VisitReports",
+        "value": "VisitReports.Create"
+    },
+    {
+        "adminConsentDescription": "Allows the app to read VisitReports of the signed-in user",
+        "adminConsentDisplayName": "Read VisitReports",
+        "id": "7d9de3b4-dd74-4601-bc21-df2f248d1627",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to read your VisitReports",
+        "userConsentDisplayName": "Read VisitReports",
+        "value": "VisitReports.Read"
+    },
+    {
+        "adminConsentDescription": "Allows the app to delete contacts for the signed-in user",
+        "adminConsentDisplayName": "Delete contacts",
+        "id": "85b8f1a0-0733-47dd-9af4-cb7221dbcb73",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to delete your contacts",
+        "userConsentDisplayName": "Delete contacts",
+        "value": "Contacts.Delete"
+    },
+    {
+        "adminConsentDescription": "Allows the app to update contacts for the signed-in user",
+        "adminConsentDisplayName": "Update contacts",
+        "id": "5f9755ce-8e8a-42d9-bedf-040aceb274ea",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to update your contacts",
+        "userConsentDisplayName": "Update contacts",
+        "value": "Contacts.Update"
+    },
+    {
+        "adminConsentDescription": "Allows the app to create contacts for the signed-in user",
+        "adminConsentDisplayName": "Create contacts",
+        "id": "d75ea03e-817a-4f3a-b7da-17090ba8f779",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to create contacts",
+        "userConsentDisplayName": "Create contacts",
+        "value": "Contacts.Create"
+    },
+    {
+        "adminConsentDescription": "Allows the app to read the signed-in contacts",
+        "adminConsentDisplayName": "Read contacts",
+        "id": "8411eda6-47de-4082-aed1-2568243ba679",
+        "isEnabled": true,
+        "lang": null,
+        "origin": "Application",
+        "type": "User",
+        "userConsentDescription": "Allows the app to read your contacts",
+        "userConsentDisplayName": "Read contacts",
+        "value": "Contacts.Read"
+    }
+]

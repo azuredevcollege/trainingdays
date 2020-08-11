@@ -1,0 +1,99 @@
+parameters:
+  environmentServiceNameAzureRM: ""
+  variableGroupName: ""
+  environmentName: ADC-DAY8-SCM-DEV
+
+jobs:
+  - deployment: Deploy
+    displayName: Build Scm Common / Infrstructure
+    variables:
+      - group: ${{ parameters.variableGroupName }}
+      - aksResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+    pool:
+      vmImage: ubuntu-latest
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: TerraformInstaller@0
+              displayName: Install Terraform
+              inputs:
+                terraformVersion: "0.12.24"
+            - task: TerraformTaskV1@0
+              displayName: Terraform Init
+              inputs:
+                provider: "azurerm"
+                command: "init"
+                workingDirectory: "$(Pipeline.Workspace)/terraform"
+                backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
+                backendAzureRmResourceGroupName: $(TFRESOURCEGROUPNAME)
+                backendAzureRmStorageAccountName: $(TFSTORAGEACCOUNT)
+                backendAzureRmContainerName: $(TFCONTAINERNAME)
+                backendAzureRmKey: $(TFSTORAGEKEY)
+            - task: TerraformTaskV1@0
+              displayName: Terraform Apply
+              inputs:
+                provider: "azurerm"
+                command: "apply"
+                workingDirectory: "$(Pipeline.Workspace)/terraform"
+                commandOptions: '-var="location=$(LOCATION)" -var="prefix=$(PREFIX)" -var="env=$(ENV)" -var="app_insights_name=$(APPINSIGHTSNAME)" -var="keyvault_name=$(KEYVAULTNAME)" -var="keyvault_identity_name=$(KEYVAULTIDENTITYNAME)" -var="aks_cluster_name=$(AKSCLUSTERNAME)" -var="sqldbusername=$(SQLDBUSERNAME) -var="sqldbpassword=$(SQLDBPASSWORD)" -var="sqlservername=$(SQLSERVERNAME)" -var="sqldbname=$(SQLDBNAME)" -var="servicebus_namespace_name=$(SERVICEBUSNAMESPACENAME)" -var="aadclientid=$(AADCLIENTID)" -var="aadclientiduri=$(AADCLIENTIDURI)" -auto-approve'
+                environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
+            - task: Kubernetes@1
+              displayName: Apply Staging ClusterIssuer for cert-manager
+              inputs:
+                connectionType: Azure Resource Manager
+                azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
+                azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+                kubernetesCluster: "$(AKSCLUSTERNAME)"
+                command: apply
+                arguments: -f $(Pipeline.Workspace)/manifests/cluster-issuer-staging.yaml
+            - task: Kubernetes@1
+              displayName: Apply Production ClusterIssuer for cert-manager
+              inputs:
+                connectionType: Azure Resource Manager
+                azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
+                azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+                kubernetesCluster: "$(AKSCLUSTERNAME)"
+                command: apply
+                arguments: -f $(Pipeline.Workspace)/manifests/cluster-issuer-prod.yaml
+            - task: replacetokens@3
+              displayName: Replace tokens in dapr-secretstore.yaml
+              inputs:
+                targetFiles: $(Pipeline.Workspace)/manifests/dapr-secretstore.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: Kubernetes@1
+              displayName: Apply dapr secretstore component
+              inputs:
+                connectionType: Azure Resource Manager
+                azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
+                azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+                kubernetesCluster: "$(AKSCLUSTERNAME)"
+                namespace: $(ENV)
+                command: apply
+                arguments: -f $(Pipeline.Workspace)/manifests/dapr-secretstore.yaml
+            - task: replacetokens@3
+              displayName: Replace tokens in dapr-pubsub.yaml
+              inputs:
+                targetFiles: $(Pipeline.Workspace)/manifests/dapr-pubsub.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: Kubernetes@1
+              displayName: Apply dapr pubsub component
+              inputs:
+                connectionType: Azure Resource Manager
+                azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
+                azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+                kubernetesCluster: "$(AKSCLUSTERNAME)"
+                namespace: $(ENV)
+                command: apply
+                arguments: -f $(Pipeline.Workspace)/manifests/dapr-pubsub.yaml

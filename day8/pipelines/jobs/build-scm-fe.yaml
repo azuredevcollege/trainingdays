@@ -1,0 +1,15 @@
+parameters:
+  buildNumber: ""
+  containerRegistryServiceConnection: ""
+
+jobs:
+  - job: Build
+    displayName: Build Scm Frontend
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../frontend/build/scm-fe.yaml
+        parameters:
+          buildNumber: ${{ parameters.buildNumber }}
+          publishDockerImage: true
+          containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}

@@ -1,0 +1,20 @@
+pr: none
+trigger: none
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Teardown SCM Common Infrastructure
+
+    jobs:
+      - template: jobs/teardown-scm-common.yaml
+        parameters:
+          artifactDropName: terraformplan
+          variableGroupName: Day7-VariableGroup
+          aadVariableGroupName: Day7-AAD-Dev
+          environmentName: ADC-DAY7-SCM-DEV
+          prefix: adcday7
+          env: dev
+          environmentServiceNameAzureRM: $(azureSubscription)

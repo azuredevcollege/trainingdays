@@ -1,0 +1,41 @@
+parameters:
+  artifactDropName: terraformplan
+  environmentServiceNameAzureRM: ""
+  variableGroupName: ""
+  aadVariableGroupName: ""
+  environmentName: ADC-DAY7-SCM-DEV
+  prefix: adcday7
+  env: dev
+
+jobs:
+  - job: Build
+    displayName: TearDown(!) Scm Common / Infrstructure
+    variables:
+      - group: ${{ parameters.variableGroupName }}
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: TerraformInstaller@0
+        displayName: Install Terraform
+        inputs:
+          terraformVersion: "0.12.24"
+      - task: TerraformTaskV1@0
+        displayName: Terraform Init
+        inputs:
+          provider: "azurerm"
+          command: "init"
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
+          backendAzureRmResourceGroupName: $(tfresourcegroup)
+          backendAzureRmStorageAccountName: $(tfstorageaccount)
+          backendAzureRmContainerName: $(tfcontainer)
+          backendAzureRmKey: $(tfstoragekey)
+      - task: TerraformTaskV1@0
+        displayName: Terraform Destroy
+        inputs:
+          provider: "azurerm"
+          command: "destroy"
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
+          environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
+
