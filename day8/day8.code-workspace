@@ -1,0 +1,53 @@
+{
+	"folders": [
+		{
+			"name": "Filesystem",
+			"path": "."
+		},
+		{
+			"path": "apps/dotnetcore/Scm.Contacts"
+		},
+		{
+			"path": "apps/dotnetcore/Scm.Search"
+		},
+		{
+			"path": "apps/dotnetcore/Scm.Resources"
+		},
+		{
+			"path": "terraform"
+		},
+		{
+			"name": "Manifests.Infrastructure",
+			"path": "infrastructure/manifests"
+		},
+		{
+			"name": "Mainfests.Scm.Api",
+			"path": "apps/dotnetcore/manifests/scmapi"
+		},
+		{
+			"name": "Manifests.Scm.Resources.Api",
+			"path": "apps/dotnetcore/manifests/scmresourcesapi"
+		},
+		{
+			"name": "Manifests.Scm.Resources.ImageResizer",
+			"path": "apps/dotnetcore/manifests/scmresourcesfunc"
+		},
+		{
+			"name": "Manifests.Scm.Search.Api",
+			"path": "apps/dotnetcore/manifests/scmsearchapi"
+		},
+		{
+			"name": "Manifests.Scm.Search.Indexer",
+			"path": "apps/dotnetcore/manifests/scmsearchfunc"
+		},
+		{
+			"name": "Build.dotnetcore",
+			"path": "apps/dotnetcore/build"
+		},
+		{
+			"name": "Pipelines",
+			"path": "pipelines"
+		}
+	],
+	"settings": {}
+}

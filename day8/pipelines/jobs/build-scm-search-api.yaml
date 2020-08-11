@@ -1,0 +1,17 @@
+parameters:
+  configuration: release
+  buildNumber: ''
+  containerRegistryServiceConnection: ''
+
+jobs:
+  - job: Build
+    displayName: Build Scm Search Api
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - template: ../../dotnetcore/build/scm-search-api.yaml
+        parameters:
+          buildConfiguration: ${{ parameters.configuration }}
+          buildNumber: ${{ parameters.buildNumber }}
+          publishDockerImage: true
+          containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}

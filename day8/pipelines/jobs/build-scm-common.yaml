@@ -1,0 +1,25 @@
+parameters:
+  artifactDropName: drop
+
+jobs:
+  - job: Build
+    displayName: Build Scm Common
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day8/terrform
+          contents: |
+            *.*
+          targetFolder: $(Build.ArtifactStagingDirectory)/terraform
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day8/infrastructure/manifests
+          contents: |
+            *.*
+          targetFolder: $(Build.ArtifactStagingDirectory)/manifests
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: $(Build.ArtifactStagingDirectory)
+          artifactName: ${{ parameters.artifactDropName }}

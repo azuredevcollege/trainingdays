@@ -1,0 +1,78 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: scm-search 
+  labels:
+    application: scmcontacts
+    service: scmsearch
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: scmsearch
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: scmsearch
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+          image: azuredevcollege.azurecr.io/adcday7/scmsearchapi
+          env:
+            - name: ContactSearchOptions__ServiceName
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SEARCHNAME
+            - name: ContactSearchOptions__AdminApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SEARCHPRIMARYKEY
+            - name: ContactSearchOptions__IndexName
+              value: scmcontacts
+            - name: AzureAdOptions__Domain
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADDOMAIN            
+            - name: AzureAdOptions__TenantId
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADTENANTID
+            - name: AzureAdOptions__ClientId
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADCLIENTID
+            - name: AzureAdOptions__ClientIdUri
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: AADCLIENTIDURI
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 5000

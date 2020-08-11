@@ -1,0 +1,67 @@
+parameters:
+  name: ""
+  environmentName: ""
+  keyVaultVariableGroupName: ""
+  containerRegistry: ""
+  clusterNamespace: ""
+  buildNumber: ""
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables:
+      - group: ${{ parameters.keyVaultVariableGroupName }}
+    pool:
+      vmImage: "ubuntu-latest"
+    environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: replacetokens@3
+              displayName: Replace tokens in secrets.yaml
+              inputs:
+                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Create imagePullSecret
+              inputs:
+                action: createSecret
+                secretName: regcred
+                namespace: ${{ parameters.clusterNamespace }}
+                dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
+            - task: KubernetesManifest@0
+              displayName: Deploy secrets to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/secrets/secrets.yaml
+            - task: replacetokens@3
+              displayName: Replace tokens in ingress file
+              inputs:
+                targetFiles: $(Pipeline.Workspace)/manifests/scm-ingress.yaml
+                encoding: "auto"
+                writeBOM: true
+                actionOnMissing: "warn"
+                keepToken: false
+                tokenPrefix: "#{"
+                tokenSuffix: "}#"
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
+              inputs:
+                action: deploy
+                namespace: ${{ parameters.clusterNamespace }}
+                manifests: |
+                  $(Pipeline.Workspace)/manifests/scm-deploy.yaml
+                  $(Pipeline.Workspace)/manifests/scm-ingress.yaml
+                  $(Pipeline.Workspace)/manifests/scm-svc.yaml
+                imagePullSecrets: |
+                  regcred
+                containers: |
+                  azuredevcollege.azurecr.io/adcday7/scmapi:${{ parameters.buildNumber }}

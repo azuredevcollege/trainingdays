@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: contacts 
+  labels:
+    application: scmcontacts
+    service: scmapi
+spec:
+  type: ClusterIP
+  selector:
+    application: scmcontacts
+    service: scmapi
+  ports:
+  - port: 8080
+    targetPort: 5000
+    

@@ -1,0 +1,33 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day8/terraform/*
+      - day8/infrastructure/manifests/*
+      - day8/pipelines/cd-scm-common.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-common.yaml
+        parameters:
+          artifactDropName: drop
+
+  - stage: Development
+    displayName: Development
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-common.yaml
+        parameters:
+          environmentServiceNameAzureRM: $(azureSubscription)
+          variableGroupName: Day8-VariableGroup-Dev
+          environmentName: ADC-DAY8-SCM-DEV
