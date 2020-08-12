@@ -6,9 +6,9 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name  = "adc-tf-state"
-    storage_account_name = "anmocktfstate"
-    container_name       = "tstate"
+    resource_group_name  = "adcd8-tfstate-rg"
+    storage_account_name = "adcd8ststate"
+    container_name       = "tfstate"
     key                  = "org.terraform.tfstate"
   }
 }
@@ -152,4 +152,15 @@ resource "azurerm_key_vault_secret" "aadcientiduri"{
   name = "AADCLIENTIDURI"
   value = var.aadclientiduri
   key_vault_id = module.common.keyvaultid
+}
+
+module "devops" {
+  source              = "./azuredevops"
+  pat                 = var.devops_pat
+  orgurl              = var.devops_orgurl
+  projectid           = var.devops_projectid
+  serviceconnectionid = var.devops_serviceconnectionid
+  keyvaultname        = var.keyvault_name
+  keyvaultgroupname   = var.devops_keyvaultgroupname
+  groupvariables      = ["AADCLIENTID", "AADCLIENTIDURI", "AADTENANTID", "APPHOSTNAME", "APPINSIGHTSKEY", "KVIDENTITYCLIENTID", "KVIDENTITYID", "KVIDENTITYPRINCIPALID", "SERVICEBUSCONNECTIONSTRING", "SQLDBCONNECTIONSTRING"]
 }

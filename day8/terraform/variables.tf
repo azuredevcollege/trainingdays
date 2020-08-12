@@ -71,3 +71,26 @@ variable "aadclientiduri" {
   type = string
   default = "http://scmapi-dev"
 }
+
+# Azure DevOps
+variable "devops_pat" {
+    type = string
+}
+
+variable "devops_orgurl" {
+    type = string
+}
+
+variable "devops_projectid" {
+    type = string
+    default = "44837ab7-f1d6-4ea5-89fe-916ac85b622e"
+}
+
+variable "devops_serviceconnectionid" {
+    type = string
+    default = "da2cb313-30c6-491d-b84b-6951079e414f"
+}
+
+variable "devops_keyvaultgroupname" {
+    type = string
+}
