@@ -25,13 +25,6 @@ jobs:
                 secretName: regcred
                 namespace: ${{ parameters.clusterNamespace }}
                 dockerRegistryEndpoint: ${{ parameters.containerRegistry }}
-            - task: KubernetesManifest@0
-              displayName: Deploy secrets to Kubernetes cluster
-              inputs:
-                action: deploy
-                namespace: ${{ parameters.clusterNamespace }}
-                manifests: |
-                  $(Pipeline.Workspace)/secrets/secrets.yaml
             - task: replacetokens@3
               displayName: Replace tokens in ingress file
               inputs:
