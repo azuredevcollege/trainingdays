@@ -9,7 +9,7 @@ jobs:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - template: ../../dotnetcore/build/scm-api.yaml
+      - template: ../../apps/dotnetcore/build/scm-api.yaml
         parameters:
           buildConfiguration: ${{ parameters.configuration }}
           buildNumber: ${{ parameters.buildNumber }}
