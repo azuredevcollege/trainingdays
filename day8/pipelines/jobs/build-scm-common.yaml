@@ -19,6 +19,12 @@ jobs:
           contents: |
             *.*
           targetFolder: $(Build.ArtifactStagingDirectory)/manifests
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: day8/infrastructure/scripts
+          contents: |
+            install-tf-kubectl-provider.sh
+          targetFolder: $(Build.ArtifactStagingDirectory)/scripts
       - task: PublishPipelineArtifact@1
         inputs:
           targetPath: $(Build.ArtifactStagingDirectory)
