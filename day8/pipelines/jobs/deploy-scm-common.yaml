@@ -8,7 +8,8 @@ jobs:
     displayName: Build Scm Common / Infrstructure
     variables:
       - group: ${{ parameters.variableGroupName }}
-      - aksResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
+      - name: aksResourceGroup 
+        value: "$(PREFIX)-k8s-$(ENV)-rg"
     pool:
       vmImage: ubuntu-latest
     environment: ${{ parameters.environmentName }}
