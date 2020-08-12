@@ -11,13 +11,13 @@ jobs:
         inputs:
           sourceFolder: day8/terraform
           contents: |
-            *.*
+            **
           targetFolder: $(Build.ArtifactStagingDirectory)/terraform
       - task: CopyFiles@2
         inputs:
           sourceFolder: day8/infrastructure/manifests
           contents: |
-            *.*
+            **
           targetFolder: $(Build.ArtifactStagingDirectory)/manifests
       - task: CopyFiles@2
         inputs:

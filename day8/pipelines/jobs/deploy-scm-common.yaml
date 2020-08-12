@@ -24,13 +24,13 @@ jobs:
                 terraformVersion: "0.12.24"
             - task: ShellScript@2
               inputs:
-                scriptPath: "$(Pipeline.Workspace)/${{ artifactDropName }}/scripts/install-tf-kubectl-provider.sh"
+                scriptPath: "$(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scripts/install-tf-kubectl-provider.sh"
             - task: TerraformTaskV1@0
               displayName: Terraform Init
               inputs:
                 provider: "azurerm"
                 command: "init"
-                workingDirectory: "$(Pipeline.Workspace)/${{ artifactDropName }}/terraform"
+                workingDirectory: "$(Pipeline.Workspace)/${{ parameters.artifactDropName }}/terraform"
                 backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
                 backendAzureRmResourceGroupName: $(TFRESOURCEGROUPNAME)
                 backendAzureRmStorageAccountName: $(TFSTORAGEACCOUNT)
@@ -41,7 +41,7 @@ jobs:
               inputs:
                 provider: "azurerm"
                 command: "apply"
-                workingDirectory: "$(Pipeline.Workspace)/${{ artifactDropName }}/terraform"
+                workingDirectory: "$(Pipeline.Workspace)/${{ parameters.artifactDropName }}/terraform"
                 commandOptions: '-var="location=$(LOCATION)" -var="prefix=$(PREFIX)" -var="env=$(ENV)" -var="app_insights_name=$(APPINSIGHTSNAME)" -var="keyvault_name=$(KEYVAULTNAME)" -var="keyvault_identity_name=$(KEYVAULTIDENTITYNAME)" -var="aks_cluster_name=$(AKSCLUSTERNAME)" -var="sqldbusername=$(SQLDBUSERNAME) -var="sqldbpassword=$(SQLDBPASSWORD)" -var="sqlservername=$(SQLSERVERNAME)" -var="sqldbname=$(SQLDBNAME)" -var="servicebus_namespace_name=$(SERVICEBUSNAMESPACENAME)" -var="aadclientid=$(AADCLIENTID)" -var="aadclientiduri=$(AADCLIENTIDURI)" -auto-approve'
                 environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
             - task: Kubernetes@1
@@ -52,7 +52,7 @@ jobs:
                 azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
                 kubernetesCluster: "$(AKSCLUSTERNAME)"
                 command: apply
-                arguments: -f $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/cluster-issuer-staging.yaml
+                arguments: -f $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/cluster-issuer-staging.yaml
             - task: Kubernetes@1
               displayName: Apply Production ClusterIssuer for cert-manager
               inputs:
@@ -61,11 +61,11 @@ jobs:
                 azureResourceGroup: "$(PREFIX)-k8s-$(ENV)-rg"
                 kubernetesCluster: "$(AKSCLUSTERNAME)"
                 command: apply
-                arguments: -f $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/cluster-issuer-prod.yaml
+                arguments: -f $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/cluster-issuer-prod.yaml
             - task: replacetokens@3
               displayName: Replace tokens in dapr-secretstore.yaml
               inputs:
-                targetFiles: $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/dapr-secretstore.yaml
+                targetFiles: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/dapr-secretstore.yaml
                 encoding: "auto"
                 writeBOM: true
                 actionOnMissing: "warn"
@@ -81,11 +81,11 @@ jobs:
                 kubernetesCluster: "$(AKSCLUSTERNAME)"
                 namespace: $(ENV)
                 command: apply
-                arguments: -f $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/dapr-secretstore.yaml
+                arguments: -f $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/dapr-secretstore.yaml
             - task: replacetokens@3
               displayName: Replace tokens in dapr-pubsub.yaml
               inputs:
-                targetFiles: $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/dapr-pubsub.yaml
+                targetFiles: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/dapr-pubsub.yaml
                 encoding: "auto"
                 writeBOM: true
                 actionOnMissing: "warn"
@@ -101,4 +101,4 @@ jobs:
                 kubernetesCluster: "$(AKSCLUSTERNAME)"
                 namespace: $(ENV)
                 command: apply
-                arguments: -f $(Pipeline.Workspace)/${{ artifactDropName }}/manifests/dapr-pubsub.yaml
+                arguments: -f $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/manifests/dapr-pubsub.yaml
