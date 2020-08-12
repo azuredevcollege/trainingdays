@@ -31,3 +31,4 @@ stages:
           environmentServiceNameAzureRM: $(azureSubscription)
           variableGroupName: Day8-VariableGroup-Dev
           environmentName: ADC-DAY8-SCM-DEV
+          artifactDropName: drop
