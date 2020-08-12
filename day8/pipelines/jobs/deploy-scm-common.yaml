@@ -20,6 +20,9 @@ jobs:
               displayName: Install Terraform
               inputs:
                 terraformVersion: "0.12.24"
+            - task: ShellScript@2
+              inputs:
+                scriptPath: "$(Pipeline.Workspace)/scripts/install-tf-kubectl-provider.sh"
             - task: TerraformTaskV1@0
               displayName: Terraform Init
               inputs:
