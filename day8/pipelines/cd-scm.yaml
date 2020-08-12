@@ -5,9 +5,9 @@ trigger:
       - master
   paths:
     include:
-      - day7/apps/dotnetcore/Scm/*
-      - day7/apps/dotnetcore/manifests/scmapi/*
-      - day7/apps/pipelines/cd-scm.yaml
+      - day8/apps/dotnetcore/Scm.Contacts/*
+      - day8/apps/dotnetcore/manifests/scmapi/*
+      - day8/apps/pipelines/cd-scm.yaml
 
 variables:
   configuration: release
@@ -33,9 +33,9 @@ stages:
       - template: jobs/deploy-scm-api.yaml
         parameters:
           name: Deploy Scm Api
-          keyVaultVariableGroupName: Day7-KeyVault-Dev
+          keyVaultVariableGroupName: Day8-VariableGroup-KV-Dev
           buildNumber: $(Build.BuildNumber)
-          environmentName: ADC-DAY7-SCM-DEV
+          environmentName: ADC-DAY8-SCM-DEV
           azureSubscription: $(azureSubscription)
           containerRegistry: $(containerRegistry)
           clusterNamespace: dev

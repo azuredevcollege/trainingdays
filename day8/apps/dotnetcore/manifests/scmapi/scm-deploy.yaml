@@ -38,7 +38,7 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "500m"
-          image: m009/scmapi:0.11
+          image: azuredevcollege.azurecr.io/adcday8/scmapi
           imagePullPolicy: IfNotPresent
           env:
           - name: ASPNETCORE_ENVIRONMENT

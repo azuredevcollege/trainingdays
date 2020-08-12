@@ -11,8 +11,8 @@ steps:
     inputs:
       repository: adcday8/scmapi
       command: build
-      dockerfile: day8/apps/dotnetcore/Scm/Adc.Scm.Api/Dockerfile
-      buildContext: day8/apps/dotnetcore/Scm
+      dockerfile: day8/apps/dotnetcore/Scm.Contacts/Adc.Scm.Api/Dockerfile
+      buildContext: day8/apps/dotnetcore/Scm.Contacts
       tags: ${{parameters.buildNumber}}
   - task: Docker@2
     displayName: Build and Publish Docker image
@@ -20,7 +20,7 @@ steps:
     inputs:
       repository: adcday8/scmapi
       command: buildAndPush
-      dockerfile: day8/apps/dotnetcore/Scm/Adc.Scm.Api/Dockerfile
+      dockerfile: day8/apps/dotnetcore/Scm.Contacts/Adc.Scm.Api/Dockerfile
       buildContext: day8/apps/dotnetcore/Scm.Contacts
       containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
       tags: ${{ parameters.buildNumber }}

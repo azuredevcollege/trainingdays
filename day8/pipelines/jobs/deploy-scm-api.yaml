@@ -18,16 +18,6 @@ jobs:
       runOnce:
         deploy:
           steps:
-            - task: replacetokens@3
-              displayName: Replace tokens in secrets.yaml
-              inputs:
-                targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
-                encoding: "auto"
-                writeBOM: true
-                actionOnMissing: "warn"
-                keepToken: false
-                tokenPrefix: "#{"
-                tokenSuffix: "}#"
             - task: KubernetesManifest@0
               displayName: Create imagePullSecret
               inputs:
@@ -64,4 +54,4 @@ jobs:
                 imagePullSecrets: |
                   regcred
                 containers: |
-                  azuredevcollege.azurecr.io/adcday7/scmapi:${{ parameters.buildNumber }}
+                  azuredevcollege.azurecr.io/adcday8/scmapi:${{ parameters.buildNumber }}
