@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/java/jdk:8-zulu-alpine AS builder
+COPY . /usr/src/myapp/
+WORKDIR /usr/src/myapp
+RUN javac app1.java
+
+FROM  mcr.microsoft.com/java/jre:8-zulu-alpine
+WORKDIR /usr/src/myapp
+COPY --from=builder /usr/src/myapp .
+CMD ["java", "app1"]
