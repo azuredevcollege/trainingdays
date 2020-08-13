@@ -68,7 +68,7 @@ namespace Adc.Scm.Api.Controllers
             var userId = _claimsProvider.GetUserId(this.HttpContext);
             var domainContact = await _repository.Add(userId, _mapper.Map<Contact, DomainObjects.Contact>(contact));
             var evt = _mapper.Map<DomainObjects.Contact, ContactAddedEvent>(domainContact);
-            await _daprClient.PublishEventAsync("scmapi", evt);
+            await _daprClient.PublishEventAsync("scmtopic", evt);
             return CreatedAtAction(nameof(GetById), new { id = domainContact.Id }, _mapper.Map<DomainObjects.Contact, Contact>(domainContact));
         }
 
@@ -89,7 +89,7 @@ namespace Adc.Scm.Api.Controllers
                 return NotFound();
 
             var evt = _mapper.Map<DomainObjects.Contact, ContactChangedEvent>(domainContact);
-            await _daprClient.PublishEventAsync("scmapi", evt);
+            await _daprClient.PublishEventAsync("scmtopic", evt);
             return Ok(_mapper.Map<DomainObjects.Contact, Contact>(domainContact));
         }
 
@@ -105,7 +105,7 @@ namespace Adc.Scm.Api.Controllers
                 return NotFound();
 
             var evt = _mapper.Map<DomainObjects.Contact, ContactDeletedEvent>(domainContact);
-            await _daprClient.PublishEventAsync("scmapi", evt);
+            await _daprClient.PublishEventAsync("scmtopic", evt);
             return NoContent();
         }
     }
