@@ -1,11 +1,8 @@
 parameters:
-  artifactDropName: terraformplan
+  artifactDropName: drop
   environmentServiceNameAzureRM: ""
   variableGroupName: ""
-  aadVariableGroupName: ""
-  environmentName: ADC-DAY7-SCM-DEV
-  prefix: adcday7
-  env: dev
+  environmentName: ADC-DAY8-SCM-DEV
 
 jobs:
   - job: Build
@@ -24,18 +21,18 @@ jobs:
         inputs:
           provider: "azurerm"
           command: "init"
-          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day8/terraform"
           backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
-          backendAzureRmResourceGroupName: $(tfresourcegroup)
-          backendAzureRmStorageAccountName: $(tfstorageaccount)
-          backendAzureRmContainerName: $(tfcontainer)
-          backendAzureRmKey: $(tfstoragekey)
+          backendAzureRmResourceGroupName: $(TFRESOURCEGROUPNAME)
+          backendAzureRmStorageAccountName: $(TFSTORAGEACCOUNT)
+          backendAzureRmContainerName: $(TFCONTAINERNAME)
+          backendAzureRmKey: $(TFSTORAGEKEY)
       - task: TerraformTaskV1@0
         displayName: Terraform Destroy
         inputs:
           provider: "azurerm"
           command: "destroy"
-          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
-          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
+          workingDirectory: "$(System.DefaultWorkingDirectory)/day8/terraform"
+          commandOptions: '-var="location=$(LOCATION)" -var="prefix=$(PREFIX)" -var="env=$(ENV)" -var="app_insights_name=$(APPINSIGHTSNAME)" -var="keyvault_name=$(KEYVAULTNAME)" -var="keyvault_identity_name=$(KEYVAULTIDENTITYNAME)" -var="aks_cluster_name=$(AKSCLUSTERNAME)" -var="sqldbusername=$(SQLDBUSERNAME)" -var="sqldbpassword=$(SQLDBPASSWORD)" -var="sqlservername=$(SQLSERVERNAME)" -var="sqldbname=$(SQLDBNAME)" -var="servicebus_namespace_name=$(SERVICEBUSNAMESPACENAME)" -var="aadclientid=$(AADCLIENTID)" -var="aadclientiduri=$(AADCLIENTIDURI)" -var="devops_serviceconnectionid=$(DEVOPSSERVICECONNECTIONID)" -var="devops_projectid=$(DEVOPSPROJECTID)" -var="devops_pat=$(DEVOPSPAT)" -var="devops_orgurl=$(DEVOPSORGURL)" -var="devops_keyvaultgroupname=$(DEVOPSKEYVAULTGROUP)" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
 
