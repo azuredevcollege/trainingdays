@@ -11,10 +11,7 @@ stages:
     jobs:
       - template: jobs/teardown-scm-common.yaml
         parameters:
-          artifactDropName: terraformplan
-          variableGroupName: Day7-VariableGroup
-          aadVariableGroupName: Day7-AAD-Dev
-          environmentName: ADC-DAY7-SCM-DEV
-          prefix: adcday7
-          env: dev
+          artifactDropName: drop
+          variableGroupName: Day8-VariableGroup-Dev
+          environmentName: ADC-DAY8-SCM-DEV
           environmentServiceNameAzureRM: $(azureSubscription)
