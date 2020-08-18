@@ -2,7 +2,7 @@
 
 [back](../README.md)  
 
-- [Challenge 0: Networking: Create a Virtual Network (IPv4) for your first VM.](./challenges/Challenge1/challenge-0.md)
+- [Challenge 0: Networking: Create a Virtual Network (IPv4) for your first VM.](./challenges/Challenge0/challenge-0.md)
 - [Challenge 1: PowerShell: Configure PowerShell for Azure Administration & Create a VM Using PowerShell.](./challenges/Challenge1/challenge-1.md)
 - [Challenge 2: ARM: Create a VM and other Azure Resources using an ARM Template](./challenges/Challenge2/challenge-2.md)
 - [Challenge 3: VM - Azure Backup: Save your VM state](./challenges/Challenge3/challenge-3.md)
