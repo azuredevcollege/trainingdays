@@ -61,7 +61,6 @@ The main goal of the Day 6 is basically building Linux Container and Docker know
 **Info Slot 3: Docker Objects**
   * Batteries included but removable
   * Docker Volume (Volume drivers, Bind Mounts)
-  * Docker Logging (Logging drivers)
   * Docker Network (basics, drivers, port publish) 
 
 **[Challenge 3: Docker Objects](./challenges/challenge3.md)**
