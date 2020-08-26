@@ -102,11 +102,11 @@ The main goal of the Day 6 is basically building Linux Container and Docker know
   * Container Services on Azure
     * Container Instances
     * App Service
-    * Azure Kubernetes Service 
-    * Container Registry
-    * Service Fabric, Batch, Functions
-    * Azure Devops
-    * Github Actions
+    * Batch
+    * Azure Service Fabric
+    * Azure Red Hat OpenShift
+    * Azure Container Registry (ACR)
+    * Azure Kubernetes Service (AKS)
 
 **[Challenge 5: Azure Container Services](./challenges/challenge5.md)**
   * Azure Container Registry
