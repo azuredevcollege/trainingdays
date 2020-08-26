@@ -25,6 +25,7 @@ Here's the overview of the training week. Happy hacking!
 - [Day 3 - Data and AI](day3/README.md)
 - [Day 4 - DevOps and Monitoring](day4/README.md)
 - [Day 5 - Identity and Architectures](day5/README.md)
+- [Day 6 - Containerization](day6/README.md)
 
 ## Azure Boards
 
