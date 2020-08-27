@@ -102,7 +102,7 @@ jobs:
     steps:
       - task: UseDotNet@2
         displayName: "Acquire .NET Core Sdk 3.1.x"
-          inputs:
+        inputs:
           packageType: Sdk
           version: 3.1.x
       - task: DotNetCoreCLI@2
