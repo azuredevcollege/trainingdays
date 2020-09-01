@@ -33,7 +33,7 @@ steps:
       buildContext: day3/apps/nodejs/visitreport
       tags: ${{parameters.buildNumber}}
   - task: Docker@2
-    displayName: Build and Puish Docker image
+    displayName: Build and Push Docker image
     condition: ${{ parameters.publishDockerImage }}
     inputs:
       repository: adcday3/scmvisitreportsapi
