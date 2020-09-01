@@ -1,0 +1,38 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day3/apps/infrastructure/templates/scm-common.json
+      - day5/apps/restore/pipelines/cd-scm-common.yaml
+      - day5/apps/restore/pipelines/jobs/build-scm-common.yaml
+      - day5/apps/restore/pipelines/jobs/deploy-scm-common.yaml
+      - day5/apps/restore/pipelines/variables/cd-scm-common-restore.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-common.yaml
+        parameters:
+          artifactDropName: drop
+
+  - stage: Restore
+    displayName: Restore
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-common.yaml
+        parameters:
+          name: Deploy Scm Restore
+          variablesFile: ../variables/cd-scm-common-restore.yaml
+          environmentName: ADC-DAY5-SCM-RESTORE
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+          uniquePrefix: $(uniquePrefix)

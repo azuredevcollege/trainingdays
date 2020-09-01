@@ -1,0 +1,42 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day3/apps/frontend/*
+      - day3/apps/infrastructure/templates/scm-fe.json
+      - day5/apps/checkpoint/pipelines/cd-scm-fe.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-fe.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-fe.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-fe-restore.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-fe.yaml
+        parameters:
+          artifactDropName: drop
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Restore
+    displayName: Restore
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-fe.yaml
+        parameters:
+          name: Deploy Scm Frontend
+          variablesFile: ../variables/cd-scm-fe-restore.yaml
+          environmentName: ADC-DAY5-SCM-RESTORE
+          azureSubscription: ${{ variables.azureSubscription }}
+          artifactDropName: drop
+          uniquePrefix: $(uniquePrefix)

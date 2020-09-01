@@ -1,0 +1,54 @@
+parameters:
+  name: ""
+  variablesFile: ""
+  environmentName: ""
+  azureSubscription: ""
+  artifactDropName: drop
+  variableGroupName: ""
+  uniquePrefix: adc
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables:
+      - group: ${{ parameters.variableGroupName }}
+      - template: ${{ parameters.variablesFile }}
+    pool:
+      vmImage: ${{ variables.vmImage }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceGroupDeployment@2
+              displayName: "Create/update Common Services"
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupName }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-textanalytics-nodejs-common.json
+                overrideParameters: >
+                  -taname ${{ parameters.uniquePrefix }}${{variables.taname}} -storageAccountName ${{ parameters.uniquePrefix }}${{ variables.storageAccountName }} -tatier ${{variables.tatier}}
+            - task: AzureResourceGroupDeployment@2
+              displayName: "Create/update Infrastructure for Linux TextAnalytics Function"
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupNameFunc }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-textanalytics-nodejs-infra.json
+                overrideParameters: >
+                  -functionAppName ${{ parameters.uniquePrefix }}${{ variables.functionAppName }} -storageAccountName ${{ parameters.uniquePrefix }}${{ variables.storageAccountName }} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }} -cosmosDbAccount ${{ parameters.uniquePrefix }}${{variables.cosmosDbAccount}}
+                  -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }} -commonResGroup ${{ variables.resourceGroupName }}
+                  -taname ${{ parameters.uniquePrefix }}${{ variables.taname }}
+            - task: AzureFunctionApp@1
+              displayName: "Deploy TextAnalytics Function App"
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                appType: functionAppLinux
+                appName: ${{ parameters.uniquePrefix }}${{ variables.functionAppName }}
+                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.TaFunc.zip
