@@ -1,7 +1,7 @@
-# Azure SQL DB #
+# Azure SQL DB
 
 
-## Here is what you will learn ##
+## Here is what you will learn
 
 - Create an Azure SQL DB (Single Database)
 - Add Data to the Azure SQL DB
@@ -9,7 +9,7 @@
 
 Azure SQL Database is a general-purpose relational database, provided as a managed service. It's based on the latest stable version of [Microsoft SQL Server database engine](https://docs.microsoft.com/sql/sql-server/sql-server-technical-documentation?toc=/azure/sql-database/toc.json). In fact, the newest capabilities of SQL Server are released first to SQL Database, and then to SQL Server itself. You get the newest SQL Server capabilities with no overhead for patching or upgrading, tested across millions of databases.
 
-To get startet with SQL Database the documentation [here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-technical-overview) is a good starting point.
+To get startet with SQL Database consult the documentation [here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-technical-overview).
 
 ## Deployment models
 
@@ -17,9 +17,9 @@ Let us have a look at the different deployment models of SQL Database first:
 
 ![SQL database Deployment options](./img/sql-database-deployment-options.png)
 
-- Single database represents a fully managed, isolated database. You might use this option if you have modern cloud applications and microservices that need a single reliable data source. A single database is similar to a contained database in Microsoft SQL Server Database Engine.
-- Managed instance is a fully managed instance of the Microsoft SQL Server Database Engine. It contains a set of databases that can be used together. Use this option for easy migration of on-premises SQL Server databases to the Azure cloud, and for applications that need to use the database features that SQL Server Database Engine provides.
-- Elastic pool is a collection of single databases with a shared set of resources, such as CPU or memory. Single databases can be moved into and out of an elastic pool.
+- [Single database](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-overview) represents a fully managed, isolated database. You might use this option if you have modern cloud applications and microservices that need a single reliable data source. A single database is similar to a contained database in Microsoft SQL Server Database Engine.
+- [Managed instance](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview) is a fully managed instance of the Microsoft SQL Server Database Engine. It contains a set of databases that can be used together. Use this option for easy migration of on-premises SQL Server databases to the Azure cloud, and for applications that need to use the database features that SQL Server Database Engine provides.
+- [Elastic pool](https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-pool-overview) is a collection of single databases with a shared set of resources, such as CPU or memory. Single databases can be moved into and out of an elastic pool.
 
 ## Purchasing models
 
@@ -29,34 +29,34 @@ SQL Database offers the following purchasing models:
 - The DTU-based purchasing model offers a blend of compute, memory, and I/O resources in three service tiers, to support light to heavy database workloads. Compute sizes within each tier provide a different mix of these resources, to which you can add additional storage resources
 - The serverless model automatically scales compute based on workload demand, and bills for the amount of compute used per second. The serverless compute tier also automatically pauses databases during inactive periods when only storage is billed, and automatically resumes databases when activity returns.
 
-You see that each purchasing model refers to compute, memory and I/O resources, because this are the most important and crtical resources a databse uses.
-
+You see that each purchasing model refers to compute, memory and I/O resources, because these are the most important and crtical resources a databse uses.
 
 
 ## Create a single SQL Database
 
 The single database deployment option creates a database in Azure SQL Database with its own set of resources and is managed via a SQL Database server. With a single database, each database is isolated from each other and portbale, each with its own service tier within the DTU-based purchasing model or vCore-based purchasing model and a guaranteed compute size. 
 
-Open a shell, we use Azure CLI to create the nneded Azure resources:
+Navigate to the azure portal and open the cloud shell. We use the Azure CLI to create the needed Azure resources:
 
 1. Create a resource group:
    ```Shell
    az group create --name <your rg name> --location <your Azure region>
    ```
 2. Create the server instance and note down the __fullyQualifiedDomainName__ of your server from the output
+> The Azure SQL Server name has to be unique.
    ```Shell
    az sql server create --name <name of the server> --resource-group <your rg name> --location <your Azure region> --admin-user <name of your admin> --admin-password <pwd>
    ```
-3. Per default the access is not permitted via the Azure SQL Server. Configure the server's firewall to allow your IP
+3. Per default the access is not permitted via the Azure SQL Server. Configure the server's firewall to allow your IPv4
    ```Shell
    az sql server firewall-rule create --server <name of your server> --resource-group <your rg name> --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
    ```
 4. Create the SQL Database with vCore-based purchasing Gen4, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
    ```Shell
-   az sql db create --name MSFTEmployees --resource-group <your rg name> --server <name of your server> --edition GeneralPurpose --family Gen4 --capacity 1 --max-size 32GB --zone-redundant false
+   az sql db create --name MSFTEmployees --resource-group <your rg name> --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
    ```
 
-## Add Data to SQL DB ##
+## Add Data to SQL DB
 
 Now that your SQL Database is up and running it's time to add some data. First we will use the Azure CLI to do so
 
@@ -72,24 +72,28 @@ Get to know your environment
    If you run the command like this you are getting a lot of information to make sense of. You can restrict this by using a query:
    
    ```Shell
-   az sql db list --resource-group <your rg name> --server <name of your server> --query '[].{Name:name}'
+   az sql db list --resource-group <your rg name> --server <name of your server> --query '[].{Name: name}'
    ```
   
    ```Shell
-   az sql db show --resource-group <your rg name> --server <name of your server> --name MSFTEmployees --query '{name: name, maxSizeBytes: maxSizeBytes, status: status}'
+   az sql db show --resource-group <your rg name> --server <name of your server> --query '{Name: name, maxSizeBytes: maxSizeBytes, status: status}'
    ```
   
-Connect to your SQL DB
+### Connect to your SQL DB
 
    ```Shell
    az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
    ```
 
-   For the next part to work you either have the sqlcmd extension or just use the Azure Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
+   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
   
    ```Shell
    sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
    ```
+   > You might need to renew the firewall-rule at this point.
+   >   ```Shell
+   >az sql server firewall-rule create --server <name of your server> --resource-group <your rg name> --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
+   >```
   
    After running this you should see a ```1>```. Now you can run SQL Queries. If you are unfamiliar with their Syntax feel free to take some time getting used to it.
 
@@ -124,7 +128,7 @@ Query the data
   
 Add the other CEOs Microsoft has had to the list as well (the ID is fictional). To exit the sqlcmd utility program enter ```exit```.
 
-## Add Data to SQL DB using the Azure Data Studio ##
+## Add Data to SQL DB using the Azure Data Studio
 
 Another, more simple approach is using the Azure Data Studio. Azure Data Studio is a cross-platform database tool for data professionals using the Microsoft family of on-premises and cloud data platforms on Windows, MacOS, and Linux.
 
@@ -142,13 +146,13 @@ Next we want to create our first table in the ContactsDb. Navigate to the Contac
 Add and run the following query, creating a new Table:
 
    ```Sql
-   CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int)
+   CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
    ```
 
 Create a new query and insert a row:
 
    ```Sql
-   INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... )
+   INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
    ```
 
 View the data returned by a query
@@ -163,11 +167,11 @@ View the data returned by a query
 
 ## Setup Dynamic Data Masking
 
-Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking
+Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
 
 ![Dynamic Data Masking](./img/dynamic-data-masking.png)
 
-To see Dynamic Data Masking in action we first add a column to the Contacts table with a Data Masking Rule.
+To see Dynamic Data Masking in action we first add a column to the CEOs table with a Data Masking Rule.
 Back in Azure Data Studio create a new query and run a command as follows:
 
    ```Sql
@@ -177,13 +181,13 @@ Back in Azure Data Studio create a new query and run a command as follows:
 Run another query to add another row:
 
    ```Sql
-   INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (43, 'Nadella', 'Satya', 52, 2014, 'snad@microsoft.com')
+   INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (43, 'Nadella', 'Satya', 52, 2014, 'snad@microsoft.com');
    ```
 When we select the top 1000 rows of the Contacts table we still see the email's actual value.
 
 ![Not Masked](./img/not-masked-result.png)
 
-The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on Contacts. Create a new query in the Azure Data Studio and run the commands as follows:
+The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on CEOs. Create a new query in the Azure Data Studio and run the commands as follows:
 
    ```Sql
    CREATE USER TestUser WITHOUT LOGIN;  
@@ -193,16 +197,16 @@ The reason behind this is that the account we have used has elevated privileges.
    SELECT * FROM CEOs; 
    ```
 
-## Access Management for Azure SQL DB ##
+## Access Management for Azure SQL DB
 
-Under Access Management we are taking a look at authentication and authorization. Authentication is the process of proving the user is who they claim to be. Authorization refers to the permissions assigned to a user within an Azure SQL Database, and determines what the user is allowed to do.
+Under Access Management we are taking a look at authentication and authorization. Authentication is the process of proving the users are who they claim to be. Authorization refers to the permissions assigned to a user within an Azure SQL Database, and determines what the user is allowed to do.
 
 Azure SQL Database supports two types of authentication: SQL authentication, as we have used before in creating the TestUser. And Azure Active Directory authentication.
 
 Let's have a look at the SQL authentication. As server admin you can create additional SQL users - which enables other users to connect to the SQL Database. Create a new query.
 
    ```Sql
-   CREATE USER Marvin WITH PASSWORD = '42_as_ANSWER!'
+   CREATE USER Marvin WITH PASSWORD = '42_as_ANSWER!';
    ```
 
 Now you can sign up as this user.
@@ -215,13 +219,13 @@ Before we did grant the ```TestUser``` select access to the Table CEOs. Similarl
 
  ![Fixed Rules](./img/permissions-of-database-roles.png)
 
-## Clean up ##
+## Clean up
 
 Delete Resource Group
 
 ```az group delete -name <your rg name>```
 
-## OPTIONAL: SQL Databace backup and retention policies ##
+## OPTIONAL: SQL Databace backup and retention policies
 
 You make the choice between configuring your server for either locally redundant backups or geographically redundant backups at server creation.
 After a server is created, the kind of redundancy it has, geographically redundant vs locally redundant, can't be switched.
@@ -236,10 +240,10 @@ Go to the Azure portal and navigate to your SQL server. Under Manage Backups you
 
    When you are using auto-failover groups with automatic failover policy, any outage that impacts one or several of the databases in the group results in automatic failover. Typically these are incidents that cannot be self-mitigated by the built-in automatic high availability operations. The examples of failover triggers include an incident caused by a SQL tenant ring or control ring being down due to an OS kernel memory leak on several compute nodes, or an incident caused by one or more tenant rings being down because a wrong network cable was cut during routine hardware decommissioning. For more information, see SQL Database High Availability.
 
-Create another Azure SQL Server
+Create another Azure SQL Server in another azure region
 
    ```Shell
-   az sql server create --name <name of your second server> --resource-group <your rg name> --location northeurope --admin-user <name of your admin> --admin-password <pwd>
+   az sql server create --name <name of your second server> --resource-group <your rg name> --location <a different Azure region> --admin-user <name of your admin> --admin-password <pwd>
    ```
    
 Create a failover group between the servers and add the database
@@ -257,13 +261,13 @@ Verify which server is secondary
 Failover to the secondary server
 
    ```Shell
-   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --name <name of your second server>
+   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --server <name of your second server>
    ```
 
 Revert failover group back to the primary server
 
    ```Shell
-   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --name <name of your server>
+   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --server <name of your server>
    ```
   
 ## OPTIONAL: Connect the Azure SQL DB to a Web Application ##
