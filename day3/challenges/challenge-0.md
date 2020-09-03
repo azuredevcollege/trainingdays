@@ -34,6 +34,12 @@ $env:BASE_RES_WEBAPP_NAME="<NameOfTheResourcesApiWebApp>"
 $env:BASE_RES_FUNCAPP_NAME="<NameOfTheFunctionsApp>"
 ```
 
+If you want to use ```bash```, make sure you hav the ```zip``` package installed:
+
+```shell
+sudo apt install zip
+```
+
 ## Run The Script
 
 The script uses your local Azure CLI. So make sure you are logged in and have selected the correct subscription. You can check the current subscription by running:
