@@ -69,11 +69,11 @@ fi
 
 echo "Deploying Common Resources."
 
-az group deployment create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-common.json --parameters applicationInsightsName=$BASE_AI_NAME
+az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-common.json --parameters applicationInsightsName=$BASE_AI_NAME
 
 echo "Deploying SCM API Resources."
 
-az group deployment create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_API_WEBAPP_NAME
+az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_API_WEBAPP_NAME
 
 echo "Building and publishing SCM API Resources."
 
@@ -82,7 +82,7 @@ cd publishContacts && zip -r package.zip . && az webapp deployment source config
 
 echo "Deploying SCM Res Resources."
 
-az group deployment create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-resources-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_RES_WEBAPP_NAME storageAccountName=$BASE_STORAGEACCOUNT_RES_NAME functionAppName=$BASE_RES_FUNCAPP_NAME
+az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-resources-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_RES_WEBAPP_NAME storageAccountName=$BASE_STORAGEACCOUNT_RES_NAME functionAppName=$BASE_RES_FUNCAPP_NAME
 
 echo "Building and publishing SCM Res Resources."
 
@@ -94,7 +94,7 @@ cd publishFunc && zip -r package.zip . && az webapp deployment source config-zip
 
 echo "Deploying SCM Frontend Resources."
 
-az group deployment create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-fe.json --parameters storageAccountName=$BASE_STORAGEACCOUNT_FE_NAME
+az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-fe.json --parameters storageAccountName=$BASE_STORAGEACCOUNT_FE_NAME
 
 echo "Activating Static Web site option in storage account."
 
