@@ -34,7 +34,7 @@ $env:BASE_RES_WEBAPP_NAME="<NameOfTheResourcesApiWebApp>"
 $env:BASE_RES_FUNCAPP_NAME="<NameOfTheFunctionsApp>"
 ```
 
-If you want to use ```bash```, make sure you hav the ```zip``` package installed:
+If you want to use ```bash```, make sure you have the ```zip``` package installed:
 
 ```shell
 sudo apt install zip
