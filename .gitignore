@@ -3,4 +3,6 @@
 **/.terraform/**
 day7/apps/infrastructure/manifests/local-secrets.yaml
 .vuepress/dist/
-
+day2/apps/dotnetcore/Scm/Adc.Scm.Api/publish
+day3/scripts/baseline/publish**
+day3/scripts/baseline/packages-microsoft-prod.deb
