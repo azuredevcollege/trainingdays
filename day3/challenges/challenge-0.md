@@ -12,7 +12,7 @@ To run the deployment script, you will have to setup a few environment variables
 export BASE_REGION_NAME=<YourAzureRegion>
 export BASE_RG_COMMON_NAME=<NameOfTheResourceGroup>
 export BASE_AI_NAME=<NameOfTheAppInsightsComponent>
-## bothe storage account name must be 15 characters or less and all LOWERCASE
+## both storage account names must be 15 characters or less and all LOWERCASE
 export BASE_STORAGEACCOUNT_FE_NAME=<NameOfTheStorageAccountForFrontend>
 export BASE_STORAGEACCOUNT_RES_NAME=<NameOfTheStorageAccountForFunctionsAndImages>
 export BASE_API_WEBAPP_NAME=<NameOfTheContactsApiWebApp>
@@ -20,13 +20,13 @@ export BASE_RES_WEBAPP_NAME=<NameOfTheResourcesApiWebApp>
 export BASE_RES_FUNCAPP_NAME=<NameOfTheFunctionsApp>
 ```
 
-### PowerShell
+### ...or PowerShell
 
 ```powershell
 $env:BASE_REGION_NAME="<YourAzureRegion>"
 $env:BASE_RG_COMMON_NAME="<NameOfTheResourceGroup>"
 $env:BASE_AI_NAME="<NameOfTheAppInsightsComponent>"
-## bothe storage account name must be 15 characters or less and all LOWERCASE
+## both storage account names must be 15 characters or less and all LOWERCASE
 $env:BASE_STORAGEACCOUNT_FE_NAME="<NameOfTheStorageAccountForFrontend>"
 $env:BASE_STORAGEACCOUNT_RES_NAME="<NameOfTheStorageAccountForFunctionsAndImages>"
 $env:BASE_API_WEBAPP_NAME="<NameOfTheContactsApiWebApp>"
@@ -66,7 +66,7 @@ cd day3/scripts/baseline
 ./deploy_baseline.sh
 ```
 
-### PowerShell
+### ...or PowerShell
 
 ```powershell
 cd day3/scripts/baseline

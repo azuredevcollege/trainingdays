@@ -1,6 +1,6 @@
 # Day 3 Data and AI
 
-- [Challenge 0 - ](challenges/challenge-0.md)
+- [Challenge 0 - (Optional) Baseline Deployment for Day 3](challenges/challenge-0.md)
 - [Challenge 1 - Azure Cosmos DB](challenges/challenge-1.md)
 - [Challenge 2 - Azure SQL DB](challenges/challenge-2.md)
 - [Challenge 3 - Azure Search](challenges/challenge-3.md)
