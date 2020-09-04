@@ -14,7 +14,7 @@ variables:
   - name: alwaysOn
     value: false
   - name: storageAccountName
-    value: adcd5scmsearchdev
+    value: adcd5searchre
   - name: indexerFunctionName
     value: adcday3scmindexer-restore
   - name: applicationInsightsName
