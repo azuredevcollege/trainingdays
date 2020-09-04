@@ -31,7 +31,7 @@ jobs:
                 overrideParameters: >
                   -sku ${{ variables.appServicePlanSKU }} -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
                   -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
-                  -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{variables.sqlServerName}} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{ parameters.uniquePrefix }}${{variables.sqlServerName}}
                   -sqlDatabaseName ${{ parameters.uniquePrefix }}${{ variables.sqlDatabaseName }} -sqlUserName $(sqlAdminUser) -sqlPassword $(sqlAdminPassword) 
                   -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
             - task: AzureRmWebAppDeployment@4
