@@ -5,9 +5,12 @@ trigger:
       - master
   paths:
     include:
-      - day3/apps/dotnetcore/Scm.Search/*
-      - day3/apps/infrastructure/templates/scm-search-api-dotnetcore.json
-      - day3/apps/pipelines/cd-scm-search.yaml
+      - day4/apps/dotnetcore/Scm.Search/*
+      - day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+      - day5/apps/checkpoint/pipelines/cd-scm-search.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-search-api.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-search-api.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-search-restore.yaml
 
 variables:
   configuration: release
