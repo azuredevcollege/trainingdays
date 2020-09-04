@@ -1,30 +1,69 @@
+using Dapr.Client;
+using Adc.Scm.Resources.Api.Secrets;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
 namespace Adc.Scm.Resources.Api.Authentication
 {
+    public static class AutheticationServicesExtensions
+    {
+        public static IServiceCollection AddAuthentication(this IServiceCollection services, IHostEnvironment env)
+        {
+            // In development use the DevAuthenticationHandler
+            if (env.IsDevelopment() || env.IsKubernetesDevelopment())
+            {
+                services.AddAuthentication(options => 
+                {
+                    options.DefaultScheme = DevAuthenticationHandler.AuthScheme;
+                }).AddScheme<AuthenticationSchemeOptions, DevAuthenticationHandler>(DevAuthenticationHandler.AuthScheme, _ => {});
+            }
+            else // use AzureAd
+            {
+                services.AddAuthentication(options => 
+                {
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddAzureAdBearer();
+            }
+
+            return services;
+        }
+    }
+    
     public static class AuthenticationBuilderExtensions
     {
         public static AuthenticationBuilder AddAzureAdBearer(this AuthenticationBuilder builder)
-            => builder.AddAzureAdBearer(_ => { });
-
-        public static AuthenticationBuilder AddAzureAdBearer(this AuthenticationBuilder builder, Action<AzureAdOptions> configureOptions)
         {
-            builder.Services.Configure(configureOptions);
-            builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureAzureAdOptions>();
+            builder.Services.AddSingleton<IConfigureOptions<AzureAdOptions>, ConfigureAzureAdOptions>();
+            builder.Services.AddSingleton<IConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>();
             builder.AddJwtBearer();
             return builder;
         }
 
-        private class ConfigureAzureAdOptions : IConfigureNamedOptions<JwtBearerOptions>
+        private class ConfigureAzureAdOptions : IConfigureOptions<AzureAdOptions>
+        {
+            private readonly DaprClient _daprClient;
+            public ConfigureAzureAdOptions(DaprClient daprClient)
+            {
+                _daprClient = daprClient;
+            }
+
+            public void Configure(AzureAdOptions options)
+            {
+                options.ClientId = _daprClient.GetSecretAsync(SecretConstants.StoreName, SecretConstants.AadClientIdKey).Result[SecretConstants.AadClientIdKey];
+                options.ClientIdUri = _daprClient.GetSecretAsync(SecretConstants.StoreName, SecretConstants.AadClientIdUriKey).Result[SecretConstants.AadClientIdUriKey];
+                options.TenantId = _daprClient.GetSecretAsync(SecretConstants.StoreName, SecretConstants.AadTenantId).Result[SecretConstants.AadTenantId];
+            }
+        }
+
+        private class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearerOptions>
         {
             private readonly AzureAdOptions _azureAdOptions;
 
-            public ConfigureAzureAdOptions(IOptions<AzureAdOptions> options)
+            public ConfigureJwtBearerOptions(IOptions<AzureAdOptions> options)
             {
                 _azureAdOptions = options.Value;
             }
@@ -40,24 +79,6 @@ namespace Adc.Scm.Resources.Api.Authentication
                 {
                     OnTokenValidated = context =>
                     {
-                        // If your authentication logic is based on users then add your logic here
-                        // If you want to add additional claims, this is the right place.
-                        // e.g.:
-                        // var objectId = context.Principal.GetObjectId();
-
-                        // var db = context.HttpContext.RequestServices.GetRequiredService<AuthorizationDbContext>();
-                        // bool isSuperAdmin = await db.SuperAdmins.AnyAsync(a => a.ObjectId == objectId);
-                        // if (isSuperAdmin)
-                        // {
-                        //     //Add claim if they are
-                        //     var claims = new List<Claim>
-                        //     {
-                        //         new Claim(ClaimTypes.Role, "superadmin")
-                        //     };
-                        //     var appIdentity = new ClaimsIdentity(claims);
-
-                        //     context.Principal.AddIdentity(appIdentity);
-                        // }
                         return Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context => 

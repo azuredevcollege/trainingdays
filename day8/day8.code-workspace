@@ -49,5 +49,32 @@
 			"path": "pipelines"
 		}
 	],
-	"settings": {}
+	"settings": {},
+	 "launch": {
+		 "configurations": [],
+		 "compounds": 
+		 [{
+			 "name": "Launch SCM Contacts with Dapr",
+			 "configurations": [
+				 "Scm.Api (Launch) with Dapr"
+			 ],
+			 "presentation": {
+				 "hidden": false,
+				 "group": "Workspace",
+				 "order": 1
+			 }
+		 },
+		 {
+			 "name": "Launch SCM Resources with Dapr",
+			 "configurations": [
+				 "Scm.Resources.Api Launch (web) with Dapr"
+			 ],
+			 "presentation": {
+				 "hidden": false,
+				 "group": "Workspace",
+				 "order": 2
+			 }
+		 }
+		]
+	 },
 }
