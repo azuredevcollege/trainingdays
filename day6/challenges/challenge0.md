@@ -151,7 +151,7 @@ Docker Toolbox includes the following Docker tools:
 - Docker Machine so you can run Docker Engine commands from Windows terminals
 - Docker Compose for running the docker-compose command
 - Kitematic, the Docker GUI
-the Docker QuickStart shell preconfigured for a - Docker command-line environment
+the Docker QuickStart shell pre-configured for a - Docker command-line environment
 - Oracle VM VirtualBox
 
 **Prerequisites**
@@ -159,7 +159,7 @@ the Docker QuickStart shell preconfigured for a - Docker command-line environmen
 - Make sure your Windows system supports Hardware Virtualization Technology and that virtualization is enabled.
   - For Windows 10 | Run Speccy --> https://www.piriform.com/speccy, and look at the CPU information.
 
-  - For Windows 8 or 8.1 | Choose Start > Task Manager and navigate to the Performance tab. Under CPU you should see the Virtulization section which must be "Enabled".
+  - For Windows 8 or 8.1 | Choose Start > Task Manager and navigate to the Performance tab. Under CPU you should see the Virtualization section which must be "Enabled".
 
   - For Windows 7 Run Speccy --> https://www.piriform.com/speccyand follow the on-screen instructions.
 
@@ -167,7 +167,7 @@ the Docker QuickStart shell preconfigured for a - Docker command-line environmen
 
 **Installation**
 1. Visit "docker/toolbox" releases section of the Github Repository -->  <https://github.com/docker/toolbox/releases>
-2. Click the latest **DockerToolbox-xx.xx.x.exe** file under the Latest Relase's assets section and download the file.
+2. Click the latest **DockerToolbox-xx.xx.x.exe** file under the latest releases assets section and download the file.
 3. Double-click **DockerToolbox-xx.xx.x.exe** to run the installer.
 4. The installer launches the **Setup - Docker Toolbox** dialog.
 If Windows security dialog prompts you to allow the program to make a change, choose **Yes**. The system displays the **Setup - Docker Toolbox for Windows** wizard.
@@ -178,7 +178,7 @@ Accept all the installer defaults. The installer takes a few minutes to install 
 - Docker Toolbox management tool and ISO
 - Git MSYS-git UNIX tools
 - Kitematic, the Docker GUI
-- the Docker QuickStart shell preconfigured for a Docker command-line environment
+- the Docker QuickStart shell pre-configured for a Docker command-line environment
 - Oracle VM VirtualBox
 6. When notified by Windows Security the installer will make changes, make sure you allow the installer to make the necessary changes. When it completes, the installer reports it was successful.
 7. The installer adds Docker Toolbox, VirtualBox, and Kitematic to your Applications folder. On your Desktop, find the Docker QuickStart Terminal icon. 
@@ -249,7 +249,7 @@ Docker Engine is available on a variety of Linux platforms as a static binary in
 
 **Installation**
 
-Follow the intructions below to installl Docker on your distro:
+Follow the instructions below to install Docker on your distro:
 - https://docs.docker.com/engine/install/centos/
 - https://docs.docker.com/engine/install/debian/
 - https://docs.docker.com/engine/install/fedora/
@@ -257,7 +257,7 @@ Follow the intructions below to installl Docker on your distro:
 
 **Ubuntu:**
 
-Open your terminal application and execute the followwing commands. 
+Open your terminal application and execute the following commands. 
 1. Older versions of Docker were called docker, docker.io, or docker-engine. If these are installed, uninstall them:
 ```shell
 $ sudo apt-get remove docker docker-engine docker.io containerd runc
@@ -336,7 +336,7 @@ If you didn't signed up yet, we recommend you to sign up and create your Docker 
 - Check your mailbox and confirm your account creation. 
 
 ## Visual Studio Code
-To work with all the samples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it runs cross-platform. 
+To work with all the samples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Studio Code as it runs cross-platform. 
 
 Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
 

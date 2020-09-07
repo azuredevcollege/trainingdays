@@ -5,9 +5,9 @@
 - Tagging
 - Image pull and push
 - Building your own image
-- Image registeries and repositories
+- Image registries and repositories
 
-In this challange, we're gonna play with Docker Images. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
+In this challenge, we're gonna play with Docker Images. A Docker container image is a lightweight, standalone, executable package of software that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
 
 ## Exercises
 
@@ -95,7 +95,7 @@ ubuntu: digest: sha256:60f560e52264ed1cb7829a0d59b1ee7740d7580e0eb293aca2d722136
 ```
 It is fast. Isn't it? Please pay attention to the output. ```Mounted from library/ubuntu```. You know that images consist of multiple layers. And each layer has it's unique id. When we pull or push any image, if the target (registry or your computer) has the layer with that id already stored on it, it doesn't pull or push that layer again. Just checks the file which is already stored on it and mounts that. This is the reason why it was fast. We didn't transfer any file to Docker Hub. Docker Hub detected that these 4 layers are already stored on it, so instead of getting it again, Docker hub just mounted these files to our repository. This is also same on our computer. We have 2 images stored on it. But they are literally the same images with different names. Docker doesn't store multiple files for these 2 images. The image files are stored just once but multiple tags added to the same files.
 
-But what are these layers? Is there any way to see how are they created? Yes and the command that we'll use is ```docker image history```. History subcommand shows us the history of the image and it shows how all layers are created. Let's check this. 
+But what are these layers? Is there any way to see how are they created? Yes and the command that we'll use is ```docker image history```. History sub-command shows us the history of the image and it shows how all layers are created. Let's check this. 
 
 Type: 
 ```shell
@@ -129,7 +129,7 @@ Cloning into 'trainingdays'...
 remote: Enumerating objects: 42, done.
 remote: Counting objects: 100% (42/42), done.
 remote: Compressing objects: 100% (31/31), done.
-remote: Total 1899 (delta 26), reused 25 (delta 11), pack-reused 1857 eceiving objects:  97% (1843/1899), 57.20 MiB | 11.92 MiB/s
+remote: Total 1899 (delta 26), reused 25 (delta 11), pack-reused 1857 Receiving objects:  97% (1843/1899), 57.20 MiB | 11.92 MiB/s
 Receiving objects: 100% (1899/1899), 63.35 MiB | 11.26 MiB/s, done.
 Resolving deltas: 100% (747/747), done.
 Updating files: 100% (1396/1396), done.
@@ -235,7 +235,7 @@ total 12
 -rw-r--r-- 1 ozozturk ozozturk 273 Aug 12 20:15 server.js
 ```
 
-This time we have 3 files. First one is ```package.json```. If you work with JavaScript, or you've ever interacted with a JavaScript project, Node.js or a frontend project, you surely met the package.json file. The package.json file is kind of a manifest for your project. It can do a lot of things, but in our case it's specially important because it defines the depencies that we'll install with npm. Our simple node application is running on top of Express framework and we need that framework to be installed to run our simple Javscript webapp. ```Server.js``` is the second file and it's our main Javascript application. It's a simple Hello World web app. And the third one is the usual suspect. Dockerfile. Let's take a look at it. 
+This time we have 3 files. First one is ```package.json```. If you work with JavaScript, or you've ever interacted with a JavaScript project, Node.js or a frontend project, you surely met the package.json file. The package.json file is kind of a manifest for your project. It can do a lot of things, but in our case it's specially important because it defines the dependencies that we'll install with npm. Our simple node application is running on top of Express framework and we need that framework to be installed to run our simple Javascript webapp. ```Server.js``` is the second file and it's our main Javascript application. It's a simple Hello World web app. And the third one is the usual suspect. Dockerfile. Let's take a look at it. 
 
 Type: 
 ```shell
@@ -338,9 +338,9 @@ Successfully built fb0586534394
 Successfully tagged ozgurozturknet/node:latest
 ```
 
-Something strange has happened. We built the image, after that we didn't change any source file and run the docker image build command second time. We recevied lots of ``` ---> Using cache``` outputs this time. What does that mean? 
+Something strange has happened. We built the image, after that we didn't change any source file and run the docker image build command second time. We received lots of ``` ---> Using cache``` outputs this time. What does that mean? 
 
-When building an image, Docker steps through the instructions in your Dockerfile, executing each in the order specified. As each instruction is examined, Docker looks for an existing image in its cache that it can reuse, rather than creating a new (duplicate) image. If you don't change any source file or didn't change anything in the Dockerfile, this means that nothing has changed, so Docker doesn't run the insturction again and again and uses the cached instruction. That makes the build process fast. Let's simulate that and see what happens if we change something. Open the ```server.js``` file with a text editor, go to line 12 and change the ```Hello World``` with another message something like ```build cache test```. Save the file and rerun the ```docker image build -t your_dockerhub_id/node:latest .``` command one more time. 
+When building an image, Docker steps through the instructions in your Dockerfile, executing each in the order specified. As each instruction is examined, Docker looks for an existing image in its cache that it can reuse, rather than creating a new (duplicate) image. If you don't change any source file or didn't change anything in the Dockerfile, this means that nothing has changed, so Docker doesn't run the instruction again and again and uses the cached instruction. That makes the build process fast. Let's simulate that and see what happens if we change something. Open the ```server.js``` file with a text editor, go to line 12 and change the ```Hello World``` with another message something like ```build cache test```. Save the file and rerun the ```docker image build -t your_dockerhub_id/node:latest .``` command one more time. 
 
 ```shell
 Sending build context to Docker daemon  4.096kB
@@ -484,7 +484,7 @@ Output will be something like:
 Hello there! I'm App1 Java Console Application
 ```
 
-Perfect. It works. App1 has been compiled and it runs.  But there seems to be something wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we used to compile our application. But do we really need to send this image to our customers? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want that our customers be able to run this application. Not all the unnessary tools and source code. Also image size is big. Because of this unnessary tools that we don't need to run the application. These tools are needed for development. Not needed to run the application. JRE, java runtime is the thing that we need to run the application. It's just the runtime and much smaller than the jdk.
+Perfect. It works. App1 has been compiled and it runs.  But there seems to be something wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we used to compile our application. But do we really need to send this image to our customers? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want that our customers be able to run this application. Not all the unnecessary tools and source code. Also image size is big. Because of this unnecessary tools that we don't need to run the application. These tools are needed for development. Not needed to run the application. JRE, java runtime is the thing that we need to run the application. It's just the runtime and much smaller than the jdk.
 
 Instead of sending this image, It would be wise to get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
 Yes there is a simple solution to handle this and it's called multi-stage build. 
@@ -600,9 +600,9 @@ COPY ./php/ /var/www/html/
 HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
 ```
 
-We use official php image as our base. Then we install couple of binaries that we need and create a folder where we'll store uploaded images and after that we copy our web app into the image. So far nothing unknown. But now we have a new instruction which is HEALTHCHECK. The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working. This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running so the container is up. When a container has a healthcheck specified, it has a health status in addition to its normal status. Therefore we can monitor our container's real status and take action if something goes wrong. In our case, we want from Docker that each container created from that image will start a healthchecking process and continue to check every 30 seconds. If contanier will get a response from http://localhost/, Docker will mark it as healthy, otherwise unhealthy. 
+We use official php image as our base. Then we install couple of binaries that we need and create a folder where we'll store uploaded images and after that we copy our web app into the image. So far nothing unknown. But now we have a new instruction which is HEALTHCHECK. The HEALTHCHECK instruction tells Docker how to test a container to check that it is still working. This can detect cases such as a web server that is stuck in an infinite loop and unable to handle new connections, even though the server process is still running so the container is up. When a container has a healthcheck specified, it has a health status in addition to its normal status. Therefore we can monitor our container's real status and take action if something goes wrong. In our case, we want from Docker that each container created from that image will start a healthchecking process and continue to check every 30 seconds. If container will get a response from http://localhost/, Docker will mark it as healthy, otherwise unhealthy. 
 
-All good but there's one thing strange. We don't have any CMD instruction in this file. So how will the container know which application to run when it starts? Answer is really simple. When you build an image, Docker inherits all settings from the base image. If you spesify anything on your Dockerfile, it overwrites the value of the base image. But if you left it blank, Image uses the value of the base image. In our case, we don't have the CMD instruction, so Docker will inherit this from base image. That's enough for the first Dockerfile. Let's take have a look at the mysql's Dockerfile too. 
+All good but there's one thing strange. We don't have any CMD instruction in this file. So how will the container know which application to run when it starts? Answer is really simple. When you build an image, Docker inherits all settings from the base image. If you specify anything on your Dockerfile, it overwrites the value of the base image. But if you left it blank, Image uses the value of the base image. In our case, we don't have the CMD instruction, so Docker will inherit this from base image. That's enough for the first Dockerfile. Let's take have a look at the mysql's Dockerfile too. 
 
 Type: 
 ```shell
@@ -713,9 +713,9 @@ If you saw this message, everything is fine. Click View and check your records.
 
 <img src="./img/php3.png">
 
-Congratulations! You have succesfully built a 2 tier web app and run that. 
+Congratulations! You have successfully built a 2 tier web app and run that. 
 
-Now we can stop and delete the containers. Please don't delete the images for now. We need them on the next challange. 
+Now we can stop and delete the containers. Please don't delete the images for now. We need them on the next challenge. 
 
 Type: 
 ```shell
@@ -755,6 +755,6 @@ Our image is ready. Now if we want, we can push it to our repository and move it
 
 ## Wrap up
 
-__Congratulations__ you have completed the Image and Registry challange. You've just learned how to create Docker images and play with them. 
+__Congratulations__ you have completed the Image and Registry challenge. You've just learned how to create Docker images and play with them. 
 
 *** Reference: https://docs.docker.com

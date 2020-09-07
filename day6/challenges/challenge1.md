@@ -7,7 +7,7 @@
 - Docker object names and ids
 - Inspecting container details
 
-In this challenge we start to learn "How to use Docker CLI?" and after that we'll run our first Docker Container. By the end of the challange, we have learned very basics of Docker containers, how to create-run-stop-delete-inspect-list them.
+In this challenge we start to learn "How to use Docker CLI?" and after that we'll run our first Docker Container. By the end of the challenge, we have learned very basics of Docker containers, how to create-run-stop-delete-inspect-list them.
 
 ## Exercises
 
@@ -82,7 +82,7 @@ Server:
  […]
  ```
 
- This command displays system wide information regarding the Docker installation. Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any runnning, paused or stopped containers on our system. Also we don't have any container images pulled. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker cli?"
+ This command displays system wide information regarding the Docker installation. Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any running, paused or stopped containers on our system. Also we don't have any container images pulled. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker cli?"
 ***
 **3: Let's see "How to become a Docker Cli master?"**
 
@@ -198,8 +198,8 @@ Digest: sha256:49a1c8800c94df04e9658809b006fd8a686cab8028d33cfba2cc049724254202
 Status: Downloaded newer image for hello-world:latest
 docker.io/library/hello-world:latest
 ```
-Docker started to do its magic. We requested from Docker that "hey please find the image called ```hello-world``` and pull it into this system from whereever it is located." Docker did that. Docker pulled the image from it's default "Image Registry" which is called Docker Hub. By default, if you don't spesify the image registry url that your image is located "i.e. mcr.microsoft.com/mcr/hello-world", Docker assumes that it's stored at Docker Hub "docker.io/library/hello-world". We also wanted to pull image called "hello-world" but as can be seen from the output Docker pulled the image called  "Status: Downloaded newer image for **hello-world:latest**". What's that **:latest**?
-An image name is made up of slash-separated name components and tags, optionally prefixed by a registry hostname. Registry hostname represents that in which registry that image is located. Slash-separated name components represent the repository of the image in that image registry. Last part, which is called tag represents the version of the image. It's meta-data you can use to distinguish versions of your Docker images. **:latest** is the default tag used by Docker. If it's not tagged otherwise, images are tagged as latest by default. And if you don't spesify the tag while working with docker image, docker always assumes that you're pointing the image tagged as  :latest. 
+Docker started to do its magic. We requested from Docker that "hey please find the image called ```hello-world``` and pull it into this system from wherever it is located." Docker did that. Docker pulled the image from it's default "Image Registry" which is called Docker Hub. By default, if you don't specify the image registry url that your image is located "i.e. mcr.microsoft.com/mcr/hello-world", Docker assumes that it's stored at Docker Hub "docker.io/library/hello-world". We also wanted to pull image called "hello-world" but as can be seen from the output Docker pulled the image called  "Status: Downloaded newer image for **hello-world:latest**". What's that **:latest**?
+An image name is made up of slash-separated name components and tags, optionally prefixed by a registry hostname. Registry hostname represents that in which registry that image is located. Slash-separated name components represent the repository of the image in that image registry. Last part, which is called tag represents the version of the image. It's meta-data you can use to distinguish versions of your Docker images. **:latest** is the default tag used by Docker. If it's not tagged otherwise, images are tagged as latest by default. And if you don't specify the tag while working with docker image, docker always assumes that you're pointing the image tagged as  :latest. 
 
 Let's type ```docker image ls``` one more time. 
 ```shell
@@ -243,8 +243,8 @@ Congratulations. You have created your first Docker container just now. But what
 You typed the command ```docker container run hello-world``` and instructed to Docker daemon that you wanted to create a new container by the image called hello-world and run a command inside that container. 
 - Docker cli took your command and connected to Docker daemon over its rest api and passed that command. 
 - Docker daemon checked if the image called ```hello-world:latest``` is stored locally or not. If it couldn't find the image, it would start to pull that from its registry. But we already pulled the image a few min ago so it didn't. 
-- Docker created a new container from that image. Assşigned a random id to that container object. Also it assigned a random name too because we didn't spesify any name for this container. After that the container has been created. But it's just created. Docker didn't start the container. "btw couple of other things have also happened like r/w layer, networks etc. but we'll come to these details later"
-- Actually ```docker container run``` command means that we want to run a command inside a new container. If don't specified which command to run, Docker runs the default command instructed on the image. In our case, we didn't spesify any command to run inside to container. Therefore Docker started the container that it created and ran the default command instructed on the image which is ```/hello```. "hello" is a console application. When you run that, it shows the "Hello from Docker! This message shows ..." message on the console and exits. 
+- Docker created a new container from that image. Assigned a random id to that container object. Also it assigned a random name too because we didn't specify any name for this container. After that the container has been created. But it's just created. Docker didn't start the container. "btw couple of other things have also happened like r/w layer, networks etc. but we'll come to these details later"
+- Actually ```docker container run``` command means that we want to run a command inside a new container. If don't specified which command to run, Docker runs the default command instructed on the image. In our case, we didn't specify any command to run inside to container. Therefore Docker started the container that it created and ran the default command instructed on the image which is ```/hello```. "hello" is a console application. When you run that, it shows the "Hello from Docker! This message shows ..." message on the console and exits. 
 - Unless otherwise stated, Docker attaches to the container's shell and shows the output of that shell "stdout, stderr"  on your console. That was the case for us too. So we saw the output of "hello" application on our terminal. 
 - **Golden Rule:** Each Docker image has a default application-command instructed on the image to run when a container is created from that image. You can overwrite this command and point another command to run when the container is created. Docker starts a container and execute that command and also starts to monitor the process which has triggered by this command. "in our case, it's 'hello' console application". This application is always the PID1.  Docker monitors the PID1. If PID1 continues to run, container runs. When PID1 killed or stopped, container exits. In our case, hello-world is a console application. When we Docker ran it, it created a message and closed. It isn't something like long running service etc. When Docker detected that the PID1 is not running any more, it closed the container too.  
 
@@ -264,14 +264,14 @@ Output will be something like:
 CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
 93a266670eb8        hello-world         "/hello"            56 minutes ago      Exited (0) 56 minutes ago                       amazing_wu
 ```
-Now we saw our container on the list. ID and name sections are different on your system than this output. When Docker containers are created, the system automatically assigns a universally unique identifier (UUID) number to each container. Also that is the case for each Docker object "image, container, volume etc.". Each Docker object has a universally unique identifier. Those are 64 character SHA-256 IDs. Docker commands truncate them to 12 characters and that's the reason why we just saw the first 12 charcarters of the ID. In addition to that, Docker assigns names to the containers. If we don't spesify the name with ```--name``` option, Docker generates a random name using an open source list of adjectives and known figures in science and IT world. 
-We can use those IDs and names interchangable when we call the container and we'll see the examples in a few minutes. 
+Now we saw our container on the list. ID and name sections are different on your system than this output. When Docker containers are created, the system automatically assigns a universally unique identifier (UUID) number to each container. Also that is the case for each Docker object "image, container, volume etc.". Each Docker object has a universally unique identifier. Those are 64 character SHA-256 IDs. Docker commands truncate them to 12 characters and that's the reason why we just saw the first 12 characters of the ID. In addition to that, Docker assigns names to the containers. If we don't specify the name with ```--name``` option, Docker generates a random name using an open source list of adjectives and known figures in science and IT world. 
+We can use those IDs and names interchangeable when we call the container and we'll see the examples in a few minutes. 
 Other sections on that list are Image, Command, Created, Status and Ports. Image is the image that used to create this container. Command is the command that has executed in the container when we started. Created is the timestamp of the creation time. Status is the current status of the container and in our case it's "Exited" which means container is stopped. Ports section show us the exposed ports from that container but it's empty at the moment because we didn't expose any port. 
 
 Let's continue to play with this container. We created the container, it ran the "hello" application, application closed so the container too. Let's start that container again. We will use container id as a reference in this. 
 
 ```shell
-$ docker container start 93a # just first a few chararcter of the container id would be enough
+$ docker container start 93a # just first a few characters of the container id would be enough
 ```
 Output will be something like:
 ```shell
@@ -305,7 +305,7 @@ If you type ```docker ps -a``` now, output should be empty.
 
 **5: Detach container**
 
-We're gonna create another container from the same hello-world image. But this time we'll create it detached. By default Docker container starts in the foreground mode. Like the one that we created above. In the foreground mode, Docker starts the defualt process in the container and attaches your console to the process’s STDIN, STDOUT and STDERR streams. But when we do that,  you can not access your console anymore. You just see the output generated by container on your screen. To avoid this we can start a container in the background mode which is also called detached and the option that gives you this ability is ```-d```. Running a container in the foreground or background doesn't change it's behavior. This is just about if we want to attach to the containers streams or not. Let's create the container in the background and also this time let's define its name too. 
+We're gonna create another container from the same hello-world image. But this time we'll create it detached. By default Docker container starts in the foreground mode. Like the one that we created above. In the foreground mode, Docker starts the default process in the container and attaches your console to the process’s STDIN, STDOUT and STDERR streams. But when we do that,  you can not access your console anymore. You just see the output generated by container on your screen. To avoid this we can start a container in the background mode which is also called detached and the option that gives you this ability is ```-d```. Running a container in the foreground or background doesn't change it's behavior. This is just about if we want to attach to the containers streams or not. Let's create the container in the background and also this time let's define its name too. 
 
 Type:
 ```shell
@@ -420,7 +420,7 @@ Output will be something like:
 Tue May 28 21:16:03 UTC 2020
 ```
 
-You can run any application-command if the application exists inside the container. Let's delete the container before the next challange.
+You can run any application-command if the application exists inside the container. Let's delete the container before the next challenge.
 
 Type:
 ```shell
@@ -487,7 +487,7 @@ Also ```docker container prune``` command deletes all stopped container as bulk 
 
 **8: Inspecting a container's details**
 
-```docker ps``` or ```docker container ls``` commands show us the list of running containers on the sytem and when you add ```-a``` option you can list both running and stopped containers. But the output of these commands give you very brief details about the containers. When you want to get all the information related to a spesific container, you shoul use ```docker container inspect``` command. Let's try this. First let's create a container. 
+```docker ps``` or ```docker container ls``` commands show us the list of running containers on the system and when you add ```-a``` option you can list both running and stopped containers. But the output of these commands give you very brief details about the containers. When you want to get all the information related to a specific container, you should use ```docker container inspect``` command. Let's try this. First let's create a container. 
 
 Type:
 ```shell
@@ -544,6 +544,6 @@ Also ```docker container prune``` command deletes all stopped container as bulk 
 
 ## Wrap up
 
-__Congratulations__ you have completed the Docker 101 challange. You've just learned the very basics of Docker containers.
+__Congratulations__ you have completed the Docker 101 challenge. You've just learned the very basics of Docker containers.
 
 *** Reference: https://docs.docker.com

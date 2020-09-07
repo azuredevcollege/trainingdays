@@ -7,7 +7,7 @@
 - Creating Networks
 - Checking connection differences between different networks
 
-In this challange, we're gonna play with Volume and Network objects which are the most important docker objects after images and containers. 
+In this challenge, we're gonna play with Volume and Network objects which are the most important docker objects after images and containers. 
 
 
 ## Exercises
@@ -29,7 +29,7 @@ Output will be something like:
 DRIVER              VOLUME NAME
  ```
 
-We don't have any volume at the moment. Let's create the first one. For that we're gonna use ```docker volume create``` command without any option. If we want to use any spesific volume driver, we would use ```-d``` option but we want to create a local volume so we don't have to spesify driver. 
+We don't have any volume at the moment. Let's create the first one. For that we're gonna use ```docker volume create``` command without any option. If we want to use any specific volume driver, we would use ```-d``` option but we want to create a local volume so we don't have to specify driver. 
 
 Type: 
 ```shell
@@ -60,7 +60,7 @@ Output will be something like:
     }
 ]
 ```
-I want you to pay attention to the  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file is written to this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mounth the volume called ```first_volume``` to the folder ```/test```. The our option would be ```-v first_volume:/test```. If the folder doesn't exist in the image, folder will be created when the container is created.
+I want you to pay attention to the  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file is written to this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. The our option would be ```-v first_volume:/test```. If the folder doesn't exist in the image, folder will be created when the container is created.
 
 Now it's time to create a container and mount that volume. We're gonna create a new interactive container from ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to container's ```/test``` folder. After it's created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
 
@@ -343,7 +343,7 @@ Output will be something like:
     }
 ]
 ```
-This time, container section of the output is not empty. We have created two containers. They're still running. And we didn't use ```--network``` when we created them so they both are connected to default bridge network. You can see their names, ids and ip addressess above. Let's attach to ```con1``` and check the network details. 
+This time, container section of the output is not empty. We have created two containers. They're still running. And we didn't use ```--network``` when we created them so they both are connected to default bridge network. You can see their names, ids and ip addresses above. Let's attach to ```con1``` and check the network details. 
 
  Type: 
 ```shell
@@ -522,7 +522,7 @@ veth9f4c8b5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ``` 
 
-Check the eth0 adapater. It's exactly the same adapater that the host has. So there isn't any network isolation. Container is running like a process on the host and uses network infrastructure of the host without any bridge or something like that in the middle. Type exit and close the connection. Container will be automatically deleted. 
+Check the eth0 adapter. It's exactly the same adapter that the host has. So there isn't any network isolation. Container is running like a process on the host and uses network infrastructure of the host without any bridge or something like that in the middle. Type exit and close the connection. Container will be automatically deleted. 
 
 ***
 **5: Default networks - None**
@@ -619,7 +619,7 @@ Output will be something like:
 ]
 ``` 
 
-Again I want you to notice Gateway and Subnet section of this output. We've created a new user-defined bridge network. We didn't spesify any subnet option. So it's created by default with next ip blok after default bridge network. So subnet is "172.18.0.0/16". If we'll create another one, it will get "172.19.0.0/16" and this goes like that. Let's create 2 containers again and connect to this newly created network. 
+Again I want you to notice Gateway and Subnet section of this output. We've created a new user-defined bridge network. We didn't specify any subnet option. So it's created by default with next ip blok after default bridge network. So subnet is "172.18.0.0/16". If we'll create another one, it will get "172.19.0.0/16" and this goes like that. Let's create 2 containers again and connect to this newly created network. 
 
 
 Type: 
@@ -696,7 +696,7 @@ PING 172.18.0.3 (172.18.0.3): 56 data bytes
 
 You couldn't neither resolve its name nor access to this container by its ip address. Containers that are running on the different networks can't communicate with each other without exposed ports. Only the containers that are running on the same network can communicate each other and if they are running on the same user-defined bridge network they can resolve each other's name too. Close the connection by typing exit and delete two other containers to by typing ```docker container rm -f web database```
 
-As the last part of this exercise, let's create a second bridge network but this time we're gonna spesify the subnet and ip ranges. 
+As the last part of this exercise, let's create a second bridge network but this time we're gonna specify the subnet and ip ranges. 
 
 Type: 
 ```shell
@@ -724,7 +724,7 @@ a4c8780d68f4        host                host                local
 ***
 **7: Port publishing**
 
-By default, when you create a container, it does not publish any of its ports to the outside world. To make a port available to clients outside the Docker, or to Docker containers which are not connected to the container’s network, we use the ```--publish``` or ```-p``` flag. This creates a firewall rule which maps a container port to a port on the Docker host. Any package that reaches to that port on the host will be forwarded to the port that listens on the container. So you can access the services inside the container from outside of the world. Also containers which are not connected to the container’s network can reach the contaiber via that published port. Let's try this. We're gonna create 2 containers on 2 different networks. First on will be web server and publish on TCP Port 80. Other one is just a busybox container that we'll try to connect the web container. 
+By default, when you create a container, it does not publish any of its ports to the outside world. To make a port available to clients outside the Docker, or to Docker containers which are not connected to the container’s network, we use the ```--publish``` or ```-p``` flag. This creates a firewall rule which maps a container port to a port on the Docker host. Any package that reaches to that port on the host will be forwarded to the port that listens on the container. So you can access the services inside the container from outside of the world. Also containers which are not connected to the container’s network can reach the container via that published port. Let's try this. We're gonna create 2 containers on 2 different networks. First on will be web server and publish on TCP Port 80. Other one is just a busybox container that we'll try to connect the web container. 
 
 Type: 
 ```shell
@@ -760,7 +760,7 @@ Output will be something like:
 curl: (7) Failed to connect to 172.18.0.4 port 80: Connection timed out
 ```
 
-We got the connection time-out message. Because we're trying to reach a container which is connected to another network. Remember that, containers that are running on the different networks can't communicate with each other. Instead of that, if we try to reach 172.18.0.1 "which is the gateway of the first_network" on port 5000 we can reach the container. Becuase, we have exposed the port. 
+We got the connection time-out message. Because we're trying to reach a container which is connected to another network. Remember that, containers that are running on the different networks can't communicate with each other. Instead of that, if we try to reach 172.18.0.1 "which is the gateway of the first_network" on port 5000 we can reach the container. Because, we have exposed the port. 
 
 Type: 
 ```shell
@@ -798,7 +798,7 @@ Type exit and container will be automatically deleted.
 
 P.S. ```-p 8080:80/udp``` you can also expose udp ports like that. 
 
-Let's delete other containers and the networks that we'ce created too. 
+Let's delete other containers and the networks that we've created too. 
 
 Type: 
 ```shell
@@ -811,6 +811,6 @@ $ docker network rm first_network second_network
 ```
 ## Wrap up
 
-__Congratulations__ you have completed the Docker Objects challange. You've just learned how to create and manage Docker Volume and Network objects.
+__Congratulations__ you have completed the Docker Objects challenge. You've just learned how to create and manage Docker Volume and Network objects.
 
 *** Reference: https://docs.docker.com

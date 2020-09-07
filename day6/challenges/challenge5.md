@@ -6,7 +6,7 @@
 - Pushing and storing the images that we have created
 - Creating first AKS cluster and deploy phpapp application
 
-In this challange, we're gonna create our ACR and AKS instances and deploy a php based webapp that we have containerized at the end of challenge 4. 
+In this challenge, we're gonna create our ACR and AKS instances and deploy a php based webapp that we have containerized at the end of challenge 4. 
 
 
 ## Exercises
@@ -15,7 +15,7 @@ In this challange, we're gonna create our ACR and AKS instances and deploy a php
 
 In this first task, we'll create a new Azure Container Registry (ACR) Instance. Azure Container Registry allows us to build, store, and manage container images and artifacts in a private registry for all types of container deployments. We're gonna store 2 images that we've created at the end of the challenge 4. Let's get started. We'll do all via portal, so let's jump to the https://portal.azure.com
 
-- Click the hamburger icon on the top left of the secren.
+- Click the hamburger icon on the top left of the screen.
 - Click **Create a resource** link.
 
 <img src="./img/acr1.png">
@@ -28,8 +28,8 @@ In this first task, we'll create a new Azure Container Registry (ACR) Instance. 
 <img src="./img/acr2.png">
 
 
-- Now we're on the **Create container registry** secren.
-- Select a subscription. Click **Create New** button onde the Resource Group and create a new resource group. 
+- Now we're on the **Create container registry** screen.
+- Select a subscription. Click **Create New** button once the Resource Group and create a new resource group. 
 - Fill the other values.
   - Registry Name: Type a unique name.
   - Location: Select **West Europe**.
@@ -43,7 +43,7 @@ In this first task, we'll create a new Azure Container Registry (ACR) Instance. 
 
 <img src="./img/acr4.png">
 
-- When done, click **Go to resource** buton and access newly created ACR instance.
+- When done, click **Go to resource** button and access newly created ACR instance.
 
 <img src="./img/acr5.png">
 
@@ -55,7 +55,7 @@ In this first task, we'll create a new Azure Container Registry (ACR) Instance. 
 <img src="./img/acr6.png">
 
 - We have created the ACR instance and it's ready to store our images. Let's turn back to Terminal and push images that we created before.
-- First, let's get logged out from current registery. 
+- First, let's get logged out from current registry. 
 Type: 
 ```shell
 $ docker logout
@@ -82,7 +82,7 @@ Login Succeeded
 
 <img src="./img/acr8.png">
 
-- We could successfully logged in. This means that from now on we can push images to this registry. But to be able to do that, we have to retag the images that we created at the end of the challange. Simply we have to add new tags to them in format of  ```registery_url/repository_name:tag```. Let's do that.
+- We could successfully logged in. This means that from now on we can push images to this registry. But to be able to do that, we have to retag the images that we created at the end of the challenge. Simply we have to add new tags to them in format of  ```registry_url/repository_name:tag```. Let's do that.
 - First, let's list all the images on the system. 
 
 Type: 
@@ -174,7 +174,7 @@ v1: digest: sha256:929ac51065d473c23229f1f85be02b854aaab147d1ebaa018884f1a5ee455
 <img src="./img/acr10.png">
 
 - Turn back to portal and confirm that the images were pushed and stored in the ACR. 
-- We successfully retagged our images and pushed them to newly created ACR. Image part has been completed. 
+- We successfully re-tagged our images and pushed them to newly created ACR. Image part has been completed. 
 
 <img src="./img/acr11.png">
 
@@ -302,7 +302,7 @@ phpapp-df67cc945-s5z6n                             1/1     Running   0          
 
 <img src="./img/acr21.png">
 
-- Congratulations! We could succesfully deploy our application to AKS cluster. Let's access it and see if it works properly. To be able to do that we have to get external ip address of the phpapp service. 
+- Congratulations! We could successfully deploy our application to AKS cluster. Let's access it and see if it works properly. To be able to do that we have to get external ip address of the phpapp service. 
 
 Type: 
 ```shell
@@ -331,7 +331,7 @@ kubernetes                                 ClusterIP      10.0.0.1       <none> 
 ***
 **4: Clean-up**
 
-When you completed the challenge, don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beggining of this challange and delete it. All the resources **ACR, AKS** that you have created in the resource group will be automatically deleted too. 
+When you completed the challenge, don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beginning of this challenge and delete it. All the resources **ACR, AKS** that you have created in the resource group will be automatically deleted too. 
 <img src="./img/acr26.png">
 
 <img src="./img/acr27.png">
@@ -341,6 +341,6 @@ When you completed the challenge, don't forget to delete the resources that you 
 ***
 ## Wrap up
 
-__Congratulations__ you have completed the Azure Container Services challange. You have created your first ACR instance and AKS cluster and deploy an application. 
+__Congratulations__ you have completed the Azure Container Services challenge. You have created your first ACR instance and AKS cluster and deploy an application. 
 
 *** Reference: https://docs.microsoft.com/en-us/azure/aks/ https://docs.microsoft.com/en-us/azure/container-registry/

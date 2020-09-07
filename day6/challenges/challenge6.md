@@ -1,7 +1,7 @@
 # Challenge 6: Self-learning
 
 ## Here is what you'll learn
-Unfortunately, one day is not enough to cover all Container and Docker related topics. Day6 has covered nearly all the important core topics related to Container and Docker but there are still things that you have to pay attention. Therefore we have created a reading list-home work for you. Challenge 6 is just a list of resources that highly reccommended by us to read. 
+Unfortunately, one day is not enough to cover all Container and Docker related topics. Day6 has covered nearly all the important core topics related to Container and Docker but there are still things that you have to pay attention. Therefore we have created a reading list-home work for you. Challenge 6 is just a list of resources that highly recommended by us to read. 
 
 **Azure Container Instances:** https://docs.microsoft.com/en-us/azure/container-instances/
 https://docs.microsoft.com/en-us/learn/modules/run-docker-with-azure-container-instances/
