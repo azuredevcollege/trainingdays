@@ -5,4 +5,5 @@ day7/apps/infrastructure/manifests/local-secrets.yaml
 .vuepress/dist/
 .envrc
 
-
+terraform.*
+crash.log
