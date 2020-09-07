@@ -1,0 +1,50 @@
+parameters:
+  name: ""
+  variablesFile: ""
+  environmentName: ""
+  azureSubscription: ""
+  artifactDropName: drop
+  uniquePrefix: adc
+
+jobs:
+  - deployment: Deploy
+    displayName: ${{ parameters.name }}
+    variables:
+      - template: ${{ parameters.variablesFile }}
+    pool:
+      vmImage: ${{ variables.vmImage }}
+    environment: ${{ parameters.environmentName }}
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - task: AzureResourceGroupDeployment@2
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                action: "Create Or Update Resource Group"
+                resourceGroupName: ${{ variables.resourceGroupName }}
+                location: ${{ variables.location }}
+                templateLocation: "Linked artifact"
+                csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-search-api-dotnetcore.json
+                overrideParameters: >
+                  -appPlanSKU ${{ variables.appServicePlanSKU }} -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
+                  -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
+                  -storageAccountName ${{ parameters.uniquePrefix }}${{ variables.storageAccountName }} -functionAppName ${{ parameters.uniquePrefix }}${{ variables.indexerFunctionName }} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }} 
+                  -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
+                  -azureSearchServiceName ${{ parameters.uniquePrefix }}${{ variables.azureSearchServiceName }}
+                  -azureSearchSKU ${{ variables.azureSearchSKU }}
+                  -azureSearchReplicaCount ${{ variables.azureSearchReplicaCount }}
+                  -azureSearchPartitionCount ${{ variables.azureSearchPartitionCount }}
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                appType: apiApp
+                webAppName: ${{ parameters.uniquePrefix }}${{ variables.apiAppName }}
+                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Search.Api.zip
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                azureSubscription: ${{ parameters.azureSubscription }}
+                appType: apiApp
+                webAppName: ${{ parameters.uniquePrefix }}${{ variables.indexerFunctionName }}
+                package: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/Adc.Scm.Search.Indexer.zip

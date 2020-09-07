@@ -1,0 +1,41 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day3/apps/nodejs/visitreport/*
+      - day3/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+      - day3/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+      - day3/apps/pipelines/cd-scm-visitreports.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-visitreports.yaml
+        parameters:
+          artifactDropName: drop
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Restore
+    displayName: Restore
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-visitreports.yaml
+        parameters:
+          name: Deploy Scm Visitreports
+          variablesFile: ../variables/cd-scm-visitreports-restore.yaml
+          variableGroupName: Day5RestoreCommonVars
+          environmentName: ADC-DAY5-SCM-RESTORE
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+          uniquePrefix: $(uniquePrefix)

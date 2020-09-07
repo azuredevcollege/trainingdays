@@ -1,0 +1,23 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-RESTORE
+  - name: location
+    value: westeurope
+  - name: apiAppName
+    value: adcday5scmapi-restore
+  - name: appServicePlanSKU
+    value: D1
+  - name: use32bitworker
+    value: true
+  - name: alwaysOn
+    value: false
+  - name: applicationInsightsName
+    value: appinsightsscmd5-restore
+  - name: sqlServerName
+    value: adcd5sqlserverrestore
+  - name: sqlDatabaseName
+    value: scmcontactsdb
+  - name: serviceBusNamespaceName
+    value: adcd5sb-restore

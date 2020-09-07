@@ -1,0 +1,19 @@
+variables:
+  - name: vmImage
+    value: ubuntu-latest
+  - name: resourceGroupName
+    value: ADC-DAY5-SCM-RESTORE
+  - name: location
+    value: westeurope
+  - name: storageAccountName
+    value: scmvuerestore
+  - name: spaEndpoint
+    value: "adcday5scmapi-restore.azurewebsites.net/"
+  - name: resourcesEndpoint
+    value: "adcday5scmresourcesapi-restore.azurewebsites.net/"
+  - name: searchEndpoint
+    value: "adcday5scmrsearchapi-restore.azurewebsites.net"
+  - name: reportsEndpoint
+    value: "adcday5scmvr-restore.azurewebsites.net"
+  - name: applicationInsightsName
+    value: appinsightsscmd5-restore

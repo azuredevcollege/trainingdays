@@ -1,0 +1,38 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day3/apps/nodejs/textanalytics/*
+      - day3/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
+      - day3/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
+      - day3/apps/pipelines/cd-scm-textanalytics.yaml
+
+variables:
+  azureSubscription: AzureDeveloperCollege
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-ta-func.yaml
+        parameters:
+          artifactDropName: drop
+
+  - stage: Restore
+    displayName: Restore
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-ta-func.yaml
+        parameters:
+          name: Deploy Scm Textanalytics
+          variablesFile: ../variables/cd-scm-textanalytics-restore.yaml
+          variableGroupName: Day5RestoreCommonVars
+          environmentName: ADC-DAY5-SCM-RESTORE
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+          uniquePrefix: $(uniquePrefix)

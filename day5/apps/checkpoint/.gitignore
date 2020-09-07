@@ -1,0 +1,8 @@
+**/obj/**
+**/bin/**
+**/.terraform/**
+day7/apps/infrastructure/manifests/local-secrets.yaml
+.vuepress/dist/
+.envrc
+
+

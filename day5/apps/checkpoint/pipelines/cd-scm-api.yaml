@@ -1,0 +1,45 @@
+pr: none
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - day3/apps/dotnetcore/Scm/*
+      - day3/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day5/apps/checkpoint/pipelines/cd-scm-api.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-api.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-api.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-api-restore.yaml
+
+variables:
+  configuration: release
+  azureSubscription: AzureDeveloperCollege
+  containerRegistry: ADC-ContainerRegistry
+
+stages:
+  - stage: Build
+    displayName: Build
+
+    jobs:
+      - template: jobs/build-scm-api.yaml
+        parameters:
+          configuration: $(configuration)
+          artifactDropName: drop
+          buildNumber: $(Build.BuildNumber)
+          containerRegistryServiceConnection: $(containerRegistry)
+
+  - stage: Restore
+    displayName: Deploy SCM API Restore
+    dependsOn: Build
+
+    jobs:
+      - template: jobs/deploy-scm-api.yaml
+        parameters:
+          name: Deploy Scm Api
+          variablesFile: ../variables/cd-scm-api-restore.yaml
+          variableGroupName: Day5RestoreCommonVars
+          environmentName: ADC-DAY5-SCM-RESTORE
+          azureSubscription: $(azureSubscription)
+          artifactDropName: drop
+          uniquePrefix: $(uniquePrefix)
