@@ -160,7 +160,7 @@ Now we have created the deployment artifacts with the build _SCM-Contacts-CI_. I
    | ServiceBusNamespaceName | your ServiceBus namespace name of stage Development         | Development |
 
 5. Go to the Tasks section of the _"Development"_ stage and use the latest Ubuntu version to run the agent on
-6. Add the task _"Azure resource group deployment"_
+6. Add the task _"ARM template deployment"_
 7. Select your Azure Subscription
 8. Set the name of the ResourceGroup, use the variable \$(ResourceGroupName)
 9. Set the Location, use the variable \$(Location)
