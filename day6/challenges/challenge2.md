@@ -5,14 +5,14 @@
 - Listing the running processes in the container
 - Checking container's resource usage
 - Limiting the container's cpu and memory usage
-- Setting enviroment variables
+- Setting environment variables
 
-In this challange, we're gonna go a little bit deeper and learn how to use native Docker commands to play with containers without connecting them. 
+In this challenge, we're gonna go a little bit deeper and learn how to use native Docker commands to play with containers without connecting them. 
 
 ## Exercises
 
 
-**1: First let's create couple of containers**
+**1: First let's create a couple of containers**
 
 Open your terminal and type: 
 ```shell
@@ -178,7 +178,7 @@ Output will be something like:
 Error response from daemon: Container 385b768034d531ca050b0334f359cc29cfa3077d479a143634fe23b1acf4c55e is not running
 ```
 
-That was the way how we can see running processes in the container. Now it's time to check container's resource usage. For that we're gonna use ```docker stats``` command. If you type ```docker stats``` without any option, it'll start showing all the container's resource usage data which are curently running. But you can also just check single container's resource usage by adding container name or id to the command, something like ```docker stats con1```. Let's try that.  
+That was the way how we can see running processes in the container. Now it's time to check container's resource usage. For that we're gonna use ```docker stats``` command. If you type ```docker stats``` without any option, it'll start showing all the container's resource usage data which are currently running. But you can also just check single container's resource usage by adding container name or id to the command, something like ```docker stats con1```. Let's try that.  
 
 Type: 
 ```shell
@@ -195,7 +195,7 @@ CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT   
 ***
 **4: CPU and Memory consumption limits**
 
-It isn't wise to run any container on any production system without limiting its cpu and memory usage. Becuase if we don't limit container's memory and cpu usage, due to a faulty process or  load, container may start using all the system resources of the host where it's running. This means that all the other containers and processes on that node would crash. Docker allows us to limit any container's memory and cpu usage. Memory part is relatively easy. You can spesify maksimum amount of ram that container can access. For example ```--memory=512M``` option dedicates 512 Megabyte of Ram. Memory option takes a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes. Also you can use ```--memory-swap``` option to set the amount of memory this container is allowed to swap to disk. Let's try to create a new container with restricted memory limit. 
+It isn't wise to run any container on any production system without limiting its cpu and memory usage. Because if we don't limit container's memory and cpu usage, due to a faulty process or  load, container may start using all the system resources of the host where it's running. This means that all the other containers and processes on that node would crash. Docker allows us to limit any container's memory and cpu usage. Memory part is relatively easy. You can specify maximum amount of ram that container can access. For example ```--memory=512M``` option dedicates 512 Megabyte of Ram. Memory option takes a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes. Also you can use ```--memory-swap``` option to set the amount of memory this container is allowed to swap to disk. Let's try to create a new container with restricted memory limit. 
 
 Type: 
 ```shell
@@ -210,7 +210,7 @@ You may use ```docker stats con3``` command to see that container started with l
 
 <img src="./img/conmemory.png">
 
-As said memory is relatively easy. Actually limiting the cpu is also easy but there isn't something like "just access to 200 Mhz of the CPU" :). Cpu limits are not the same as memory limit. You can't spesify the amount of the CPU power. Instead of that, you can only spesify which cpu core that container can access or not. If you don't spesify that, by default any container can access to all cpu cores of the host. ```–cpus``` option allows you to limit maksimum number of cores that container can use. For example ```–cpus=“3”``` means that container can only access 3 cpu cores of the host. There is another option which is ```--cpuset-cpus=```. This allows you restrict to spesific cores. For example, ```--cpuset-cpus=“1,3”```  means that container can only use core number 1 and core number 3 on that host. Let's try these and create 2 new containers with limited Cpu.
+As said memory is relatively easy. Actually limiting the cpu is also easy but there isn't something like "just access to 200 Mhz of the CPU" :). Cpu limits are not the same as memory limit. You can't specify the amount of the CPU power. Instead of that, you can only specify which cpu core that container can access or not. If you don't specify that, by default any container can access to all cpu cores of the host. ```–cpus``` option allows you to limit maximum number of cores that container can use. For example ```–cpus=“3”``` means that container can only access 3 cpu cores of the host. There is another option which is ```--cpuset-cpus=```. This allows you restrict to specific cores. For example, ```--cpuset-cpus=“1,3”```  means that container can only use core number 1 and core number 3 on that host. Let's try these and create 2 new containers with limited Cpu.
 
 Type: 
 ```shell
@@ -235,7 +235,7 @@ Output will be something like:
 
 > An environment variable is a dynamic-named value that can affect the way running processes will behave on a computer. They are part of the environment in which a process runs. For example, a running process can query the value of the TEMP environment variable to discover a suitable location to store temporary files, or the HOME or USERPROFILE variable to find the directory structure owned by the user running the process. *Wikipedia
 
-Docker allows us to set enviroment variables in the container while creating it. There are 2 ways to set environment variables in a container. First one is ```--env``` option. Type ```--env``` and after that you set the key=value and this creates the key as an enviroment variable and sets the value as its value. You can use multiple ```--env``` options to set multiple environment variables. But if you need to set long list of environment variables, you may create a file and put all the key=value pairs in it and you can use ```--env-file``` option to set all of these environment variables as bulk. It's now time to try that. First we're gonna create a new container from ubuntu image. While doing that, we'll set couple of enviroment variables. And instead of the default application, we're gonna instruct to run ```printenv``` command and this will list all the enviroment variables of the container. 
+Docker allows us to set environment variables in the container while creating it. There are 2 ways to set environment variables in a container. First one is ```--env``` option. Type ```--env``` and after that you set the key=value and this creates the key as an environment variable and sets the value as its value. You can use multiple ```--env``` options to set multiple environment variables. But if you need to set long list of environment variables, you may create a file and put all the key=value pairs in it and you can use ```--env-file``` option to set all of these environment variables as bulk. It's now time to try that. First we're gonna create a new container from ubuntu image. While doing that, we'll set couple of enviroment variables. And instead of the default application, we're gonna instruct to run ```printenv``` command and this will list all the enviroment variables of the container. 
 
 Type: 
 ```shell
@@ -292,6 +292,6 @@ env_test2
 
 ## Wrap up
 
-__Congratulations__ you have completed the Container 101 challange. You've  learned couple of very essential Docker commands.
+__Congratulations__ you have completed the Container 101 challenge. You've  learned couple of very essential Docker commands.
 
 *** Reference: https://docs.docker.com
