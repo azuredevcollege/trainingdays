@@ -21,7 +21,7 @@ When you reached the "Create Web App" wizard, follow the steps below:
 - Create a new resource group, name it "myFirstWebApps-rg"
 - Under instance details, enter a name for your Web App (be careful: this must be a global unique name!)
 - Publish: Code
-- Runtime: .NET Core 3.0 Current
+- Runtime: .NET Core 3.1 (LTS)
 - Operation System: Windows
 - Region: West Europe
 - SKU and Size: S1
