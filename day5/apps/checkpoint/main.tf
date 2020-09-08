@@ -366,7 +366,7 @@ resource "azurerm_resource_group" "container_rg" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${var.unique_resource_prefix}adcTrainingDaysContainerRegistry"
+  name                = "${local.unique_prefix}adcTrainingDaysContainerRegistry"
   resource_group_name = azurerm_resource_group.container_rg.name
   location            = azurerm_resource_group.container_rg.location
   sku                 = "Premium"
