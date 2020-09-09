@@ -180,3 +180,9 @@ jq is a lightweight and flexible command-line JSON processor. In some challenges
 To install jq got to <https://stedolan.github.io/jq/download/> and follow the instructions.
 
 ![jq](./images/../img/jq.png)
+
+## git Version Control
+
+The repository is located at github, so - obviously - we'll need a local git client to interact with the repo. Download and install the appropriate version of git for you here: <https://git-scm.com/download>
+
+![git](./images/../img/logo@2x.png)
