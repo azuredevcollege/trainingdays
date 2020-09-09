@@ -6,6 +6,10 @@
 - [Challenge 3 - Integrate Azure AD into the SCM Contacts API](./challenges/challenge-3.md)
 - :small_orange_diamond: *[Breakout! - Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* :small_orange_diamond:
 
+> Please take a look at the restore checkpoint, if you were unable to complete day4.
+>
+> [Checkpoint - Restore from day4 to continue the breakout session (optional)](./apps/checkpoint/README.md)
+
 # Day5 - Goal
 
 You already have deployed the Azure Developer College's sample application to your Azure subscription. Although the application is up and running we can not use different user accounts to create Contacts and VisitReports per user. The current deployed application does not support any user authentication.

@@ -43,7 +43,7 @@ resource "null_resource" "git_restore" {
   }
 
   provisioner "local-exec" {
-    command = "git remote add restore ${data.azuredevops_git_repositories.default.repositories[0].ssh_url}; git push restore master && git remote remove restore"
+    command = "ssh-keyscan -H ssh.dev.azure.com >> ~/.ssh/known_hosts && git remote add restore ${data.azuredevops_git_repositories.default.repositories[0].ssh_url}; git push restore master && git remote remove restore"
   }
 }
 resource "random_string" "sql_admin_username" {
@@ -366,7 +366,7 @@ resource "azurerm_resource_group" "container_rg" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${var.unique_resource_prefix}adcTrainingDaysContainerRegistry"
+  name                = "${local.unique_prefix}adcTrainingDaysContainerRegistry"
   resource_group_name = azurerm_resource_group.container_rg.name
   location            = azurerm_resource_group.container_rg.location
   sku                 = "Premium"
