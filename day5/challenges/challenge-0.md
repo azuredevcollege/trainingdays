@@ -7,7 +7,7 @@
 - How to receive an __id_token__ with basic profile information of the authenticated user
 
 Here is an high-level overview of the authentication process:
-![Flow](images/oidc-id-token-flow.png)
+![Flow](./images/oidc-id-token-flow.png)
 
 In short:
 
@@ -38,7 +38,7 @@ az account show
 
 Note down the `appId` value in the response - this is the id under which your AAD application has been registered. In the Azure Portal, we can see your new app registration under `AAD --> App Registrations --> Owned applications`:
 
-![alt-text](images/aad_app_registration.png)
+![alt-text](./images/aad_app_registration.png)
 
 ## Run the Token Echo Server
 
