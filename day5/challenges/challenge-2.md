@@ -69,7 +69,7 @@ az ad sp create --id $API_APP_ID
 ```
 
 Go to your Azure AD and have a look at the registered application. The permissions look as follow:
-![API Permissions](imgages/../images/api-premissions.png)
+![API Permissions](./images/../images/api-premissions.png)
 
 ## Run the Token Echo Server
 
