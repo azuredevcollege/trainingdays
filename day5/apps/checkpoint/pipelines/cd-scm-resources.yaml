@@ -7,7 +7,10 @@ trigger:
     include:
       - day3/apps/dotnetcore/Scm.Resources/*
       - day3/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
-      - day3/apps/pipelines/cd-scm-resources.yaml
+      - day5/apps/checkpoint/pipelines/cd-scm-resources.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-resources.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-resources.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-resources-restore.yaml
 
 variables:
   configuration: release

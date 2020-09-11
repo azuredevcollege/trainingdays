@@ -8,7 +8,10 @@ trigger:
       - day3/apps/nodejs/visitreport/*
       - day3/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
       - day3/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
-      - day3/apps/pipelines/cd-scm-visitreports.yaml
+      - day5/apps/checkpoint/pipelines/cd-scm-visitreports.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-visitreports.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-visitreports.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-visitreports-restore.yaml
 
 variables:
   azureSubscription: AzureDeveloperCollege

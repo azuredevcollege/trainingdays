@@ -8,7 +8,10 @@ trigger:
       - day3/apps/nodejs/textanalytics/*
       - day3/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
       - day3/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
-      - day3/apps/pipelines/cd-scm-textanalytics.yaml
+      - day5/apps/checkpoint/pipelines/cd-scm-textanalytics.yaml
+      - day5/apps/checkpoint/pipelines/jobs/build-scm-ta-func.yaml
+      - day5/apps/checkpoint/pipelines/jobs/deploy-scm-ta-func.yaml
+      - day5/apps/checkpoint/pipelines/variables/cd-scm-textanalytics-restore.yaml
 
 variables:
   azureSubscription: AzureDeveloperCollege
