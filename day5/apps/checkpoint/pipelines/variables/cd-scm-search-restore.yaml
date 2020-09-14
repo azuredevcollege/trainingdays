@@ -16,7 +16,7 @@ variables:
   - name: storageAccountName
     value: adcd5searchre
   - name: indexerFunctionName
-    value: adcday3scmindexer-restore
+    value: adcday5scmindexer-restore
   - name: applicationInsightsName
     value: appinsightsscmd5-restore
   - name: serviceBusNamespaceName
