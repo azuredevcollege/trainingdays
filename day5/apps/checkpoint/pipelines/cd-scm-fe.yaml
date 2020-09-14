@@ -38,6 +38,7 @@ stages:
         parameters:
           name: Deploy Scm Frontend
           variablesFile: ../variables/cd-scm-fe-restore.yaml
+          aadVariablesGroupName: Day5RestoreAADVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: ${{ variables.azureSubscription }}
           artifactDropName: drop

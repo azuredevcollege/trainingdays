@@ -10,6 +10,7 @@ jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
+      - group: ${{ parameters.aadVariablesGroupName }}
       - template: ${{ parameters.variablesFile }}
       - name: appinsightsKey
         value: ""
@@ -61,7 +62,7 @@ jobs:
                 scriptType: "bash"
                 scriptLocation: "inlineScript"
                 inlineScript: |
-                  echo "var uisettings = { \"enableStats\": true, \"endpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.spaEndpoint }}\", \"resourcesEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.resourcesEndpoint }}\", \"searchEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.searchEndpoint }}\", \"reportsEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.reportsEndpoint }}\", \"aiKey\": \"`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist/settings/settings.js
+                  echo "var uisettings = { \"tenantId\": \"$(AadTenantId)\", \"audience\": \"$(AadApiClientIdUri)\", \"clientId\": \"$(AadFrontendClientId)\", \"enableStats\": true, \"endpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.spaEndpoint }}\", \"resourcesEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.resourcesEndpoint }}\", \"searchEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.searchEndpoint }}\", \"reportsEndpoint\": \"https://${{ parameters.uniquePrefix }}${{ variables.reportsEndpoint }}\", \"aiKey\": \"`az resource show -g ${{ variables.resourceGroupName }} -n ${{ variables.applicationInsightsName }} --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/dist/settings/settings.js
             - task: AzureCLI@2
               displayName: Copy SPA to blob storage
               inputs:
