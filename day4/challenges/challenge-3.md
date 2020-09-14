@@ -109,7 +109,7 @@ Now that we have created the build artifact, we can create a Release build to de
    - ServiceBusnamespaceName - |your prefix|-scm-dev (the namespace name must be globally unique)
    - ServiceBusSKU - Standard
    - CosmosDbAccountName - |your prefix|-scm-dev (the account name must be globally unique)
-8. Go to the Tasks section of the *"Development"* stage and add the task *"Azure resource group deployment"*
+8. Go to the Tasks section of the *"Development"* stage and add the task *"ARM template deployment"*
    - Select the Azure subscription
    - Use the variable for the ResourceGroup: $(ResourceGroup)
    - Select a location where you want to deploy the Azure resources
