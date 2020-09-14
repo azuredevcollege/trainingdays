@@ -5,8 +5,10 @@ trigger:
       - master
   paths:
     include:
-      - day3/apps/dotnetcore/Scm/*
-      - day3/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day4/apps/dotnetcore/Scm/*
+      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day5/apps/dotnetcore/Scm/*
+      - day5/apps/infrastructure/templates/scm-api-dotnetcore.json
       - day5/apps/checkpoint/pipelines/cd-scm-api.yaml
       - day5/apps/checkpoint/pipelines/jobs/build-scm-api.yaml
       - day5/apps/checkpoint/pipelines/jobs/deploy-scm-api.yaml
