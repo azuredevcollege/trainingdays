@@ -10,6 +10,7 @@ jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
+      - group: ${{ parameters.aadVariablesGroupName }}
       - template: ${{ parameters.variablesFile }}
     pool:
       vmImage: ${{ variables.vmImage }}
@@ -27,15 +28,24 @@ jobs:
                 templateLocation: "Linked artifact"
                 csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-search-api-dotnetcore.json
                 overrideParameters: >
-                  -appPlanSKU ${{ variables.appServicePlanSKU }} -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
-                  -use32bitworker ${{ variables.use32bitworker }} -alwaysOn ${{ variables.alwaysOn }} 
-                  -storageAccountName ${{ parameters.uniquePrefix }}${{ variables.storageAccountName }} -functionAppName ${{ parameters.uniquePrefix }}${{ variables.indexerFunctionName }} 
+                  -appPlanSKU ${{ variables.appServicePlanSKU }}
+                  -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
+                  -use32bitworker ${{ variables.use32bitworker }}
+                  -alwaysOn ${{ variables.alwaysOn }} 
+                  -storageAccountName ${{ parameters.uniquePrefix }}${{ variables.storageAccountName }}
+                  -functionAppName ${{ parameters.uniquePrefix }}${{ variables.indexerFunctionName }} 
                   -applicationInsightsName ${{ variables.applicationInsightsName }} 
                   -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
                   -azureSearchServiceName ${{ parameters.uniquePrefix }}${{ variables.azureSearchServiceName }}
                   -azureSearchSKU ${{ variables.azureSearchSKU }}
                   -azureSearchReplicaCount ${{ variables.azureSearchReplicaCount }}
                   -azureSearchPartitionCount ${{ variables.azureSearchPartitionCount }}
+                # Uncomment these lines to pass AAD variables
+                #  -aadInstance $(aadInstance)
+                #  -aadClientId $(aadClientId)
+                #  -aadTenantId $(aadTenantId)
+                #  -aadDomain $(aadDomain)
+                #  -aadClientIdUri $(aadClientIdUri)
             - task: AzureRmWebAppDeployment@4
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
