@@ -11,6 +11,7 @@ trigger:
       - day5/apps/checkpoint/pipelines/jobs/build-scm-api.yaml
       - day5/apps/checkpoint/pipelines/jobs/deploy-scm-api.yaml
       - day5/apps/checkpoint/pipelines/variables/cd-scm-api-restore.yaml
+      - day5/apps/checkpoint/pipelines/variables/aad-variables-restore.yaml
 
 variables:
   configuration: release
@@ -38,6 +39,7 @@ stages:
         parameters:
           name: Deploy Scm Api
           variablesFile: ../variables/cd-scm-api-restore.yaml
+          aadVariablesGroupName: Day5RestoreAADVars
           variableGroupName: Day5RestoreCommonVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: $(azureSubscription)

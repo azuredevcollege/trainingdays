@@ -11,7 +11,7 @@ jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
-      - group: ${{ parameters.variableGroupName }}
+      - group: ${{ parameters.aadVariablesGroupName }}
       - template: ${{ parameters.variablesFile }}
     pool:
       vmImage: ${{ variables.vmImage }}
@@ -34,6 +34,11 @@ jobs:
                   -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{ parameters.uniquePrefix }}${{variables.sqlServerName}}
                   -sqlDatabaseName ${{ parameters.uniquePrefix }}${{ variables.sqlDatabaseName }} -sqlUserName $(sqlAdminUser) -sqlPassword $(sqlAdminPassword) 
                   -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
+                  -aadInstance $(aadInstance)
+                  -aadClientId $(aadClientId)
+                  -aadTenantId $(aadTenantId)
+                  -aadDomain $(aadDomain)
+                  -aadClientIdUri $(aadClientIdUri)
             - task: AzureRmWebAppDeployment@4
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
