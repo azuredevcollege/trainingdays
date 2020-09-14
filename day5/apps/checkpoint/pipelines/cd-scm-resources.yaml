@@ -39,6 +39,7 @@ stages:
       - template: jobs/deploy-scm-resources-api.yaml
         parameters:
           name: Deploy Scm Resources Api
+          aadVariablesGroupName: Day5RestoreAADVars
           variablesFile: ../variables/cd-scm-resources-restore.yaml
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: $(azureSubscription)
