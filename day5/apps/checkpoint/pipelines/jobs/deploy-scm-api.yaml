@@ -34,11 +34,12 @@ jobs:
                   -applicationInsightsName ${{ variables.applicationInsightsName }} -sqlServerName ${{ parameters.uniquePrefix }}${{variables.sqlServerName}}
                   -sqlDatabaseName ${{ parameters.uniquePrefix }}${{ variables.sqlDatabaseName }} -sqlUserName $(sqlAdminUser) -sqlPassword $(sqlAdminPassword) 
                   -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
-                  -aadInstance $(aadInstance)
-                  -aadClientId $(aadClientId)
-                  -aadTenantId $(aadTenantId)
-                  -aadDomain $(aadDomain)
-                  -aadClientIdUri $(aadClientIdUri)
+                # Uncomment these lines to pass AAD variables
+                #  -aadInstance $(aadInstance)
+                #  -aadClientId $(aadClientId)
+                #  -aadTenantId $(aadTenantId)
+                #  -aadDomain $(aadDomain)
+                #  -aadClientIdUri $(aadClientIdUri)
             - task: AzureRmWebAppDeployment@4
               inputs:
                 azureSubscription: ${{ parameters.azureSubscription }}
