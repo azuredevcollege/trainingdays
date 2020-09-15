@@ -1,10 +1,12 @@
-# Break Out #1: Deploy the Azure Dev College sample application to Azure #
+# Break Out #1: Deploy the Azure Dev College sample application to Azure
 
 Now it's time to get familiar with our sample application. You will now clone the repository to your local machine, setup your "local loop" and deploy a frist version to Azure.
 
 ![architecture_bo1](./img/architecture_bo1.png "architecture_bo1")
 
-## Setup Local Loop ##
+> **Before proceeding**: Please check, that all the [Prerequisites](challenge-0.md) are present on your machine.
+
+## Setup Local Loop
 
 Clone the repository to your local machine. Run this command from a blank folder.
 
@@ -20,41 +22,39 @@ Receiving objects: 100% (2473/2473), 22.78 MiB | 16.39 MiB/s, done.
 Resolving deltas: 100% (1392/1392), done.
 ```
 
-> Please check, that all the [Prerequisites](challenge-0.md) are present on your machine.
-
-Switch to the *azure-developer-college* folder and open VS Code:
+Switch to the _azure-developer-college_ folder and open VS Code:
 
 ```shell
 $ code .
 ```
 
-Open folder Day2/apps. In that folder, we will be concentrating on *dotnetcore/Scm* and *frontend/scmfe*.
+Open folder Day2/apps. In that folder, we will be concentrating on _dotnetcore/Scm_ and _frontend/scmfe_.
 
 ![bo1_code](./img/bo1_code.png "bo1_code")
 
-The first one contains the backend logic for working with *contacts* objects, the latter one contains the Single page Application (SPA) which is written in VueJS.
+The first one contains the backend logic for working with _contacts_ objects, the latter one contains the Single page Application (SPA) which is written in VueJS.
 
 Open each folder and get familiar with the code in there.
 
 > If you have any questions, reach out to one of the proctors.
 
-## Run the *Contacts* service locally ##
+## Run the _Contacts_ service locally
 
 Now it's time to run the contacts API on your local machine. Therefore, a debug configuration has already been prepared for you. So, switch to the "Debug" view in Visual Studio Code and in the drop-down, choose **Day2 - Launch SCM Contacts API**. Click the "Run" button.
 
 ![vscode_debug_contacts](./img/vscode_debug_contacts.png "vscode_debug_contacts")
 
-If you correctly set up your machine, after a few seconds a browser window will open and show the Swagger UI for the *contacts* API.
+If you correctly set up your machine, after a few seconds a browser window will open and show the Swagger UI for the _contacts_ API.
 
 Get familiar with all the available operations and also test a few of them via the UI.
 
 ![browser_swagger_contacts](./img/browser_swagger_contacts.png "browser_swagger_contacts")
 
-### Preparing the SPA for the first run ###
+### Preparing the SPA for the first run
 
 To run the Single Page Application on your local machine, we first need to install all the neccessary Node packages via the Node Package Manager (NPM).
 
-On the command line, switch to the folder *apps/frontend/scmfe* and run the following command:
+On the command line, switch to the folder _apps/frontend/scmfe_ and run the following command:
 
 ```shell
 $ npm install
@@ -69,7 +69,7 @@ added 1281 packages from 895 contributors and audited 26623 packages in 24.125s
 
 Back in Visual Studio Code, we need to tell the SPA where to call the contacts service (the contacts API endpoint, as well as all other upcoming endpoint, can be dynamically configured per environment).
 
-Open the file *apps/frontend/scmfe/public/settings/settings.js* and make sure the property *endpoint* has the value **http://localhost:5050**.
+Open the file _apps/frontend/scmfe/public/settings/settings.js_ and make sure the property _endpoint_ has the value **http://localhost:5050**.
 
 ```json
 var uisettings = {
@@ -81,7 +81,9 @@ var uisettings = {
 
 This file will be loaded during the startup of our application and will configure the contacts module to use our local service for contacts management.
 
-So, everything is in place now...let's start the application. Go back to the *Debug* view, choose **Day2 - Launch Frontend**.
+So, everything is in place now...let's start the application. Go back to the _Debug_ view, choose **Day2 - Launch Frontend**.
+
+> There **may** be a problem when running that debug configuration. In case "npm" cannot be started, please go to the commandline and run ```npm run serve```!
 
 **IMPORTANT**: Make sure the contacts API still runs!
 
@@ -89,19 +91,19 @@ When you run the config, a local build will be kicked-off and after finishing, t
 
 Again, get familiar with the application, open the contacts list, create a few contacts, edit a contact and delete one.
 
-If you want to, you can also test the mobile experience of the app by opening the Chrome Developer Tool and switching to a mobile user-agent. 
+If you want to, you can also test the mobile experience of the app by opening the Chrome Developer Tool and switching to a mobile user-agent.
 
 ![browser_bo1](./img/browser_bo1.png "browser_bo1")
 
 ![browser_mobile_bo1](./img/browser_mobile_bo1.png "browser_mobile_bo1")
 
-## Deploy to Azure ##
+## Deploy to Azure
 
-We have now been able to run the application locally. Of course, we want to have it in Azure. In this first Break Out, we only deploy the *Contacts* API to Azure and run the SPA on our local machine.
+We have now been able to run the application locally. Of course, we want to have it in Azure. In this first Break Out, we only deploy the _Contacts_ API to Azure and run the SPA on our local machine.
 
 So, first of all, let's deploy the backend to Azure. You already know how to do it ([Challenge 1 - Azure Web Applications](./challenge-1.md) is your "cheat sheet"), so here is just an overview:
 
-1. create a new resource group, name it e.g. **scm-breakout-rg**, location *West Europe*
+1. create a new resource group, name it e.g. **scm-breakout-rg**, location _West Europe_
 1. create an Azure Web App (OS: **Windows**, RuntimeStack: **.NET Core 3.1 (LTS)**, Size: **B1**, AppInsights is not needed at the moment). You can choose to use the Portal or the Azure CLI.
 1. deploy the Contacts API to Azure
 1. after deployment, check whether the API is running (open the Swagger UI)
@@ -112,11 +114,11 @@ When everything works as expected in Azure, go back to the **settings.js** file 
 
 Open the browser and check, if your application still works as expected.
 
-## Finished before Time? ##
+## Finished before Time?
 
 Try adding slots to your app and deploy the service to the slot, afterwards swap it!
 
-# Wrap-Up #
+# Wrap-Up
 
 We have now set up our local development environment. We cloned the repo, installed dependencies of the SPA, ran both services and deployed the contacts API to Azure.
 

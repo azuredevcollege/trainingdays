@@ -58,11 +58,11 @@ Follow the wizard and when asked, enter the following information (only importan
 
 ![portal_bo2_func](./img/portal_bo2_func.png "portal_bo2_func")
 
-When the Function has been created, we need to add a few **Application settings** that our image manipulation function needs to be working correctly.
+When the Function has been created, we need to add a few **Configuration settings** that our image manipulation function needs to be working correctly.
 
 Please open the Azure Function and switch to the **Configuration** view.
 
-Add the following Application settings:
+Add the following Configuration settings:
 
 | Name | Value / Hints |
 | --- | --- |
@@ -125,6 +125,8 @@ Time for testing!
 When everything has been deployed to Azure, open the **settings.js** file of your SPA (folder *day2/apps/frontend/scmfe/public/settings*) and adjust the **resourcesEndpoint** property (also make sure, that **endpoint** points to the Contacts API in Azure). Enter the value of your newly deployed Resources API for it, e.g. https://scmimageresource.azurewebsites.net/.
 
 Switch to the "Debug" view and start the Single Page Application (dropdown: **Day2 - Launch Frontend**).
+
+> There **may** be a problem when running that debug configuration. In case "npm" cannot be started, please go to the commandline and run ```npm run serve```!
 
 To test everything we just set up, create a new *Contact* and open the details of it afterwards. On the right side box, you should now see a button called "**CHANGE AVATAR**".
 
