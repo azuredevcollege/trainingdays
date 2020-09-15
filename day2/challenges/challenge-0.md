@@ -1,8 +1,8 @@
-# Challenge 0 - Setup your System #
+# Challenge 0 - Setup your System
 
 To be able to follow all the challenges provided in this workshop, you need a few prerequisites on your machine. This challenge is for setting up your system.
 
-## dotnet SDK ##
+## dotnet SDK
 
 Download and install dotnet core SDK from <https://dotnet.microsoft.com/download>
 
@@ -26,7 +26,7 @@ path-to-application:
   The path to an application .dll file to execute.
 ```
 
-## Node JS ##
+## Node JS
 
 Download and install the current LTS version (12.y.z) of Node JS from <https://nodejs.org/en/download/>
 
@@ -62,7 +62,7 @@ npm help <term>   search for help on <term>
 npm help npm      involved overview
 ```
 
-## Vue CLI ##
+## Vue CLI
 
 ![vuejs](./img/vuejs.png "vuejs")
 
@@ -80,7 +80,7 @@ $ vue --version
 3.8.4
 ```
 
-## Azure CLI ##
+## Azure CLI
 
 We will also be using the Azure command line interface to create and interact with reosurces running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
@@ -135,13 +135,13 @@ $ az account list -o table
 $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 ```
 
-## Visual Studio Code ##
+## Visual Studio Code
 
-To work with all the smaples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it runs cross-platform. 
+To work with all the smaples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it runs cross-platform.
 
 Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
 
-### Useful Extensions ###
+### Useful Extensions
 
 After the setup is complete. Open Visual Studio an open the "Extensions" sidebar:
 
@@ -156,21 +156,21 @@ Search and install the following extensions:
 
 The _Azure Functions_ extension should have already been installed as part of the _Azure Tools_ extension, but you additionally need to make sure to follow the OS-specific instructions.
 
-## Azure Storage Explorer ##
+## Azure Storage Explorer
 
 In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer.
 
-Go to <https://azure.microsoft.com/en-us/features/storage-explorer/>, download and install the tool. 
+Go to <https://azure.microsoft.com/en-us/features/storage-explorer/>, download and install the tool.
 
 ![Azure Storage Explorer](./img/storage_explorer.png "Azure Storage Explorer")
 
 ![Azure Storage Explorer](./img/storage_explorer_view.png "Azure Storage Explorer")
 
-## Azure Data Studio ##
+## Azure Data Studio
 
 We will also work with Azure SQL Databases. You can, of course, use SQL Server Management Studio if you are on a Windows machine. If you want to work "cross-platform", use Azure Data Studio.
 
-Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio>, download and install the tool. 
+Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio>, download and install the tool.
 
 ![Azure Data Studio](./img/azure_data_studio.png "Azure Data Studio")
 
@@ -179,4 +179,10 @@ Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-dat
 jq is a lightweight and flexible command-line JSON processor. In some challenges we use jq to process the JSON documents that we get back from Azure CLI.
 To install jq got to <https://stedolan.github.io/jq/download/> and follow the instructions.
 
-![jq](./images/../img/jq.png)
+![jq](./img/jq.png)
+
+## git Version Control
+
+The repository is located at github, so - obviously - we'll need a local git client to interact with the repo. Download and install the appropriate version of git for you here: <https://git-scm.com/download>
+
+![git](./img/logo@2x.png)

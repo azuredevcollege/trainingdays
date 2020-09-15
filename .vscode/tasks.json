@@ -48,8 +48,7 @@
             "args": [
                 "build",
                 "${workspaceFolder}/day2/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "/property:GenerateFullPaths=true"
             ],
             "problemMatcher": "$msCompile"
         },

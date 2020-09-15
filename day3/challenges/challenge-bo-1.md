@@ -251,7 +251,7 @@ Do the same with the Image Manipulation Function in folder *day3/apps/dotnetcore
 
 ### Deploy the Contacts Search Service ###
 
-To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.0**) - use SKU / Size **B1**. 
+To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **B1**. 
 
 When finished, apply these settings to the Web App Configuration settings:
 

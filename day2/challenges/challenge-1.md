@@ -1,15 +1,15 @@
-# Challenge 1 - Azure Web Apps #
+# Challenge 1 - Azure Web Apps
 
-## Here is what you will learn ##
+## Here is what you will learn
 
 - Create an AppService Plan / Azure Web App
 - Create and deploy an ASP.NET Core Web App to Azure
 - Create and configure WebApp slots
 - Use slots to deploy new versions of your web application with near-zero downtime
 
-## Create an Azure Web App ##
+## Create an Azure Web App
 
-### Option 1: Azure Portal ###
+### Option 1: Azure Portal
 
 To create an Azure Web App, go to the Azure Portal and click on **"Create a resource"**, in the next view choose **"Web App"**.
 
@@ -21,7 +21,7 @@ When you reached the "Create Web App" wizard, follow the steps below:
 - Create a new resource group, name it "myFirstWebApps-rg"
 - Under instance details, enter a name for your Web App (be careful: this must be a global unique name!)
 - Publish: Code
-- Runtime: .NET Core 3.0 Current
+- Runtime: .NET Core 3.1 (LTS)
 - Operation System: Windows
 - Region: West Europe
 - SKU and Size: S1
@@ -46,7 +46,7 @@ Open the web app in your browser.
 
 ![browser](./img/browser_webapp.png "browser")
 
-### Option 2: Azure CLI ###
+### Option 2: Azure CLI
 
 If you have created the web application already with option 1, go to the portal and delete the resource group - including all the newly created resources (you have to wait until it has finished, before proceeding). We will be creating the exact same resources now with the Azure CLI.
 
@@ -243,11 +243,11 @@ $ az webapp config appsettings set --settings APPINSIGHTS_INSTRUMENTATIONKEY=<YO
 
 Now, we are all set to add a sample application.
 
-## Create a sample application ##
+## Create a sample application
 
 We will use a .NET Core MVC application to demonstrate the deployment process to an Azure Web App. So first, let's create a demo application.
 
-Create a local folder called *devcollege* and open it in the comannd line. CD into that folder and execute:
+Create a local folder called _devcollege_ and open it in the comannd line. CD into that folder and execute:
 
 ```shell
 $ dotnet new mvc -o myFirstCoreApp
@@ -262,9 +262,9 @@ Running 'dotnet restore' on myFirstCoreApp/myFirstCoreApp.csproj...
 Restore succeeded.
 ```
 
-### Visual Studio Code ###
+### Visual Studio Code
 
-After the wizard has finished, cd into the new folder *myFirstCoreApp* and open it in VS Code:
+After the wizard has finished, cd into the new folder _myFirstCoreApp_ and open it in VS Code:
 
 ```shell
 $ code .
@@ -276,33 +276,33 @@ Get familiar with the environment and have a look at the controller HomeControll
 
 Set a breakpoint (F9) on method **public IActionResult Index()** in Controllers/HomeController.cs
 
-Press F5 - if VS Code asks you about the environment, choose *.NET Core*
+Press F5 - if VS Code asks you about the environment, choose _.NET Core_
 
-The project will now be built and after that, your browser will point to *https:/localhost:5001*.
+The project will now be built and after that, your browser will point to _https:/localhost:5001_.
 
-#### Optional / Workaround ####
+#### Optional / Workaround
 
-> Here is a workaround, if port *5001* is blocked on your machine.
+> Here is a workaround, if port _5001_ is blocked on your machine.
 
-Open file *launch.json* in the folder *.vscode* and add the env variable **ASPNETCORE_URLS** with a value that works for you.
+Open file _launch.json_ in the folder _.vscode_ and add the env variable **ASPNETCORE_URLS** with a value that works for you.
 
 Example:
 
 ![vscode-launch](./img/vscode_launch.png "vscode-launch")
 
-### Debug Tools ###
+### Debug Tools
 
 When the breakpoint gets hit, get familiar with the tools of the debugger.
 
 ![vscode-debug](./img/vscode_debug.png "vscode-debug")
 
-Open *Views/Home/Index.cshtml* and change the welcome text to "Welcome to the Azure Developer College".
+Open _Views/Home/Index.cshtml_ and change the welcome text to "Welcome to the Azure Developer College".
 
 Run it again locally and check, if the changes appear.
 
 ![browser-welcome](./img/browser_welcome.png "browser-welcome")
 
-## Deploy the sample app to Azure ##
+## Deploy the sample app to Azure
 
 Now let's deploy the webapp to Azure.
 
@@ -310,7 +310,7 @@ If you haven't done so far, add the Azure App Service Extension (see: [Challenge
 
 Find your webapp in the extension and right-click --> Deploy to Web App...
 
-> If you can't find your subscription, press **F1** and choose the Task *Azure: Sign In*.
+> If you can't find your subscription, press **F1** and choose the Task _Azure: Sign In_.
 
 ![vscode-deploy](./img/vscode_deploy.png "vscode-deploy")
 
@@ -320,7 +320,7 @@ After a few seconds the browser will show you your first web app running in Azur
 
 ![browser-webapp](./img/browser_webappdevcollege.png "browser-webapp")
 
-## Working with Deployment Slots ##
+## Working with Deployment Slots
 
 Open your web app in the portal and go to "Deployment Slots".
 
@@ -330,9 +330,9 @@ Create a new slot called "Staging" (choose clone settings from your production s
 
 When finished, go back to VS Code.
 
-## Deploy sample application to Staging slot ##
+## Deploy sample application to Staging slot
 
-Open *Views/Home/Index.cshtml* again and change the welcome text to "Welcome to the Azure Developer College - this time with slots!".
+Open _Views/Home/Index.cshtml_ again and change the welcome text to "Welcome to the Azure Developer College - this time with slots!".
 
 Check that your local development environment works as expected.
 
@@ -342,7 +342,7 @@ To deploy the application to the **Staging** slot, find your webapp in the **Azu
 
 Your current application will now be deployed to your "Staging" slot.
 
-### Show Staging application ###
+### Show Staging application
 
 To see your staging slot in action, go to the slot in the portal and copy the URL in the overview blade.
 
@@ -354,7 +354,7 @@ Open your browser, navigate to the URL and check, if the headline contains the n
 
 > Also check the production slot (URL without "-staging").
 
-### Swapping Slots ###
+### Swapping Slots
 
 Now that everything works as expected, go back to "Deployment Slots" and click on "Swap" (selecting the staging slot as source).
 
@@ -364,9 +364,9 @@ With this command, we are swapping the current "poduction" slot with our "Stagin
 
 Now check, that the production slot serves the new version of the website.
 
-> **Optional**: Split traffic 50:50 to staging and production a see what happens when you reload your page in the browser pointing to the *production* slot. What do you think, why does this happen??
+> **Optional**: Split traffic 50:50 to staging and production a see what happens when you reload your page in the browser pointing to the _production_ slot. What do you think, why does this happen??
 
-## House Keeping ##
+## House Keeping
 
 Remove the sample resource group.
 
