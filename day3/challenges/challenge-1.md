@@ -123,20 +123,23 @@ The following Azure Resource Manager template creates an Azure Cosmos account wi
 - Two containers that share 400 Requested Units per second (RU/s) throughput at the database level.
 - One container with dedicated 400 RU/s throughput.
 
-We will be using Azure CLI to deploy the ARM template, so please use the commands below (if you chose a different name for your resource group, please adjust the command):
+We will be using Azure CLI to deploy the ARM template. Navigate to the **template.json** in this folder *(day3/apps/arm/template.json)* and <br> 
+exchange <YOUR_NEW_ACCOUNT_NAME> with your name and a unique ID.
+
+```template.json
+"parameters": {
+        "databaseAccount": {
+            "defaultValue": "<NAME_YOUR_COSMOSDB_ACCOUNT>",
+            "type": "String"
+        }
+    },
+```
+
+Now let's use the commands below (if you chose a different name for your resource group, please adjust the command):
 
 ```shell 
-$ az group deployment create --resource-group adc-cosmos-db-rg \
---template-uri https://raw.githubusercontent.com/azure/azure-quickstart-templates/master/101-cosmosdb-sql/azuredeploy.json \
---parameters accountName=<YOUR_NEW_ACCOUNT_NAME> \
-primaryRegion=westeurope \
-secondaryRegion=northeurope \
-databaseName=<YOUR_NEW_DB_NAME> \
-sharedThroughput=400 \
-sharedContainer1Name=FirstToDo \
-sharedContainer2Name=SecondToDo \
-dedicatedContainer1Name=FirstToDo1 \
-dedicatedThroughput=400
+$ az deployment group create --resource-group adc-cosmos-db-rg \
+--template-uri https://github.com/azuredevcollege/trainingdays/tree/master/day3/apps/arm/template.json
 
 $ az cosmosdb show --resource-group adc-cosmos-db-rg  --name <YOUR_NEW_ACCOUNT_NAME> --output tsv
 ```
@@ -151,7 +154,7 @@ We now want to show you, how to integrate Azure Cosmos DB with a NodeJS applicat
 There is already a predefined sample you can clone to your machine. So, please open a command line window and in a *new folder*, run the following command to clone the sample:
 
 ```shell
-$ git clone https://github.com/Azure-Samples/azure-cosmos-db-sql-api-nodejs-getting-started.git
+$ git clone https://github.com/CodeUnicornMartha/azure-cosmos-db-sql-api-nodejs-getting-started.git
 ```
 
 Open the folder the repo has been cloned to in Visual Studio Code.
