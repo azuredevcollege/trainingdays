@@ -1,5 +1,5 @@
 title: Azure Developer College
-patterns: ['**/*.md']
+patterns: ["**/*.md", "!**/node_modules"]
 base: /trainingdays/
 themeConfig:
     repo: 'azuredevcollege/trainingdays'
