@@ -83,7 +83,7 @@ This file will be loaded during the startup of our application and will configur
 
 So, everything is in place now...let's start the application. Go back to the _Debug_ view, choose **Day2 - Launch Frontend**.
 
-> There **may** be a problem when running that debug configuration. In case "npm" cannot be started, please go to the commandline and run ```npm run serve```!
+> There **may** be a problem when running that debug configuration. In case "npm" cannot be started, please go to the commandline and run `npm run serve`!
 
 **IMPORTANT**: Make sure the contacts API still runs!
 
