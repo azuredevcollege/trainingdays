@@ -41,6 +41,7 @@ stages:
           name: Deploy Scm Visitreports
           variablesFile: ../variables/cd-scm-visitreports-restore.yaml
           variableGroupName: Day5RestoreCommonVars
+          aadVariablesGroupName: Day5RestoreAADVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: $(azureSubscription)
           artifactDropName: drop

@@ -11,6 +11,7 @@ jobs:
   - deployment: Deploy
     displayName: ${{ parameters.name }}
     variables:
+      - group: ${{ parameters.aadVariablesGroupName }}
       - group: ${{ parameters.variableGroupName }}
       - template: ${{ parameters.variablesFile }}
     pool:
@@ -41,9 +42,15 @@ jobs:
                 templateLocation: "Linked artifact"
                 csmFile: $(Pipeline.Workspace)/${{ parameters.artifactDropName }}/scm-visitreport-nodejs-infra.json
                 overrideParameters: >
-                  -sku ${{ variables.appServicePlanSKU }} -skuCode ${{ variables.appServicePlanSKUCode }} -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
-                  -applicationInsightsName ${{ variables.applicationInsightsName }} -cosmosDbAccount ${{ parameters.uniquePrefix }}${{variables.cosmosDbAccount}}
-                  -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }} -commonResGroup ${{ variables.resourceGroupName }}
+                  -sku ${{ variables.appServicePlanSKU }} -skuCode ${{ variables.appServicePlanSKUCode }}
+                  -webAppName ${{ parameters.uniquePrefix }}${{ variables.apiAppName }} 
+                  -applicationInsightsName ${{ variables.applicationInsightsName }}
+                  -cosmosDbAccount ${{ parameters.uniquePrefix }}${{variables.cosmosDbAccount}}
+                  -serviceBusNamespaceName ${{ parameters.uniquePrefix }}${{ variables.serviceBusNamespaceName }}
+                  -commonResGroup ${{ variables.resourceGroupName }}
+                # Uncomment these lines to pass AAD variables
+                #  -aadTenantId $(aadTenantId)
+                #  -aadClientIdUri $(aadClientIdUri)
             - task: AzureWebApp@1
               displayName: 'Deploy Nodejs App'
               inputs:
