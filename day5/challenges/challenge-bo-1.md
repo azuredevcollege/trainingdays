@@ -13,6 +13,9 @@ Here is the list of the remaining services we have to integrate into Azure AD:
 - SCM Textanalytics
 - SCM Frontend
 
+> If you started this day based on the checkpoint, please [**follow
+> this link**](../apps/checkpoint/ChallengeAndBreakout.md#modified-steps-for-break-out-session) to see an adopted guide.
+
 As in [challenge-3](./challenge-3.md) we always perform the following steps for each service:
 1. Create and checkout a new branch
 2. Edit the the existing build definition and change everything from `day4` to `day5`
@@ -146,6 +149,10 @@ CD Build variables for stage __Testing__:
 ```
 echo "var uisettings = { \"tenantId\": \"$(AadTenantId)\", \"audience\": \"$(AadApiClientIdUri)\", \"clientId\": \"$(AadFrontendClientId)\", \"enableStats\": true, \"endpoint\": \"$(ContactsEndpoint)\", \"resourcesEndpoint\": \"$(ResourcesEndpoint)\", \"searchEndpoint\": \"$(SearchEndpoint)\", \"reportsEndpoint\": \"$(ReportsEndpoint)\", \"aiKey\": \"`az resource show -g $(ResourceGroupName) -n $(ApplicationInsightsName) --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(System.ArtifactsDirectory)/_SCM-Frontend-CI/drop/dist/settings/settings.js
 ```
+
+> Please skip this step if you've started on the checkpoint, the correct
+> variable replacement should already be in place.
+
 Make sure that you copy the whole line!
 
 ## Wrap up

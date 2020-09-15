@@ -109,6 +109,8 @@ After you have run the script twice navigate to your Azure AD and checkout the n
 
 ## Protect SCM Contacts API with Azure AD
 
+> If you started with the checkpoint please [continue here](../apps/checkpoint/ChallengeAndBreakout.md#differences-in-challenge-3-protect-scm-contacts-api-with-azure-ad).
+
 Now that we have created the needed applications in Azure AD it's time to deploy the SCM Contacts API to Azure with Azure AD integration to protect the API. After the deployment the API can only be accessed with a valid access token issued by Azure AD.
 Yesterday we have created CI/CD Builds for all services. Today we want to continue with Azure Pipelines to deploy all services with Azure AD integration.
 
