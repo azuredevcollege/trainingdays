@@ -1,8 +1,9 @@
 var uisettings = {
-    "endpoint": "https://adcday3scmapi-dev.azurewebsites.net/",
-    "resourcesEndpoint": "https://adcday3scmresourcesapi-dev.azurewebsites.net/",
-    "searchEndpoint": "https://adcday3scmrsearchapi-dev.azurewebsites.net/",
-    "reportsEndpoint": "https://adcday3scmvr-dev.azurewebsites.net",
-    "enableStats": false,
+    "endpoint": "https://dcday2contacts.azurewebsites.net",
+    "resourcesEndpoint": "https://dcday2resources.azurewebsites.net",
+    "searchEndpoint": "https://dcday3search.azurewebsites.net",
+    "reportsEndpoint": "http://localhost:3000",
+    // "reportsEndpoint": "https://dcday3visitreports.azurewebsites.net",
+    "enableStats": true,
     "aiKey": ""
 }
