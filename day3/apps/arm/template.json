@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "databaseAccount": {
-            "defaultValue": "[concat('marthadb-', uniqueString(resourceGroup().id))]",
+            "defaultValue": "[concat('cosmosdb-', uniqueString(resourceGroup().id))]",
             "type": "String"
         }
     },
