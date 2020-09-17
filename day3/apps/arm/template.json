@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "databaseAccount": {
-            "defaultValue": "alexcosmosdb100",
+            "defaultValue": "[concat('marthadb-', uniqueString(resourceGroup().id))]",
             "type": "String"
         }
     },
