@@ -140,7 +140,7 @@ For the second command you will copy **<YOUR_NEW_ACCOUNT_NAME>** from the portal
 
 ```shell 
 $ az deployment group create --resource-group adc-cosmos-db-rg \
---template-uri https://github.com/azuredevcollege/trainingdays/tree/master/day3/apps/arm/template.json
+--template-uri https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day3/apps/arm/template.json
 
 $ az cosmosdb show --resource-group adc-cosmos-db-rg  --name <YOUR_NEW_ACCOUNT_NAME> --output tsv
 ```
