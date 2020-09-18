@@ -59,4 +59,4 @@ services. All APIs use the same Azure AD application that we already created
 in [challenge-3](../../challenges/challenge-3.md) for each stage (Development and
 Production). The Frontend services uses the client application.
 
-[Back to breakout](../../challenges/challenge-bo-1.html#scm-resource-api)
+[Back to breakout](../../challenges/challenge-bo-1.md#scm-resource-api)
