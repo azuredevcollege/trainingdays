@@ -18,7 +18,7 @@ jobs:
           containerRegistryServiceConnection: ${{ parameters.containerRegistryServiceConnection }}
       - task: CopyFiles@2
         inputs:
-          sourceFolder: day3/apps/infrastructure/templates
+          sourceFolder: day4/apps/infrastructure/templates
           contents: |
             scm-resources-api-dotnetcore.json
           targetFolder: $(Build.ArtifactStagingDirectory)

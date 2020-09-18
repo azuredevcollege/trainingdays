@@ -5,9 +5,12 @@ trigger:
       - master
   paths:
     include:
-      - day3/apps/nodejs/visitreport/*
-      - day3/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
-      - day3/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+      - day4/apps/nodejs/visitreport/*
+      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+      - day5/apps/nodejs/visitreport/*
+      - day5/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+      - day5/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
       - day5/apps/checkpoint/pipelines/cd-scm-visitreports.yaml
       - day5/apps/checkpoint/pipelines/jobs/build-scm-visitreports.yaml
       - day5/apps/checkpoint/pipelines/jobs/deploy-scm-visitreports.yaml
@@ -38,6 +41,7 @@ stages:
           name: Deploy Scm Visitreports
           variablesFile: ../variables/cd-scm-visitreports-restore.yaml
           variableGroupName: Day5RestoreCommonVars
+          aadVariablesGroupName: Day5RestoreAADVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: $(azureSubscription)
           artifactDropName: drop

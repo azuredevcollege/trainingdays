@@ -6,7 +6,9 @@ trigger:
   paths:
     include:
       - day3/apps/frontend/*
-      - day3/apps/infrastructure/templates/scm-fe.json
+      - day4/apps/infrastructure/templates/scm-fe.json
+      - day5/apps/frontend/*
+      - day5/apps/infrastructure/templates/scm-fe.json
       - day5/apps/checkpoint/pipelines/cd-scm-fe.yaml
       - day5/apps/checkpoint/pipelines/jobs/build-scm-fe.yaml
       - day5/apps/checkpoint/pipelines/jobs/deploy-scm-fe.yaml
@@ -36,6 +38,7 @@ stages:
         parameters:
           name: Deploy Scm Frontend
           variablesFile: ../variables/cd-scm-fe-restore.yaml
+          aadVariablesGroupName: Day5RestoreAADVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: ${{ variables.azureSubscription }}
           artifactDropName: drop

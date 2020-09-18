@@ -5,12 +5,15 @@ trigger:
       - master
   paths:
     include:
-      - day3/apps/dotnetcore/Scm/*
-      - day3/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day4/apps/dotnetcore/Scm/*
+      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day5/apps/dotnetcore/Scm/*
+      - day5/apps/infrastructure/templates/scm-api-dotnetcore.json
       - day5/apps/checkpoint/pipelines/cd-scm-api.yaml
       - day5/apps/checkpoint/pipelines/jobs/build-scm-api.yaml
       - day5/apps/checkpoint/pipelines/jobs/deploy-scm-api.yaml
       - day5/apps/checkpoint/pipelines/variables/cd-scm-api-restore.yaml
+      - day5/apps/checkpoint/pipelines/variables/aad-variables-restore.yaml
 
 variables:
   configuration: release
@@ -38,6 +41,7 @@ stages:
         parameters:
           name: Deploy Scm Api
           variablesFile: ../variables/cd-scm-api-restore.yaml
+          aadVariablesGroupName: Day5RestoreAADVars
           variableGroupName: Day5RestoreCommonVars
           environmentName: ADC-DAY5-SCM-RESTORE
           azureSubscription: $(azureSubscription)

@@ -85,30 +85,47 @@ resource "azuredevops_variable_group" "day5_vars" {
   }
 }
 
-resource "azuredevops_variable_group" "dev_vars" {
+resource "azuredevops_variable_group" "aad_vars" {
   project_id   = azuredevops_project.project.id
-  name         = "Day5-AAD-Dev"
+  name         = "Day5RestoreAADVars"
   description  = "Managed by Terraform"
   allow_access = true
 
   variable {
-    name  = "FOO"
-    value = "BAR"
+    name  = "AadInstance"
+    value = "https://login.microsoftonline.com"
   }
-}
-
-resource "azuredevops_variable_group" "test_vars" {
-  project_id   = azuredevops_project.project.id
-  name         = "Day5-AAD-Test"
-  description  = "Managed by Terraform"
-  allow_access = true
 
   variable {
-    name  = "FOO"
-    value = "BAR"
+    name  = "AadClientId"
+    value = ""
+  }
+
+  variable {
+    name  = "AadTenantId"
+    value = ""
+  }
+
+  variable {
+    name  = "AadDomain"
+    value = ""
+  }
+
+  variable {
+    name  = "AadClientIdUri"
+    value = ""
+  }
+
+  variable {
+    name  = "AadApiClientIdUri"
+    value = ""
+  }
+
+  variable {
+    name  = "AadFrontendClientId"
+    value = ""
   }
 }
-
 resource "azuredevops_build_definition" "common" {
   project_id = azuredevops_project.project.id
   name       = "SCM Common"
@@ -163,8 +180,6 @@ resource "azuredevops_build_definition" "api" {
 
   variable_groups = [
     azuredevops_variable_group.day5_vars.id,
-    azuredevops_variable_group.dev_vars.id,
-    azuredevops_variable_group.test_vars.id,
   ]
 
   depends_on = [
