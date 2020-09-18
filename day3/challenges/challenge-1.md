@@ -124,22 +124,23 @@ The following Azure Resource Manager template creates an Azure Cosmos account wi
 - One container with dedicated 400 RU/s throughput.
 
 We will be using Azure CLI to deploy the ARM template. Navigate to the **template.json** in this folder *(day3/apps/arm/template.json)* and <br> 
-exchange <YOUR_NEW_ACCOUNT_NAME> with your name and a unique ID.
+and look at the **"defaultValue"** parameter where the value will be the new **Cosmos DB account name** including the name *cosmosdb* and a *unique ID*.
 
 ```template.json
 "parameters": {
         "databaseAccount": {
-            "defaultValue": "<NAME_YOUR_COSMOSDB_ACCOUNT>",
+            "defaultValue": "[concat('cosmosdb-', uniqueString(resourceGroup().id))]",
             "type": "String"
         }
     },
 ```
 
-Now let's use the commands below (if you chose a different name for your resource group, please adjust the command):
+Now let's use the commands below (if you chose a different name for your resource group, please adjust the command) <br>
+For the second command you will copy **<YOUR_NEW_ACCOUNT_NAME>** from the portal once the Cosmos DB is successfully created:
 
 ```shell 
 $ az deployment group create --resource-group adc-cosmos-db-rg \
---template-uri https://github.com/azuredevcollege/trainingdays/tree/master/day3/apps/arm/template.json
+--template-uri https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day3/apps/arm/template.json
 
 $ az cosmosdb show --resource-group adc-cosmos-db-rg  --name <YOUR_NEW_ACCOUNT_NAME> --output tsv
 ```

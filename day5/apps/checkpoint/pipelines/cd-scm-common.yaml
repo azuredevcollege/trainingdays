@@ -5,7 +5,8 @@ trigger:
       - master
   paths:
     include:
-      - day3/apps/infrastructure/templates/scm-common.json
+      - day4/apps/infrastructure/templates/scm-common.json
+      - day5/apps/infrastructure/templates/scm-common.json
       - day5/apps/restore/pipelines/cd-scm-common.yaml
       - day5/apps/restore/pipelines/jobs/build-scm-common.yaml
       - day5/apps/restore/pipelines/jobs/deploy-scm-common.yaml
