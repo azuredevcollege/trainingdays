@@ -26,11 +26,15 @@ First of all, create a resource group called "**adc-cosmos-db-rg**" and use loca
 
 Now add a Cosmos DB account:
 - choose an unique *Account Name*
-- API: *Core SQL (Apache Spark: None)*
+- API: *Core SQL*
+- Notebooks: *Off*  
 - Location: *westeurope*
+- Capacity mode: *Provisioned throughput*
+- Apply Free Tier Account: *Apply*
+- Account Type: *Non-Production*
 - Geo-Redundancy: *Disable*
 - Multi-region Writes: *Enable*
-- Availability Zones: *Disable* 
+- Availability Zones: *Disable*
 - Hit "Create"
 
 ![Cosmos DB Create](./img/CosmosCreate.png)
@@ -285,9 +289,13 @@ You will use **Azure Data Factory (ADF)** to import the JSON array stored in the
 1. Click **Add** to add a new resource. Search for **Data Factory** and select it.
 ![Azure Data Factory](./img/DataFactoryCosmos.png)
 
-1. Create a new **Data Factory**. You should name this data factory "**ImportNutritionDataAppdevCollege(yourname)**" (optionally you can append a unique number) and select the relevant Azure subscription. You should ensure that Version "**V2**" is selected. Select "**West Europe**" as the region. Do **not** select **Enable GIT** (this may be checked by default). Click **create**.
+1. Create a new **Data Factory**. You should name this data factory "**ImportNutritionDataAppdevCollege(yourname)**" (optionally you can append a unique number) and select the relevant Azure subscription. You should ensure that Version "**V2**" is selected. Select "**West Europe**" as the region.
 
 ![Data Factory Details](./img/DataFactoryDetails.png)
+
+Do select **Configure Git later** (found on the second screen). Click through all the screens and hit **create**.
+
+![Data Factory Configure GIT later](./img/ConfigureGITLater.png)
 
 1. After creation, open your newly created Data Factory. Select **Author & Monitor** and you will launch ADF. You should see a screen similar to the screenshot below. 
 (We will be using ADF for a one-time copy of data from a source JSON file on Azure Blob Storage to a database in Cosmos DB’s SQL API. ADF can also be used for more frequent data transfers from Cosmos DB to other data stores.)
