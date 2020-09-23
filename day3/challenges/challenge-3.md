@@ -260,7 +260,7 @@ Begin by opening the Cloud Shell in the Browser, a Bash console, Powershell cons
     
     ![Search Key](./img/SearchKey.png)
 
-    > Get the query key as well. It's a best practice to issue query requests with read-only access.
+    ⚠ Get the query key as well. It's a best practice to issue query requests with read-only access. Use the **key** underneath the *Manage query keys* (e.g. *C4DD...*)
 
 ## Important Parts of the Quickstart Application
 
