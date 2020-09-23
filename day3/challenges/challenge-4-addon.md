@@ -144,9 +144,9 @@ Use the same Notebook as before and copy the following code in a cell below the 
 import requests, json
 
 api_key = "xxx" # Paste your API key here
-
+region = "<paste-your-text-translator-service-region here>"
 url = "https://api.cognitive.microsofttranslator.com/translate?api-version=3.0"
-headers = {'Ocp-Apim-Subscription-Key': api_key, 'Content-type': 'application/json'}
+headers = {'Ocp-Apim-Subscription-Key': api_key, 'Ocp-Apim-Subscription-Region': region, 'Content-type': 'application/json'}
 
 params = {'to': 'de'}
 

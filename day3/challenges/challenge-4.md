@@ -363,6 +363,7 @@ let https = require('https');
 
 let subscription_key = "<paste-your-text-translator-key-here>";
 let endpoint = "https://api.cognitive.microsofttranslator.com";
+let region = "<paste-your-text-translator-service-region here>";
 let path = '/translate?api-version=3.0&to=es&to=it';
 
 let response_handler = function (response) {
@@ -389,6 +390,7 @@ let translate_text = function (documents) {
         path: path,
         headers: {
             'Ocp-Apim-Subscription-Key': subscription_key,
+            'Ocp-Apim-Subscription-Region': region,
             'Content-type': 'application/json'
         }
     };
