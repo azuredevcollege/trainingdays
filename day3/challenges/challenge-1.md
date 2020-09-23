@@ -39,7 +39,7 @@ Now add a Cosmos DB account:
 
 ![Cosmos DB Create](./img/CosmosCreate.png)
 
-![Cosmos DB Create Details](./img/CosmosCreateDetails.png)
+![Cosmos DB Create Details](./img/CosmosCreateDetails2.png)
 
 ## Add Data to Cosmos DB ##
 
