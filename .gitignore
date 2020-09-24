@@ -7,3 +7,4 @@ day2/apps/dotnetcore/Scm/Adc.Scm.Api/publish
 day3/scripts/baseline/publish**
 day3/scripts/baseline/packages-microsoft-prod.deb
 **/packages-microsoft-prod.deb
+**/*Zone.Identifier
