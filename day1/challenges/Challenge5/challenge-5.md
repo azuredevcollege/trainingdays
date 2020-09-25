@@ -11,7 +11,7 @@
 ## Create a storage account and a container using the azure portal
 
 1. Login to your azure subscription **and search the marketplace for 'Storage Account'**  
-![Storage Account Marketplace Item](sa01.PNG)  
+![Storage Account Marketplace Item](./sa01.PNG)  
 **Create a storage account** with the following values:
 
 | Name | Value |
@@ -36,15 +36,15 @@ See some use cases for SAS / [SAS use cases](https://docs.microsoft.com/en-us/az
 | Public access level  |  Private (no anonymous access) |
 
 Now **upload a small file**.  
-![Upload a txt file to a storage account](sa02.PNG)  
+![Upload a txt file to a storage account](./sa02.PNG)  
 
 **Can you download the file** using its URI in another browser session?  
-![Download URI](sa03.PNG)  
+![Download URI](./sa03.PNG)  
   
 **Answer: No. Because anonymous access is not allowed** and this URI does not 'carry' any auth token:  
   
 
-![Download error](downloadError.png)
+![Download error](./downloadError.png)
   
 
   
@@ -54,16 +54,16 @@ Now **upload a small file**.
 [Azure Portal] -> %Your Storage Account% -> Shared access signature -> "Generate SAS and connection string"
 ```
 **Copy the Blob Service SAS URL to the clipboard**
-![SAS URL](sas01.PNG)  
+![SAS URL](./sas01.PNG)  
   
 In the result copy the SAS URI:  
-![SAS URL](sas02.PNG)  
+![SAS URL](./sas02.PNG)  
 and **edit the SAS URL**: You need to add the path to uploaded file - it should look similar to:  
 
 > https://**%Your Storage Account Name%**.blob.core.windows.net/**secured/HelloWorld.txt**?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-01-26T00:03:42Z&st=2020-01-25T16:03:42Z&spr=https&sig=Pehc....  
 
 **Can you now download the file** in the browser [Yes]  
-![Download with edited URI works](downloadSuccess.png)
+![Download with edited URI works](./downloadSuccess.png)
 
 > **Note**: If a SAS,...  
 > - ... is leaked, it can be used by anyone who obtains it, which can potentially compromise your storage account.
@@ -88,20 +88,20 @@ Why? Because the SAS key was generated using the previous key1 -> which is no lo
 | Permissions  |  **Write** |  
 
 **Note** Don't forget to use the **save** button!  
-![Access policy](saaccpol01.PNG)
+![Access policy](./saaccpol01.PNG)
 
 2. **Create a SAS URL that is using this access policy** using Azure Storage Explorer  
-**Open** [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and  [See Also Day 2: Challenge 0 - Setup your System](/day2/challenges/challenge-0.md)
+**Open** [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and  [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
 **Navigate to your storage account** and container.  
 **Right click** and do 'Get Shared Access Signature' based on our policy.  
-![Storage Explorer generate SAS URI](saaccpol02.PNG)  
+![Storage Explorer generate SAS URI](./saaccpol02.PNG)  
 **Copy the URI** to the clipboard.  
 **Edit the SAS URI** -> add the path to uploaded file -> can you now download the file in the browser [No]  
 **Edit the stored access policy 'securedap' to allow READ access**  
 ```
 [Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' -> Access policy -> Under 'Storage access policy' -> 'securedap' -> '...' -> Edit -> Permissions -> Add READ -> OK -> Save
 ```
-![RW Access Policy](saaccpol03.PNG)  
+![RW Access Policy](./saaccpol03.PNG)  
 **Can you now download the file in the browser** [Yes]
 
 > **Note**:  
@@ -205,10 +205,10 @@ Remove-AzADApplication -DisplayName $SPDisplayName -Force
 ```
 [Azure Portal] -> Storage Account -> File Shares -> 'myfiles' -> Connect -> copy the code into the clipboard
 ```  
-![Azure Files](azfiles01.PNG))  
+![Azure Files](./azfiles01.PNG))  
   
 In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted.  
-![Mounted Azure File Share](azfiles02.PNG)
+![Mounted Azure File Share](./azfiles02.PNG)
 
 > Questions:
 > - What is the default quota of an azure file share? 

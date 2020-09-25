@@ -14,7 +14,7 @@
 - Configure loadbalancing based on clients origin geography. 
 
 Our **final architecture** will look like this: 
-![Final architecture](TMArchitecture.png)  
+![Final architecture](./TMArchitecture.png)  
   
 > To speed things up you will execute a script that creates the VMs and Load balancers in the 2 regions automatically. Then you will setup the Traffic Manager using the portal.
 
@@ -23,7 +23,7 @@ Now let's **create some vms** using the 'Cloud Shell' in the Azure Portal.
 ```
 [Azure Portal] -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
 ```  
-![Cloud Shell](CloudShell.png))  
+![Cloud Shell](./CloudShell.png))  
 The **'Cloud Shell' is an in-browser-accessible shell for managing Azure resources**. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
 When being asked **choose PowerShell this time**.  
 **The first time you use the 'Cloud Shell' you will be asked to setup a storage account** e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
@@ -31,7 +31,7 @@ When being asked **choose PowerShell this time**.
 ```
 [Azure Portal] -> Click 'Show advanced settings'
 ```  
-![Cloud Shell Storage Account Setup](CloudShell1.png)  
+![Cloud Shell Storage Account Setup](./CloudShell1.png)  
 
 | Name | Value |
 |---|---|
@@ -45,7 +45,7 @@ When being asked **choose PowerShell this time**.
 [Azure Portal] -> Create storage
 ```  
 Once successful your shell should appear at the bottom of the page:  
-![Cloud Shell in the Azure portal](CloudShell2.png)
+![Cloud Shell in the Azure portal](./CloudShell2.png)
   
 To setup the starting point **copy & paste the following code into the Cloud Shell**:  
 ```PowerShell
@@ -98,7 +98,7 @@ Add 2 endpoints to the traffic manager.
 
 Now test by opening the traffic managers DNS name in your browser (you might need to open multiple different browsers to see some change):  
 
-| ![VM Yellow](testvmyellow.png)   | ![VM Green](testvmgreen.png)   | ![VM Blue](testvmblue.png)  | ![VM Red](testvmred.png)  |
+| ![VM Yellow](./testvmyellow.png)   | ![VM Green](./testvmgreen.png)   | ![VM Blue](./testvmblue.png)  | ![VM Red](./testvmred.png)  |
 |---|---|---|---|
 | vmyellow (Amsterdam)   | vmgreen (Amsterdam) |  vmblue (Dublin) | vmred (Dublin) |
   

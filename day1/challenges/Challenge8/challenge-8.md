@@ -4,7 +4,7 @@
 ## Here is what you will learn ##
 What it takes to implement a VPN tunnel between your onprem firewall <---VPN S2S---> Azure  
 **Our final architecture will look like this**:  
-![Hybrid Network with Azure](goal.png)
+![Hybrid Network with Azure](./goal.png)
 
 
 ## An Azure S2S VPN requires: ##
@@ -19,12 +19,12 @@ What it takes to implement a VPN tunnel between your onprem firewall <---VPN S2S
 
 ## 1. Starting Point ##
 Your **instructor** (_ask him for the details_) **has setup for you the onprem** part:  
-![Onpremise](onpremise.png)
+![Onpremise](./onpremise.png)
 
 **Click** on the 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge%207%2FChallenge8Start.json"><img src="deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FChallenge8Start.json"><img src="./deploytoazure.png"/></a>
 button **you will get some Azure resources to start** with:  
-![azure vpn starting point](vpnLabAzureStart.png)
+![azure vpn starting point](./vpnLabAzureStart.png)
 
 | Name | Value |
 |---|---|
@@ -60,7 +60,7 @@ button **you will get some Azure resources to start** with:
 
 **The GW setup will take approx 30 mins. to create** -> come back later (e.g. in the meantime you can do the next lab :-))...  
 When your **GW has** been assigned a **public IP** address then you know **it is online**.  
-![VPN GW with public IP](vpnGWPIP.png)
+![VPN GW with public IP](./vpnGWPIP.png)
 
 ## 3. [Azure] Create a Local Network Gateway ##
 The purpose of this task is to tell azure how to contact the onpremise firewall:  
@@ -97,7 +97,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
   
 
 **Internet -- 1st RDP--> onprem Lab (HyperV Host) -- 2nd RDP--> cmW2k19** (192.168.0.11) **--https-->IPFire** (192.168.0.100)  
-![Connection Flow](connectionFlow.png)
+![Connection Flow](./connectionFlow.png)
 
 | Parameter Name | Values  |
 |---|---|
@@ -111,12 +111,12 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 ```
    IPFire -> Services -> IPSec -> 'Connection Status and -Control' -> Add
 ```
-![IPFire: Add a connection](vpn0.PNG)
+![IPFire: Add a connection](./vpn0.PNG)
 
 ```
    "Net-to-Net Virtual Private Network" -> Add
 ```
-![IPFire: add Net-to-Net connection](vpn1.PNG)
+![IPFire: add Net-to-Net connection](./vpn1.PNG)
 
 | Parameter Name | Values  |
 |---|---|
@@ -126,25 +126,25 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Remote subnet | **_%Address Range of the virtual network in azure%_** (in our case 10.1.0.0/255.255.0.0) |
 | Use a pre-shared key | **_%Shared Key you used above%_** (Azure Portal -> VPN Gateway -> Connections -> Shared Key)|
 
-![IPFire: connection settings](vpn2.PNG) 
+![IPFire: connection settings](./vpn2.PNG) 
 **Save**
 
 **Click on the pencil symbol and choose 'Advanced'**:
-![IPFire: Advanced cipher settings](vpn3.PNG) 
+![IPFire: Advanced cipher settings](./vpn3.PNG) 
 
 Select the **following algorithms / suites for the connection**:
-![IPFire: connection settings](vpn4.PNG)  
+![IPFire: connection settings](./vpn4.PNG)  
 **select Always on** then **Save**
 
 **Tick checkbox to enable connection** - connection status should go to green:
-![IPFire: connection settings](vpn5.PNG) 
+![IPFire: connection settings](./vpn5.PNG) 
 
 **Now let's ping your azure vm** (e.g. vmazure) under its private ip (probably: 10.1.0.4) from onpremise:  
-![Successful Ping](successfulPing.png) 
+![Successful Ping](./successfulPing.png) 
 Do you receive a response?  
 
 ## [Optional] Apply a more secure cipher for the VPN tunnel.
-**The following ARM Template ([VPNMoreSecureConnPolicy.json](VPNMoreSecureConnPolicy.json)) defines a more secure cipher / algorithm to use for the VPN tunnel.**  
+**The following ARM Template ([VPNMoreSecureConnPolicy.json](./VPNMoreSecureConnPolicy.json)) defines a more secure cipher / algorithm to use for the VPN tunnel.**  
 | Parameter Name | Values  |
 |---|---|
 | ipsecEncryption | AES256 |
@@ -155,10 +155,10 @@ Do you receive a response?
 | pfsGroup | PFS2048 |  
 
 To deploy click the
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge%207%2FVPNMoreSecureConnPolicy.json"><img src="deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="deploytoazure.png"/></a>
 button and select correct parameters to apply new ciphers to your current connection.  
 However you also need to apply this to the onprem firewall:  
-![VPN more secure cipher](vpn6-moresecure.PNG) 
+![VPN more secure cipher](./vpn6-moresecure.PNG) 
 
 ## Cleanup ##
 **Delete the resource group** _rg-vpn_

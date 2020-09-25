@@ -19,14 +19,14 @@ Choose backup policy -> '(new) DailyPolicy'
   ->Enable Backup
 ```  
 **Note:** You might want to **pack all of your vm backups in a separate Resource Group** as backups of vms might live longer than the actual vm.  
-![EnableBackup](enableBackup1.PNG)
+![EnableBackup](./enableBackup1.PNG)
 
 ## Trigger a manual vm backup ##
 
 Navigate to your vm in the azure portal -> Operations -> Backup  
 Note that **the view has changed** after creating the vault.  
 **Trigger the backup manually**.  
-![Trigger the backup manually](enableBackupTriggerManually.PNG)  
+![Trigger the backup manually](./enableBackupTriggerManually.PNG)  
   
 **Press** _'View all jobs'_ to get a status of the backup.  
 It'll take some time for the backup to finish.
@@ -55,7 +55,7 @@ The backup is _'mounted'_ as drive to your local machine via the internet.
 
 Azure Portal -> Virtual Machines -> vmadds01 -> Operations -> Backup -> File Recovery  
   
-![File Restore](enableBackupFileRestore.PNG)
+![File Restore](./enableBackupFileRestore.PNG)
 
 
 [back](../../README.md) 
