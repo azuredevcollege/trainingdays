@@ -20,7 +20,7 @@ Using the **Cloud Shell saves you time** as...:
 ```
 [Azure Portal] -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
 ```  
-![Cloud Shell](CloudShell.png))  
+![Cloud Shell](./CloudShell.png))  
 The **'Cloud Shell' is an in-browser-accessible shell for managing Azure resources**. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
 When being asked **choose PowerShell this time**.  
 **The first time you use the 'Cloud Shell' you will be asked to setup a storage account** e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
@@ -28,7 +28,7 @@ When being asked **choose PowerShell this time**.
 ```
 [Azure Portal] -> Click 'Show advanced settings'
 ```  
-![Cloud Shell Storage Account Setup](CloudShell1.png)  
+![Cloud Shell Storage Account Setup](./CloudShell1.png)  
 
 | Name | Value |
 |---|---|
@@ -42,7 +42,7 @@ When being asked **choose PowerShell this time**.
 [Azure Portal] -> Create storage
 ```  
 Once successful your shell should appear at the bottom of the page:  
-![Cloud Shell in the Azure portal](CloudShell2.png)
+![Cloud Shell in the Azure portal](./CloudShell2.png)
 
 ## Playing with the Cloud Shell ##
 **Execute your first commands**. Using 'PowerShell' as environment ('bash' is also possible) you can either call:  
@@ -60,7 +60,7 @@ choose whatever you prefer - most Azure documentation available shows both ways 
 $psversiontable
 ```  
 should return something like:  
-![PowerShell Version output](CloudShell3.png)  
+![PowerShell Version output](./CloudShell3.png)  
 
 
 Let's query e.g. the available VM sizes in a specific region:
@@ -162,9 +162,9 @@ $VMName = 'MyVM'    # variable for easy reuse
 New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_A0'
 ```
 **Enter a user name** (not 'admin' nor 'administrator') **and a complex password** when asked.
-![progress in azure cloud shell](newvm.png) 
+![progress in azure cloud shell](./newvm.png) 
 After a successful run you should have a VM in your subscription:  
- ![MyVM in Azure Portal](newvm2.png)  
+ ![MyVM in Azure Portal](./newvm2.png)  
   
 **Cleanup** e.g. **by deleting** the resource group with the vm **using the portal or via executing**:
 ```PowerShell

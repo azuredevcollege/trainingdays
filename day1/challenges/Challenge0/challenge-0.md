@@ -16,7 +16,7 @@ especially if your are working on a domain joined device.
 
  
 **Click on the '+' symbol and use the search to find the corresponding Azure Resource Type, e.g. like:**  
-![CreateResourceGroup.png](CreateResourceGroup.png)
+![CreateResourceGroup.png](./CreateResourceGroup.png)
   
 **Create all resources according to the table:**  
 
