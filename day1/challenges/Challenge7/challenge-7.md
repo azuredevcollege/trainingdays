@@ -18,7 +18,7 @@ In this directory there is an ARM-template which includes 2 web server vms and i
 !['Starting Point' Architecture](./startingpoint01.png)  
 
 **Deploy this scenario** into your subscription by clicking on the 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge%207%2FChallenge7Start.json"><img src="./deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge7%2FChallenge7Start.json"><img src="./deploytoazure.png"/></a>
 button.  
 
 | Name | Value |
@@ -50,15 +50,15 @@ Now let's **add an external azure loadbalancer** in front of the 2 parallel web 
 | Choose public IP address  |  pip-wwwfarm |  
   
 > **Note**: To **get your loadbalancer working** you need to **configure** the following:
-> - ... [**a backend pool**](./lbconfig01.PNG) that contains the 'endpoints' i.e. the vms to which the traffic will be routed.
-> - ... [**a health probe**](./lbconfig02.PNG) for TCP port 80 (http) to check if the endpoints are 'responsive' to web requests
-> - ... [**a lb rule**](./lbconfig03.PNG) to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)  
+> - ... [**a backend pool**](./lbconfig01.png) that contains the 'endpoints' i.e. the vms to which the traffic will be routed.
+> - ... [**a health probe**](./lbconfig02.png) for TCP port 80 (http) to check if the endpoints are 'responsive' to web requests
+> - ... [**a lb rule**](./lbconfig03.png) to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)  
 
 **Finally**  
 To **check** if your **lb is working** do a **http://_%PIP of your lb%_**  
 Depending which endpoint serves your request the **result should something like**:  
-<a href="lbresult1.png"><img src="./lbresult1.png" width=150px></a>
-<a href="lbresult2.png"><img src="./lbresult2.png" width=150px></a>
+<a href="lbresult1.png"><img src="lbresult1.png" width=150px></a>
+<a href="lbresult2.png"><img src="lbresult2.png" width=150px></a>
 
 ## [optional] Test server outage ##
 Stop one vm and verifiy if the webpage is still served.  

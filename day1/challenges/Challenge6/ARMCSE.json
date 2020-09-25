@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vmName": {
-            "defaultValue": "vmweb01",
+            "defaultValue": "vmblue",
             "type": "string"
         }
     },

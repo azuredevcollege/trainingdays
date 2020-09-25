@@ -303,30 +303,30 @@
             }
         },
         {
-                "apiVersion": "2018-10-01",
-                "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
-                "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
-                ],
-                "location": "[resourceGroup().location]",
-                "copy": {
-                    "name": "dsccopy",
-                    "count": "[length(variables('vmNames'))]"
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
+            ],
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "dsccopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.73",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "modulesUrl": "https://github.com/CSA-OCP-GER/azure-developer-college/raw/master/day1/challenges/Challenge%209/EnablePingConfig.zip",
+                    "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
                 },
-                "properties": {
-                    "publisher": "Microsoft.Powershell",
-                    "type": "DSC",
-                    "typeHandlerVersion": "2.73",
-                    "autoUpgradeMinorVersion": true,
-                    "settings": {
-                        "modulesUrl": "https://github.com/CSA-OCP-GER/azure-developer-college/raw/master/day1/challenges/Challenge%209/EnablePingConfig.zip",
-                        "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
-                    },
-                    "protectedSettings": {
-                    }
+                "protectedSettings": {
                 }
             }
+        }
     ],
     "outputs": {
         "storageAccountName": {

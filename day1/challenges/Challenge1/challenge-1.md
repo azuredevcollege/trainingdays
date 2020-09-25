@@ -1,90 +1,70 @@
-# Challenge 1: PowerShell: Configure PowerShell for Azure Administration & Create a VM Using PowerShell.
+# Challenge 1: Cloud Shell: Using PowerShell for Azure Administration and Automation
 
 [back](../../README.md)
 
 ## Here is what you will learn ##
 
-- Which PowerShell modules to download for Azure administration
-- How to update the modules as version updates **will** happen.
-- Use help with _-examples_ to speed your coding through code snippets
-- Deploy your first Azure VM using code.
+- Use the 'Cloud Shell' as _'launch point'_ for PowerShell to automate Azure resource creation and configuration.
+- Learn it's benefits (vs. using PowerShell on your PC)
+- Learn to know which PowerShell modules are used.
+  
+## Benefits of the Azure Cloud Shell ##
+The Azure **Cloud Shell is a shell | console hosted in your browser window**. Ready to **execute commands to create, delete, modify Azure resources in your subscription**.  
+While it is also possible to use PowerShell on your local PC to administer Azure. Using the Cloud Shell brings some advantages compared to using your PC as 'launch point'.  
 
-## Install PowerShell Az Modules for Azure ##
-Open PowerShell **as administrator** and execute: 
-```
-Install-Module Az
-```
+Using the **Cloud Shell saves you time** as...:  
+- **no need to explicitly code the azure logon within the script** - you are already authenticated to Azure via the browser ;-)
+- **nothing needs to be installed on your PC** ([no "which version of PowerShell? What modules?](https://docs.microsoft.com/en-us/powershell/azure))"
 
-Press 'Y' and allow the installation of the latest Nuget Package Provider:
+## Create an Azure Cloud Shell (if you don't have one.)
 ```
-NuGet provider is required to continue
-PowerShellGet requires NuGet provider version '2.8.5.201' or newer to interact with NuGet-based repositories. The NuGet
- provider must be available in 'C:\Program Files\PackageManagement\ProviderAssemblies' or
-'C:\Users\Administrator\AppData\Local\PackageManagement\ProviderAssemblies'. You can also install the NuGet provider by
- running 'Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force'. Do you want PowerShellGet to install
-and import the NuGet provider now?
-[Y] Yes  [N] No  [S] Suspend  [?] Help (default is "Y"): y
-```
-Press 'A' to make the PowerShell Gallery a trusted code repository - this is the Code source for the Azure Az modules:
-```
-Untrusted repository
-You are installing the modules from an untrusted repository. If you trust this repository, change its
-InstallationPolicy value by running the Set-PSRepository cmdlet. Are you sure you want to install the modules from
-'PSGallery'?
-[Y] Yes  [A] Yes to All  [N] No  [L] No to All  [S] Suspend  [?] Help (default is "N"): a
-```
-The installation will take a while. After install you can query the modules and it's versions using:
-```
-get-module Az* -ListAvailable
-```
-Output will be something like:
-```
-Directory: C:\Program Files\WindowsPowerShell\Modules
+[Azure Portal] -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
+```  
+![Cloud Shell](./CloudShell.png))  
+The **'Cloud Shell' is an in-browser-accessible shell for managing Azure resources**. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
+When being asked **choose PowerShell this time**.  
+**The first time you use the 'Cloud Shell' you will be asked to setup a storage account** e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
 
+```
+[Azure Portal] -> Click 'Show advanced settings'
+```  
+![Cloud Shell Storage Account Setup](./CloudShell1.png)  
 
-ModuleType Version    Name                                ExportedCommands
----------- -------    ----                                ----------------
-Script     1.4.0      Az.Accounts                         {Disable-AzDataCollection, Disable-AzContextAutosave, Enab...
-Script     1.0.1      Az.Aks                              {Get-AzAks, New-AzAks, Remove-AzAks, Import-AzAksCredentia...
-Script     1.0.2      Az.AnalysisServices                 {Resume-AzAnalysisServicesServer, Suspend-AzAnalysisServic...
-Script     1.0.0      Az.ApiManagement                    {Add-AzApiManagementRegion, Get-AzApiManagementSsoToken, N...
-Script     1.0.0      Az.ApplicationInsights              {Get-AzApplicationInsights, New-AzApplicationInsights, Rem...
-Script     1.2.0      Az.Automation                       {Get-AzAutomationHybridWorkerGroup, Remove-AzAutomationHyb...
-Script     1.0.0      Az.Batch                            {Remove-AzBatchAccount, Get-AzBatchAccount, Get-AzBatchAcc...
-Script     1.0.0      Az.Billing                          {Get-AzBillingInvoice, Get-AzBillingPeriod, Get-AzEnrollme...
-Script     1.1.0      Az.Cdn                              {Get-AzCdnProfile, Get-AzCdnProfileSsoUrl, New-AzCdnProfil...
-Script     1.0.1      Az.CognitiveServices                {Get-AzCognitiveServicesAccount, Get-AzCognitiveServicesAc...
-Script     1.6.0      Az.Compute                          {Remove-AzAvailabilitySet, Get-AzAvailabilitySet, New-AzAv...
-Script     1.0.0      Az.ContainerInstance                {New-AzContainerGroup, Get-AzContainerGroup, Remove-AzCont...
-Script     1.0.1      Az.ContainerRegistry                {New-AzContainerRegistry, Get-AzContainerRegistry, Update-...
-.
-.
-.
-```
+| Name | Value |
+|---|---|
+| Subscription  |  _your subscription_ |
+| Cloud Shell Region  |  e.g. **North Europe** |   
+| Resource Group  |  e.g. **rg-cloudshell** |   
+| Storage Account  |  **_some unique value_** |   
+| File Share  |  **cloudshell**|   
 
-## First Steps: Login to Azure and select your target subscription...
-To Login open PowerShell and execute:
 ```
-Login-AzAccount
+[Azure Portal] -> Create storage
+```  
+Once successful your shell should appear at the bottom of the page:  
+![Cloud Shell in the Azure portal](./CloudShell2.png)
+
+## Playing with the Cloud Shell ##
+**Execute your first commands**. Using 'PowerShell' as environment ('bash' is also possible) you can either call:  
+**Azure CLI code** snippets, e.g.:
 ```
-List the available Azure subscriptions:
-```
+az account show
+```  
+or launch **Azure PowerShell snippets**, like:
+```PowerShell
 Get-AzSubscription
 ```
-Output will be something like:
+choose whatever you prefer - most Azure documentation available shows both ways - sometimes one is shorter than the other.  
+**Note that Azure seems to use PowerShell Core on a Linux OS for its Cloud Shell: Execute...**
+```PowerShell
+$psversiontable
+```  
+should return something like:  
+![PowerShell Version output](./CloudShell3.png)  
 
-```
-Name                     Id                                   TenantId                             State
-----                     --                                   --------                             -----
-Azure Pass - Sponsorship 79021c9b-147b-4dc0-ab8c-a3de94905f3f c097c15f-e692-4b72-8f72-490b95209f57 Enabled
 
-```
-To select a specific subscription as target for further deployments you might want to ask the user:
-```
-Get-AzSubscription | Out-GridView -PassThru | Set-AzContext
-```
-Now after the context has been set you can query subscription specific details e.g. the available VM sizes in a specific region:
-```
+Let's query e.g. the available VM sizes in a specific region:
+```PowerShell
 Get-AzVMSize -Location 'west europe'
 ```
 Output should be something like:
@@ -101,19 +81,52 @@ Standard_A3                        4       7168                8        1047552 
 
 ```
 
-**Note:** Azure resources (e.g. a virtual machine's hard disk) are provided through so called Azure Resource Providers. 
-In order to create a specific resource (e.g. a VM) you have to talk to the correct resource provider (e.g. Microsoft.Compute). 
-These resource providers implement the feature (e.g. a VM) in a specific region. You don't have to learn whom to talk to and where which resource providers are available - because the PowerShell Az modules you just installed do this for you.  
-The Az modules are _sort of_ aligned to Azure Resource Providers, i.e. 
-| What do you want to create |  Responsible Azure Resource Provider | PowerShell Module to use  |
-|---|---|---|
-| Create a VM |  Microsoft.Compute | Az.Compute  |
-| Create a virtual network |  Microsoft.Network | Az.Network  |
-| ... |  ... | ...  |
-
-So the commands for creating a VM are _'hidden'_ in Az.Compute.
+## PowerShell Az Modules for Azure ##
+The so-called PowerShell _cmdlets_ (e.g. 'Get-Date', 'Get-AzVMSize',...) are grouped into modules.  
+There are **specific modules for Azure administration: the '_Az modules_'**
 Execute:
+```PowerShell
+Get-Module az* -ListAvailable
 ```
+**to list the pre-installed Az modules**:  
+```
+Directory: C:\Program Files\WindowsPowerShell\Modules
+
+    Directory: /usr/local/share/powershell/Modules
+
+ModuleType Version    PreRelease Name                                PSEdition ExportedCommands
+---------- -------    ---------- ----                                --------- ----------------
+Script     4.6.1                 Az                                  Core,Desk
+Script     1.9.3                 Az.Accounts                         Core,Desk {Disable-AzDataCollection, Disable-AzContextAutosave, Enable-AzDataCollection, Enable-AzCon…
+Script     1.1.1                 Az.Advisor                          Core,Desk {Get-AzAdvisorRecommendation, Enable-AzAdvisorRecommendation, Disable-AzAdvisorRecommendati…
+Script     1.2.0                 Az.Aks                              Core,Desk {Get-AzAksCluster, New-AzAksCluster, Remove-AzAksCluster, Import-AzAksCredential…}
+Script     1.1.4                 Az.AnalysisServices                 Core,Desk {Resume-AzAnalysisServicesServer, Suspend-AzAnalysisServicesServer, Get-AzAnalysisServicesS…
+Script     2.1.0                 Az.ApiManagement                    Core,Desk {Add-AzApiManagementApiToGateway, Add-AzApiManagementApiToProduct, Add-AzApiManagementProdu…
+Script     1.1.0                 Az.ApplicationInsights              Core,Desk {Get-AzApplicationInsights, New-AzApplicationInsights, Remove-AzApplicationInsights, Update…
+Script     1.4.0                 Az.Automation                       Core,Desk {Get-AzAutomationHybridWorkerGroup, Remove-AzAutomationHybridWorkerGroup, Get-AzAutomationJ…
+Script     3.1.0                 Az.Batch                            Core,Desk {Remove-AzBatchAccount, Get-AzBatchAccount, Get-AzBatchAccountKey, New-AzBatchAccount…}
+Script     1.0.3                 Az.Billing                          Core,Desk {Get-AzBillingInvoice, Get-AzBillingPeriod, Get-AzEnrollmentAccount, Get-AzConsumptionBudge…
+Script     1.4.3                 Az.Cdn                              Core,Desk {Get-AzCdnProfile, Get-AzCdnProfileSsoUrl, New-AzCdnProfile, Remove-AzCdnProfile…}
+.
+.
+.
+```
+**To find out which module hosts which cmdlet** (e.g. Get-AzVMSize) **type** something like:
+```PowerShell
+get-command *vmsize*
+```
+Result similar to:  
+```
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Alias           Get-AzureRmVMSize
+Cmdlet          Get-AzDtlAllowedVMSizesPolicy                      1.0.2      Az.DevTestLabs
+Cmdlet          Get-AzVMSize                                       4.3.1      Az.Compute
+Cmdlet          Set-AzDtlAllowedVMSizesPolicy                      1.0.2      Az.DevTestLabs
+```  
+
+To find out all commands hosted in the Az.Compute module type:
+```PowerShell
 Get-Command -Module Az.Compute
 ```
 delivers e.g.:
@@ -123,30 +136,41 @@ CommandType     Name                                               Version    So
 .
 .
 .
-Cmdlet          Invoke-AzVMRunCommand                              3.0.0      Az.Compute
-Cmdlet          Invoke-AzVmssVMRunCommand                          3.0.0      Az.Compute
-Cmdlet          New-AzVM                                           3.0.0      Az.Compute
-Cmdlet          New-AzVMConfig                                     3.0.0      Az.Compute
-Cmdlet          New-AzVMDataDisk                                   3.0.0      Az.Compute
-Cmdlet          New-AzVMSqlServerAutoBackupConfig                  3.0.0      Az.Compute
+Cmdlet          New-AzSnapshotUpdateConfig                         4.3.1      Az.Compute
+Cmdlet          New-AzVM                                           4.3.1      Az.Compute
+Cmdlet          New-AzVMConfig                                     4.3.1      Az.Compute
+Cmdlet          New-AzVMDataDisk                                   4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerAutoBackupConfig                  4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerAutoPatchingConfig                4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerKeyVaultCredentialConfig          4.3.1      Az.Compute
 .
 .
 .
 ```
 ## Create a VM with PowerShell ...
-Now **let's create a vm using PowerShell**. But we are lazy and want to be fast so we copy example code from PowerShell help:
+Now **let's create a VM using PowerShell**.  
+**_New-AzVM_** seems to be a good candidate but **you may need some help** with the parameters.  
+**Try _help New-AzVM_** **or execute**:  
+```PowerShell
+help New-AzVM -online
 ```
-help New-AzVM -Examples | clip
-```
-copies the example code to the clipboard. Open PowerShell ISE and do a **CTRL-V** to paste the code into a editor window. 
-Please **choose example 3** and remove the rest: 
-![PowerShell ISE](New-AzVMinPowerShell.PNG)
+this **should open a new browser tab with online help for New-AzVM**. Examine the explanation and look at the code samples.
 
-**Now it's your turn**: e.g. remove errors - (superflous line breaks), use variables, implement the resource group creation, add login-azaccount, subscription selection...  
+Try **creating a simple VM by executing**:  
+```PowerShell
+$VMName = 'MyVM'    # variable for easy reuse
+New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_A0'
+```
+**Enter a user name** (not 'admin' nor 'administrator') **and a complex password** when asked.
+![progress in azure cloud shell](./newvm.png) 
+After a successful run you should have a VM in your subscription:  
+ ![MyVM in Azure Portal](./newvm2.png)  
   
-**Does it run?** If yes, watch in the portal what happens.
-**What is missing | outdated?**
-
-After a successful run. **Cleanup** e.g. by deleting the resource group with the vm using the portal
+**Cleanup** e.g. **by deleting** the resource group with the vm **using the portal or via executing**:
+```PowerShell
+Remove-AzResourceGroup $VMName -Force -AsJob   # -AsJob will execute this operation in the background 
+```
+> **In case of a error** try restarting the cloud shell as it times out.  
+  
 
 [back](../../README.md)

@@ -2,16 +2,16 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "connections_cn_azure2onprem_name": {
-            "defaultValue": "cn-azure2onprem",
+        "connection": {
+            "defaultValue": "azure-to-onprem",
             "type": "String"
         },
-        "virtualNetworkGateways_azurevnetvpngateway_name": {
-            "defaultValue": "azurevnetvpngateway",
+        "vpnGateway": {
+            "defaultValue": "myAzVPNGWay",
             "type": "String"
         },
-        "localNetworkGateways_lgw_cmonprem_001_name": {
-            "defaultValue": "lgw-vpnonprem",
+        "localNetworkGateway": {
+            "defaultValue": "l-gw-ipfire",
             "type": "String"
         }
     },
@@ -21,14 +21,14 @@
         {
             "type": "Microsoft.Network/connections",
             "apiVersion": "2019-09-01",
-            "name": "[parameters('connections_cn_azure2onprem_name')]",
+            "name": "[parameters('connection')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "virtualNetworkGateway1": {
-                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('virtualNetworkGateways_azurevnetvpngateway_name'))]"
+                    "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('vpnGateway'))]"
                 },
                 "localNetworkGateway2": {
-                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateways_lgw_cmonprem_001_name'))]"
+                    "id": "[resourceId('Microsoft.Network/localNetworkGateways', parameters('localNetworkGateway'))]"
                 },
                 "connectionType": "IPsec",
                 "connectionProtocol": "IKEv2",
