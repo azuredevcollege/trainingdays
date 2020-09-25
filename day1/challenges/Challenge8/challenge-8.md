@@ -22,7 +22,7 @@ Your **instructor** (_ask him for the details_) **has setup for you the onprem**
 ![Onpremise](./onpremise.png)
 
 **Click** on the 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FChallenge8Start.json"><img src="./deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FChallenge8Start.json"><img src="./deploytoazure.png"/></a>
 button **you will get some Azure resources to start** with:  
 ![azure vpn starting point](./vpnLabAzureStart.png)
 
@@ -155,7 +155,7 @@ Do you receive a response?
 | pfsGroup | PFS2048 |  
 
 To deploy click the
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="deploytoazure.png"/></a>
 button and select correct parameters to apply new ciphers to your current connection.  
 However you also need to apply this to the onprem firewall:  
 ![VPN more secure cipher](./vpn6-moresecure.png) 
