@@ -34,18 +34,18 @@ To **modify an existing disk it must be first 'detached' first** from the vm
 ```
 [Azure Portal] -> Virtual machines -> e.g. 'vmweb01' -> Disks -> "Edit"  
 ```
-![VM disk edit button](./vmDiskEditButton.PNG)  
+![VM disk edit button](./vmDiskEditButton.png)  
   
 **Detach !**  
   
-![VM disk detach](./vmDiskDetach.PNG)  
+![VM disk detach](./vmDiskDetach.png)  
 And don't forget the **SAVE** button!
 
 **Find your disk in the resource group and change it's configuration**
 ```
 [Azure Portal] -> Resource Groups -> rg-contosomortgage-www -> vmweb01-datadisk1 -> Configuration
 ```
-![VM Disk Configuration](./vmDiskConfig.PNG)
+![VM Disk Configuration](./vmDiskConfig.png)
 
 **Now resize to a disk type that**:
 - **supports 99.9% availabilty**

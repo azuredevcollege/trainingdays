@@ -50,9 +50,9 @@ Now let's **add an external azure loadbalancer** in front of the 2 parallel web 
 | Choose public IP address  |  pip-wwwfarm |  
   
 > **Note**: To **get your loadbalancer working** you need to **configure** the following:
-> - ... [**a backend pool**](./lbconfig01.PNG) that contains the 'endpoints' i.e. the vms to which the traffic will be routed.
-> - ... [**a health probe**](./lbconfig02.PNG) for TCP port 80 (http) to check if the endpoints are 'responsive' to web requests
-> - ... [**a lb rule**](./lbconfig03.PNG) to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)  
+> - ... [**a backend pool**](./lbconfig01.png) that contains the 'endpoints' i.e. the vms to which the traffic will be routed.
+> - ... [**a health probe**](./lbconfig02.png) for TCP port 80 (http) to check if the endpoints are 'responsive' to web requests
+> - ... [**a lb rule**](./lbconfig03.png) to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)  
 
 **Finally**  
 To **check** if your **lb is working** do a **http://_%PIP of your lb%_**  

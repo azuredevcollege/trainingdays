@@ -60,10 +60,10 @@ Get-Date | Out-File $filePath -Append
 | Arguments (Optional) |  _none_  |  
   
 **Wait some seconds** then do a **refresh** of your browser - it'll show the progress:  
-![Reload the page](./AddCSE-HelloWorldToVM2.PNG)
+![Reload the page](./AddCSE-HelloWorldToVM2.png)
   
 Final result should show a success:  
-![Result](./AddCSE-HelloWorldToVM3.PNG)
+![Result](./AddCSE-HelloWorldToVM3.png)
 
 ## See what has happened inside the VM
 Now we **RDP into the VM** and see what has happened **and where to find logs** in case something breaks.
@@ -77,15 +77,15 @@ Now we **RDP into the VM** and see what has happened **and where to find logs** 
 Within the VM:
 1. **Navigate to c:\temp**  
 The **result** should look similar to this:  
-![CSE Result](./AddCSE-HelloWorldToVM4Result.PNG)
+![CSE Result](./AddCSE-HelloWorldToVM4Result.png)
 
 2. **Navigate to C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_\Downloads**
 The CSE is software that runs within the VM. The script that will be executed is **download**ed first to this **location**. If you don't see your script file CSE might have trouble to download the resource.  
-![CSE Download Folder](./AddCSE-HelloWorldToVM5DownloadFolder.PNG)  
+![CSE Download Folder](./AddCSE-HelloWorldToVM5DownloadFolder.png)  
 
 3. **Navigate to C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_**
 This is the place where the **CSE logs its actions locally** - a good place to start troubleshooting.  
-![CSE Logs Folder](./AddCSE-HelloWorldToVM6LogsFolder.PNG)
+![CSE Logs Folder](./AddCSE-HelloWorldToVM6LogsFolder.png)
 
 4. **Remove the CSE from the VM**
 ```
@@ -111,12 +111,12 @@ In this lab **we use a storage account for this**.
   
 3. **Edit the CSE ARM template to use the correct scripts location**
 Once uploaded you can copy the blobs URL from the azure portal  
-![Copy the URL of the IIS install script](./saUploadCSE2.PNG)
+![Copy the URL of the IIS install script](./saUploadCSE2.png)
 
 **Can you download the file in your browser using the URL**? [Yes] If not have you set the correct access level at the container?
 
 **Edit this** [CSE ARM template](./ARMCSE.json) **template** to use the scripts location: 
-![Edit following ARM section](./ModifyARM.PNG)  
+![Edit following ARM section](./ModifyARM.png)  
 
 **with your value**
 ```

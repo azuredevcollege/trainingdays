@@ -111,12 +111,12 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 ```
    IPFire -> Services -> IPSec -> 'Connection Status and -Control' -> Add
 ```
-![IPFire: Add a connection](./vpn0.PNG)
+![IPFire: Add a connection](./vpn0.png)
 
 ```
    "Net-to-Net Virtual Private Network" -> Add
 ```
-![IPFire: add Net-to-Net connection](./vpn1.PNG)
+![IPFire: add Net-to-Net connection](./vpn1.png)
 
 | Parameter Name | Values  |
 |---|---|
@@ -126,18 +126,18 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Remote subnet | **_%Address Range of the virtual network in azure%_** (in our case 10.1.0.0/255.255.0.0) |
 | Use a pre-shared key | **_%Shared Key you used above%_** (Azure Portal -> VPN Gateway -> Connections -> Shared Key)|
 
-![IPFire: connection settings](./vpn2.PNG) 
+![IPFire: connection settings](./vpn2.png) 
 **Save**
 
 **Click on the pencil symbol and choose 'Advanced'**:
-![IPFire: Advanced cipher settings](./vpn3.PNG) 
+![IPFire: Advanced cipher settings](./vpn3.png) 
 
 Select the **following algorithms / suites for the connection**:
-![IPFire: connection settings](./vpn4.PNG)  
+![IPFire: connection settings](./vpn4.png)  
 **select Always on** then **Save**
 
 **Tick checkbox to enable connection** - connection status should go to green:
-![IPFire: connection settings](./vpn5.PNG) 
+![IPFire: connection settings](./vpn5.png) 
 
 **Now let's ping your azure vm** (e.g. vmazure) under its private ip (probably: 10.1.0.4) from onpremise:  
 ![Successful Ping](./successfulPing.png) 
@@ -158,7 +158,7 @@ To deploy click the
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="deploytoazure.png"/></a>
 button and select correct parameters to apply new ciphers to your current connection.  
 However you also need to apply this to the onprem firewall:  
-![VPN more secure cipher](./vpn6-moresecure.PNG) 
+![VPN more secure cipher](./vpn6-moresecure.png) 
 
 ## Cleanup ##
 **Delete the resource group** _rg-vpn_

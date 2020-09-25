@@ -18,7 +18,7 @@ ARM _'powered'_ deployments are:
 0. _optional_ **Cleanup** all resources that have been created in this workshop until now e.g. by deleting the resource groups.  
 
 1. Login to your azure subscription **and search the marketplace for 'Template Deployment'**    
-![Azure Template Deployment](./TemplateDeployment.PNG)
+![Azure Template Deployment](./TemplateDeployment.png)
   
 2. Create -> select '**Build your own template in the editor**'
 3. Copy the RAW view of [this ARM template](./ARMOne.json) and paste it into the editor **clear first** window.  
@@ -29,13 +29,13 @@ ARM _'powered'_ deployments are:
 |---|---|---|
 | Resource Group  |  rg-contosomortgage-www |  _location_ : North Europe |
 
-![Template Deployment Enter Parameters](./TemplateDeployment2.PNG)  
+![Template Deployment Enter Parameters](./TemplateDeployment2.png)  
 and hit **Purchase** to trigger the deployment.
 
 5. **Once finished your deployment should look like**:
 [Azure Portal] -> Resource Group -> 'rg-contosomortgage-www' -> Deployments -> 'Microsoft.Template' -> 'Deployment details'
 
-![Template Deployment Results](./TemplateDeployment3.PNG)  
+![Template Deployment Results](./TemplateDeployment3.png)  
 
 **Is this deployment fast? Redeployable? Replayable in another subscription?**
 

@@ -26,7 +26,7 @@ button.
 | Disk Sku  |  StandardSSD_LRS |  
   
 The result should look similar to this:  
-![Deployment result](./armdeploymentresult.PNG)  
+![Deployment result](./armdeploymentresult.png)  
 
 ## 2. Implement the VNET peering ##
 You need to create the peerings on each virtual network:  
@@ -44,7 +44,7 @@ The wizard in the portal is _smart enough_ to let create 2 peerings in a single 
 | Virtual Network (_to peer with_) | **VNET2** |
 | **Remote** virtual network - Peering link name  |  **VNET2-to-VNET1** |   
 
-![VNET Peering settings](./vnetpeeringsettings.PNG)
+![VNET Peering settings](./vnetpeeringsettings.png)
   
 ## 3. Check if the peering works ##
 Connect to one vm through RDP using its public ip address: e.g. VMonVNET1 through 
@@ -56,7 +56,7 @@ Connect to one vm through RDP using its public ip address: e.g. VMonVNET1 throug
   
 
 **Open a command prompt and ping the other vm** using its internal IP: In our case VMonVNET2 - should be 192.168.100.4:  
-![VNET Peering ping test](./vnetpeeringtest.PNG)
+![VNET Peering ping test](./vnetpeeringtest.png)
 
 ## Cleanup ##
 **Delete the resource group** _rg-VNETPeering_
