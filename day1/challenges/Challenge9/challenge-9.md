@@ -13,7 +13,7 @@ At **first** you will deploy the _start environment_ and in the **second** step 
 In this directory there is an ARM-template which 2 virtual networks and 2 vms and its requirements (networking, disks,...).:  
 
 **Deploy this scenario** into your subscription by clicking on the 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge9%2FChallenge9Start.json"><img src="./deploytoazure.png"/></a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge9%2FChallenge9Start.json"><img src="./deploytoazure.png"/></a>
 button.  
 
 | Name | Value |

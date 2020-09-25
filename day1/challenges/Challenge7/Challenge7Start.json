@@ -299,10 +299,10 @@
                     "typeHandlerVersion": "2.73",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "modulesUrl": "https://github.com/CSA-OCP-GER/azure-developer-college/raw/master/day1/challenges/Challenge%207/wwwFarmConfig.zip",
+                        "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/wwwFarmConfig.zip",
                         "configurationFunction": "wwwFarmConfig.ps1\\wwwFarmConfig",
                         "properties": {
-                            "webZipURI": "https://github.com/CSA-OCP-GER/azure-developer-college/raw/master/day1/challenges/Challenge%207/web.zip"
+                            "webZipURI": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/web.zip"
                         }
                     },
                     "protectedSettings": {

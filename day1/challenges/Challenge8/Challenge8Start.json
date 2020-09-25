@@ -261,7 +261,7 @@
                 "typeHandlerVersion": "2.73",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "modulesUrl": "https://github.com/CSA-OCP-GER/azure-developer-college/raw/master/day1/challenges/Challenge%209/EnablePingConfig.zip",
+                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge9/EnablePingConfig.zip",
                     "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
                 },
                 "protectedSettings": {

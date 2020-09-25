@@ -11,7 +11,7 @@
 
 ## Do you need a VM? ##
 **For this lab you need an Azure virtual machine that runs Windows Server**. And some storage accessible to hold your automation code.  
-Just **click**  <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCSA-OCP-GER%2Fazure-developer-college%2Fmaster%2Fday1%2Fchallenges%2FChallenge6%2FChallenge6Start.json"><img src="./deploytoazure.png"/></a> **to spin up a new VM** for this lab.
+Just **click**  <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge6%2FChallenge6Start.json"><img src="./deploytoazure.png"/></a> **to spin up a new VM** for this lab.
 
 
 | Name | Value |
