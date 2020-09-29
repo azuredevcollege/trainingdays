@@ -92,7 +92,7 @@ Deployment of you function starts and after a few seconds, it is running in Azur
 We need to add another Azure Web App to host the "Resources API" of our SCM Contacts application.
 
 1. got to your resource group **scm-breakout-rg**
-1. create an Azure Web App (you can choose to use the Portal or the Azure CLI: OS - **Windows**, RuntimeStack - **.NET Core 3.1 (LTS)**, Size - **B1**, AppInsights is not needed at the moment). You can choose the same settings as for the Contacts API.
+1. create an Azure Web App (you can choose to use the Portal or the Azure CLI: OS - **Windows**, RuntimeStack - **.NET Core 3.1 (LTS)**, Size - **S1**, AppInsights is not needed at the moment). You can choose the same settings as for the Contacts API.
 
 When the deployment has finished, we also need to add a few settings. Open the Web App in the Portal and go to the "Configuration" view (under **Settings**).
 

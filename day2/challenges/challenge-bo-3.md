@@ -12,14 +12,14 @@ As a reminder, here is the architecture, we want to create:
 
 - **Contacts API**
   - _Azure Web App:_
-    - Size: B1
+    - Size: S1
     - make it accept only HTTPS traffic
 - **Resources / Images API**
   - _Azure Storage Account:_
     - SKU: Local Redundant Storage
     - Kind: StorageV2
   - _Azure Web App:_
-    - Size: B1
+    - Size: S1
     - make it accept only HTTPS traffic
     - configure App Settings:
       - ImageStoreOptions\_\_StorageAccountConnectionString: <CONNECTIONSTRING_OF_STORAGEACCOUNT>

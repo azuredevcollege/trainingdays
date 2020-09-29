@@ -256,7 +256,7 @@ Do the same with the Image Manipulation Function in folder _day3/apps/dotnetcore
 
 ### Deploy the Contacts Search Service
 
-To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **B1**.
+To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **S1**.
 
 When finished, apply these settings to the Web App Configuration settings:
 
@@ -332,7 +332,7 @@ Create the Linux Web App in West Europe with the following parameters.
 | Resource Group   | Create a new resource group, e.g. **scm-breakout-tux-rg** |
 | Publish          | _Code_                                                    |
 | Runtime Stack    | _Node 12 LTS_                                             |
-| App Service Plan | Create a new one: OS - _Linux_, SKU - _B1_                |
+| App Service Plan | Create a new one: OS - _Linux_, SKU - _S1_                |
 
 ![day3_bo_tux_vr](./img/day3_bo_tux_vr.png "day3_bo_tux_vr")
 

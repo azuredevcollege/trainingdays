@@ -104,7 +104,7 @@ We have now been able to run the application locally. Of course, we want to have
 So, first of all, let's deploy the backend to Azure. You already know how to do it ([Challenge 1 - Azure Web Applications](./challenge-1.md) is your "cheat sheet"), so here is just an overview:
 
 1. create a new resource group, name it e.g. **scm-breakout-rg**, location _West Europe_
-1. create an Azure Web App (OS: **Windows**, RuntimeStack: **.NET Core 3.1 (LTS)**, Size: **B1**, AppInsights is not needed at the moment). You can choose to use the Portal or the Azure CLI.
+1. create an Azure Web App (OS: **Windows**, RuntimeStack: **.NET Core 3.1 (LTS)**, Size: **S1**, AppInsights is not needed at the moment). You can choose to use the Portal or the Azure CLI.
 1. deploy the Contacts API to Azure
 1. after deployment, check whether the API is running (open the Swagger UI)
 

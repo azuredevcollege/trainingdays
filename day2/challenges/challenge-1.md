@@ -24,7 +24,8 @@ When you reached the "Create Web App" wizard, follow the steps below:
 - Runtime: .NET Core 3.1 (LTS)
 - Operation System: Windows
 - Region: West Europe
-- SKU and Size: S1
+- create a new AppSerice plan
+  - SKU and Size: S1
   - To get familiar with other sizes, click "Change size"
 
 Click "Next: Monitoring".
