@@ -132,7 +132,8 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 **Click on the pencil symbol and choose 'Advanced'**:
 ![IPFire: Advanced cipher settings](./vpn3.png) 
 
-Select the **following algorithms / suites for the connection**:
+**You must** (!) select the **following algorithms / suites for the connection**:  
+
 ![IPFire: connection settings](./vpn4.png)  
 **select Always on** then **Save**
 
