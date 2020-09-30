@@ -73,7 +73,8 @@
                 "resource": {
                     "id": "cosmos-db-database"
                 },
-                "options": {}
+                "options": {
+                }
             }
         },
         {
@@ -115,7 +116,9 @@
                         "conflictResolutionPath": "/_ts"
                     }
                 },
-                "options": {}
+                "options": {
+                    "throughput": 400
+                }
             }
         },
         {
@@ -157,7 +160,9 @@
                         "conflictResolutionPath": "/_ts"
                     }
                 },
-                "options": {}
+                "options": {
+                    "throughput": 400
+                }
             }
         },
         {
@@ -199,34 +204,7 @@
                         "conflictResolutionPath": "/_ts"
                     }
                 },
-                "options": {}
-            }
-        },
-        {
-            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/throughputSettings",
-            "apiVersion": "2020-06-01-preview",
-            "name": "[concat(parameters('databaseAccount'), '/cosmos-db-database/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccount'), 'cosmos-db-database')]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccount'))]"
-            ],
-            "properties": {
-                "resource": {
-                    "throughput": 400
-                }
-            }
-        },
-        {
-            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
-            "apiVersion": "2020-06-01-preview",
-            "name": "[concat(parameters('databaseAccount'), '/cosmos-db-database/FirstToDo1/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccount'), 'cosmos-db-database', 'FirstToDo1')]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccount'), 'cosmos-db-database')]",
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccount'))]"
-            ],
-            "properties": {
-                "resource": {
+                "options": {
                     "throughput": 400
                 }
             }
