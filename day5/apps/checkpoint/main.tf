@@ -4,12 +4,12 @@ provider "azuredevops" {
 
 locals {
   project_name  = "DevCollegeDay5Restore"
-  unique_prefix = var.unique_resource_prefix == "" ? random_string.prefix.result : var.unique_resource_prefix
+  unique_prefix = var.unique_resource_prefix == "" ? join("", ["a", random_string.prefix.result]) : var.unique_resource_prefix
   branch_name   = data.azuredevops_git_repositories.default.repositories[0].default_branch
 }
 
 resource "random_string" "prefix" {
-  length  = 6
+  length  = 5
   special = false
   upper   = false
 }
