@@ -8,3 +8,4 @@ day3/scripts/baseline/publish**
 day3/scripts/baseline/packages-microsoft-prod.deb
 **/packages-microsoft-prod.deb
 **/*Zone.Identifier
+day7/terraform/terraform.tfstate**
