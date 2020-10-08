@@ -138,10 +138,10 @@ Events:
 
 So, the pod is running, but how do we access it?! Let's have a look at one option, that you typically would use in _test/debug_ scenarios. 
 
-With `kubectl` you can "port-forward" pods to your local machine. This is how it works in our case:
+With `kubectl` you can "port-forward" a local port to a port on a pod. This is how it works in our case:
 
 ```zsh
 $ kubectl port-forward myfirstpod 8080:80
 ```
 
-Our pod is listening on port `80` and we forward that one to our local port `8080`. You can check the result by navigating - once again - to `http://localhost:8080`.
+Our pod is listening on port `80` and we forward our local port `8080` to that one. You can check the result by navigating - once again - to `http://localhost:8080`.
