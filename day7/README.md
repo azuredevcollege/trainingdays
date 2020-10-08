@@ -1,4 +1,4 @@
-Add stroage account for terrastate
+Add storage account for terrastate
 
 ```shell
 az group create --name adc-tfstate-rg --location westeurope

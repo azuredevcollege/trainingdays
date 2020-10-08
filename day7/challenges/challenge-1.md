@@ -1,19 +1,18 @@
-# Create your first Kubernetes Cluster
+# Create your first Kubernetes Cluster and Container Registry
 
-In this section we will create a kubernetes cluster using the azure cli, configure your local access
-credentials to control your cluster using kubectl, take some first steps and run our first pod.
+In this section we will create a Kubernetes cluster using the Azure CLI, configure your local access credentials to control your cluster using kubectl, take some first steps and run our first pod.
 
 ## Create the cluster
 
 To have a clean overview of what is beeing provisioned under the hood, we create a new resource
-group and and create our kubernetes cluster within.
+group and and create our Kubernetes cluster within.
 
 ```zsh
 $ az group create --name adc-aks-rg --location germanywestcentral
-$ az aks create --resource-group adc-aks-rg --name adc-cluster --kubernetes-version 1.17.7
+$ az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.17.11
 ```
 
-> Note that we deploy kubernetes with the latest available version on azure at the time of writing.
+> Note that we deploy Kubernetes with the latest available version on azure at the time of writing.
 > If you use a different version, you might run into trouble during the _Access the Dashboard_
 > section.
 
@@ -22,12 +21,12 @@ Let's inspect the created resources:
 ![Created resource groups](./img/rg-created.png)
 
 The `az aks create` command created a second resource group named
-`MC_adc-aks-rg_adc-cluster_germanywestcentral` containing all resources provisioned for our aks
+`MC_adc-aks-rg_adc-cluster_germanywestcentral` containing all resources provisioned for our AKS
 cluster.
 
 ![Resource group with AKS resource](./img/cluster-rg.png)
 
-The resource group we explicitly created only holds the aks resource.
+The resource group we explicitly created only holds the AKS resource.
 
 ![Automatically created resource group](./img/auto-rg.png)
 
@@ -36,7 +35,7 @@ all it's containing resources will be deleted when the cluster is destroyed.
 
 ## Establish access to the cluster
 
-Now it's time to access our cluster. To authenticate us against the cluster kubernetes uses client
+Now it's time to access our cluster. To authenticate us against the cluster Kubernetes uses client
 certificates and access tokens. To obtain these access credentials for our newly created cluster we
 use the `az aks get-credentials` command:
 
@@ -48,10 +47,10 @@ Server Version: version.Info{Major:"1", Minor:"17", GitVersion:"v1.17.7", GitCom
 ```
 
 `kubectl version` prints both the version of the locally runnig commandline tool as well as the
-kubernetes version running on our cluster. To inspect the access credentials and cluster
+Kubernetes version running on our cluster. To inspect the access credentials and cluster
 configuration stored for us in our `~/.kube/config` file run `kubectl config view`.
 
-We've setup access to our kubernetes cluster. Now we can start exploring and working with our
+We've setup access to our Kubernetes cluster. Now we can start exploring and working with our
 cluster.
 
 ## Access the dashboard
@@ -59,7 +58,7 @@ cluster.
 AKS comes with the kubernetes-dashboard installed by default. Accessing the dashboard requires us to
 create a `ServiceAccount` with the _cluster-admin_ `ClusterRole`.
 
-To create these `Resources` within our kubernetes cluster we will first declare the desired
+To create these `Resources` within our Kubernetes cluster we will first declare the desired
 configuration for our `ServiceAccount` in a yaml file and apply the desired configuration to our
 cluster using the `kubectl apply` command.
 
@@ -73,7 +72,8 @@ kind: Namespace
 metadata:
   name: kubernetes-dashboard
 
---- # This separates multiple resource definitions in a single file
+# This separates multiple resource definitions in a single file
+--- 
 apiVersion: v1
 kind: ServiceAccount
 metadata:

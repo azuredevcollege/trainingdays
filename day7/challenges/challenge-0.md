@@ -2,9 +2,9 @@
 
 ## Install Kubectl
 
-kubectl is the commandline interface for kubernets.
+kubectl is the commandline interface for Kubernetes. You will need the tool to interact with the cluster, e.g. to create a pod, deployment or service.
 
-If you already have the azure cli installed you can just install it using following command.
+If you already have the Azure CLI on your machine, you can just install it using the following command:
 
 ```zsh
 $ az aks install-cli
