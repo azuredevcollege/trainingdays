@@ -136,6 +136,8 @@ Events:
   Normal  Started    12s   kubelet, aks-nodepool1-11985439-vmss000001  Started container myfirstpod
 ```
 
+## Port-Forwarding
+
 So, the pod is running, but how do we access it?! Let's have a look at one option, that you typically would use in _test/debug_ scenarios. 
 
 With `kubectl` you can "port-forward" a local port to a port on a pod. This is how it works in our case:
