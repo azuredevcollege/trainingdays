@@ -4,6 +4,11 @@ provider "azurerm" {
   }
 }
 
+data "azurerm_kubernetes_service_versions" "current" {
+  location       = var.location
+  version_prefix = "1.16"
+}
+
 resource "azurerm_kubernetes_cluster" "k8s" {
   name                = "${var.prefix}k8s${var.env}"
   location            = var.location
@@ -24,7 +29,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
-  kubernetes_version = "1.16.7"
+  kubernetes_version = data.azurerm_kubernetes_service_versions.current.latest_version
 
   tags = {
     environment = var.env
