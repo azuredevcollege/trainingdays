@@ -393,9 +393,22 @@ myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
 myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
 ```
 
-As you can see, Kubernetes immediately start a new pod, because for a certain amount of time, there are only 3 pods running in the cluster. And in the deployment, we told Kubernetes to always have 4 pods of the API present.
+As you can see, Kubernetes immediately starts a new pod (`myapi-7c74475b88-rpv8x`), because for a certain amount of time, there are only 3 pods running/available in the cluster. And in the deployment, we told Kubernetes to always have 4 pods of the API present.
 
-Still - no way to access our pods. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them.
+### Scale on purpose
+
+Of course, you can scale such a deployment on purpose to e.g. 3 or 10 replicas. Therefor, you should use the `scale` command. Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
+
+```zsh
+# Scale up to 10 replicas
+$ kubectl scale deployment --replicas 10 myapi
+
+deployment.apps/myapi scaled
+
+# kubectl get pods should now show 10 "myapi"-pods
+```
+
+So, now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
 
 ## Services
 
