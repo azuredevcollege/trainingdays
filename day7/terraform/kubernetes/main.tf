@@ -6,7 +6,7 @@ provider "azurerm" {
 
 data "azurerm_kubernetes_service_versions" "current" {
   location       = var.location
-  version_prefix = "1.16"
+  version_prefix = "1.17"
 }
 
 resource "azurerm_kubernetes_cluster" "k8s" {

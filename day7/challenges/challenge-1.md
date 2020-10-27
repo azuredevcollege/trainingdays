@@ -1,4 +1,4 @@
-# Create your first Kubernetes Cluster and Container Registry
+# Create your first Kubernetes Cluster
 
 In this section we will create a Kubernetes cluster using the Azure CLI, configure your local access credentials to control your cluster using kubectl, take some first steps and run our first pod.
 

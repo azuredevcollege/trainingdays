@@ -17,11 +17,18 @@ namespace Adc.Scm.Events
 
         public async Task Send(EventBase evt)
         {
-            var client = GetClient();
-            var json = JsonConvert.SerializeObject(evt);
-            var msg = new Message(Encoding.UTF8.GetBytes(json));
-            msg.SessionId = evt.UserId.ToString();
-            await client.SendAsync(msg);
+            try
+            {
+                var client = GetClient();
+                var json = JsonConvert.SerializeObject(evt);
+                var msg = new Message(Encoding.UTF8.GetBytes(json));
+                msg.SessionId = evt.UserId.ToString();
+                await client.SendAsync(msg);
+            }
+            catch (System.Exception)
+            {
+                System.Console.WriteLine("Event not sent: ConnectionString might not be initialized.");
+            }
         }
 
         private TopicClient GetClient()

@@ -15,6 +15,8 @@ $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr adcc
 
 ## Build a custom image
 
+Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`.
+
 ```zsh
 $ docker build -t test:1.0 .
 $ docker run -p 8080:80 test:1.0
@@ -167,7 +169,231 @@ $ kubectl logs myfirstpod -f=true
 
 ## Running multiple instances of our workload
 
-Describe deployments
+Now we only showed, how Kubernetes is dealing with single container/pod environments. If such a  pod fails (something serious happens and the process crashes e.g.), Kubernetes doesn't take care of restarting our workload. On top of that, we only run a single instance - ideally, we  can tell  Kubernetes to run multiple instances of our container in the cluster. To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): `Deployments`.
+
+In a `Deployment`, you can tell Kubernetes a few more things, that you definetely need in production environments:
+
+- number of instances of our container/pod
+- how to do the upgrade, in case we deploy the next version of our service (e.g. always keep two instances up and running)
+
+So let's do this...the service that we are going to deploy needs a SQL server instance to connect to. Therefor, we deploy a Microsoft SQL Server 2019 instance into our cluster that we then can use from our service.
+
+```yaml
+# Content of file sqlserver.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql-deployment
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: mssql
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        fsGroup: 10001
+      containers:
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: MSSQL_PID
+          value: "Developer"
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          value: "Ch@ngeMe!23"
+```
+
+Create a file called `sqlserver.yaml` and apply the configuration.
+
+```zsh
+$ kubectl apply -f sqlserver.yaml
+
+deployment.apps/mssql-deployment created
+
+$ kubectl get pods -w
+
+NAME                                READY   STATUS              RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   0/1     ContainerCreating   0          5s
+mssql-deployment-5559884974-q2j4w   1/1     Running             0          39s
+```
+
+After about 30-40 sec, you should see that the pod with SQL Server 2019 is up and running. Also, let's have a look at the deployment.
+
+```zsh
+$ kubectl get deployments
+
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+mssql-deployment   1/1     1            1           100s
+
+$ kubectl describe deployment mssql-deployment
+
+Name:                   mssql-deployment
+Namespace:              default
+CreationTimestamp:      Tue, 27 Oct 2020 09:34:28 +0100
+Labels:                 <none>
+Annotations:            deployment.kubernetes.io/revision: 1
+Selector:               app=mssql
+Replicas:               1 desired | 1 updated | 1 total | 1 available | 0 unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        0
+RollingUpdateStrategy:  25% max unavailable, 25% max surge
+Pod Template:
+  Labels:  app=mssql
+  Containers:
+   mssql:
+    Image:      mcr.microsoft.com/mssql/server:2019-latest
+    Port:       1433/TCP
+    Host Port:  0/TCP
+    Environment:
+      MSSQL_PID:    Developer
+      ACCEPT_EULA:  Y
+      SA_PASSWORD:  Ch@ngeMe!23
+    Mounts:         <none>
+  Volumes:          <none>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <none>
+NewReplicaSet:   mssql-deployment-5559884974 (1/1 replicas created)
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m25s  deployment-controller  Scaled up replica set mssql-deployment-5559884974 to 1
+```
+
+As we need to connect to this pod over the network, let's find out what IP adress has been assigned to it.
+
+```zsh
+$ kubectl get pods -o wide
+
+NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
+mssql-deployment-5559884974-q2j4w   1/1     Running   0          4m44s   10.244.0.5   aks-nodepool1-11985439-vmss000000   <none>           <none>
+``` 
+
+The adress may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the adress down, as you will need it in the next step.
+
+Now, we can deploy a simple API that is able to manage `Contacts` object, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image is already present in a public container registry, so we don't need to build an image for it.
+
+```yaml
+# Content of file api.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapi
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myapi
+  template:
+    metadata:
+      labels:
+        app: myapi
+    spec:
+      containers:
+      - name: myapi
+        env:
+        - name: ConnectionStrings__DefaultConnectionString
+          value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
+        image: csaocpger/adc-api-sql:2.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+```
+
+A few notes on the deployment above. Firt and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database. Please replace \<IP_OF_THE_SQL_POD\> with the correct IP adress. We also set resource limits and expose port 5000, so that the API can be reached from outside of the pod.
+
+So, again create a file (`api.yaml`) with the contents above - don't forget to replace the IP adress - and apply the configuration to your cluster.
+
+```zsh
+$ kubectl apply -f api.yaml
+
+deployment.apps/myapi created
+```
+
+Let's have a look at the pods, we should now have 4 replicas running in the cluster.
+
+```zsh
+$ kubectl get pods
+
+NAME                                READY   STATUS    RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   1/1     Running   0          23m
+myapi-7c74475b88-7hmcj              1/1     Running   0          74s
+myapi-7c74475b88-7jhtq              1/1     Running   0          74s
+myapi-7c74475b88-jzmcx              1/1     Running   0          74s
+myapi-7c74475b88-s5gmj              1/1     Running   0          74s
+```
+
+So, we are all set to test the API and the connection to the SQL server. As done before, let's port-forward a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj`.
+
+```zsh
+$ kubectl port-forward myapi-7c74475b88-7hmcj 8080:5000
+
+Forwarding from 127.0.0.1:8080 -> 5000
+Forwarding from [::1]:8080 -> 5000
+Handling connection for 8080
+Handling connection for 8080
+Handling connection for 8080
+```
+
+You can now open a browser and navigate to `http://localhost:8080`. If everything is fine, you will see the Swagger UI of the API:
+
+![SwaggerUI](./img/swagger-api.png)
+
+Try out the API, e.g. create a contact via `POST` method, read (all) contacts via the `GET` operations etc.
+
+### Failover / Health
+
+As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. if a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and restarts the 4th pod again to reestablish the desired state. 
+
+Let's try this...first, let's query the pods in our cluster. An this time, we are "watching" (`-w`) them so that we get notified of any changes of their states:
+
+```zsh
+$ kubectl get pods -w
+
+NAME                                READY   STATUS    RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   1/1     Running   0          58m
+myapi-7c74475b88-7hmcj              1/1     Running   0          36m
+myapi-7c74475b88-7jhtq              1/1     Running   0          36m
+myapi-7c74475b88-jzmcx              1/1     Running   0          36m
+myapi-7c74475b88-s5gmj              1/1     Running   0          36m
+```
+
+Now please open another tab/command line window and kill one of the pods. Here, we pick ``.
+
+```zsh
+$ kubectl delete pod myapi-7c74475b88-7jhtq
+
+pod "myapi-7c74475b88-7jhtq" deleted
+```
+
+In the first tab/window where we are watching for "pod changes", you should now see a similar output...
+
+```zsh
+myapi-7c74475b88-7jhtq              1/1     Terminating   0          45m
+myapi-7c74475b88-rpv8x              0/1     Pending       0          0s
+myapi-7c74475b88-rpv8x              0/1     Pending       0          0s
+myapi-7c74475b88-rpv8x              0/1     ContainerCreating   0          0s
+myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
+myapi-7c74475b88-rpv8x              1/1     Running             0          2s
+myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
+myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
+```
+
+As you can see, Kubernetes immediately start a new pod, because for a certain amount of time, there are only 3 pods running in the cluster. And in the deployment, we told Kubernetes to always have 4 pods of the API present.
 
 Still - no way to access our pods. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them.
 
