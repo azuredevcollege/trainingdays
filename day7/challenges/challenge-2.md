@@ -8,7 +8,7 @@ In order to be able to store the custom Docker images you will be creating throu
 $ az group create --name adc-acr-rg --location germanywestcentral
 $ az acr create --name adccontainerreg --resource-group adc-acr-rg --sku basic --admin-enabled
 
-# now let's attach the container registry to the cluster 
+# now let's attach the container registry to the cluster
 
 $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr adccontainerreg
 ```
@@ -38,7 +38,7 @@ We are now ready to push the image to our container registry.
 ```zsh
 $ docker tag test:1.0 adccontainerreg.azurecr.io/test:1.0
 $ docker push adccontainerreg.azurecr.io/test:1.0
-````
+```
 
 You can also build directly within the Azure Container Registry service, in case you don't have Docker on your machine. Let's have try...
 
@@ -60,10 +60,10 @@ metadata:
   name: myfirstpod
 spec:
   containers:
-  - image: adccontainerreg.azurecr.io/test:2.0
-    name: myfirstpod
-    resources: {}
-    ports:
+    - image: adccontainerreg.azurecr.io/test:2.0
+      name: myfirstpod
+      resources: {}
+      ports:
         - containerPort: 80
   restartPolicy: Never
 ```
@@ -140,7 +140,7 @@ Events:
 
 ## Port-Forwarding
 
-So, the pod is running, but how do we access it?! Let's have a look at one option, that you typically would use in _test/debug_ scenarios. 
+So, the pod is running, but how do we access it?! Let's have a look at one option, that you typically would use in _test/debug_ scenarios.
 
 With `kubectl` you can "port-forward" a local port to a port on a pod. This is how it works in our case:
 
@@ -169,7 +169,7 @@ $ kubectl logs myfirstpod -f=true
 
 ## Running multiple instances of our workload
 
-Now we only showed, how Kubernetes is dealing with single container/pod environments. If such a  pod fails (something serious happens and the process crashes e.g.), Kubernetes doesn't take care of restarting our workload. On top of that, we only run a single instance - ideally, we  can tell  Kubernetes to run multiple instances of our container in the cluster. To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): `Deployments`.
+Now we only showed, how Kubernetes is dealing with single container/pod environments. If such a pod fails (something serious happens and the process crashes e.g.), Kubernetes doesn't take care of restarting our workload. On top of that, we only run a single instance - ideally, we can tell Kubernetes to run multiple instances of our container in the cluster. To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): `Deployments`.
 
 In a `Deployment`, you can tell Kubernetes a few more things, that you definetely need in production environments:
 
@@ -187,8 +187,8 @@ metadata:
 spec:
   replicas: 1
   selector:
-     matchLabels:
-       app: mssql
+    matchLabels:
+      app: mssql
   template:
     metadata:
       labels:
@@ -198,17 +198,17 @@ spec:
       securityContext:
         fsGroup: 10001
       containers:
-      - name: mssql
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        ports:
-        - containerPort: 1433
-        env:
-        - name: MSSQL_PID
-          value: "Developer"
-        - name: ACCEPT_EULA
-          value: "Y"
-        - name: SA_PASSWORD
-          value: "Ch@ngeMe!23"
+        - name: mssql
+          image: mcr.microsoft.com/mssql/server:2019-latest
+          ports:
+            - containerPort: 1433
+          env:
+            - name: MSSQL_PID
+              value: 'Developer'
+            - name: ACCEPT_EULA
+              value: 'Y'
+            - name: SA_PASSWORD
+              value: 'Ch@ngeMe!23'
 ```
 
 Create a file called `sqlserver.yaml` and apply the configuration.
@@ -278,7 +278,7 @@ $ kubectl get pods -o wide
 
 NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
 mssql-deployment-5559884974-q2j4w   1/1     Running   0          4m44s   10.244.0.5   aks-nodepool1-11985439-vmss000000   <none>           <none>
-``` 
+```
 
 The adress may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the adress down, as you will need it in the next step.
 
@@ -301,17 +301,17 @@ spec:
         app: myapi
     spec:
       containers:
-      - name: myapi
-        env:
-        - name: ConnectionStrings__DefaultConnectionString
-          value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
-        image: csaocpger/adc-api-sql:2.1
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 5000
+        - name: myapi
+          env:
+            - name: ConnectionStrings__DefaultConnectionString
+              value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
+          image: csaocpger/adc-api-sql:2.1
+          resources:
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 5000
 ```
 
 A few notes on the deployment above. Firt and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database. Please replace \<IP_OF_THE_SQL_POD\> with the correct IP adress. We also set resource limits and expose port 5000, so that the API can be reached from outside of the pod.
@@ -357,7 +357,7 @@ Try out the API, e.g. create a contact via `POST` method, read (all) contacts vi
 
 ### Failover / Health
 
-As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. if a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and restarts the 4th pod again to reestablish the desired state. 
+As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. if a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and restarts the 4th pod again to reestablish the desired state.
 
 Let's try this...first, let's query the pods in our cluster. An this time, we are "watching" (`-w`) them so that we get notified of any changes of their states:
 
@@ -412,9 +412,9 @@ So, now we learned how to scale containers/pods and how Kubernetes behaves when 
 
 ## Services
 
-Kubernetes comes with its own service discovery component, called `Service`. A service is a way to expose a set of pods as a network endpoint with a unique name. This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP adresses therefor change or aren't valid the next time you would call such a pod. So, the `Service` is the one component that keeps track of what pods make up a certain service (and what IP adresses are valid to call) - and is also able to load-balance traffic across those pods. 
+Kubernetes comes with its own service discovery component, called `Service`. A service is a way to expose a set of pods as a network endpoint with a unique name. This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP adresses therefor change or aren't valid the next time you would call such a pod. So, the `Service` is the one component that keeps track of what pods make up a certain service (and what IP adresses are valid to call) - and is also able to load-balance traffic across those pods.
 
-To be able to determine which pods form a service, Kubernetes uses `Labels` and `LabelSelectors`: you assign labels to a (set of) pod(s) e.g. `app = myapi` and the corresponding service uses the same key/value combination as selector. 
+To be able to determine which pods form a service, Kubernetes uses `Labels` and `LabelSelectors`: you assign labels to a (set of) pod(s) e.g. `app = myapi` and the corresponding service uses the same key/value combination as selector.
 
 There are different types of services you can create in Kubernetes, let's dive into some of them...
 
@@ -424,7 +424,7 @@ The default service type in Kubernetes is called `ClusterIP`. If you choose that
 
 Let's see it in action...
 
-For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster). 
+For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster).
 Let's scale the API deployment back down to 4 replicas.
 
 ```zsh
@@ -524,7 +524,7 @@ So, how do we check, that the service(s) really find pods to route traffic to? T
 
 Let's see how that looks like in our case.
 
-```zsh 
+```zsh
 $ kubectl get services,endpoints
 
 NAME                  TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
@@ -542,13 +542,8 @@ This looks pretty good! The services we added have been created and there are al
 
 ## NodePort
 
-
 ## LoadBalancer
-
 
 ## Ingress
 
 Add an ingress controller in front of service
-
-
-
