@@ -15,7 +15,7 @@ $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr adcc
 
 ## Build a custom image
 
-Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`.
+First, let's build a custom Docker image. Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`.
 
 ```zsh
 $ docker build -t test:1.0 .
@@ -397,28 +397,154 @@ As you can see, Kubernetes immediately starts a new pod (`myapi-7c74475b88-rpv8x
 
 ### Scale on purpose
 
-Of course, you can scale such a deployment on purpose to e.g. 3 or 10 replicas. Therefor, you should use the `scale` command. Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
+Of course, you can scale such a deployment on purpose to e.g. 3 or 6 replicas. Therefor, you should use the `scale` command. Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
 
 ```zsh
-# Scale up to 10 replicas
-$ kubectl scale deployment --replicas 10 myapi
+# Scale up to 6 replicas
+$ kubectl scale deployment --replicas 6 myapi
 
 deployment.apps/myapi scaled
 
-# kubectl get pods should now show 10 "myapi"-pods
+# kubectl get pods should now show 6 "myapi"-pods
 ```
 
 So, now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
 
 ## Services
 
-Describe service types
+Kubernetes comes with its own service discovery component, called `Service`. A service is a way to expose a set of pods as a network endpoint with a unique name. This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP adresses therefor change or aren't valid the next time you would call such a pod. So, the `Service` is the one component that keeps track of what pods make up a certain service (and what IP adresses are valid to call) - and is also able to load-balance traffic across those pods. 
 
-Add service in front of our pods
+To be able to determine which pods form a service, Kubernetes uses `Labels` and `LabelSelectors`: you assign labels to a (set of) pod(s) e.g. `app = myapi` and the corresponding service uses the same key/value combination as selector. 
 
-Internal access --> use busybox to wget index.html (ClusterIp + NodePort)
+There are different types of services you can create in Kubernetes, let's dive into some of them...
 
-LoadBalancer type
+## ClusterIP
+
+The default service type in Kubernetes is called `ClusterIP`. If you choose that type, the service will be exposed via a cluster-internal IP adress and is therefor only reachable from within the cluster.
+
+Let's see it in action...
+
+For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster). 
+Let's scale the API deployment back down to 4 replicas.
+
+```zsh
+$ kubectl scale deployment --replicas 4 myapi
+
+deployment.apps/myapi scaled
+```
+
+After executing that command, the current state should look similar to that one:
+
+```zsh
+$ kubectl get pods,deployments,services
+
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/mssql-deployment-5559884974-q2j4w   1/1     Running   0          6h9m
+pod/myapi-7c74475b88-67s7w              1/1     Running   0          49s
+pod/myapi-7c74475b88-jzmcx              1/1     Running   0          5h47m
+pod/myapi-7c74475b88-s5gmj              1/1     Running   0          5h47m
+pod/myapi-7c74475b88-vhw6n              1/1     Running   0          49s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mssql-deployment   1/1     1            1           6h9m
+deployment.apps/myapi              4/4     4            4           5h47m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.0.0.1     <none>        443/TCP   5d1h
+```
+
+In the previous deployment, we already added `Labels` without really knowing what they are good for :)). Here's the excerpt of one the YAML manifest:
+
+```yaml
+spec:
+  [...]
+  template:
+    metadata:
+      labels:
+        app: myapi
+```
+
+So, let's see, if we have these labels attached to the API pods.
+
+```zsh
+kubectl get pods --show-labels -o wide
+
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES   LABELS
+mssql-deployment-5559884974-q2j4w   1/1     Running   0          6h42m   10.244.0.5    aks-nodepool1-11985439-vmss000000   <none>           <none>            app=mssql,pod-template-hash=5559884974
+myapi-7c74475b88-67s7w              1/1     Running   0          34m     10.244.0.15   aks-nodepool1-11985439-vmss000000   <none>           <none>            app=myapi,pod-template-hash=7c74475b88
+myapi-7c74475b88-jzmcx              1/1     Running   0          6h20m   10.244.2.4    aks-nodepool1-11985439-vmss000002   <none>           <none>            app=myapi,pod-template-hash=7c74475b88
+myapi-7c74475b88-s5gmj              1/1     Running   0          6h20m   10.244.1.8    aks-nodepool1-11985439-vmss000001   <none>           <none>            app=myapi,pod-template-hash=7c74475b88
+myapi-7c74475b88-vhw6n              1/1     Running   0          34m     10.244.0.16   aks-nodepool1-11985439-vmss000000   <none>           <none>            app=myapi,pod-template-hash=7c74475b88
+```
+
+Looks good! As you can see, the SQL server pod also already has some labels (`app=mssql`). Now, let's add two services: one for the SQL server (remember, we used the IP adress in the connection string, which is really bad as we now know) and one for the API pods.
+
+```yaml
+# Content of file sqlserver-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssqlsvr
+spec:
+  selector:
+    app: mssql
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433 # could be omitted, because 'port' and 'targetPort' are the same
+  type: ClusterIP # could be omitted, because ClusterIP is the default type
+```
+
+```yaml
+# Content of file api-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: contactsapi
+spec:
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'external' port...
+      targetPort: 5000 # 'internal' port...
+```
+
+Let's apply both definitions.
+
+```zsh
+$ kubectl apply -f sqlserver-service.yaml
+service/mssqlsvr created
+
+$ kubectl apply -f api-service.yaml
+service/contactsapi created
+```
+
+So, how do we check, that the service(s) really find pods to route traffic to? Therefor, another Kubernetes object comes into play: `Endpoints`. An endpoint tracks the IP adresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed. Any time a pod gets created or deleted (and is part of a certain service), the corresponding `Endpoint` gets updated.
+
+Let's see how that looks like in our case.
+
+```zsh 
+$ kubectl get services,endpoints
+
+NAME                  TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+service/contactsapi   ClusterIP   10.0.49.134   <none>        8080/TCP   8m21s
+service/kubernetes    ClusterIP   10.0.0.1      <none>        443/TCP    5d1h
+service/mssqlsvr      ClusterIP   10.0.96.4     <none>        1433/TCP   8m21s
+
+NAME                    ENDPOINTS                                                       AGE
+endpoints/contactsapi   10.244.0.15:5000,10.244.0.16:5000,10.244.1.8:5000 + 1 more...   8m22s
+endpoints/kubernetes    20.50.162.80:443                                                5d1h
+endpoints/mssqlsvr      10.244.0.5:1433                                                 8m22s
+```
+
+This looks pretty good! The services we added have been created and there are also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds mutliple pods/IP adresses to route traffic to.
+
+## NodePort
+
+
+## LoadBalancer
+
 
 ## Ingress
 
