@@ -89,7 +89,7 @@ myfirstpod   1/1     Running             0          17s
 Also, "describe" the pod to see some more details like status, the node it's running on, events etc.
 
 ```zsh
-$ kubectl describe myfirstpod
+$ kubectl describe pod myfirstpod
 Name:         myfirstpod
 Namespace:    default
 Priority:     0
