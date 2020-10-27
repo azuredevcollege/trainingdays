@@ -104,7 +104,7 @@ So, great, we can now receive events when a file is added to blob storage. Let's
 Therefore, we need to add a dependency to our project that enables us to do image manipulation in dotnet core. We will use **SixLabors.ImageSharp** <https://github.com/SixLabors/ImageSharp>. Open a terminal and go to your projects folder. Add the library:
 
 ```shell
-dotnet add <NAME_OF_FUNC>.csproj package SixLabors.ImageSharp
+dotnet add <NAME_OF_FUNCTION_PROJECT>.csproj package SixLabors.ImageSharp
 ```
 
 Now, back in Visual Studio Code, replace the contents of the file **BlobTriggerCSharp.cs** with:
