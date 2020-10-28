@@ -627,7 +627,134 @@ As you can see, the API is working perfectly...and, traffic is load-balanced ove
 
 ## NodePort
 
+So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node has a public IP adress. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
+
+To demonstrate the behavior, we'll create a new service called `nodeport-contactsapi` that will select all of the API pods currently running in the cluster - basically the same behavior as the ClusterIP service, but accessible via \<NodeIp>:\<NodePort>.
+
+```yaml
+# Content of file api-service-nodeport.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-contactsapi
+spec:
+  type: NodePort
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'clusterip' port...
+      targetPort: 5000 # 'internal' port...
+      nodePort: 30010 # optional - Kubernetes would pick a port from the default node-port range 30000-32767
+```
+
+Create a file called `api-service-nodeport.yaml` and apply the definition to your cluster.
+
+```zsh
+$ kubectl apply -f api-service-nodeport.yaml
+
+service/nodeport-contactsapi created
+
+# Check the services/endpoints created
+$ kubectl get services,endpoints
+```
+
+By using the same label selectors for the service, we get the same endpoints as for our `ClusterIP` API service.
+
+Now, let's call such a service via a node's IP adress and the port `30010`.
+
+```zsh
+# get node IP adresses
+$ kubectl get nodes -o wide
+
+NAME                                STATUS   ROLES   AGE     VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+aks-nodepool1-11985439-vmss000000   Ready    agent   5d20h   v1.17.11   10.240.0.4    <none>        Ubuntu 16.04.7 LTS   4.15.0-1096-azure   docker://19.3.12
+aks-nodepool1-11985439-vmss000001   Ready    agent   5d20h   v1.17.11   10.240.0.5    <none>        Ubuntu 16.04.7 LTS   4.15.0-1096-azure   docker://19.3.12
+aks-nodepool1-11985439-vmss000002   Ready    agent   5d20h   v1.17.11   10.240.0.6    <none>        Ubuntu 16.04.7 LTS   4.15.0-1096-azure   docker://19.3.12
+```
+
+In this case, we have the IP adresses `10.240.0.4`, `10.240.0.5` and `10.240.0.6`. Let's use one of them to call the contacts API.
+
+```zsh
+$ kubectl run -it --rm --image csaocpger/httpie:1.0 http --restart Never -- /bin/sh
+
+# inside the pod, execute...
+
+$ http GET http://10.240.0.4:30010/contacts
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Wed, 28 Oct 2020 09:45:58 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[
+    {
+        "avatarLocation": "",
+        "city": "Redmond",
+        "company": "Microsoft",
+        "country": "USA",
+        "description": "CEO of Microsoft",
+        "email": "satya@microsoft.com",
+        "firstname": "Satya",
+        "houseNumber": "1",
+        "id": "011a9848-2889-4164-a29e-d5ffca5d58cc",
+        "lastname": "Nadella",
+        "mobile": "+1 32 6546 6542",
+        "phone": "+1 32 6546 6545",
+        "postalCode": "123456",
+        "street": "Street"
+    }
+]
+```
+
+Perfect! We can now also call our contacts API service via a worker node. But unfortunately, our worker nodes do not have a public IP adress. So how can we access our service now via the internet? Let's move on to the next service type: `LoadBalancer`.
+
 ## LoadBalancer
+
+As you might already have guessed, a service of type `LoadBalancer` is the one, that enables us to expose a service via an Azure Loadbalancer with a public IP adress. By default, also a ClusterIP and NodePort service, to which the external loadbalancer routes, are automatically created.
+
+Let's see this in action. Again, we create an additional service that routes traffic to our 4 API pods, this time with a type of `LoadBalancer`.
+
+```yaml
+# Content of file api-service-loadbalancer.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-contactsapi
+spec:
+  type: LoadBalancer
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'public' port...
+      targetPort: 5000 # 'internal' port...
+```
+
+Please create a file called `api-service-loadbalancer.yaml` and apply it.
+
+```zsh
+$ kubectl apply -f api-service-loadbalancer.yaml
+
+service/loadbalancer-contactsapi created
+
+# Check available services in the cluster
+
+$ kubectl get services -w
+
+NAME                       TYPE           CLUSTER-IP    EXTERNAL-IP      PORT(S)          AGE
+contactsapi                ClusterIP      10.0.49.134   <none>           8080/TCP         19h
+kubernetes                 ClusterIP      10.0.0.1      <none>           443/TCP          5d21h
+loadbalancer-contactsapi   LoadBalancer   10.0.163.1    <pending>        8080:30320/TCP   6s
+mssqlsvr                   ClusterIP      10.0.96.4     <none>           1433/TCP         19h
+nodeport-contactsapi       NodePort       10.0.87.165   <none>           8080:30010/TCP   69m
+loadbalancer-contactsapi   LoadBalancer   10.0.163.1    52.236.151.220   8080:30320/TCP   56s
+```
+
+As you can see, after a short amount of time, the `loadbalancer-contactsapi` is receiving an external IP adress from the Azure Loadbalancer. Our contacts API should now be accessible - in this case - via http://52.236.151.220:8080. If you open that link in a browser (of course, replace the IP adress with the one your service has been assigned), you should see the swagger UI.
+
+![swagger_external](./img/swagger-external.png)
 
 ## Ingress
 
