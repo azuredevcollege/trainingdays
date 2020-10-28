@@ -15,7 +15,7 @@ $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr adcc
 
 ## Build a custom image
 
-First, let's build a custom Docker image. Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`.
+First, let's build a custom Docker image. Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`. Take a look at the - very simple - Dockerfile and run the following commands.
 
 ```zsh
 $ docker build -t test:1.0 .
@@ -372,7 +372,7 @@ myapi-7c74475b88-jzmcx              1/1     Running   0          36m
 myapi-7c74475b88-s5gmj              1/1     Running   0          36m
 ```
 
-Now please open another tab/command line window and kill one of the pods. Here, we pick ``.
+Now please open another tab/command line window and kill one of the pods. Here, we pick `myapi-7c74475b88-7jhtq`.
 
 ```zsh
 $ kubectl delete pod myapi-7c74475b88-7jhtq
@@ -538,7 +538,92 @@ endpoints/kubernetes    20.50.162.80:443                                        
 endpoints/mssqlsvr      10.244.0.5:1433                                                 8m22s
 ```
 
-This looks pretty good! The services we added have been created and there are also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds mutliple pods/IP adresses to route traffic to.
+This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP adresses to route traffic to.
+
+Now, there is one more step to do, before we can test the setup: adjust the connection string of the "myapi" deployment.
+
+```yaml
+[...]
+    - name: ConnectionStrings__DefaultConnectionString
+      value: Server=tcp:mssqlsvr,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
+[...]
+```
+
+Please replace the IP adress, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 new API pods.
+
+```zsh
+$ kubectl apply -f api.yaml
+deployment.apps/myapi configured
+```
+
+Let's test the setup...we now spin up another pod in the cluster, connect to the commandline of that pod and run several calls against our API service.
+
+```zsh
+$ kubectl run -it --rm --image csaocpger/httpie:1.0 http --restart Never -- /bin/sh
+If you don't see a command prompt, try pressing enter.
+```
+
+You are now connected to the pod and should see a command prompt. We can now issue some requests.
+
+```zsh
+
+# CREATE a contact
+$ echo '{ "firstname": "Satya", "lastname": "Nadella", "email": "satya@microsoft.com", "company": "Microsoft", "avatarLocation": "", "phone": "+1 32 6546 6545", "mobile": "+1 32 6546 6542", "description": "CEO of Microsoft", "street": "Street", "houseNumber": "1", "city": "Redmond", "postalCode": "123456", "country": "USA" }' | http POST http://contactsapi:8080/contacts
+
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+Date: Wed, 28 Oct 2020 08:44:43 GMT
+Location: http://contactsapi:8080/contacts/011a9848-2889-4164-a29e-d5ffca5d58cc
+Server: Kestrel
+Transfer-Encoding: chunked
+
+{
+    "avatarLocation": "",
+    "city": "Redmond",
+    "company": "Microsoft",
+    "country": "USA",
+    "description": "CEO of Microsoft",
+    "email": "satya@microsoft.com",
+    "firstname": "Satya",
+    "houseNumber": "1",
+    "id": "011a9848-2889-4164-a29e-d5ffca5d58cc",
+    "lastname": "Nadella",
+    "mobile": "+1 32 6546 6542",
+    "phone": "+1 32 6546 6545",
+    "postalCode": "123456",
+    "street": "Street"
+}
+
+# READ all contacts
+http GET http://contactsapi:8080/contacts
+
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Wed, 28 Oct 2020 08:45:49 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+[
+    {
+        "avatarLocation": "",
+        "city": "Redmond",
+        "company": "Microsoft",
+        "country": "USA",
+        "description": "CEO of Microsoft",
+        "email": "satya@microsoft.com",
+        "firstname": "Satya",
+        "houseNumber": "1",
+        "id": "011a9848-2889-4164-a29e-d5ffca5d58cc",
+        "lastname": "Nadella",
+        "mobile": "+1 32 6546 6542",
+        "phone": "+1 32 6546 6545",
+        "postalCode": "123456",
+        "street": "Street"
+    }
+]
+```
+
+As you can see, the API is working perfectly...and, traffic is load-balanced over the 4 running pods of the contacts API. Also, the connection from an API pod to the database via the `Service` is working as expected.
 
 ## NodePort
 
