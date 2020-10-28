@@ -6,11 +6,11 @@ In order to be able to store the custom Docker images you will be creating throu
 
 ```zsh
 $ az group create --name adc-acr-rg --location germanywestcentral
-$ az acr create --name adccontainerreg --resource-group adc-acr-rg --sku basic --admin-enabled
+$ az acr create --name <ACR_NAME> --resource-group adc-acr-rg --sku basic --admin-enabled
 
 # now let's attach the container registry to the cluster
 
-$ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr adccontainerreg
+$ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr <ACR_NAME>
 ```
 
 ## Build a custom image
@@ -27,23 +27,23 @@ Open your browser and navigate to `http://localhost:8080`. You should see a page
 Now let's push the image to our registry. To be able to interact with our registry, we first need to login.
 
 ```zsh
-$ ACRPWD=$(az acr credential show -n adccontainerreg --query "passwords[0].value" -o tsv)
-$ docker login adccontainerreg.azurecr.io -u adccontainerreg -p $ACRPWD
+$ ACRPWD=$(az acr credential show -n <ACR_NAME> --query "passwords[0].value" -o tsv)
+$ docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
 ```
 
-> In this sample, we used the `admin` account of our registry to login - basically with username/password. In secure/production environments, you should not enable the `admin` account on the registry and login via Azure Active Directory: `az acr login -n adccontainerreg`. The token that is issued will be valid for 3 hours.
+> In this sample, we used the `admin` account of our registry to login - basically with username/password. In secure/production environments, you should not enable the `admin` account on the registry and login via Azure Active Directory: `az acr login -n <ACR_NAME>`. The token that is issued will be valid for 3 hours.
 
 We are now ready to push the image to our container registry.
 
 ```zsh
-$ docker tag test:1.0 adccontainerreg.azurecr.io/test:1.0
-$ docker push adccontainerreg.azurecr.io/test:1.0
+$ docker tag test:1.0 <ACR_NAME>.azurecr.io/test:1.0
+$ docker push <ACR_NAME>.azurecr.io/test:1.0
 ```
 
-You can also build directly within the Azure Container Registry service, in case you don't have Docker on your machine. Let's have try...
+You can also build directly within the Azure Container Registry service, in case you don't have Docker on your machine. Let's have a try...
 
 ```zsh
-$ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/test:2.0 .
+$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/test:2.0 .
 ```
 
 The command will send the current build context to Azure, kick-off a docker build and add the image to your registry.
@@ -60,7 +60,7 @@ metadata:
   name: myfirstpod
 spec:
   containers:
-    - image: adccontainerreg.azurecr.io/test:2.0
+    - image: <ACR_NAME>.azurecr.io/test:2.0
       name: myfirstpod
       resources: {}
       ports:
@@ -74,7 +74,7 @@ Create a file called `myfirstpod.yaml` with the content above and apply it to yo
 $ kubectl apply -f myfirstpod.yaml
 ```
 
-Check that everything works as expected.
+Check that everything works as expected:
 
 ```zsh
 $ kubectl get pods -w
@@ -169,7 +169,9 @@ $ kubectl logs myfirstpod -f=true
 
 ## Running multiple instances of our workload
 
-Now we only showed, how Kubernetes is dealing with single container/pod environments. If such a pod fails (something serious happens and the process crashes e.g.), Kubernetes doesn't take care of restarting our workload. On top of that, we only run a single instance - ideally, we can tell Kubernetes to run multiple instances of our container in the cluster. To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): `Deployments`.
+Until now we only showed, how Kubernetes is dealing with single container/pod environments. If such a pod fails (something serious happens and the process crashes e.g.), Kubernetes doesn't take care of restarting our workload. On top of that, we only run a single instance - ideally, we can tell Kubernetes to run multiple instances of our container in the cluster. To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): `Deployments`.
+
+### Deployments
 
 In a `Deployment`, you can tell Kubernetes a few more things, that you definetely need in production environments:
 
@@ -282,10 +284,10 @@ mssql-deployment-5559884974-q2j4w   1/1     Running   0          4m44s   10.244.
 
 The adress may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the adress down, as you will need it in the next step.
 
-Now, we can deploy a simple API that is able to manage `Contacts` object, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image needs to be built upfront and put in your container registry. So, please go to the folder `day7/apps/dotnetcore/Scm` and build the API image:
+Now, we can deploy a simple API that is able to manage `Contacts` objects, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image needs to be built upfront and put in your container registry. So, please go to the folder `day7/apps/dotnetcore/Scm` and build the API image:
 
 ```zsh
-$ docker build -t adccontainerreg.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+$ docker build -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 
 Sending build context to Docker daemon  64.51kB
 Step 1/11 : FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
@@ -307,7 +309,7 @@ Successfully tagged adccontainerreg.azurecr.io/adc-api-sql:1.0
 After a successful build, push the local image to the Azure Container Registry:
 
 ```zsh
-$ docker push adccontainerreg.azurecr.io/adc-api-sql:1.0
+$ docker push <ACR_NAME>.azurecr.io/adc-api-sql:1.0
 
 The push refers to repository [adccontainerreg.azurecr.io/adc-api-sql]
 11185412b6d4: Pushed
@@ -324,7 +326,7 @@ d0fe97fa8b8c: Mounted from test
 Alternatively, you can also build directly within the container registry:
 
 ```zsh
-$ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 ```
 
 Now we are ready to use the image in our deployment:
@@ -350,7 +352,7 @@ spec:
           env:
             - name: ConnectionStrings__DefaultConnectionString
               value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
-          image: adccontainerreg.azurecr.io/adc-api-sql:1.0
+          image: <ACR_NAME>.azurecr.io/adc-api-sql:1.0
           resources:
             limits:
               memory: '128Mi'
@@ -359,9 +361,9 @@ spec:
             - containerPort: 5000
 ```
 
-A few notes on the deployment above. Firt and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database. Please replace \<IP_OF_THE_SQL_POD\> with the correct IP adress. We also set resource limits and expose port 5000, so that the API can be reached from outside of the pod.
+A few notes on the deployment above. Firt and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database (the API will use this env variable to get the connection string). Please replace \<IP_OF_THE_SQL_POD\> with the correct IP adress. We also set resource limits and expose port `5000`, so that the API can be reached from outside of the pod.
 
-So, again create a file (`api.yaml`) with the contents above - don't forget to replace the IP adress - and apply the configuration to your cluster.
+Again, create a file (`api.yaml`) with the contents above - don't forget to replace the IP adress - and apply the configuration to your cluster.
 
 ```zsh
 $ kubectl apply -f api.yaml
@@ -369,7 +371,7 @@ $ kubectl apply -f api.yaml
 deployment.apps/myapi created
 ```
 
-Let's have a look at the pods, we should now have 4 replicas running in the cluster.
+Let's have a look at the pods...we should now have 4 replicas running in the cluster.
 
 ```zsh
 $ kubectl get pods
@@ -382,7 +384,7 @@ myapi-7c74475b88-jzmcx              1/1     Running   0          74s
 myapi-7c74475b88-s5gmj              1/1     Running   0          74s
 ```
 
-So, we are all set to test the API and the connection to the SQL server. As done before, let's port-forward a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj`.
+We are all set to test the API and the connection to the SQL server. As done before, let's "port-forward" a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj`.
 
 ```zsh
 $ kubectl port-forward myapi-7c74475b88-7hmcj 8080:5000
@@ -402,7 +404,7 @@ Try out the API, e.g. create a contact via `POST` method, read (all) contacts vi
 
 ### Failover / Health
 
-As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. if a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and restarts the 4th pod again to reestablish the desired state.
+As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. when a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and re-creates the 4th pod again to reestablish the desired state.
 
 Let's try this...first, let's query the pods in our cluster. An this time, we are "watching" (`-w`) them so that we get notified of any changes of their states:
 
@@ -438,11 +440,11 @@ myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
 myapi-7c74475b88-7jhtq              0/1     Terminating         0          45m
 ```
 
-As you can see, Kubernetes immediately starts a new pod (`myapi-7c74475b88-rpv8x`), because for a certain amount of time, there are only 3 pods running/available in the cluster. And in the deployment, we told Kubernetes to always have 4 pods of the API present.
+As you can see, Kubernetes immediately starts a new pod (`myapi-7c74475b88-rpv8x`), because for a certain amount of time, there are only 3 pods running/available in the cluster. And in the deployment, we told Kubernetes to always have 4 pods of them present.
 
 ### Scale on purpose
 
-Of course, you can scale such a deployment on purpose to e.g. 3 or 6 replicas. Therefor, you should use the `scale` command. Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
+Of course, you can scale such a deployment on purpose to e.g. 3 or 6 replicas. Therefor, you should use the `scale` command (or simply edit the deployment manifest). Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
 
 ```zsh
 # Scale up to 6 replicas
@@ -453,7 +455,7 @@ deployment.apps/myapi scaled
 # kubectl get pods should now show 6 "myapi"-pods
 ```
 
-So, now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
+Now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
 
 ## Services
 
@@ -470,7 +472,7 @@ The default service type in Kubernetes is called `ClusterIP`. If you choose that
 Let's see it in action...
 
 For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster).
-Let's scale the API deployment back down to 4 replicas.
+Let's scale the API deployment back down to 4 replicas in case you haven't already done so.
 
 ```zsh
 $ kubectl scale deployment --replicas 4 myapi
@@ -565,7 +567,7 @@ $ kubectl apply -f api-service.yaml
 service/contactsapi created
 ```
 
-So, how do we check, that the service(s) really find pods to route traffic to? Therefor, another Kubernetes object comes into play: `Endpoints`. An endpoint tracks the IP adresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed. Any time a pod gets created or deleted (and is part of a certain service), the corresponding `Endpoint` gets updated.
+So, how do we check, that the service(s) really find pods to route traffic to? Therefor, another Kubernetes object comes into play: `Endpoints`. An endpoint tracks the IP adresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed to. Any time a pod gets created or deleted (and is part of a certain service), the corresponding `Endpoint` gets updated.
 
 Let's see how that looks like in our case.
 
@@ -583,7 +585,7 @@ endpoints/kubernetes    20.50.162.80:443                                        
 endpoints/mssqlsvr      10.244.0.5:1433                                                 8m22s
 ```
 
-This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP adresses to route traffic to.
+This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP adresses to route traffic to. From now on, we could use the service name to call our pods, e.g. http://contactsapi:8080.
 
 Now, there is one more step to do, before we can test the setup: adjust the connection string of the "myapi" deployment.
 
@@ -594,7 +596,7 @@ Now, there is one more step to do, before we can test the setup: adjust the conn
 [...]
 ```
 
-Please replace the IP adress, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 new API pods.
+Please replace the IP adress, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 re-created API pods.
 
 ```zsh
 $ kubectl apply -f api.yaml
@@ -672,7 +674,7 @@ As you can see, the API is working perfectly...and, traffic is load-balanced ove
 
 ## NodePort
 
-So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node has a public IP adress. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
+So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP adress. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
 
 To demonstrate the behavior, we'll create a new service called `nodeport-contactsapi` that will select all of the API pods currently running in the cluster - basically the same behavior as the ClusterIP service, but accessible via \<NodeIp>:\<NodePort>.
 
@@ -706,7 +708,7 @@ $ kubectl get services,endpoints
 
 By using the same label selectors for the service, we get the same endpoints as for our `ClusterIP` API service.
 
-Now, let's call such a service via a node's IP adress and the port `30010`.
+Now, let's call such a service via a node's IP adress and the port `30010`. We first need to determine the IP adress of each node.
 
 ```zsh
 # get node IP adresses
@@ -757,7 +759,7 @@ Perfect! We can now also call our contacts API service via a worker node. But un
 
 ## LoadBalancer
 
-As you might already have guessed, a service of type `LoadBalancer` is the one, that enables us to expose a service via an Azure Loadbalancer with a public IP adress. By default, also a ClusterIP and NodePort service, to which the external loadbalancer routes, are automatically created.
+As you might already have guessed, a service of type `LoadBalancer` is the one, that enables us to expose a service via an Azure Loadbalancer with a public IP adress. By default, also a `ClusterIP` and `NodePort` service, to which the external loadbalancer routes, are automatically created.
 
 Let's see this in action. Again, we create an additional service that routes traffic to our 4 API pods, this time with a type of `LoadBalancer`.
 
@@ -797,10 +799,10 @@ nodeport-contactsapi       NodePort       10.0.87.165   <none>           8080:30
 loadbalancer-contactsapi   LoadBalancer   10.0.163.1    52.236.151.220   8080:30320/TCP   56s
 ```
 
-As you can see, after a short amount of time, the `loadbalancer-contactsapi` is receiving an external IP adress from the Azure Loadbalancer. Our contacts API should now be accessible - in this case - via http://52.236.151.220:8080. If you open that link in a browser (of course, replace the IP adress with the one your service has been assigned), you should see the swagger UI.
+As you can see, after a short amount of time, the `loadbalancer-contactsapi` is receiving an external IP adress from the Azure Loadbalancer. Our contacts API should now be accessible - in this case - via http://52.236.151.220:8080. If you open that link in a browser (of course, replace the IP adress with the one your service has received), you should see the swagger UI.
 
 ![swagger_external](./img/swagger-external.png)
 
-## Ingress
+We now have the tools to expose a single service to the internet via the `LoadBalancer` type. This may be okay in a scenario, where you only have few services. But to be clear, this is a bad pattern. In a production environment, you want to limit the amount of externally available services to a minimum. And if your application is made of several services or is implementing a microservice-based architectural pattern, using `LoadBalancer` services is a bad practice. Ideally, you only use one public IP adress and manage the external access to the cluster via `Ingress` definitions and the corresponding `IngressController`.
 
-Add an ingress controller in front of service
+## Ingress
