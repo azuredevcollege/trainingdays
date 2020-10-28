@@ -7,7 +7,6 @@ import resourcesStore from "./components/resources/store";
 import searchStore from "./components/search/store";
 import statsStore from "./components/stats/store";
 import reportsStore from "./components/visitreports/store";
-import authStore from "./components/auth/store";
 
 Vue.use(Vuex);
 
@@ -32,8 +31,7 @@ export default new Vuex.Store({
     search: searchStore,
     resources: resourcesStore,
     reports: reportsStore,
-    stats: statsStore,
-    auth: authStore
+    stats: statsStore
   },
   state: {
 

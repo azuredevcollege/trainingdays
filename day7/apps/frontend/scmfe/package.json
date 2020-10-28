@@ -17,7 +17,6 @@
     "vue-application-insights": "^1.0.7",
     "vue-cropperjs": "^3.0.0",
     "vue-echarts": "^4.0.4",
-    "vue-msal": "^3.0.1",
     "vue-router": "^3.4.3",
     "vue-wait": "^1.4.8",
     "vuetify": "^2.3.10",

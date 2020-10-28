@@ -12,9 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Adc.Scm.Api.Authentication;
-using Adc.Scm.Api.Authorization;
+using System;
 
 namespace Adc.Scm.Api
 {
@@ -36,15 +34,6 @@ namespace Adc.Scm.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Initialize authentication
-            services.AddAuthentication(options => {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddAzureAdBearer(options => Configuration.Bind("AzureAdOptions", options));
-
-            // Initialize authorization
-            services.AddContactsAuthorization();
-
             // Initialize ApplicationInsights
             services.AddSingleton<ITelemetryInitializer, ApiTelemetryInitializer>();
             services.AddApplicationInsightsTelemetry();
@@ -98,27 +87,6 @@ namespace Adc.Scm.Api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contacts API", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme 
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[]{}
-                    }
-                });
             });
 
             services.AddCors(options =>
@@ -149,7 +117,6 @@ namespace Adc.Scm.Api
 
             app.UseRouting();
 
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
