@@ -282,7 +282,52 @@ mssql-deployment-5559884974-q2j4w   1/1     Running   0          4m44s   10.244.
 
 The adress may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the adress down, as you will need it in the next step.
 
-Now, we can deploy a simple API that is able to manage `Contacts` object, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image is already present in a public container registry, so we don't need to build an image for it.
+Now, we can deploy a simple API that is able to manage `Contacts` object, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image needs to be built upfront and put in your container registry. So, please go to the folder `day7/apps/dotnetcore/Scm` and build the API image:
+
+```zsh
+$ docker build -t adccontainerreg.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+
+Sending build context to Docker daemon  64.51kB
+Step 1/11 : FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+3.1: Pulling from dotnet/core/sdk
+[...]
+[...]
+Step 10/11 : USER www-data
+ ---> Running in 50fb1d57ca84
+Removing intermediate container 50fb1d57ca84
+ ---> 4264f8b474b6
+Step 11/11 : ENTRYPOINT ["dotnet", "Adc.Scm.Api.dll"]
+ ---> Running in bbd3e574d650
+Removing intermediate container bbd3e574d650
+ ---> b4a8315645be
+Successfully built b4a8315645be
+Successfully tagged adccontainerreg.azurecr.io/adc-api-sql:1.0
+```
+
+After a successful build, push the local image to the Azure Container Registry:
+
+```zsh
+$ docker push adccontainerreg.azurecr.io/adc-api-sql:1.0
+
+The push refers to repository [adccontainerreg.azurecr.io/adc-api-sql]
+11185412b6d4: Pushed
+afe1f320f2da: Pushed
+42a28097962e: Pushed
+049b0fdaa27c: Pushed
+87e08e237115: Pushed
+1915427dc1a4: Pushed
+8a939c4fd477: Pushed
+d0fe97fa8b8c: Mounted from test
+1.0: digest: sha256:b10195ef4c4f4efe1c8ace700ae24121f236ab73e91f2d6dce8d78d82b3967ec size: 2006
+```
+
+Alternatively, you can also build directly within the container registry:
+
+```zsh
+$ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+```
+
+Now we are ready to use the image in our deployment:
 
 ```yaml
 # Content of file api.yaml
@@ -305,7 +350,7 @@ spec:
           env:
             - name: ConnectionStrings__DefaultConnectionString
               value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
-          image: csaocpger/adc-api-sql:2.1
+          image: adccontainerreg.azurecr.io/adc-api-sql:1.0
           resources:
             limits:
               memory: '128Mi'

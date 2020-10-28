@@ -17,7 +17,7 @@ spec:
           env:
             - name: ConnectionStrings__DefaultConnectionString
               value: Server=tcp:<IP_OF_THE_SQL_POD>,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;
-          image: csaocpger/adc-api-sql:2.1
+          image: adccontainerreg.azurecr.io/adc-api-sql:1.0
           resources:
             limits:
               memory: '128Mi'
