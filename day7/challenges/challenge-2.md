@@ -1068,4 +1068,4 @@ That looks good, now open a browser and navigate to the website (here: <http://2
 
 ## Wrap-Up
 
-Congratulations, you have deployed a full-blown application to Kubernetes with a SQL server running inside the cluster. As you might guess, there are a few things now that need to be adjusted. E.g. we added some of the configuration settings - even worse, passwords! - "hard-coded" to manifest files. Also the endpoint configuration for the UI has been baked into the image. In the next challenge, we will adress these issues by using Kubernetes `ConfigMaps` and `Secrets`.
+Congratulations, you have deployed a full-blown application to Kubernetes with a SQL server running inside the cluster. As you might guess, there are a few things now that need to be adjusted. E.g. we added some of the configuration settings - even worse, passwords! - "hard-coded" to manifest files. Also the endpoint configuration for the UI has been baked into the image. In the next challenge, we will adress these issues by using Kubernetes `ConfigMaps` and `Secrets`. You will learn how to configure your application "from outside" by using standard Kubernetes objects.
