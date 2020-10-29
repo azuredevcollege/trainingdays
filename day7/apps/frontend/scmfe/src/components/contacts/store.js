@@ -1,6 +1,6 @@
 import { getHttpClient } from '../../utils/http-client'
 
-const BASE_PATH = '/contacts'
+const BASE_PATH = '/'
 
 const state = {
   contacts: [],
@@ -11,10 +11,10 @@ const state = {
 
 // getters
 const getters = {
-  contacts: (state) => state.contacts,
-  contact: (state) => state.contact,
-  newContact: (state) => state.newContact,
-  contactsPicker: (state) => state.contactsPicker,
+  contacts: state => state.contacts,
+  contact: state => state.contact,
+  newContact: state => state.newContact,
+  contactsPicker: state => state.contactsPicker,
 }
 
 // actions
@@ -24,11 +24,11 @@ const actions = {
     var client = getHttpClient()
     return client
       .get(BASE_PATH)
-      .then((response) => {
+      .then(response => {
         commit('setContacts', response.data)
         dispatch('wait/end', 'apicall', { root: true })
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(
@@ -58,11 +58,11 @@ const actions = {
     var client = getHttpClient()
     return client
       .get(BASE_PATH)
-      .then((response) => {
+      .then(response => {
         commit('setContactsList', response.data)
         dispatch('wait/end', 'apicall', { root: true })
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(
@@ -91,12 +91,12 @@ const actions = {
     dispatch('wait/start', 'apicall', { root: true })
     var client = getHttpClient()
     return client
-      .get(`${BASE_PATH}/${id}`)
-      .then((response) => {
+      .get(`${BASE_PATH}${id}`)
+      .then(response => {
         commit('setContact', response.data)
         dispatch('wait/end', 'apicall', { root: true })
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(
@@ -125,7 +125,7 @@ const actions = {
     dispatch('wait/start', 'apicall', { root: true })
     var client = getHttpClient()
     return client
-      .put(`${BASE_PATH}/${payload.id}`, payload)
+      .put(`${BASE_PATH}${payload.id}`, payload)
       .then(() => {
         dispatch('wait/end', 'apicall', { root: true })
         dispatch(
@@ -139,7 +139,7 @@ const actions = {
         )
         return dispatch('read', payload.id)
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(
@@ -169,7 +169,7 @@ const actions = {
     var client = getHttpClient()
     return client
       .post(`${BASE_PATH}`, payload)
-      .then((response) => {
+      .then(response => {
         var newcontact = response.data.id
         commit('setNewContact', newcontact)
         dispatch(
@@ -183,7 +183,7 @@ const actions = {
         )
         dispatch('wait/end', 'apicall', { root: true })
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(
@@ -212,7 +212,7 @@ const actions = {
     dispatch('wait/start', 'apicall', { root: true })
     var client = getHttpClient()
     return client
-      .delete(`${BASE_PATH}/${id}`)
+      .delete(`${BASE_PATH}${id}`)
       .then(() => {
         dispatch(
           'notifications/addMessage',
@@ -225,7 +225,7 @@ const actions = {
         )
         dispatch('wait/end', 'apicall', { root: true })
       })
-      .catch((err) => {
+      .catch(err => {
         if (typeof err == 'object' && err.code) {
           if (err.code == 'ECONNABORTED') {
             dispatch(

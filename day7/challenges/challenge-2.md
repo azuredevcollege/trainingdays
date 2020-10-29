@@ -833,7 +833,7 @@ $ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 "ingress-nginx" has been added to your repositories
 
-$ helm install my-ingress ingress-nginx/ingress-nginx --set controller.service.externalTrafficPolicy=Local --namespace ingress
+$ helm install my-ingress ingress-nginx/ingress-nginx --version 3.7.1 --set controller.service.externalTrafficPolicy=Local --namespace ingress
 
 NAME: my-ingress
 LAST DEPLOYED: Thu Oct 29 08:11:35 2020
@@ -891,9 +891,10 @@ Now, let's create an ingress definition for the Contacts API.
 ## Create Ingress Definitions
 
 The controller has been successfully installed and can accept traffic. We are ready to create an [ingress definition](https://kubernetes.io/docs/concepts/services-networking/ingress/) for the Contacts API. To access the service, we want to be able to call an endpoint like that: <http://20-67-122-249.nip.io/api/contacts>. Therefor, we will be using path-based routing!
+nginx.ingress.kubernetes.io/rewrite-target: /contacts/\$2
 
 ```yaml
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: ing-contacts
@@ -903,13 +904,14 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
     nginx.ingress.kubernetes.io/cors-max-age: '600'
     nginx.ingress.kubernetes.io/proxy-body-size: '12m'
-    nginx.ingress.kubernetes.io/rewrite-target: '/contacts/$2'
+    nginx.ingress.kubernetes.io/rewrite-target: /contacts/\$2
+    nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
   rules:
     - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
       http:
         paths:
-          - path: /api/contacts(/|$)(.*)
+          - path: /api/contacts(\/|$)(.*)
             backend:
               serviceName: contactsapi
               servicePort: 8080
@@ -919,6 +921,150 @@ You should now be able to navigate to the adress <http://20-67-122-249.nip.io/ap
 
 ![ingress_contacts](./img/ingress_contacts.png)
 
+As you can see in the ingress definition, we also added a few annotations to influence how the underlying NGINX server is dealing with requests. E.g. enable [Cross-Origin-Resource-Sharing (CORS)](<https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#:~:text=Cross%2DOrigin%20Resource%20Sharing%20(CORS)%20is%20a%20mechanism%20that,resources%20from%20a%20different%20origin.>) (`nginx.ingress.kubernetes.io/enable-cors`) and also define which headers are allowed (`nginx.ingress.kubernetes.io/cors-allow-headers`) or how long the CORS response is valid until the next CORS request will be sent by the browser (`nginx.ingress.kubernetes.io/cors-max-age`).
+
+For your information, there is a long list of available annotations you can use with the NGINX ingress controller: <https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/>. Of course, other ingress controllers support similar definitions.
+
 ## Add the UI
 
-So, just having an API is pretty boring. Of course there is also a UI service, that is able to interact with the API. Let's also add that component to our cluster.
+So, just having an API is pretty boring. Of course there is also a UI service, that is able to interact with the API. Let's also add that component to our cluster to have a "real-life setup". Go to the folder `day7/apps/frontend/scmfe/public/settings` and adjust the settings.js file for the frontend. We need to tell the Single Page Application, where to access the Contacts API.
+
+```js
+var uisettings = {
+  endpoint: 'http://<YOUR_NIO_DOMAIN>/api/contacts/',
+  enableStats: false,
+  aiKey: '',
+}
+```
+
+In the current sample, the file looks like that:
+
+```js
+var uisettings = {
+  endpoint: 'http://20-67-122-249.nip.io/api/contacts/',
+  enableStats: false,
+  aiKey: '',
+}
+```
+
+Save the file and - in a commandline terminal - go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
+
+```zsh
+$ docker build -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
+$ docker push adccontainerreg.azurecr.io/adc-frontend-ui:1.0
+```
+
+Alternatively, you can also use your Azure Container Registry:
+
+```zsh
+$ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
+```
+
+As soon as the image is present in your registry, let's deploy it to the cluster. We need three definitions: a deployment, a clusterip service and an ingress object. This time, we will deploy everything within one file, separating each object by `---`. Please **adjust the the ingress host** to the domain, you are using.
+
+```yaml
+# Content of file frontend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfrontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfrontend
+  template:
+    metadata:
+      labels:
+        app: myfrontend
+    spec:
+      containers:
+        - name: myfrontend
+          image: adccontainerreg.azurecr.io/adc-frontend-ui:1.0
+          resources:
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: myfrontend
+spec:
+  type: ClusterIP
+  selector:
+    app: myfrontend
+  ports:
+    - port: 8080
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ing-frontend
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
+    nginx.ingress.kubernetes.io/cors-max-age: '600'
+    nginx.ingress.kubernetes.io/proxy-body-size: '12m'
+spec:
+  rules:
+    - host: 20-67-122-249.nip.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: frontend
+              servicePort: 8080
+```
+
+Create a file called `frontend.yaml` with the content above and apply it:
+
+```zsh
+$ kubectl apply -f frontend.yaml
+
+deployment.apps/myfrontend created
+service/frontend created
+ingress.networking.k8s.io/ing-frontend created
+```
+
+Please check, that everything is in place:
+
+```zsh
+$ kubectl get deployment,service,endpoints,ingress
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mssql-deployment   1/1     1            1           2d2h
+deployment.apps/myapi              4/4     4            4           2d1h
+deployment.apps/myfrontend         1/1     1            1           3m5s
+
+NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/contactsapi   ClusterIP   10.0.49.134    <none>        8080/TCP   43h
+service/frontend      ClusterIP   10.0.124.132   <none>        8080/TCP   3m5s
+service/kubernetes    ClusterIP   10.0.0.1       <none>        443/TCP    6d21h
+service/mssqlsvr      ClusterIP   10.0.96.4      <none>        1433/TCP   43h
+
+NAME                    ENDPOINTS                                                        AGE
+endpoints/contactsapi   10.244.0.38:5000,10.244.1.15:5000,10.244.1.16:5000 + 1 more...   43h
+endpoints/frontend      10.244.0.39:80                                                   3m5s
+endpoints/kubernetes    20.50.162.80:443                                                 6d21h
+endpoints/mssqlsvr      10.244.0.5:1433                                                  43h
+
+NAME                              HOSTS                  ADDRESS         PORTS   AGE
+ingress.extensions/ing-contacts   20-67-122-249.nip.io   20.67.122.249   80      45m
+ingress.extensions/ing-frontend   20-67-122-249.nip.io   20.67.122.249   80      3m5s
+```
+
+That looks good, now open a browser and navigate to the website (here: <http://20-67-122-249.nip.io/>), open the contacts list, create/modify a contact etc.
+
+![ui_home](./img/ui_home.png)
+![ui_list](./img/ui_list.png)
+![ui_detail](./img/ui_detail.png)
+
+## Wrap-Up
+
+Congratulations, you have deployed a full-blown application to Kubernetes with a SQL running inside the cluster. As you might guess, there are a few things now that need to be adjusted. E.g. we added some of the configuration settings - even worse, passwords! - "hard-coded" to manifest files. Also the endpoint configuration for the UI has been baked into the image. In the next challenge, we will adress these issues by using Kubernetes `ConfigMaps` and `Secrets`.
