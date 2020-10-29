@@ -931,7 +931,7 @@ So, just having an API is pretty boring. Of course there is also a UI service, t
 
 ```js
 var uisettings = {
-  endpoint: 'http://<YOUR_NIO_DOMAIN>/api/contacts/',
+  endpoint: 'http://<YOUR_NIP_DOMAIN>/api/contacts/',
   enableStats: false,
   aiKey: '',
 }
@@ -947,20 +947,22 @@ var uisettings = {
 }
 ```
 
-Save the file and - in a commandline terminal - go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
+Save the file and - in a terminal - go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
 
 ```zsh
 $ docker build -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
 $ docker push adccontainerreg.azurecr.io/adc-frontend-ui:1.0
 ```
 
-Alternatively, you can also use your Azure Container Registry:
+Alternatively, you can also use your Azure Container Registry for the build:
 
 ```zsh
 $ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
 ```
 
-As soon as the image is present in your registry, let's deploy it to the cluster. We need three definitions: a deployment, a clusterip service and an ingress object. This time, we will deploy everything within one file, separating each object by `---`. Please **adjust the the ingress host** to the domain, you are using.
+As soon as the image is present in your registry, let's deploy it to the cluster. We need three definitions: a deployment, a `ClusterIP` service and an ingress object. This time, we will deploy everything via one file, separating each object by `---`.
+
+Don't forget to **adjust the the ingress host** to the domain you are using.
 
 ```yaml
 # Content of file frontend.yaml
@@ -1014,7 +1016,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: '12m'
 spec:
   rules:
-    - host: 20-67-122-249.nip.io
+    - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
       http:
         paths:
           - path: /
@@ -1067,4 +1069,4 @@ That looks good, now open a browser and navigate to the website (here: <http://2
 
 ## Wrap-Up
 
-Congratulations, you have deployed a full-blown application to Kubernetes with a SQL running inside the cluster. As you might guess, there are a few things now that need to be adjusted. E.g. we added some of the configuration settings - even worse, passwords! - "hard-coded" to manifest files. Also the endpoint configuration for the UI has been baked into the image. In the next challenge, we will adress these issues by using Kubernetes `ConfigMaps` and `Secrets`.
+Congratulations, you have deployed a full-blown application to Kubernetes with a SQL server running inside the cluster. As you might guess, there are a few things now that need to be adjusted. E.g. we added some of the configuration settings - even worse, passwords! - "hard-coded" to manifest files. Also the endpoint configuration for the UI has been baked into the image. In the next challenge, we will adress these issues by using Kubernetes `ConfigMaps` and `Secrets`.
