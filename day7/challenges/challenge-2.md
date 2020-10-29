@@ -891,7 +891,6 @@ Now, let's create an ingress definition for the Contacts API.
 ## Create Ingress Definitions
 
 The controller has been successfully installed and can accept traffic. We are ready to create an [ingress definition](https://kubernetes.io/docs/concepts/services-networking/ingress/) for the Contacts API. To access the service, we want to be able to call an endpoint like that: <http://20-67-122-249.nip.io/api/contacts>. Therefor, we will be using path-based routing!
-nginx.ingress.kubernetes.io/rewrite-target: /contacts/\$2
 
 ```yaml
 apiVersion: networking.k8s.io/v1beta1
