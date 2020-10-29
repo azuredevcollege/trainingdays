@@ -949,14 +949,14 @@ var uisettings = {
 Save the file and - in a terminal - go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
 
 ```zsh
-$ docker build -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
-$ docker push adccontainerreg.azurecr.io/adc-frontend-ui:1.0
+$ docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
+$ docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
 ```
 
 Alternatively, you can also use your Azure Container Registry for the build:
 
 ```zsh
-$ az acr build -r adccontainerreg -t adccontainerreg.azurecr.io/adc-frontend-ui:1.0 .
+$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
 ```
 
 As soon as the image is present in your registry, let's deploy it to the cluster. We need three definitions: a deployment, a `ClusterIP` service and an ingress object. This time, we will deploy everything via one file, separating each object by `---`.
@@ -981,7 +981,7 @@ spec:
     spec:
       containers:
         - name: myfrontend
-          image: adccontainerreg.azurecr.io/adc-frontend-ui:1.0
+          image: <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
           resources:
             limits:
               memory: '128Mi'
