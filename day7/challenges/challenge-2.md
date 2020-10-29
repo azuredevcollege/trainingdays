@@ -803,6 +803,122 @@ As you can see, after a short amount of time, the `loadbalancer-contactsapi` is 
 
 ![swagger_external](./img/swagger-external.png)
 
-We now have the tools to expose a single service to the internet via the `LoadBalancer` type. This may be okay in a scenario, where you only have few services. But to be clear, this is a bad pattern. In a production environment, you want to limit the amount of externally available services to a minimum. And if your application is made of several services or is implementing a microservice-based architectural pattern, using `LoadBalancer` services is a bad practice. Ideally, you only use one public IP adress and manage the external access to the cluster via `Ingress` definitions and the corresponding `IngressController`.
+We now have the tools to expose a single service to the internet via the `LoadBalancer` type. This may be okay in a scenario, where you only have few services. But to be clear, this is a "bad pattern". In a production environment, you want to limit the amount of externally available services (IP adresses) to a minimum. And if your application is made of several services or is implementing a microservice-based architectural pattern, using `LoadBalancer` services is a bad practice. Ideally, you only use one public IP adress and manage the external access to the cluster via `Ingress` definitions and the corresponding `Ingress Controller`.
 
 ## Ingress
+
+An `Ingress` definition is a way to describe how clients are routed to your services. It manages the **external** access to your cluster, typically via http(s). It is a core concept of Kubernetes and the "rules" defined in an `Ingress` manifest are always implemented by a third party controller, the `Ingress Controller`. Kubernetes doesn't come with one "out-of-the-box", but you can install one from a variety of offerings. We will be using the NGINX Ingress Controller, but here's an awesome comparion of all the (relevant) available options currently: <https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-oq3k/htmlview#>
+
+The `Ingress Controller` sits in front of many services within a cluster and is the (most of the time) the only service of type `LoadBalancer` with a public IP in Kubernetes, routing traffic to your services and - depending on the implementation - can also add functionality like SSL termination, path rewrites, name based virtual hosts, IP whitelisting etc.
+
+![ingress controller](./img/ingress_controller.png)
+
+### Installation
+
+To install the [NGINX ingress controller](https://kubernetes.github.io/ingress-nginx/), we will be using Helm. Helm is the defacto package manager in the Kubernetes universe. If you haven't installed it already, please go to <https://helm.sh/docs/intro/install/> and follow the instructions depending on the OS you are using. If you follow this workshop in the Azure Cloud Shell, you are good to go - it is already installed for you.
+
+**Important:** To keeps things cleary seperated from each other, we will be using a different namespace for the ingress controller. [Kubernetes namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) are a way to logically group workloads within a cluster - they literally create a "virtual cluster" in your physical cluster.
+
+> By the way, you are already using namespaces! Every time you were deploying pods, services etc. to the cluster, you were using the `default` namespace which has been created for you during cluster creation. You can list the available namespaces by executing `kubectl get namespaces`.
+
+Now, let's install the ingress controller:
+
+```zsh
+# create ingress namespace
+$ kubectl create namespace ingress
+
+namespace/ingress created
+
+$ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+"ingress-nginx" has been added to your repositories
+
+$ helm install my-ingress ingress-nginx/ingress-nginx --set controller.service.externalTrafficPolicy=Local --namespace ingress
+
+NAME: my-ingress
+LAST DEPLOYED: Thu Oct 29 08:11:35 2020
+NAMESPACE: ingress
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+The ingress-nginx controller has been installed.
+It may take a few minutes for the LoadBalancer IP to be available.
+You can watch the status by running 'kubectl --namespace ingress get services -o wide -w my-ingress-ingress-nginx-controller'
+[...]
+[...]
+```
+
+After the controller has been installed, check the correspondig service:
+
+```zsh
+
+$ kubectl --namespace ingress get services my-ingress-ingress-nginx-controller
+
+NAME                                  TYPE           CLUSTER-IP     EXTERNAL-IP     PORT(S)                      AGE
+my-ingress-ingress-nginx-controller   LoadBalancer   10.0.200.226   20.67.122.249   80:32258/TCP,443:31950/TCP   2m37s
+```
+
+The service `my-ingress-ingress-nginx-controller` successfully got a public IP and is now ready to accept traffic. Well, but using an IP adress to navigate to websites/services is not the best option, correct? Let's use a fully-qualified-domain-name (FQND)! The problem is, we haven't registered a domain for our sample. But: you can use a service called [nip.io](https://nip.io/) that will give you "dynamic routing" by simply adding the IP adress (with dots "." or dashes "-" as seperator) as a subdomain of the domain "nip.io". In the current case, the domain looks like this: <http://20-67-122-249.nip.io/>
+
+You can test the setup, by opening a browser and navigating to that URL...you should see a page similar to that one.
+
+![default_ingress](./img/default_ingress.png)
+
+So, the IP adress of the ingress controller will be the only one exposed in our cluster now. Therefor, we can get rid of the one created in the previuos chapter. To have a clean environment, let's also remove the `NodePort` service.
+
+```zsh
+# this one will take some time, because Kubernetes needs to delete the public IP at the Azure Loadbalancer
+$ kubectl delete service loadbalancer-contactsapi
+
+service "loadbalancer-contactsapi" deleted
+
+$ kubectl delete service nodeport-contactsapi
+
+service "nodeport-contactsapi" deleted
+
+# query the service - you should have the 'mssqlsvr' and 'contactsapi' service (ClusterIP)
+$ kubectl get services
+
+NAME          TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+contactsapi   ClusterIP   10.0.49.134   <none>        8080/TCP   40h
+kubernetes    ClusterIP   10.0.0.1      <none>        443/TCP    6d17h
+mssqlsvr      ClusterIP   10.0.96.4     <none>        1433/TCP   40h
+```
+
+Now, let's create an ingress definition for the Contacts API.
+
+## Create Ingress Definitions
+
+The controller has been successfully installed and can accept traffic. We are ready to create an [ingress definition](https://kubernetes.io/docs/concepts/services-networking/ingress/) for the Contacts API. To access the service, we want to be able to call an endpoint like that: <http://20-67-122-249.nip.io/api/contacts>. Therefor, we will be using path-based routing!
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ing-contacts
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
+    nginx.ingress.kubernetes.io/cors-max-age: '600'
+    nginx.ingress.kubernetes.io/proxy-body-size: '12m'
+    nginx.ingress.kubernetes.io/rewrite-target: '/contacts/$2'
+spec:
+  rules:
+    - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
+      http:
+        paths:
+          - path: /api/contacts(/|$)(.*)
+            backend:
+              serviceName: contactsapi
+              servicePort: 8080
+```
+
+You should now be able to navigate to the adress <http://20-67-122-249.nip.io/api/contacts> and get the list of available contacts. Traffic is now managed by the ingress controller and dynamically routed to the `contactsapi` service (that is by default not accessible publicly - only now through the ingress controller/definition).
+
+![ingress_contacts](./img/ingress_contacts.png)
+
+## Add the UI
+
+So, just having an API is pretty boring. Of course there is also a UI service, that is able to interact with the API. Let's also add that component to our cluster.
