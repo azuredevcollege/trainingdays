@@ -11,7 +11,7 @@ COPY . ./
 ##
 
 ## Build app
-RUN dotnet publish -o /app/out -c Release ./Adc.Scm.Api/Adc.Scm.Api.csproj
+RUN dotnet publish -o /app/out -c Release ./Adc.Scm.Api.csproj
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime

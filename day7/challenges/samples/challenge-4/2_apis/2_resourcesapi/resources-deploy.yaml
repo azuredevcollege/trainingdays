@@ -34,7 +34,7 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
-          image: <ACR_NAME>.azurecr.io/adc-resources-api:<VERSION_TAG>
+          image: <ACR_NAME>.azurecr.io/adc-resources-api:2.0
           env:
             - name: ImageStoreOptions__StorageAccountConnectionString
               valueFrom:

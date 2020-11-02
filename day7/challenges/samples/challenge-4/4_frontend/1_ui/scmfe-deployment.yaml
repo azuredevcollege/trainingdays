@@ -34,7 +34,7 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
-          image: <ACR_NAME>.azurecr.io/adc-frontend-ui:<VERSION_TAG>
+          image: <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
