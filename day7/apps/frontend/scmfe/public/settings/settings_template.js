@@ -1,8 +1,8 @@
 var uisettings = {
-  endpoint: 'https://#{adcday7HOSTNAME}#/api/contacts/',
-  resourcesEndpoint: 'https://#{adcday7HOSTNAME}#/api/resources/',
-  searchEndpoint: 'https://#{adcday7HOSTNAME}#/api/search/',
-  reportsEndpoint: 'https://#{adcday7HOSTNAME}#/api/visitreports/',
+  endpoint: 'https://#{YOUR_HOSTNAME}#/api/contacts/',
+  resourcesEndpoint: 'https://#{YOUR_HOSTNAME}#/api/resources/',
+  searchEndpoint: 'https://#{YOUR_HOSTNAME}#/api/search/',
+  reportsEndpoint: 'https://#{YOUR_HOSTNAME}#/api/visitreports/',
   enableStats: true,
-  aiKey: '#{adcday7APPINSIGHTSKEY}#',
+  aiKey: '#{appinsights}#',
 }

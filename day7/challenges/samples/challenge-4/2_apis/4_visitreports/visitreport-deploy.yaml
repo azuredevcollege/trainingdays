@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: visitreports-deploy
+  labels:
+    application: scmcontacts
+    service: visitreportsapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: visitreportsapi
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: visitreportsapi
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: <ACR_NAME>.azurecr.io/adc-visitreports-api:<VERSION_TAG>
+          env:
+            - name: COSMOSDB
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSENDPOINT
+            - name: CUSTOMCONNSTR_COSMOSKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: COSMOSPRIMARYKEY
+            - name: CUSTOMCONNSTR_SBVRTOPIC_CONNSTR
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: VRSENDCONNSTR
+            - name: CUSTOMCONNSTR_SBCONTACTSTOPIC_CONNSTR
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: CONTACTSLISTENENTITYCONNSTR
+            - name: APPINSIGHTS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000

@@ -49,7 +49,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-body-size: '12m'
 spec:
   rules:
-    - host: 20-67-122-249.nip.io
+    - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
       http:
         paths:
           - path: /

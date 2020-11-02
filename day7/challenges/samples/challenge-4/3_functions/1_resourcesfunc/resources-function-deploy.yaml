@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resources-function-deploy
+  labels:
+    application: scmcontacts
+    service: resourcesfunc
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: resourcesfunc
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: resourcesfunc
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: <ACR_NAME>.azurecr.io/adc-resources-func:<VERSION_TAG>
+          env:
+            - name: AzureWebJobsDashboard
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: AzureWebJobsStorage
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: FUNCTIONSCONNECTIONSTRING
+            - name: ServiceBusConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: THUMBNAILLISTENCONNSTR
+            - name: FUNCTIONS_WORKER_RUNTIME
+              value: dotnet
+            - name: FUNCTIONS_EXTENSION_VERSION
+              value: '~3'
+            - name: ImageProcessorOptions__StorageAccountConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: RESOURCESCONNECTIONSTRING
+            - name: ImageProcessorOptions__ImageWidth
+              value: '100'
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
