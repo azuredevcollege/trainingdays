@@ -893,6 +893,7 @@ Now, let's create an ingress definition for the Contacts API.
 The controller has been successfully installed and can accept traffic. We are ready to create an [ingress definition](https://kubernetes.io/docs/concepts/services-networking/ingress/) for the Contacts API. To access the service, we want to be able to call an endpoint like that: <http://20-67-122-249.nip.io/api/contacts>. Therefor, we will be using path-based routing!
 
 ```yaml
+# Content of file api-ingress.yaml
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -914,6 +915,12 @@ spec:
             backend:
               serviceName: contactsapi
               servicePort: 8080
+```
+
+Create the file `api-ingress.yaml` and apply it:
+
+```zsh
+$ kubectl apply -f api-ingress.yaml
 ```
 
 You should now be able to navigate to the adress <http://20-67-122-249.nip.io/api/contacts> and get the list of available contacts. Traffic is now managed by the ingress controller and dynamically routed to the `contactsapi` service (that is by default not accessible publicly - only now through the ingress controller/definition).
