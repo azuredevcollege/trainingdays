@@ -151,24 +151,92 @@ $ kubectl delete ingress ing-contacts
 
 ### Contacts API
 
-Folder `day7/challenges/samples/challenge-4/2_apis/1_contactsapi`:
+Folder `day7/challenges/samples/challenge-4/2_apis`:
 
+```zsh
+$ kubectl apply -f 1_contactsapi
+
+deployment.apps/ca-deploy created
+ingress.extensions/ing-contacts created
+service/contactsapi created
 ```
-
 
 ### Resources API
 
+Folder `day7/challenges/samples/challenge-4/2_apis`:
+
+```zsh
+$ kubectl apply -f 2_resourcesapi
+
+deployment.apps/resources-deploy created
+ingress.extensions/ing-resources created
+service/resourcesapi created
+```
+
 ### Search API
 
+Folder `day7/challenges/samples/challenge-4/2_apis`:
+
+```zsh
+$ kubectl apply -f 3_searchapi
+
+deployment.apps/search-deploy created
+ingress.extensions/ing-search created
+service/searchapi created
+```
+
 ### Visit Reports API
+
+Folder `day7/challenges/samples/challenge-4/2_apis`:
+
+```zsh
+$ kubectl apply -f 4_visitreports
+
+deployment.apps/visitreports-deploy created
+ingress.extensions/ing-visitreports created
+service/visitreportapi created
+```
 
 ## Deploy Functions / Daemon Services
 
 ### Resources / Image Resizer
 
+Folder `day7/challenges/samples/challenge-4/3_functions`:
+
+```zsh
+$ kubectl apply -f 1_resourcesfunc
+
+deployment.apps/resources-function-deploy created
+```
+
 ### Search / Contacts Indexer
+
+Folder `day7/challenges/samples/challenge-4/3_functions`:
+
+```zsh
+$ kubectl apply -f 2_searchfunc
+
+deployment.apps/search-function-deploy created
+```
 
 ### Text Analytics / Visit Reports Sentiment Analysis
 
+Folder `day7/challenges/samples/challenge-4/3_functions`:
+
+```zsh
+$ kubectl apply -f 3_textanalyticsfunc
+
+deployment.apps/textanalytics-function-deploy created
+```
+
 ## Deploy UI
+
+Folder `day7/challenges/samples/challenge-4/4_frontend`:
+
+```zsh
+$ kubectl apply -f 1_ui
+
+deployment.apps/frontend-deploy created
+ingress.extensions/ing-frontend created
+service/frontend created
 ```

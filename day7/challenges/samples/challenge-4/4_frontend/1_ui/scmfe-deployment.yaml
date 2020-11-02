@@ -44,5 +44,5 @@ spec:
               readOnly: true
       volumes:
         - name: uisettings
-          secret:
-            secretName: uisettings
+          configMap:
+            name: uisettings
