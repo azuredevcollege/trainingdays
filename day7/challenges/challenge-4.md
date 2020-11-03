@@ -77,10 +77,30 @@ $ terraform apply
 # Answer with 'yes' when asked, that the changes will be applied.
 ```
 
-**This will take up to 20min. to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
+**This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
 ```zsh
 $ terraform output > azure_output.txt
+```
+
+## Create a new Kubernetes Namespace
+
+We will put our application into a namespace called `contactsapp`. Let's create it:
+
+```zsh
+$ kubectl create ns contactsapp
+
+namespace/contactsapp created
+```
+
+We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands.
+
+```zsh
+$ kubectl config set-context --current --namespace=contactsapp
+
+Context "adc-cluster" modified.
+
+# to reset the namespace later back to 'default', use 'kubectl config set-context --current --namespace=default'
 ```
 
 ## Deploy Configuration / Secrets
@@ -215,26 +235,6 @@ We are now all set to deploy the services to the Kubernetes cluster. We will the
 ```zsh
 $ kubectl delete ingress ing-frontend
 $ kubectl delete ingress ing-contacts
-```
-
-### Create a new Kubernetes Namespace
-
-We will put our application into a namespace called `contactsapp`. Let's create it:
-
-```zsh
-$ kubectl create ns contactsapp
-
-namespace/contactsapp created
-```
-
-We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands.
-
-```zsh
-$ kubectl config set-context --current --namespace=contactsapp
-
-Context "adc-cluster" modified.
-
-# to reset the namespace later back to 'default', use 'kubectl config set-context --current --namespace=default'
 ```
 
 We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. For each of these services, that includes a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.
@@ -491,7 +491,7 @@ Navigate to the Application Insights component in the portal and check the data 
 
 ![map](./img/monitoring_end2end.png)
 
-### Applcaiion Dashboard
+### Application Dashboard
 
 You can also create an application dashboard by clicking on `Application Dashboard` on the overview page of the Application Insights component.
 
@@ -500,3 +500,11 @@ You can also create an application dashboard by clicking on `Application Dashboa
 ## Wrap-Up
 
 Congratulations, you have successfully deployed a full-blown, microservice-oriented application to your AKS cluster.
+
+## House-Keeping
+
+Don't forget to reset `kubectl` configuration to use the 'default' namespace!
+
+```zsh
+$ kubectl config set-context --current --namespace=default
+```
