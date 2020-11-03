@@ -1,0 +1,14 @@
+# Content of file api-service-nodeport.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-contactsapi
+spec:
+  type: NodePort
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'clusterip' port...
+      targetPort: 5000 # 'internal' port...
+      nodePort: 30010 # optional - Kubernetes would pick a port from the default node-port range 30000-32767

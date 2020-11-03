@@ -61,11 +61,6 @@
         @keyup.enter="search()"
       />
       <v-spacer />
-      <v-icon>mdi-account</v-icon>
-      {{msal.user.name}}
-      <v-btn class="ml-7" v-if="$msal.isAuthenticated()" icon large @click="$msal.signOut()">
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
     </v-app-bar>
     <v-content>
       <router-view></router-view>
@@ -76,10 +71,7 @@
 
 <script>
 import NotificationSnackbar from "./components/notifications/NotificationSnackbar";
-import { msalMixin } from "vue-msal";
-
 export default {
-  mixins: [msalMixin],
   name: "App",
   created() {
     if (

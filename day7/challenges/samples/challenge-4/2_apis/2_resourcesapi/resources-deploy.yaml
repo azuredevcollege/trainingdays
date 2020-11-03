@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: resources-deploy
+  labels:
+    application: scmcontacts
+    service: resourcesapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: resourcesapi
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: resourcesapi
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: <ACR_NAME>.azurecr.io/adc-resources-api:2.0
+          env:
+            - name: ImageStoreOptions__StorageAccountConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: RESOURCESCONNECTIONSTRING
+            - name: ImageStoreOptions__ImageContainer
+              value: rawimages
+            - name: ImageStoreOptions__ThumbnailContainer
+              value: thumbnails
+            - name: ServiceBusQueueOptions__ThumbnailQueueConnectionString
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: THUMBNAILSENDCONNSTR
+            - name: ServiceBusQueueOptions__ImageContainer
+              value: rawimages
+            - name: ServiceBusQueueOptions__ThumbnailContainer
+              value: thumbnails
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000

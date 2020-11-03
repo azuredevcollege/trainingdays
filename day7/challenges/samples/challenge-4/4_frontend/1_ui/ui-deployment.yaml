@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deploy
+  labels:
+    application: scmcontacts
+    service: frontend
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: frontend
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: frontend
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: '/usr/share/nginx/html/settings'
+              name: uisettings
+              readOnly: true
+      volumes:
+        - name: uisettings
+          configMap:
+            name: uisettings

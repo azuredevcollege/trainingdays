@@ -4,14 +4,14 @@ provider "azurerm" {
   }
 }
 
-terraform {
-  backend "azurerm" {
-    resource_group_name  = "adc-tfstate-rg"
-    storage_account_name = "tfstateadadc"
-    container_name       = "tfstate"
-    key                  = "org.terraform.tfstate"
-  }
-}
+# terraform {
+#   backend "azurerm" {
+#     resource_group_name  = "adc-tfstate-rg"
+#     storage_account_name = "tfstateadadc"
+#     container_name       = "tfstate"
+#     key                  = "org.terraform.tfstate"
+#   }
+# }
 
 resource "azurerm_resource_group" "common" {
   name     = "${var.prefix}-common-rg"

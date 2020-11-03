@@ -8,3 +8,9 @@ day3/scripts/baseline/publish**
 day3/scripts/baseline/packages-microsoft-prod.deb
 **/packages-microsoft-prod.deb
 **/*Zone.Identifier
+day7/terraform/terraform.tfstate**
+**/terraform.tfstate
+**/terraform.tfstate.backup
+day7/challenges/samples/challenge-4/0_tf/azure_output.txt
+day7/challenges/samples/challenge-4/1_config/local-configmap.yaml
+day7/challenges/samples/challenge-4/1_config/local-secrets.yaml

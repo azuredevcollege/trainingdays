@@ -1,0 +1,13 @@
+# Content of file api-service-loadbalancer.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-contactsapi
+spec:
+  type: LoadBalancer
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'public' port...
+      targetPort: 5000 # 'internal' port...

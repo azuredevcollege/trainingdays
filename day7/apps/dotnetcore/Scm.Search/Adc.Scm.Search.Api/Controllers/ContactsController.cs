@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Adc.Scm.Search.Api.Authorization;
 using Adc.Scm.Search.Api.Models;
 using Adc.Scm.Search.Api.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,7 +25,6 @@ namespace Adc.Scm.Search.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = AuthorizationScopes.ContactsRead)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<object> Search([FromQuery]string phrase)
         {
@@ -36,7 +33,6 @@ namespace Adc.Scm.Search.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = AuthorizationScopes.ContactsRead)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<object> Search([FromBody]ContactSearch search)
         {

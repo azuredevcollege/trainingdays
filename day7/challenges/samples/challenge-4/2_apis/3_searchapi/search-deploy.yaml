@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: search-deploy
+  labels:
+    application: scmcontacts
+    service: searchapi
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      application: scmcontacts
+      service: searchapi
+  template:
+    metadata:
+      labels:
+        application: scmcontacts
+        service: searchapi
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: application
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          image: <ACR_NAME>.azurecr.io/adc-search-api:2.0
+          env:
+            - name: ContactSearchOptions__ServiceName
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SEARCHNAME
+            - name: ContactSearchOptions__AdminApiKey
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: SEARCHPRIMARYKEY
+            - name: ContactSearchOptions__IndexName
+              value: scmcontacts
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              valueFrom:
+                secretKeyRef:
+                  name: scmsecrets
+                  key: APPINSIGHTSKEY
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000

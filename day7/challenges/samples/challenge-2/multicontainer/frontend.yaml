@@ -1,0 +1,58 @@
+# Content of file frontend.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myfrontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myfrontend
+  template:
+    metadata:
+      labels:
+        app: myfrontend
+    spec:
+      containers:
+        - name: myfrontend
+          image: adccontainerreg.azurecr.io/adc-frontend-ui:1.0
+          resources:
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  labels:
+    app: myfrontend
+spec:
+  type: ClusterIP
+  selector:
+    app: myfrontend
+  ports:
+    - port: 8080
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ing-frontend
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
+    nginx.ingress.kubernetes.io/cors-max-age: '600'
+    nginx.ingress.kubernetes.io/proxy-body-size: '12m'
+spec:
+  rules:
+    - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: frontend
+              servicePort: 8080

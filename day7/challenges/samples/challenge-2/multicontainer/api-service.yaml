@@ -1,0 +1,12 @@
+# Content of file api-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: contactsapi
+spec:
+  selector:
+    app: myapi
+  ports:
+    - protocol: TCP
+      port: 8080 # 'external' port...
+      targetPort: 5000 # 'internal' port...

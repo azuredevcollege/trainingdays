@@ -5,10 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Adc.Scm.Resources.Api.Authorization;
 using Adc.Scm.Resources.Api.Repositories;
 using Adc.Scm.Resources.Api.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +27,6 @@ namespace Adc.Scm.Resources.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = AuthorizationPolicy.ContactsCreateOrUpdate)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> UploadImage([FromForm(Name = "imageupload")]IFormFile file)
@@ -57,7 +54,6 @@ namespace Adc.Scm.Resources.Api.Controllers
         }
 
         [HttpPost("binary")]
-        [Authorize(Policy = AuthorizationPolicy.ContactsCreateOrUpdate)]
         [Consumes("image/png", "image/gif", "image/jpeg", "image/jpg")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -80,7 +76,6 @@ namespace Adc.Scm.Resources.Api.Controllers
         }
 
         [HttpGet("{image}")]
-        [Authorize(Policy = AuthorizationPolicy.ContactsRead)]
         [Produces("application/octet-stream")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]

@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: visitreport 
+  name: visitreportapi
   labels:
     application: scmcontacts
     service: scmvisitreport
@@ -11,6 +11,5 @@ spec:
     application: scmcontacts
     service: scmvisitreport
   ports:
-  - port: 8080
-    targetPort: 3000
-    
+    - port: 8080
+      targetPort: 3000

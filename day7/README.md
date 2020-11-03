@@ -1,122 +1,24 @@
-Add stroage account for terrastate
+# Day 7 - Kubernetes
 
-```shell
-az group create --name adc-tfstate-rg --location westeurope
+- [Challenge 0 - Setup your System](./challenges/challenge-0.md)
+- [Challenge 1 - Create your first Kubernetes Cluster](./challenges/challenge-1.md)
+- [Challenge 2 - Basic Kubernetes Concepts](./challenges/challenge-2.md)
+- [Challenge 3 - Configuration](./challenges/challenge-3.md)
+- [Challenge 4 - Deploy the sample application](./challenges/challenge-4.md)
+- :small*orange_diamond: *[Bonus! - Secure Endpoints with SSL Certificates (optional)](./challenges/bonus-1.md)\_ :small_orange_diamond:
 
-az storage account create -n tfstateadadc -g adc-tfstate-rg --sku Standard_LRS
+## Goal
 
-az storage container create -n tfstate --account-name tfstateadadc --account-key `az storage account keys list -n tfstateadadc -g adc-tfstate-rg --query "[0].value" -otsv`
-```
+The goal of this day is to make you familiar with Kubernetes and give you hands-on experience in deploying real-world applications/services. First, we will setup your local environment that you are ready to use Kubernetes, then setup a first Kubernetes cluster with the Azure Kubernetes Service (AKS). After a few easy tasks like deploying some containers/pods, this workshop will guide you how to setup deployments and different service types, how to route traffic from the internet to/within your cluster and in the end show you how to operate a real-world application consisting of multiple microservices backed by Azure platform services like Azure SQL DB and/or CosmosDB.
 
-Kubernetes
+If you have completed Day 1-5 of the Azure Developer College, you are already familiar with the application. For all others: the application is called "Simple Contacts Management" and gives a user the ability to manage contacts and visit reports, a very tiny CRM, so to say.
 
+At the end of the day, you will have a working application that looks like that:
 
-k create ns dev
+![home](./challenges/img/app_home.png)
+![contacts](./challenges/img/app_contacts.png)
+![stats](./challenges/img/app_stats.png)
 
-Ingress:
+The architecture you will be setting up (in Kubernetes, as well as in Azure) looks like that:
 
-k create ns ingress
-
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-helm install clstr-ingress stable/nginx-ingress --set rbac.create=true,controller.service.externalTrafficPolicy=Local --namespace ingress
-
-Secret / Docker Reg
-
-Dashboard
-
-https://github.com/vmware-tanzu/octant/releases
-
-Certmanager
-
-kubectl create namespace cert-manager
-
-helm repo add jetstack https://charts.jetstack.io
-
-helm install cert-manager \
-  --namespace cert-manager \
-  --version v0.15.0 \
-  jetstack/cert-manager \
-   --set installCRDs=true \
-   --set ingressShim.defaultIssuerName=letsencrypt-prod \
-   --set ingressShim.defaultIssuerKind=ClusterIssuer \
-   --set ingressShim.defaultIssuerGroup=cert-manager.io
-
-
-apiVersion: cert-manager.io/v1alpha2
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-staging
-spec:
-  acme:
-    # The ACME server URL
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    # Email address used for ACME registration
-    email: chritian.dennig@microsoft.com
-    # Name of a secret used to store the ACME account private key
-    privateKeySecretRef:
-      name: letsencrypt-staging
-    # Enable the HTTP-01 challenge provider
-    solvers:
-    - http01:
-        ingress:
-          class:  nginx
-
----
-
-
-apiVersion: cert-manager.io/v1alpha2
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-spec:
-  acme:
-    # The ACME server URL
-    server: https://acme-v02.api.letsencrypt.org/directory
-    # Email address used for ACME registration
-    email: christian.dennig@microsoft.com
-    # Name of a secret used to store the ACME account private key
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    # Enable the HTTP-01 challenge provider
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
-
-
---- 
-
-
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: ing-contacts
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/enable-cors: "true"
-    nginx.ingress.kubernetes.io/cors-allow-headers: "Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language"
-    nginx.ingress.kubernetes.io/cors-max-age: "600"
-    nginx.ingress.kubernetes.io/proxy-body-size: "12m"
-    nginx.ingress.kubernetes.io/rewrite-target: "/contacts/$2"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-spec:
-  tls:
-    - hosts:
-        - 52-232-4-29.nip.io
-      secretName: tls-secret
-  rules:
-  - host: 52-232-4-29.nip.io
-    http:
-      paths:
-      - path: /api/contacts(/|$)(.*)
-        backend:
-          serviceName: contacts
-          servicePort: 8080
-
-DevOps:
-
-Replace Tokens
-Terraform Task
-
-Replace Variable for Terraform state / container
+![aks](./challenges/img/aks_arch.png)
