@@ -198,3 +198,19 @@ both the initial request to the website, as well as any subsequent request to
 the contacts API use secure HTTPS endpoints.
 
 ![A display of the browsers developer tools](img/https-inspector.png)
+
+If both requests are being served over https were good to got!
+
+## Note about settings/settings.js
+
+It might be necessary to update the `settings/settings.js` file for the frontend deployment. One elegant way to make sure the corresponding protocol is being used is just to set the path to the API as absolute on the same host.
+
+
+```js
+var uisettings = {
+  endpoint: "/api/contacts/",
+  enableStats: false,
+  aiKey: '',
+}
+```
+
