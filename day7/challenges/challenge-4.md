@@ -136,7 +136,7 @@ data:
     }
 ```
 
-The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key is NOT the base64-encoded one!
+The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
 
 Please apply both files to your cluster:
 
@@ -152,7 +152,7 @@ secret/scmsecrets created
 
 Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for conveniance reasons, we build all images in the container registry!
 
-Now, build all the required images one by one...
+Now, build all the required images one by one...of course, replace `<ACR_NAME>` with the name of your container registry.
 
 1. Contacts API: Folder `day7/apps/dotnetcore/Scm`:
 
@@ -210,7 +210,7 @@ Now, all images are present in your container registry. You can check the reposi
 
 We are now all set to deploy the services to the Kubernetes cluster. We will therefor create a new namespace for the application - again, to keep things clearly separated from each other!
 
-**But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now iterfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
+**But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
 ```zsh
 $ kubectl delete ingress ing-frontend
@@ -239,16 +239,16 @@ Context "adc-cluster" modified.
 
 We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. For each of these services, that includes a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.
 
-**For each service, you need to adjust some variables in the predefined YAML manifest. So please carefully read the hints in each API section.**
+**For each service, you need to adjust some variables in the predefined YAML manifests. So please carefully read the hints in each API section.**
 
 ### Contacts API
 
 Settings to adjust:
 
-| File            | Setting            | Hint                                                             |
-| --------------- | ------------------ | ---------------------------------------------------------------- |
-| ca-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry           |
-| ca-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io` |
+| File            | Setting            | Hint                                                                                            |
+| --------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
+| ca-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| ca-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
 
@@ -266,10 +266,10 @@ service/contactsapi created
 
 Settings to adjust:
 
-| File                   | Setting            | Hint                                                             |
-| ---------------------- | ------------------ | ---------------------------------------------------------------- |
-| resources-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry           |
-| resources-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io` |
+| File                   | Setting            | Hint                                                                                            |
+| ---------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
+| resources-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| resources-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
 
@@ -287,10 +287,10 @@ service/resourcesapi created
 
 Settings to adjust:
 
-| File                | Setting            | Hint                                                             |
-| ------------------- | ------------------ | ---------------------------------------------------------------- |
-| search-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry           |
-| search-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io` |
+| File                | Setting            | Hint                                                                                            |
+| ------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
+| search-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| search-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
 
@@ -308,10 +308,10 @@ service/searchapi created
 
 Settings to adjust:
 
-| File                      | Setting            | Hint                                                             |
-| ------------------------- | ------------------ | ---------------------------------------------------------------- |
-| visitreports-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry           |
-| visitreports-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io` |
+| File                      | Setting            | Hint                                                                                            |
+| ------------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
+| visitreports-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| visitreports-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
 
@@ -327,7 +327,7 @@ service/visitreportapi created
 
 ## Deploy Functions / Daemon Services
 
-Next, we deploy the background/daemon services...same procedure:
+Next, we deploy the background/daemon services. For each of these background services, that only includes a `Deployment` as they won't be called directly (most of them listen for messages of the Azure Service Bus we already created)...so, same procedure:
 
 **For each service, you need to adjust some variables in the predefined YAML manifest. So please carefully read the hints in each API section.**
 
@@ -335,9 +335,9 @@ Next, we deploy the background/daemon services...same procedure:
 
 Settings to adjust:
 
-| File                           | Setting    | Hint                                                   |
-| ------------------------------ | ---------- | ------------------------------------------------------ |
-| resources-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry |
+| File                           | Setting    | Hint                                                                                            |
+| ------------------------------ | ---------- | ----------------------------------------------------------------------------------------------- |
+| resources-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -353,9 +353,9 @@ deployment.apps/resources-function-deploy created
 
 Settings to adjust:
 
-| File                        | Setting    | Hint                                                   |
-| --------------------------- | ---------- | ------------------------------------------------------ |
-| search-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry |
+| File                        | Setting    | Hint                                                                                            |
+| --------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| search-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -371,9 +371,9 @@ deployment.apps/search-function-deploy created
 
 Settings to adjust:
 
-| File                               | Setting    | Hint                                                   |
-| ---------------------------------- | ---------- | ------------------------------------------------------ |
-| textanalytics-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry |
+| File                               | Setting    | Hint                                                                                            |
+| ---------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
+| textanalytics-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -391,10 +391,10 @@ Last, but not least, we also need to deploy the VueJS Single Page Application.
 
 Settings to adjust:
 
-| File            | Setting            | Hint                                                             |
-| --------------- | ------------------ | ---------------------------------------------------------------- |
-| ui-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry           |
-| ui-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io` |
+| File            | Setting            | Hint                                                                                            |
+| --------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
+| ui-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| ui-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
 
@@ -407,3 +407,96 @@ deployment.apps/frontend-deploy created
 ingress.extensions/ing-frontend created
 service/frontend created
 ```
+
+## Check
+
+That was alot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
+
+```zsh
+$ kubectl get deployment,pods,service,endpoints,ingress
+NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/ca-deploy                       2/2     2            2           23h
+deployment.apps/frontend-deploy                 2/2     2            2           22h
+deployment.apps/resources-deploy                2/2     2            2           23h
+deployment.apps/resources-function-deploy       2/2     2            2           22h
+deployment.apps/search-deploy                   2/2     2            2           22h
+deployment.apps/search-function-deploy          2/2     2            2           22h
+deployment.apps/textanalytics-function-deploy   2/2     2            2           22h
+deployment.apps/visitreports-deploy             2/2     2            2           22h
+
+NAME                                                 READY   STATUS    RESTARTS   AGE
+pod/ca-deploy-75bcd947f8-gbppf                       1/1     Running   0          23h
+pod/ca-deploy-75bcd947f8-mpkdd                       1/1     Running   0          23h
+pod/frontend-deploy-76d6fdfd85-mpcnj                 1/1     Running   0          22h
+pod/frontend-deploy-76d6fdfd85-xwvfv                 1/1     Running   0          22h
+pod/resources-deploy-7567764b6b-fbwmg                1/1     Running   0          23h
+pod/resources-deploy-7567764b6b-pkpvg                1/1     Running   0          23h
+pod/resources-function-deploy-5f8487bc8f-96nq7       1/1     Running   0          22h
+pod/resources-function-deploy-5f8487bc8f-b7b5z       1/1     Running   0          22h
+pod/search-deploy-656c589d54-fvnf5                   1/1     Running   0          22h
+pod/search-deploy-656c589d54-t28m2                   1/1     Running   0          22h
+pod/search-function-deploy-85497fb7bc-6mph7          1/1     Running   0          22h
+pod/search-function-deploy-85497fb7bc-wzrhx          1/1     Running   0          22h
+pod/textanalytics-function-deploy-6884ccdb5b-2fch5   1/1     Running   0          22h
+pod/textanalytics-function-deploy-6884ccdb5b-ccnzm   1/1     Running   0          22h
+pod/visitreports-deploy-7d774598b6-dk6zs             1/1     Running   0          22h
+pod/visitreports-deploy-7d774598b6-zx5ds             1/1     Running   0          22h
+
+NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/contactsapi      ClusterIP   10.0.233.94    <none>        8080/TCP   23h
+service/frontend         ClusterIP   10.0.183.66    <none>        8080/TCP   22h
+service/resourcesapi     ClusterIP   10.0.64.143    <none>        8080/TCP   23h
+service/searchapi        ClusterIP   10.0.145.162   <none>        8080/TCP   22h
+service/visitreportapi   ClusterIP   10.0.148.56    <none>        8080/TCP   22h
+
+NAME                       ENDPOINTS                           AGE
+endpoints/contactsapi      10.244.0.40:5000,10.244.2.25:5000   23h
+endpoints/frontend         10.244.1.19:80,10.244.2.32:80       22h
+endpoints/resourcesapi     10.244.0.41:5000,10.244.2.26:5000   23h
+endpoints/searchapi        10.244.0.42:5000,10.244.2.27:5000   22h
+endpoints/visitreportapi   10.244.1.17:3000,10.244.2.28:3000   22h
+
+NAME                                  HOSTS                  ADDRESS         PORTS   AGE
+ingress.extensions/ing-contacts       20-67-122-249.nip.io   20.67.122.249   80      23h
+ingress.extensions/ing-frontend       20-67-122-249.nip.io   20.67.122.249   80      22h
+ingress.extensions/ing-resources      20-67-122-249.nip.io   20.67.122.249   80      23h
+ingress.extensions/ing-search         20-67-122-249.nip.io   20.67.122.249   80      22h
+ingress.extensions/ing-visitreports   20-67-122-249.nip.io   20.67.122.249   80      22h
+```
+
+You should no see a similar output, having 8 deployments, 16 pods (each deployment set `replicas: 2`), 5 services with corresponding endpoints and 5 ingress definitions.
+
+If that is the case, open a browser and navigate to you nip.io domain and give it a try! Create contacts, create visit reports for an existing contact, search via the search bar at the top of the website, have a look at the statistics!
+
+## Monitoring
+
+In case you missed it, we already created a service that is helping you with monitoring your application running in the Kubernetes cluster: Application Insights! Each service (API, background service, frontend) is communication with Application Insights (via the instrumentation key) and sending telemetry data like, request/response time, errors that may have occured, how your users navigate through the frontend.
+
+Navigate to the Application Insights component in the portal and check the data that is sent to that service:
+
+### Application Map
+
+![map](./img/monitoring_map.png)
+![map](./img/monitoring_error.png)
+
+### Application Performance
+
+![map](./img/monitoring_performance.png)
+
+### Application User Events / Frontend Integration
+
+![map](./img/monitoring_userevents.png)
+
+### Application End2End Transactions
+
+![map](./img/monitoring_end2end.png)
+
+### Applcaiion Dashboard
+
+You can also create an application dashboard by clicking on `Application Dashboard` on the overview page of the Application Insights component.
+
+![map](./img/monitoring_dashboard.png)
+
+## Wrap-Up
+
+Congratulations, you have successfully deployed a full-blown, microservice-oriented application to your AKS cluster.
