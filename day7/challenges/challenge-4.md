@@ -1,4 +1,4 @@
-# Deploy the sample application
+# Deploy a microservice-oriented sample application
 
 ## Goal / Architecture
 
