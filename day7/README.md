@@ -1,4 +1,4 @@
-# Day 7 - Kubernetes
+# Day 7 Kubernetes
 
 - [Challenge 0 - Setup your System](./challenges/challenge-0.md)
 - [Challenge 1 - Create your first Kubernetes Cluster](./challenges/challenge-1.md)
