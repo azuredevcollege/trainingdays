@@ -72,7 +72,7 @@ https://cert-manager.io/docs/usage/ingress/
 
 If you take a look at the kubernetes dashboard under the `cert-manager` namespace you should see a few nice green deployments showing up after a few seconds.
 
-![cert-manager namespace on the kubernetes dashboard](img/cert-manager-workloads.png)
+![cert-manager namespace on the kubernetes dashboard](./img/cert-manager-workloads.png)
 
 ## Add a LetsEncrypt cluster issuer
 
@@ -217,7 +217,7 @@ Navigate to you contacts website and use your browsers developer tools to make s
 both the initial request to the website, as well as any subsequent request to
 the contacts API use secure HTTPS endpoints.
 
-![A display of the browsers developer tools](img/https-inspector.png)
+![A display of the browsers developer tools](./img/https-inspector.png)
 
 If both requests are being served over https were good to got!
 

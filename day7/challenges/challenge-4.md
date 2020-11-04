@@ -500,11 +500,3 @@ You can also create an application dashboard by clicking on `Application Dashboa
 ## Wrap-Up
 
 Congratulations, you have successfully deployed a full-blown, microservice-oriented application to your AKS cluster.
-
-## House-Keeping
-
-Don't forget to reset `kubectl` configuration to use the 'default' namespace!
-
-```zsh
-$ kubectl config set-context --current --namespace=default
-```
