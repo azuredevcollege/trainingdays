@@ -228,7 +228,7 @@ Now, all images are present in your container registry. You can check the reposi
 
 ## Deploy Backend APIs
 
-We are now all set to deploy the services to the Kubernetes cluster. We will therefor create a new namespace for the application - again, to keep things clearly separated from each other!
+We are now all set to deploy the services to the Kubernetes cluster.
 
 **But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
@@ -247,7 +247,7 @@ Settings to adjust:
 
 | File            | Setting            | Hint                                                                                            |
 | --------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
-| ca-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| ca-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | ca-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
@@ -268,7 +268,7 @@ Settings to adjust:
 
 | File                   | Setting            | Hint                                                                                            |
 | ---------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
-| resources-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| resources-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | resources-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
@@ -289,7 +289,7 @@ Settings to adjust:
 
 | File                | Setting            | Hint                                                                                            |
 | ------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
-| search-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| search-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | search-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
@@ -310,7 +310,7 @@ Settings to adjust:
 
 | File                      | Setting            | Hint                                                                                            |
 | ------------------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
-| visitreports-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| visitreports-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | visitreports-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
@@ -337,7 +337,7 @@ Settings to adjust:
 
 | File                           | Setting    | Hint                                                                                            |
 | ------------------------------ | ---------- | ----------------------------------------------------------------------------------------------- |
-| resources-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| resources-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -355,7 +355,7 @@ Settings to adjust:
 
 | File                        | Setting    | Hint                                                                                            |
 | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| search-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| search-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -373,7 +373,7 @@ Settings to adjust:
 
 | File                               | Setting    | Hint                                                                                            |
 | ---------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
-| textanalytics-function-deploy.yaml | <ARC_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| textanalytics-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
 <br>
 
@@ -393,7 +393,7 @@ Settings to adjust:
 
 | File            | Setting            | Hint                                                                                            |
 | --------------- | ------------------ | ----------------------------------------------------------------------------------------------- |
-| ui-deploy.yaml  | <ARC_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
+| ui-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | ui-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
 <br>
