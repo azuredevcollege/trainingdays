@@ -9,7 +9,7 @@ group and and create our Kubernetes cluster within.
 
 ```zsh
 $ az group create --name adc-aks-rg --location westeurope
-$ az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.17.11
+$ az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.17.13
 ```
 
 > Note that we deploy Kubernetes with the latest available version on azure at the time of writing.
