@@ -1,7 +1,7 @@
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scm-search 
+  name: scm-search
   labels:
     application: scmcontacts
     service: scmsearch
@@ -29,12 +29,12 @@ spec:
         - name: application
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: '64Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday7/scmsearchapi
+              memory: '256Mi'
+              cpu: '500m'
+          image: azuredevcollege.azurecr.io/adcd7/scmsearchapi
           env:
             - name: ContactSearchOptions__ServiceName
               valueFrom:
@@ -52,7 +52,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: AADDOMAIN            
+                  key: AADDOMAIN
             - name: AzureAdOptions__TenantId
               valueFrom:
                 secretKeyRef:
@@ -75,4 +75,4 @@ spec:
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 5000
+            - containerPort: 5000

@@ -8,7 +8,7 @@ To have a clean overview of what is beeing provisioned under the hood, we create
 group and and create our Kubernetes cluster within.
 
 ```zsh
-$ az group create --name adc-aks-rg --location germanywestcentral
+$ az group create --name adc-aks-rg --location westeurope
 $ az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.17.11
 ```
 
@@ -21,7 +21,7 @@ Let's inspect the created resources:
 ![Created resource groups](./img/rg-created.png)
 
 The `az aks create` command created a second resource group named
-`MC_adc-aks-rg_adc-cluster_germanywestcentral` containing all resources provisioned for our AKS
+`MC_adc-aks-rg_adc-cluster_westeurope` containing all resources provisioned for our AKS
 cluster.
 
 ![Resource group with AKS resource](./img/cluster-rg.png)
@@ -73,7 +73,7 @@ metadata:
   name: kubernetes-dashboard
 
 # This separates multiple resource definitions in a single file
---- 
+---
 apiVersion: v1
 kind: ServiceAccount
 metadata:

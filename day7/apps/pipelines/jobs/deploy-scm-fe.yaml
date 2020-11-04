@@ -1,10 +1,10 @@
 parameters:
-  name: ""
-  environmentName: ""
-  keyVaultVariableGroupName: ""
-  containerRegistry: ""
-  clusterNamespace: ""
-  buildNumber: ""
+  name: ''
+  environmentName: ''
+  keyVaultVariableGroupName: ''
+  containerRegistry: ''
+  clusterNamespace: ''
+  buildNumber: ''
 
 jobs:
   - deployment: Deploy
@@ -12,7 +12,7 @@ jobs:
     variables:
       - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: "ubuntu-latest"
+      vmImage: 'ubuntu-latest'
     environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
@@ -22,12 +22,12 @@ jobs:
               displayName: Replace tokens in secrets.yaml
               inputs:
                 targetFiles: $(Pipeline.Workspace)/manifests/ui-secret.yaml
-                encoding: "auto"
+                encoding: 'auto'
                 writeBOM: true
-                actionOnMissing: "warn"
+                actionOnMissing: 'warn'
                 keepToken: false
-                tokenPrefix: "#{"
-                tokenSuffix: "}#"
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
             - task: KubernetesManifest@0
               displayName: Create imagePullSecret
               inputs:
@@ -46,12 +46,12 @@ jobs:
               displayName: Replace tokens in ingress file
               inputs:
                 targetFiles: $(Pipeline.Workspace)/manifests/scmfe-ingress.yaml
-                encoding: "auto"
+                encoding: 'auto'
                 writeBOM: true
-                actionOnMissing: "warn"
+                actionOnMissing: 'warn'
                 keepToken: false
-                tokenPrefix: "#{"
-                tokenSuffix: "}#"
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
             - task: KubernetesManifest@0
               displayName: Deploy to Kubernetes cluster
               inputs:
@@ -64,4 +64,4 @@ jobs:
                 imagePullSecrets: |
                   regcred
                 containers: |
-                  azuredevcollege.azurecr.io/adcday7/scmfe:${{ parameters.buildNumber }}
+                  azuredevcollege.azurecr.io/adcd7/scmfe:${{ parameters.buildNumber }}

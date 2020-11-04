@@ -1,7 +1,7 @@
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scm-deploy 
+  name: scm-deploy
   labels:
     application: scmcontacts
     service: scmapi
@@ -29,12 +29,12 @@ spec:
         - name: application
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: '64Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday7/scmapi
+              memory: '256Mi'
+              cpu: '500m'
+          image: azuredevcollege.azurecr.io/adcd7/scmapi
           env:
             - name: ConnectionStrings__DefaultConnectionString
               valueFrom:
@@ -45,7 +45,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: scmsecrets
-                  key: AADDOMAIN            
+                  key: AADDOMAIN
             - name: AzureAdOptions__TenantId
               valueFrom:
                 secretKeyRef:
@@ -73,4 +73,4 @@ spec:
                   key: CONTACTSSENDCONNSTR
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 5000
+            - containerPort: 5000

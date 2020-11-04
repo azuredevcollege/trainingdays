@@ -1,7 +1,7 @@
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scmfe-deploy 
+  name: scmfe-deploy
   labels:
     application: scmcontacts
     service: scmfe
@@ -29,20 +29,20 @@ spec:
         - name: application
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: '64Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday7/scmfe
+              memory: '256Mi'
+              cpu: '500m'
+          image: azuredevcollege.azurecr.io/adcd7/scmfe
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 80
+            - containerPort: 80
           volumeMounts:
-          - mountPath: "/usr/share/nginx/html/settings"
-            name: uisettings
-            readOnly: true
+            - mountPath: '/usr/share/nginx/html/settings'
+              name: uisettings
+              readOnly: true
       volumes:
-      - name: uisettings
-        secret:
-          secretName: uisettings
+        - name: uisettings
+          secret:
+            secretName: uisettings

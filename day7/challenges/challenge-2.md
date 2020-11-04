@@ -5,7 +5,7 @@
 In order to be able to store the custom Docker images you will be creating throughout this workshop, we need a container registry. Azure provides its own service for that, the Azure Container Registry. Let's create one via the Azure CLI:
 
 ```zsh
-$ az group create --name adc-acr-rg --location germanywestcentral
+$ az group create --name adc-acr-rg --location westeurope
 $ az acr create --name <ACR_NAME> --resource-group adc-acr-rg --sku basic --admin-enabled
 
 # now let's attach the container registry to the cluster

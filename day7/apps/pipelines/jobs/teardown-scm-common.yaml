@@ -4,12 +4,12 @@ parameters:
   variableGroupName: ''
   aadVariableGroupName: ''
   environmentName: ADC-DAY7-SCM-DEV
-  prefix: adcday7
+  prefix: adcd7
   env: dev
 
 jobs:
   - job: Build
-    displayName: TearDown(!) Scm Common / Infrstructure
+    displayName: TearDown(!) Scm Common / Infrastructure
     variables:
       - group: ${{ parameters.variableGroupName }}
     pool:

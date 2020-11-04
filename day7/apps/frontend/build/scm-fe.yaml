@@ -1,14 +1,14 @@
 parameters:
-  buildNumber: ""
+  buildNumber: ''
   publishDockerImage: true
-  containerRegistryServiceConnection: ""
+  containerRegistryServiceConnection: ''
 
 steps:
   - task: Docker@2
     displayName: Build Docker image
     condition: eq(${{ parameters.publishDockerImage }}, false)
     inputs:
-      repository: adcday7/scmfe
+      repository: adcd7/scmfe
       command: build
       dockerfile: day7/apps/frontend/scmfe/Dockerfile
       buildContext: day7/apps/frontend/scmfe
@@ -17,7 +17,7 @@ steps:
     displayName: Build and Push Docker image
     condition: ${{ parameters.publishDockerImage }}
     inputs:
-      repository: adcday7/scmfe
+      repository: adcd7/scmfe
       command: buildAndPush
       dockerfile: day7/apps/frontend/scmfe/Dockerfile
       buildContext: day7/apps/frontend/scmfe

@@ -1,9 +1,3 @@
-provider "azurerm" {
-  version = "~> 2.6.0"
-  features {
-  }
-}
-
 # CosmosDB
 
 resource "azurerm_cosmosdb_account" "cda" {
@@ -58,12 +52,12 @@ resource "azurerm_sql_server" "sqlsrv" {
 }
 
 resource "azurerm_sql_database" "sqldb" {
-  name                              = "${var.prefix}sqldb${var.env}"
-  resource_group_name               = var.resource_group_name
-  location                          = var.location
-  server_name                       = azurerm_sql_server.sqlsrv.name
-  requested_service_objective_name  = "S0"
-  edition                           = "Standard"
+  name                             = "${var.prefix}sqldb${var.env}"
+  resource_group_name              = var.resource_group_name
+  location                         = var.location
+  server_name                      = azurerm_sql_server.sqlsrv.name
+  requested_service_objective_name = "S0"
+  edition                          = "Standard"
   tags = {
     environment = var.env
   }

@@ -4,7 +4,7 @@ parameters:
   variableGroupName: ''
   aadVariableGroupName: ''
   environmentName: ADC-DAY7-SCM-DEV
-  prefix: adcday7
+  prefix: adcd7
   env: dev
 
 jobs:

@@ -14,10 +14,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        -  #{adcday7HOSTNAME}#
+        -  #{adcd7HOSTNAME}#
       secretName: tls-secret
   rules:
-    - host: #{adcday7HOSTNAME}#
+    - host: #{adcd7HOSTNAME}#
       http:
         paths:
           - path: /api/visitreports(/|$)(.*)

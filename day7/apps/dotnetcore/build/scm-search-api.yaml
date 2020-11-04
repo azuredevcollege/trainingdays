@@ -1,15 +1,15 @@
 parameters:
   buildConfiguration: release
-  buildNumber: ""
+  buildNumber: ''
   publishDockerImage: true
-  containerRegistryServiceConnection: ""
+  containerRegistryServiceConnection: ''
 
 steps:
   - task: Docker@2
     displayName: Build Docker image
     condition: eq(${{ parameters.publishDockerImage }}, false)
     inputs:
-      repository: adcday7/scmsearchapi
+      repository: adcd7/scmsearchapi
       command: build
       dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
       buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
@@ -18,7 +18,7 @@ steps:
     displayName: Build and Publish Docker image
     condition: ${{ parameters.publishDockerImage }}
     inputs:
-      repository: adcday7/scmsearchapi
+      repository: adcd7/scmsearchapi
       command: buildAndPush
       dockerfile: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
       buildContext: day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api

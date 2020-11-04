@@ -1,7 +1,7 @@
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scm-textanalytics-function-deploy 
+  name: scm-textanalytics-function-deploy
   labels:
     application: scmcontacts
     service: scmtextanalyticsfunc
@@ -29,12 +29,12 @@ spec:
         - name: application
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: '64Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "500m"
-          image:  azuredevcollege.azurecr.io/adcday7/scmtextanalytics
+              memory: '256Mi'
+              cpu: '500m'
+          image: azuredevcollege.azurecr.io/adcd7/scmtextanalytics
           env:
             - name: AzureWebJobsStorage
               valueFrom:

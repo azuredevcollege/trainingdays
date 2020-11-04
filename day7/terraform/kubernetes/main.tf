@@ -1,9 +1,3 @@
-provider "azurerm" {
-  version = "~> 2.6.0"
-  features {
-  }
-}
-
 data "azurerm_kubernetes_service_versions" "current" {
   location       = var.location
   version_prefix = "1.17"
@@ -50,7 +44,7 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "appns" {
   metadata {
-    name = var.env
+    name = "contactsapp"
   }
 }
 
@@ -120,7 +114,7 @@ resource "helm_release" "cert-manager" {
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
   namespace  = kubernetes_namespace.cert_manager.metadata[0].name
-  version    = "v0.15.0"
+  version    = "v1.0.4"
 
   set {
     name  = "installCRDs"
@@ -134,10 +128,6 @@ resource "helm_release" "cert-manager" {
   set {
     name  = "ingressShim.defaultIssuerKind"
     value = "ClusterIssuer"
-  }
-  set {
-    name  = "ingressShim.defaultIssuerGroup"
-    value = "cert-manager.io"
   }
 }
 

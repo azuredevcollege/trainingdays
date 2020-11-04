@@ -1,6 +1,9 @@
 provider "azurerm" {
-  version = "~> 2.6.0"
+  version = "~> 2.34.0"
   features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
   }
 }
 
@@ -9,7 +12,7 @@ terraform {
     resource_group_name  = "adc-tfstate-rg"
     storage_account_name = "tfstateadadc"
     container_name       = "tfstate"
-    key                  = "org.terraform.tfstate"
+    key                  = "com.terraform.tfstate"
   }
 }
 

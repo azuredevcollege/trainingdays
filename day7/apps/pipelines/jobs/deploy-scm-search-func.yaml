@@ -1,10 +1,10 @@
 parameters:
-  name: ""
-  environmentName: ""
-  keyVaultVariableGroupName: ""
-  containerRegistry: ""
-  clusterNamespace: ""
-  buildNumber: ""
+  name: ''
+  environmentName: ''
+  keyVaultVariableGroupName: ''
+  containerRegistry: ''
+  clusterNamespace: ''
+  buildNumber: ''
 
 jobs:
   - deployment: Deploy
@@ -12,7 +12,7 @@ jobs:
     variables:
       - group: ${{ parameters.keyVaultVariableGroupName }}
     pool:
-      vmImage: "ubuntu-latest"
+      vmImage: 'ubuntu-latest'
     environment: ${{ parameters.environmentName }}.${{ parameters.clusterNamespace }}
     strategy:
       runOnce:
@@ -21,12 +21,12 @@ jobs:
             - task: replacetokens@3
               inputs:
                 targetFiles: $(Pipeline.Workspace)/secrets/secrets.yaml
-                encoding: "auto"
+                encoding: 'auto'
                 writeBOM: true
-                actionOnMissing: "warn"
+                actionOnMissing: 'warn'
                 keepToken: false
-                tokenPrefix: "#{"
-                tokenSuffix: "}#"
+                tokenPrefix: '#{'
+                tokenSuffix: '}#'
             - task: KubernetesManifest@0
               displayName: Create imagePullSecret
               inputs:
@@ -51,4 +51,4 @@ jobs:
                 imagePullSecrets: |
                   regcred
                 containers: |
-                  azuredevcollege.azurecr.io/adcday7/scmsearchindexer:${{ parameters.buildNumber }}
+                  azuredevcollege.azurecr.io/adcd7/scmsearchindexer:${{ parameters.buildNumber }}

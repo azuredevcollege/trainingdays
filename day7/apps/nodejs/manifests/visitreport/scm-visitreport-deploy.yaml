@@ -1,7 +1,7 @@
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scm-visitreport 
+  name: scm-visitreport
   labels:
     application: scmcontacts
     service: scmvisitreport
@@ -29,12 +29,12 @@ spec:
         - name: application
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: '64Mi'
+              cpu: '100m'
             limits:
-              memory: "256Mi"
-              cpu: "500m"
-          image: azuredevcollege.azurecr.io/adcday7/scmvisitreportsapi
+              memory: '256Mi'
+              cpu: '500m'
+          image: azuredevcollege.azurecr.io/adcd7/scmvisitreportsapi
           env:
             - name: COSMOSDB
               valueFrom:
@@ -73,4 +73,4 @@ spec:
                   key: APPINSIGHTSKEY
           imagePullPolicy: IfNotPresent
           ports:
-          - containerPort: 3000
+            - containerPort: 3000

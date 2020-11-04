@@ -15,6 +15,6 @@ stages:
           variableGroupName: Day7-VariableGroup
           aadVariableGroupName: Day7-AAD-Dev
           environmentName: ADC-DAY7-SCM-DEV
-          prefix: adcday7
+          prefix: adcd7
           env: dev
           environmentServiceNameAzureRM: $(azureSubscription)
