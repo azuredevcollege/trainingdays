@@ -1,8 +1,8 @@
 parameters:
   artifactDropName: terraformplan
-  environmentServiceNameAzureRM: ""
-  variableGroupName: ""
-  aadVariableGroupName: ""
+  environmentServiceNameAzureRM: ''
+  variableGroupName: ''
+  aadVariableGroupName: ''
   environmentName: ADC-DAY7-SCM-DEV
   prefix: adcday7
   env: dev
@@ -19,13 +19,13 @@ jobs:
       - task: TerraformInstaller@0
         displayName: Install Terraform
         inputs:
-          terraformVersion: "0.12.26"
+          terraformVersion: '0.13.5'
       - task: TerraformTaskV1@0
         displayName: Terraform Init
         inputs:
-          provider: "azurerm"
-          command: "init"
-          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          provider: 'azurerm'
+          command: 'init'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
           backendServiceArm: ${{ parameters.environmentServiceNameAzureRM }}
           backendAzureRmResourceGroupName: $(tfresourcegroup)
           backendAzureRmStorageAccountName: $(tfstorageaccount)
@@ -34,9 +34,9 @@ jobs:
       - task: TerraformTaskV1@0
         displayName: Terraform Apply
         inputs:
-          provider: "azurerm"
-          command: "apply"
-          workingDirectory: "$(System.DefaultWorkingDirectory)/day7/terraform"
+          provider: 'azurerm'
+          command: 'apply'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
           commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
       - task: Kubernetes@1
@@ -44,8 +44,8 @@ jobs:
         inputs:
           connectionType: Azure Resource Manager
           azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
-          azureResourceGroup: "${{ parameters.prefix }}-k8s-rg"
-          kubernetesCluster: "${{ parameters.prefix }}k8s${{ parameters.env }}"
+          azureResourceGroup: '${{ parameters.prefix }}-k8s-rg'
+          kubernetesCluster: '${{ parameters.prefix }}k8s${{ parameters.env }}'
           command: apply
           arguments: -f day7/apps/infrastructure/manifests/cluster-issuer-staging.yaml
       - task: Kubernetes@1
@@ -53,7 +53,7 @@ jobs:
         inputs:
           connectionType: Azure Resource Manager
           azureSubscriptionEndpoint: ${{ parameters.environmentServiceNameAzureRM }}
-          azureResourceGroup: "${{ parameters.prefix }}-k8s-rg"
-          kubernetesCluster: "${{ parameters.prefix }}k8s${{ parameters.env }}"
+          azureResourceGroup: '${{ parameters.prefix }}-k8s-rg'
+          kubernetesCluster: '${{ parameters.prefix }}k8s${{ parameters.env }}'
           command: apply
           arguments: -f day7/apps/infrastructure/manifests/cluster-issuer-prod.yaml
