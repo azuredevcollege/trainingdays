@@ -233,8 +233,8 @@ We are now all set to deploy the services to the Kubernetes cluster. We will the
 **But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
 ```zsh
-$ kubectl delete ingress ing-frontend
-$ kubectl delete ingress ing-contacts
+$ kubectl delete ingress ing-frontend -n default
+$ kubectl delete ingress ing-contacts -n default
 ```
 
 We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. For each of these services, that includes a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.
