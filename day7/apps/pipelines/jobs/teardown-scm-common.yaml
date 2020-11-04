@@ -36,5 +36,5 @@ jobs:
           provider: 'azurerm'
           command: 'destroy'
           workingDirectory: '$(System.DefaultWorkingDirectory)/day7/terraform'
-          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="aaddomain=$(aadDomain)" -var="aadtenantid=$(aadTenantId)" -var="aadclientid=$(aadApiClientId)" -var="aadfeclientid=$(aadFrontendClientId)" -var="aadclientiduri=$(aadApiClientIdUri)" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
+          commandOptions: '-var="prefix=${{ parameters.prefix }}" -var="env=${{ parameters.env }}" -var="sqldbusername=$(sqlAdminUser)" -var="sqldbpassword=$(sqlAdminPassword)" -auto-approve'
           environmentServiceNameAzureRM: ${{ parameters.environmentServiceNameAzureRM }}
