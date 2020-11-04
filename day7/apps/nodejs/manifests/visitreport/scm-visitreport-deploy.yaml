@@ -56,16 +56,6 @@ spec:
                 secretKeyRef:
                   name: scmsecrets
                   key: CONTACTSLISTENENTITYCONNSTR
-            - name: TENANT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADTENANTID
-            - name: AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADCLIENTIDURI
             - name: APPINSIGHTS_KEY
               valueFrom:
                 secretKeyRef:

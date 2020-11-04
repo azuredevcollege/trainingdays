@@ -38,4 +38,4 @@ stages:
           environmentName: ADC-DAY7-SCM-DEV
           azureSubscription: $(azureSubscription)
           containerRegistry: $(containerRegistry)
-          clusterNamespace: dev
+          clusterNamespace: contactsapp

@@ -54,26 +54,6 @@ spec:
               value: rawimages
             - name: ServiceBusQueueOptions__ThumbnailContainer
               value: thumbnails
-            - name: AzureAdOptions__Domain
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADDOMAIN
-            - name: AzureAdOptions__TenantId
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADTENANTID
-            - name: AzureAdOptions__ClientId
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADCLIENTID
-            - name: AzureAdOptions__ClientIdUri
-              valueFrom:
-                secretKeyRef:
-                  name: scmsecrets
-                  key: AADCLIENTIDURI
             - name: APPINSIGHTS_INSTRUMENTATIONKEY
               valueFrom:
                 secretKeyRef:
