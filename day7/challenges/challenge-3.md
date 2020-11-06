@@ -2,8 +2,8 @@
 
 ## Why do we need Secrets and ConfigMaps
 
-It is actually obvious that certain settings of an application or service should not be hard coded in the source code of the application. Instead applications load these settings from a configuration file at runtime to aviod a new building of the application or service. By configuration files an application can be integrated configurably into other environments. Configuration files are however not the only possibility to configure applications. Environment variables are even more frequently used to configure an application or service. 
-Your containerized applications need some certain data or credentials to run properly. In challenge 2 you have seen that running an SQL Server in a container you had to set a a password, which was hard coded into the deployment file.
+It is actually obvious that certain settings of an application or service should not be hard coded in the source code of the application. Instead applications load these settings from a configuration file at runtime to avoid a new build of the application or service. By configuration files an application can be integrated configurably into other environments. Configuration files are however not the only possibility to configure applications. Environment variables are even more frequently used to configure an application or service. 
+Your containerized applications need some certain data or credentials to run properly. In challenge 2 you have seen that running an SQL Server in a container you had to set a password, which was hard coded into the deployment file.
 
 ```yaml
 ...
