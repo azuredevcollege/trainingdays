@@ -2,7 +2,7 @@
 
 ## Why do we need Secrets and ConfigMaps
 
-It is actually obvious that certain settings of an application or service are not hard coded in the source code of the application. Instead applications load these settings from a configuration file at runtime to aviod a new building of the application or service. By configuration files an application can be integrated configurably into an environment.  Configuration files are however not the only possibility to configure applications. Environment variables are even more frequently used to configure an application or service. 
+It is actually obvious that certain settings of an application or service should not be hard coded in the source code of the application. Instead applications load these settings from a configuration file at runtime to aviod a new building of the application or service. By configuration files an application can be integrated configurably into other environments. Configuration files are however not the only possibility to configure applications. Environment variables are even more frequently used to configure an application or service. 
 Your containerized applications need some certain data or credentials to run properly. In challenge 2 you have seen that running an SQL Server in a container you had to set a a password, which was hard coded into the deployment file.
 
 ```yaml
@@ -44,13 +44,13 @@ var uisettings = {
 }
 ```
 
-With Secrets and ConfigMapa, Kubernetes provides two objects that help us configure applications or services at deployment time. In the next sections we will get to know these objects better.
+With Secrets and ConfigMapa, Kubernetes provides two objects that help us to configure applications or services at deployment time. In the next sections we will get to know these objects better.
 
 ## ConfigMaps
 
 A ConfigMap is a Kuberenetes API object used to store non confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables or as configuration files in volume mounts. A ConfigMap allows you to decouple environment specific settings from your deployments and pod definitions or containers.
 
-You can use __kubectl create configmap__ command to create ConfigMaps from directories, files and literal values.
+You can use `kubectl create configmap` command to create ConfigMaps from directories, files and literal values.
 
 ### Create a ConfigMap from iteral values
 
@@ -100,8 +100,9 @@ metadata:
   name: myfirstconfigmapdemo
 spec:
   containers:
-  - image: busybox
+  - image: alpine
     name: myfirstconfigmapdemo
+    command: ["sleep", "3600"]
     env:
       - name: MYFIRSTVALUE
         valueFrom:
@@ -140,7 +141,7 @@ $ kubectl delete pod myfirstconfigmapdemo
 ```
 
 Kubernetes supports many types of volumes. A Pod can use any number of volume types simultaneously. At its core, a volume is just a directory which is accessible to the container in a pod. How that directory comes to be a medium is determined by the particular volume type. At the end the volume must be mounted in the container to access it.
-A ConfigMap provides a way to inject configuration data into pods. The data stored in a ConfigMap can be referenced in a volume of type configMap and then consumed by containeriied applications running in a pod.
+A ConfigMap provides a way to inject configuration data into pods. The data stored in a ConfigMap can be referenced in a volume of type configMap and then consumed by containerized applications running in a pod.
 
 Let us see it in action. First create a new file and name it `volumedemo.yaml` and add the following content:
 
@@ -182,7 +183,7 @@ Use `kubectl apply` command to create the Pod in your cluster:
 $ kubectl apply ./volumedemo.yaml
 ```
 
-Next we can connect to the container by running the `kubectl exec` command with argument `-t` and open a shell inside the container:
+Next we can connect to the container by running the `kubectl exec` command with argument `-it` and open a shell inside the container:
 
 ```zsh
 $ kubectl exec -it volumedemo -- /bin/sh
