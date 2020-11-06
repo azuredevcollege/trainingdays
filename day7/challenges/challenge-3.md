@@ -203,11 +203,117 @@ All ConfigMap keys, specified in the items array of the pod definition, are crea
 
 ### Create a ConfigMap from file
 
-### From File
+In the previous exercise we have seen how key-value pairs are added to a ConfigMap using `--from-literal`. A ConfigMap's key-value pairs can be created from files, too. In this exercise we learn how to create ConfigMap key-value pairs from files and how to mount a volume to make these files accessibly to the container inside a pod.
 
-create cfgmp
+First we need a file that contains the settings for a container. Create a file `demosettings.json` and add the following content:
 
-use file as mount (shortly describe volume/mount in pods) in frontend pod
+```json
+{
+    "key1" : "value1",
+    "key2" : "value2"
+}
+```
+
+We can use the `kubectl create configmap` command with argument `--from-file` to create a key-value pair from a file.
+Let us first try a dry-run to see how the ConfigMap object looks like:
+
+```zsh
+$ kubectl create configmap myfilemap --from-file=demosettings=./demosettings.json --dry-run -o yaml
+
+apiVersion: v1
+data:
+  demosettings: |-
+    {
+        "key1" : "value1",
+        "key2" : "value2"
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: myfilemap
+```
+
+The ConfigMap contains a key-value pair with key `demosettings` with the json file's content as value. Since the name of the key was specified with `demosettings` in `--from-file` it is the expected result. But it is also possible to leave out the name of the key. The name of the key will then be the name of the file.
+
+```zsh
+$ kubectl create configmap myfilemap --from-file=./demosettings.json --dry-run -o yaml
+
+apiVersion: v1
+data:
+  demosettings.json: |-
+    {
+        "key1" : "value1",
+        "key2" : "value2"
+    }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: myfilemap
+```
+
+Now let us first create the ConfigMap in the cluster:
+
+```zsh
+$ kubectl create configmap myfilemap --from-file=demosettings=./demosettings.json
+```
+
+Create a file `volumefiledemo.yaml` and add the following content:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: volumefiledemo
+  name: volumefiledemo
+spec:
+  containers:
+  - image: alpine
+    name: volumefiledemo
+    command: ["sleep", "3600"]
+    volumeMounts:
+    # mount the config volume to path /config
+    - name: config
+      mountPath: "/config"
+      readOnly: true
+  volumes:
+  # set volumes at the Pod level, then mount them into containers inside the pod
+    - name: config
+      configMap:
+        # specify the name of the ConfigMap to use
+        name: myfilemap
+        # an array of keys from the ConfigMap to create as file
+        items:
+        - key: "demosettings"
+          path: "demosettings.json"
+
+```
+This pod definition mounts the volume `config` to the path `/config` into the container. The volume is of type `configMap` and references the ConfigMap `myfilemap`. The content or value of the key `demosettings` is stored in a file named `demosettings.json` which is accessibly to the container under `/config/demosettings.json`.
+
+Let us see it in action. Use the `kubectl apply` command to create the pod:
+
+```zsh
+$ kubectl apply -f ./volumefiledemo.yaml
+```
+After the pod is up and running we can use the `kubectl exec` command with argument `-it` to connect to the container inside the pod and open a shell:
+
+```zsh
+$ kubectl exec -it volumefiledemo -- /bin/sh
+```
+
+Now we can check if the file and its content is available:
+
+```shell
+/ cd config
+/config ls
+demosettings.json
+/config more ./demosettings.json
+{
+    "key1" : "value1",
+    "key2" : "value2"
+}
+```
 
 ## Secrets
 
