@@ -58,7 +58,7 @@ Now, let us first create a ConfigMap from literal values and let us look at how 
 Open a shell and run the `kubectl create configmap` command with the option --from-literal argument to define a literal value from the command line:
 
 ```zsh
-$ kubectl create configmap myfirstmap --from-literal=myfirstkey=myfirstvalue --from-literal=mysecondkey=mysecondvalue --dry-run -o yaml
+$ kubectl create configmap myfirstmap --from-literal=myfirstkey=myfirstvalue --from-literal=mysecondkey=mysecondvalue --dry-run=client -o yaml
 ```
 
 After the command has been executed, you will see the following output:
@@ -218,7 +218,7 @@ We can use the `kubectl create configmap` command with argument `--from-file` to
 Let us first try a dry-run to see how the ConfigMap object looks like:
 
 ```zsh
-$ kubectl create configmap myfilemap --from-file=demosettings=./demosettings.json --dry-run -o yaml
+$ kubectl create configmap myfilemap --from-file=demosettings=./demosettings.json --dry-run=client -o yaml
 
 apiVersion: v1
 data:
@@ -236,7 +236,7 @@ metadata:
 The ConfigMap contains a key-value pair with key `demosettings` with the json file's content as value. Since the name of the key was specified with `demosettings` in `--from-file` it is the expected result. But it is also possible to leave out the name of the key. The name of the key will then be the name of the file.
 
 ```zsh
-$ kubectl create configmap myfilemap --from-file=./demosettings.json --dry-run -o yaml
+$ kubectl create configmap myfilemap --from-file=./demosettings.json --dry-run=client -o yaml
 
 apiVersion: v1
 data:
@@ -324,7 +324,7 @@ ConfigMaps are used to creating configuration settings for applications as plain
 Now, let us first create a Secret from literal values and let us look at how the Secret object is built up. Open a shell and run the kubectl create configmap command with the option --from-literal argument to define a literal value from the command line:
 
 ```zsh
-$ kubectl create secret generic mysecret --from-literal=myfirstkey=myfirstvalue --from-literal=mysecondkey=mysecondvalue --dry-run -o yaml
+$ kubectl create secret generic mysecret --from-literal=myfirstkey=myfirstvalue --from-literal=mysecondkey=mysecondvalue --dry-run=client -o yaml
 ```
 
 After the command has been executed, you see the following output:
