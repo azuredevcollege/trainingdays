@@ -433,7 +433,7 @@ We can use the `kubectl create secret generic` command with argument `--from-fil
 Let us first try a dry-run to see how the ConfigMap object looks like:
 
 ```zsh
-$ kubectl create secret generic myfilesecret --from-file=demosecrets=./demosecrets.json --dry-run -o yaml
+$ kubectl create secret generic myfilesecret --from-file=demosecrets=./demosecrets.json --dry-run=client -o yaml
 
 apiVersion: v1
 data:
@@ -447,7 +447,7 @@ metadata:
 The Secret contains a key-value pair with key `demosecretes` with the json file's base64 encoded content. Since the name of the key was specified with `demosecrets` in `--from-file` it is the expected result. But it is also possible to leave out the name of the key. The name of the key will then be the name of the file.
 
 ```zsh
-$ kubectl create secret generic myfilesecret --from-file=./demosecrets.json --dry-run -o yaml
+$ kubectl create secret generic myfilesecret --from-file=./demosecrets.json --dry-run=client -o yaml
 
 apiVersion: v1
 data:
