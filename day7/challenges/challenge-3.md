@@ -108,12 +108,12 @@ spec:
         valueFrom:
             configMapKeyRef:
               name: myfirstmap
-              key: myfirstvalue
+              key: myfirstkey
       - name: MYSECONDVALUE
         valueFrom:
             configMapKeyRef:
               name: myfirstmap
-              key: mysecondvalue              
+              key: mysecondkey              
   restartPolicy: Never
 ```
 
