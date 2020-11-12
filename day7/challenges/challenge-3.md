@@ -106,12 +106,12 @@ spec:
     env:
       - name: MYFIRSTVALUE
         valueFrom:
-            configMapRef:
+            configMapKeyRef:
               name: myfirstmap
               key: myfirstvalue
       - name: MYSECONDVALUE
         valueFrom:
-            configMapRef:
+            configMapKeyRef:
               name: myfirstmap
               key: mysecondvalue              
   restartPolicy: Never
