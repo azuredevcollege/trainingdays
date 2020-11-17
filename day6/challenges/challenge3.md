@@ -7,7 +7,7 @@
 - Creating Networks
 - Checking connection differences between different networks
 
-In this challenge, we're gonna play with Volume and Network objects which are the most important docker objects after images and containers. 
+In this challenge, we're gonna play with Volume and Network objects which are the most important Docker objects after Images and Containers. 
 
 
 ## Exercises
@@ -15,7 +15,7 @@ In this challenge, we're gonna play with Volume and Network objects which are th
 
 **1: Creating the first volume**
 
-Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data for example on a nfs drive or on the cloud. 
+Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data, for example on a nfs drive or on the cloud. 
 After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. In this way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when container is deleted. Volumes allow us to keep files independent of containers' lifetime. Let's create our first volume and see that in action. 
 
 First let's check if there is any volume has been created on the host before. 
@@ -29,7 +29,7 @@ Output will be something like:
 DRIVER              VOLUME NAME
  ```
 
-We don't have any volume at the moment. Let's create the first one. For that we're gonna use ```docker volume create``` command without any option. If we want to use any specific volume driver, we would use ```-d``` option but we want to create a local volume so we don't have to specify driver. 
+We don't have any volume at the moment. Let's create the first one. For that, we're gonna use ```docker volume create``` command without any option. If we want to use any specific volume driver, we would use ```-d``` option but we want to create a local volume so we don't have to specify a driver. 
 
 Type: 
 ```shell
@@ -60,11 +60,11 @@ Output will be something like:
     }
 ]
 ```
-I want you to pay attention to the  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file is written to this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. The our option would be ```-v first_volume:/test```. If the folder doesn't exist in the image, folder will be created when the container is created.
+I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, folder will be created when container is created.
 
 Now it's time to create a container and mount that volume. We're gonna create a new interactive container from ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to container's ```/test``` folder. After it's created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
 
-(We will use another useful option too which is ```--rm```. If you create a Docker container with ```--rm```, the container will be automatically deleted when it's exited. Therefore you don't need to manually clean later. Please use with caution.)
+(We will use another useful option too, which is ```--rm```. If you create a Docker container with ```--rm```, container will be automatically deleted when it's exited. Therefore you don't need to manually clean later. Please use with caution.)
 
 Type: 
 ```shell
@@ -87,7 +87,7 @@ root@666540d6384b:/test# exit
 exit
 ```
 
-When we exited, container stopped working. We created that container with ```--rm``` therefore container is deleted too. You can check by typing ```docker ps -a```. There should be no container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything was written to that folder actually was written to the volume. Container was deleted but volume still remains. So our data too. Let's create another volume and see that. This time we're gonna create another container from alpine image to see that it doesn't matter which image we use. 
+When we exited, container stopped working. We created that container with ```--rm``` therefore container is deleted too. You can check this by typing ```docker ps -a```. There shouldn't be any running or stopped container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything was written to that folder actually was written to the volume. Container was deleted but volume still remains. So our data too. Let's create another container and see that. This time we're gonna create another container from alpine image to see that it doesn't matter which image we use. 
 
 Type: 
 ```shell
@@ -103,7 +103,7 @@ Status: Downloaded newer image for alpine:latest
 / #
 ```
 
-Now we're connected to the container. Let's jump to the ```/test2``` folder and check if the file is there.  
+We're connected to the container. Let's jump to the ```/test2``` folder and check if file is there.  
 
 ```shell
 / # cd /test2
@@ -114,12 +114,12 @@ this is a test line
 /test2 # exit
 ```
 
-Yes the file is there. As you can see, we kept our data longer than the container's lifetime. Don't forget, containers are disposable and can be deleted but your data doesn't need to be.
+Yes! file is there. As you can see, we kept our data longer than the container's lifetime. Don't forget, containers are disposable and can be deleted but your data doesn't need to be.
 
 ***
 **2: Other volume options**
 
-Another use case of the volumes is that you can mount the same volume to the multiple containers at the same time. Let's try that.
+Another use case of the volumes is that you can mount same volume to multiple containers at the same time. Let's try that.
 
 
 Type: 
@@ -163,7 +163,7 @@ from-con2.txt  test.txt
 root@70fd46786a11:/test#
 ```
 
-This time, we'll create another container and mount ```first_volume``` to containers ```/test3``` folder but this time volume will be mounted read only. For that, we're gonna use ```:ro``` option. Open another terminal window and;
+This time, we'll create another container and mount ```first_volume``` to ```/test3``` folder but this time volume will be mounted read only. For that, we're gonna use ```:ro``` option. Open another terminal window and;
 
 Type: 
 ```shell
@@ -186,7 +186,7 @@ touch: cannot touch 'newfile.txt': Read-only file system
 root@0f00f388b5e8:/test3#
 ```
 
-Type ```exit``` into all 3 terminals. This will close the containers and they'll be automatically deleted. But volume will not be deleted and therefore we're gonna keep the files that we need. But now we're done so we can delete the volume too.
+Type ```exit``` in all 3 terminals. This will close the containers and they'll be automatically deleted. But volume will not be deleted. Therefore we're gonna keep the files that we need. But now, we're done our exercise so we can delete this volume too.
 
 Type: 
 ```shell
@@ -213,9 +213,9 @@ NETWORK ID          NAME                DRIVER              SCOPE
 a4c8780d68f4        host                host                local
 3f2520a5781c        none                null                local
 ```
-When Docker engine is installed, a default bridge network (also called bridge) is created automatically, and newly-started containers connect to it unless otherwise specified. In addition to that, two other networks are created too. Which are host and none. 
+When Docker engine is installed, a default bridge network (also called bridge) is created automatically and newly-started containers connect to it unless otherwise specified. In addition to that, two other networks are created too. Which are host and none. 
 
-All containers without a ```--network``` option specified, are attached to the default bridge network and Containers on the default bridge network can access each other by their IP addresses. You can also create user-defined custom bridge networks. But we'll come to that later. For now let's inspect the default bridge network.
+All containers without a ```--network``` option specified are attached to the default bridge network. Containers on the default bridge network can access each other by their IP addresses. You can also create user-defined custom bridge networks. But we'll come to that later. For now, let's inspect the default bridge network.
 
 Type: 
 ```shell
@@ -262,7 +262,7 @@ Output will be something like:
 ]
 ```
 
-"Subnet" is "172.17.0.0/16" and "Gateway" is "172.17.0.1". This means that all containers without a ```--network``` specified are attached to this bridge network and get an ip address from that subnet. Also each container that are connected to this network can communicate with each other. It's time to try that. First we're gonna create 2 container with ```-d``` and ```-it``` options and in short ```-dit```. This allows us to create a container interactive and connected but also detached. So connection will be opened to this container but we'll get our terminal back continue to work. 
+"Subnet" is "172.17.0.0/16" and "Gateway" is "172.17.0.1". This means that all containers without a ```--network``` specified will be attached to this bridge network and get an ip address from that subnet. Also each container that are connected to this network can communicate with each other. It's time to try that. First we're gonna create 2 containers with ```-d``` and ```-it``` options, in short ```-dit```. This allows us to create a container interactive and connected "-it" but also detached "-d". So connection will be opened to this container but we'll get our terminal back. In this way, we can continue to work. 
 
 Type: 
 ```shell
@@ -282,7 +282,7 @@ Output will be something like:
 f89a73c7d38d6bad0d14b68cc629e8e4fd2f32e8f274ce20cbbb8f116efe5887
 ``` 
 
- In the mean time we're gonna learn another docker command which is ```docker attach```. This command allows us to attach our terminal’s standard input, output, and error (or any combination of the three) to a running container using the container’s ID or name. This allows us to view its ongoing output or to control it interactively, as though the commands were running directly in your terminal. This is how we will attach to running connection on these containers. But before that let's inspect the bridge network object one more time. 
+ In the mean time we're gonna learn another docker command which is ```docker attach```. This command allows us to attach our terminal’s standard input, output, and error (or any combination of the three) to a running container using the container’s ID or name. This allows us to see its ongoing output or control it interactively, as though the commands were running directly in your terminal. This is how we will attach to running connection on these containers. But before that let's inspect the bridge network object one more time. 
 
  Type: 
 ```shell
@@ -353,7 +353,7 @@ Output will be something like:
 ```shell
 root@bb1dcc608811:/#
 ```
-Now we're in the container. First we're gonna check its network details by typing ifconfig but when you do that, you will get an error "bash: ifconfig: command not found". Another important thing you have to know about container images that most of them are minimal builds and don't have even the most used basic tools like ifconfig and ping. We need to install that first. 
+We are in con1. First we're gonna check network details by typing ifconfig but when you do that, you will get an error "bash: ifconfig: command not found". Another important thing you have to know about container images is that most of them are minimal builds and don't have even most used basic tools like ifconfig and ping. We need to install that first. 
 
  Type: 
 ```shell
@@ -389,7 +389,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-As you can see con1 gets the ip address of 172.17.0.2. Let's try to ping con2. Ip address of con2 is 172.17.0.3.
+As you can see, con1 got an ip address "172.17.0.2". Let's try to ping con2. Ip address of con2 is 172.17.0.3.
 
 Type: 
 ```shell
@@ -407,7 +407,7 @@ PING 172.17.0.3 (172.17.0.3) 56(84) bytes of data.
 4 packets transmitted, 4 received, 0% packet loss, time 3086ms
 rtt min/avg/max/mdev = 0.090/1.299/4.848/2.048 ms
 ```
-It seems that connection between con1 and con2 is possible. Because they're connected to same default bridge network. They can communicate directly without exposing their ports. They're on the same network and there isn't any rule that blocks this communication. But I wonder if they can solve each other's name too? Is there any dns mechanism running behind the scenes? Let's try that. First we're gonna try to ping www.bing.com and see if the container can solve the public domain names. 
+It seems that connection between con1 and con2 is possible. Because they're connected to same default bridge network. They can communicate directly without exposing their ports. They're on the same network and there isn't any rule that blocks this communication. But I wonder if they can solve each other's name too? Is there any dns mechanism running behind the scenes? Let's try that. First we're gonna try to ping www.bing.com and see if container can solve public domain names. 
 
 Type: 
 ```shell
@@ -434,18 +434,18 @@ Output will be something like:
 ```shell
 ping: con2: Name or service not known
 ```
-Containers on the default bridge network can only access each other by IP addresses, unless you use the --link option, which is considered legacy. On a user-defined bridge network, containers can resolve each other by name or alias. That's the main benefit of user defined bridge networks. In addition to that using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate. We'll come to that later. 
+Containers on the default bridge network can only access each other by their IP addresses, unless you use the --link option, which is considered legacy. On a user-defined bridge network, containers can resolve each other by name or alias. That's the main benefit of user defined bridge networks. In addition to that using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate. We'll come to that later. 
 
 You can detach from a container and leave it running using the CTRL-p CTRL-q key sequence. Let's type that and detach from the container. 
 
-You can connect to and disconnect from the networks any time you wish. Let's try this and disconnect the con1 from bridge network. 
+You can connect to and disconnect from networks any time you wish. Let's try this and disconnect "con1" from bridge network. 
 
 Type: 
 ```shell
 $ docker network disconnect bridge con1
 ```
 
-Now the con1 is disconnected from bridge network. Attach again to the container's shell and check that it's disconnected. 
+Now the con1 is disconnected from bridge network. Attach again to container's shell and check that it's disconnected. 
 
 Type: 
 ```shell
@@ -462,13 +462,13 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
-As you can see only the loopback adapter remains. Let's type the CTRL-p CTRL-q and detach from the container again. Delete the container by typing ```docker container rm -f con1 con2```
+As you can see, only the loopback adapter remains. Let's type CTRL-p CTRL-q and detach from the container again. Delete containers by typing ```docker container rm -f con1 con2```
 
 
 ***
 **4: Default networks - Host**
 
-Another network that has been created when Docker starts is the host network. If you use the host network mode for a container, that container’s network stack is not isolated from the Docker host (the container shares the host’s networking namespace), and the container does not get its own IP-address allocated. Let's create another container and connect that to the host network.
+Another network that has been created when Docker starts is "host" network. If you attach a container to the "host" network, that container’s network stack is not isolated from Docker host's network stack (container shares the host’s networking namespace), and container does not get its own IP-address allocated. Let's create another container and connect that to the host network.
 
 Type: 
 ```shell
@@ -527,7 +527,7 @@ Check the eth0 adapter. It's exactly the same adapter that the host has. So ther
 ***
 **5: Default networks - None**
 
-If you want to completely disable the networking stack on a container, you can use the --network none flag when starting the container. Within the container, only the loopback device is created. Let's try that. 
+If you want to disable networking stack completely on a container, you can use  --network none flag. Within the container, only the loopback device will be created. Let's try that. 
 
 Type: 
 ```shell
@@ -549,13 +549,13 @@ Output will be something like:
 2: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN qlen 1000
     link/sit 0.0.0.0 brd 0.0.0.0
 ``` 
-As you can see there isn't any eth device has created. This container can't communicate with any endpoint. Type exit and container will be automatically deleted. 
+As you can see, there isn't any eth device that has created. This container can't communicate with any endpoint. Type exit, container will be automatically deleted. 
 
 ***
 **6: User-defined bridge network**
 
-All containers without a --network specified, are attached to the default bridge network. This can be a risk, as unrelated stacks/services/containers are then able to communicate. Using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate.
-If your containers use the default bridge network, you can configure it, but all the containers use the same settings, such as MTU and iptables rules. In addition, configuring the default bridge network happens outside of Docker itself, and requires a restart of Docker. User-defined bridge networks are created and configured using docker network create. If different groups of applications have different network requirements, you can configure each user-defined bridge separately, as you create it. Containers connected to the same user-defined bridge network effectively expose all ports to each other. For a port to be accessible to containers or non-Docker hosts on different networks, that port must be published using the -p or --publish flag which we will come later. For now let's create our first user-defined bridge network. 
+All containers without a --network specified are connected to the default bridge network. This can be a risk, as unrelated stacks/services/containers are then able to communicate. Using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate.
+If your containers use the default bridge network, you can configure it, but all the containers use the same settings, such as MTU and iptables rules. In addition, configuring the default bridge network happens outside of Docker itself, and requires a restart of Docker. User-defined bridge networks are created by using ```docker network create``` command. If different group of applications have different network requirements, you can configure each user-defined bridge network separately while creating them. Containers connected to the same user-defined bridge network effectively expose all ports to each other. For a port to be accessible to containers or non-Docker hosts on different networks, that port must be published using the -p or --publish flag which we will come later. For now let's create our first user-defined bridge network. 
 
 Type: 
 ```shell
@@ -566,7 +566,7 @@ Output will be something like:
 6bb87b6c22ea7dceee3cf87367aee2bd9045c1f255d98c4c01cac00ab6478d13
 ``` 
 
-It's created. Now it's time to check and see its details. 
+It has been created. Now it's time to check and see its details. 
 
 Type: 
 ```shell
@@ -619,7 +619,7 @@ Output will be something like:
 ]
 ``` 
 
-Again I want you to notice Gateway and Subnet section of this output. We've created a new user-defined bridge network. We didn't specify any subnet option. So it's created by default with next ip blok after default bridge network. So subnet is "172.18.0.0/16". If we'll create another one, it will get "172.19.0.0/16" and this goes like that. Let's create 2 containers again and connect to this newly created network. 
+Again, I want you to notice Gateway and Subnet section of this output. We've created a user-defined bridge network. We didn't specify any subnet option. That is why it got the next ip block after default bridge network. So subnet is "172.18.0.0/16". If we create another one, it will get "172.19.0.0/16" and this goes like that. Let's create 2 containers again and connect them to this newly created network. 
 
 
 Type: 
@@ -650,7 +650,7 @@ Output will be something like:
 / #
 ``` 
 
-We're connected to the web container. Let's try to ping the database container by its name. 
+We're connected to "web" container. Let's try to ping "database" container by its name. 
 
 Type: 
 ```shell
@@ -669,7 +669,7 @@ PING database (172.18.0.3): 56 data bytes
 round-trip min/avg/max = 0.069/0.112/0.158 ms
 ```
 
-As you can see, now the containers that are connected to the same user-defined bridge network can communicate with each other and resolve each other's name. But let's try to create another container on the default bridge network and try to access this container. 
+As you can see, containers that are connected to the same user-defined bridge network can communicate with each other and resolve each other's name. But let's try to create another container on the default bridge network and try to access this container. 
 
 Open a second terminal window. 
 Type: 
@@ -681,7 +681,7 @@ Output will be something like:
 / #
 ```
 
-Container named test has been created and you're connected to its shell. Try to ping database server by its name and ip address.
+"test" container has been created and you're connected to its shell. Try to ping "database" contaiber by its name and ip address.
 
 ```shell
 / # ping database
@@ -694,7 +694,7 @@ PING 172.18.0.3 (172.18.0.3): 56 data bytes
 / #
 ```
 
-You couldn't neither resolve its name nor access to this container by its ip address. Containers that are running on the different networks can't communicate with each other without exposed ports. Only the containers that are running on the same network can communicate each other and if they are running on the same user-defined bridge network they can resolve each other's name too. Close the connection by typing exit and delete two other containers to by typing ```docker container rm -f web database```
+You shouldn't have been able to neither resolve its name nor access to this container by its ip address. Containers that are running on different networks can't communicate with each other without exposed ports. Only the containers that are running on the same network can communicate with each other and if they are running on the same user-defined bridge network, they can resolve each other's name too. Close this connection by typing exit and delete other containers too by typing ```docker container rm -f web database```
 
 As the last part of this exercise, let's create a second bridge network but this time we're gonna specify the subnet and ip ranges. 
 
@@ -724,7 +724,7 @@ a4c8780d68f4        host                host                local
 ***
 **7: Port publishing**
 
-By default, when you create a container, it does not publish any of its ports to the outside world. To make a port available to clients outside the Docker, or to Docker containers which are not connected to the container’s network, we use the ```--publish``` or ```-p``` flag. This creates a firewall rule which maps a container port to a port on the Docker host. Any package that reaches to that port on the host will be forwarded to the port that listens on the container. So you can access the services inside the container from outside of the world. Also containers which are not connected to the container’s network can reach the container via that published port. Let's try this. We're gonna create 2 containers on 2 different networks. First on will be web server and publish on TCP Port 80. Other one is just a busybox container that we'll try to connect the web container. 
+By default, when you create a container, it does not publish any of its ports to outside world. To make a port available to clients outside the Docker, or to Docker containers which are not connected to the same network, we use ```--publish``` or ```-p``` flags. This creates a firewall rule which maps a container port to a port on the Docker host. Any package that reaches to that port on the host will be forwarded to the port that listens on the container. So you can access to services inside the container from outside. Also containers which are not connected to the container’s network can reach this container via that published port. Let's try this. We're gonna create 2 containers connected to 2 different networks. First one will be "web" and will be published TCP Port 80. Other one is just a busybox container that we'll try to connect to "web" container. 
 
 Type: 
 ```shell
@@ -734,11 +734,11 @@ Output will be something like:
 ```shell
 d20a67de0c86993f07dbc0774a883e5d6414693b5fdd9f2b183426bf4a5835c3
 ```
-If you open a browser on your computer and visit 127.0.0.1:5000 you will reach the web daemon which is running inside the container and listens on port 80. We some kind connect host's 5000 port to container's 80 port. 
+If you open a browser on your computer and visit 127.0.0.1:5000, you will reach to the web daemon which is running inside the container. Somehow, we mapped host's TCP 5000 to containers TCP 80. 
 
 <img src="./img/nginx2.png">
 
-Now let's create a second container and connect that to the ```second_network``` and try to reach webserver. But first let's get webserver's ip address. Type ```docker container inspect webserver``` and check Ip address section. In my case it's "IPAddress": "172.18.0.4". Ok, we are now ready to create the second container. 
+Now, let's create a second container and connect that to the ```second_network``` and try to reach webserver. But first let's get webserver's ip address. Type ```docker container inspect webserver``` and check Ip address section. In my case it's "IPAddress": "172.18.0.4". Ok, we are now ready to create the second container. 
 
 Type: 
 ```shell
@@ -760,7 +760,7 @@ Output will be something like:
 curl: (7) Failed to connect to 172.18.0.4 port 80: Connection timed out
 ```
 
-We got the connection time-out message. Because we're trying to reach a container which is connected to another network. Remember that, containers that are running on the different networks can't communicate with each other. Instead of that, if we try to reach 172.18.0.1 "which is the gateway of the first_network" on port 5000 we can reach the container. Because, we have exposed the port. 
+We got a "connection time-out" message. Because we were trying to reach a container which is connected to another network. Remember that, containers that are running on different networks can't communicate with each other. Instead of that, if we try to reach 172.18.0.1 "which is the gateway of the first_network" on port 5000 we can reach to the container. Because, we have exposed that port. 
 
 Type: 
 ```shell
@@ -798,7 +798,7 @@ Type exit and container will be automatically deleted.
 
 P.S. ```-p 8080:80/udp``` you can also expose udp ports like that. 
 
-Let's delete other containers and the networks that we've created too. 
+Let's delete other containers and networks that we've created so far. 
 
 Type: 
 ```shell
@@ -811,6 +811,6 @@ $ docker network rm first_network second_network
 ```
 ## Wrap up
 
-__Congratulations__ you have completed the Docker Objects challenge. You've just learned how to create and manage Docker Volume and Network objects.
+__Congratulations__ you have completed the Docker Objects challenge and learned how to create and manage Docker Volume and Network objects.
 
 *** Reference: https://docs.docker.com
