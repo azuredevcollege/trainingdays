@@ -262,7 +262,7 @@ Open the terminal and cd to the folder where you saved the file.
 
 Type: 
 ```shell
-$ docker container run --name env_test2  --env-file .\env.list ubuntu printenv
+$ docker container run --name env_test2  --env-file env.list ubuntu printenv
 ```
 Output will be something like:
 ```shell
