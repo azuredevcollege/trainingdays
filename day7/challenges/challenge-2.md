@@ -500,7 +500,7 @@ NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
 service/kubernetes   ClusterIP   10.0.0.1     <none>        443/TCP   5d1h
 ```
 
-In the previous deployment, we already added `Labels` without really knowing what they are good for :)). Here's the excerpt of one the YAML manifest:
+In the previous deployment, we already added `Labels` without really knowing what they are good for :). Here's the excerpt of one the YAML manifests:
 
 ```yaml
 spec:
