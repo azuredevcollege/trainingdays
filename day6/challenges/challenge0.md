@@ -7,7 +7,7 @@ To be able to follow all the challenges provided in this workshop, you need a fe
 
 <img src="./img/dockerlogo.png" width="200">
 
-It's obvious that it's expected you to have Docker installed on your computer. But installation process is not as seamless as it has to be. Docker published different packages for different operating systems. Please follow the section of your operating system below and install related Docker package published for your operating system. 
+It's obvious that it's expected you to have Docker installed on your computer. But installation process is not as seamless as it has to be. Docker publishes different packages for different operating systems. Please follow the section of your operating system below and install related Docker package published for your operating system. 
 
 ***If you can't install any software on your computer due to company policies or other reasons, please spin up an Ubuntu VM on Azure and follow the Linux section below***
 
@@ -331,7 +331,7 @@ For more examples and ideas, visit:
 ```
 
 ## Docker Hub
-If you didn't signed up yet, we recommend you to sign up and create your Docker ID. This will alllow you to create public and private repositories to store your own Docker Images. 
+If you didn't sign up yet, we recommend you to sign up and create your Docker ID. This will allow you to create public and private repositories to store your own Docker Images. 
 - Visit <https://hub.docker.com/> and fill the form, click **Sign Up** button and create your Docker ID. 
 - Check your mailbox and confirm your account creation. 
 
@@ -342,7 +342,7 @@ Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and i
 
 ### Useful Extensions ###
 
-After the setup is complete. Open Visual Studio and open the "Extensions" sidebar:
+After the setup is complete, open "Visual Studio" and open the "Extensions" sidebar:
 
 ![Visual Studio Extensions](./img/vscode_extensions.png "VS Code Extensions")
 
