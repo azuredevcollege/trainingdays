@@ -2,9 +2,9 @@
 
 ## Here is what you'll learn
 
-- Creating Azure Container Registery Instance
-- Pushing and storing the images that we have created
-- Creating first AKS cluster and deploy phpapp application
+- Creating Azure Container Registry Instance
+- Pushing images that we have built to ACR 
+- Creating first AKS cluster and deploying phpapp application
 
 In this challenge, we're gonna create our ACR and AKS instances and deploy a php based webapp that we have containerized at the end of challenge 4. 
 
@@ -12,8 +12,10 @@ In this challenge, we're gonna create our ACR and AKS instances and deploy a php
 ## Exercises
 
 **1: Azure Container Registry**
+<details>
+  <summary>Click to expand!</summary>
 
-In this first task, we'll create a new Azure Container Registry (ACR) Instance. Azure Container Registry allows us to build, store, and manage container images and artifacts in a private registry for all types of container deployments. We're gonna store 2 images that we've created at the end of the challenge 4. Let's get started. We'll do all via portal, so let's jump to the https://portal.azure.com
+In this first task, we'll create a new Azure Container Registry (ACR) Instance. Azure Container Registry allows us to build, store, and manage container images and artifacts in a private registry for all types of container deployments. We're gonna store 2 images that we've created at the end of the challenge 4. Let's get started. We'll complete this via portal, so let's jump to https://portal.azure.com
 
 - Click the hamburger icon on the top left of the screen.
 - Click **Create a resource** link.
@@ -54,7 +56,7 @@ In this first task, we'll create a new Azure Container Registry (ACR) Instance. 
 
 <img src="./img/acr6.png">
 
-- We have created the ACR instance and it's ready to store our images. Let's turn back to Terminal and push images that we created before.
+- We have created an ACR instance and it's ready to store our images. Let's turn back to Terminal and push images that we have created before.
 - First, let's get logged out from current registry. 
 Type: 
 ```shell
@@ -67,7 +69,7 @@ Removing login credentials for https://index.docker.io/v1/
 
 <img src="./img/acr7.png">
 
-- It's time login to our newly created ACR instance. 
+- It's time log into our newly created ACR instance. 
 
 Type: 
 ```shell
@@ -82,7 +84,7 @@ Login Succeeded
 
 <img src="./img/acr8.png">
 
-- We could successfully logged in. This means that from now on we can push images to this registry. But to be able to do that, we have to retag the images that we created at the end of the challenge. Simply we have to add new tags to them in format of  ```registry_url/repository_name:tag```. Let's do that.
+- We could successfully logged in. This means that from now on we can push images to this registry. But to be able to do that, we have to retag the images that we have created at the end of the challenge 4. Simply we have to add new tags to them, in this format  ```registry_url/repository_name:tag```. Let's do that.
 - First, let's list all the images on the system. 
 
 Type: 
@@ -95,14 +97,14 @@ REPOSITORY            TAG                 IMAGE ID            CREATED           
 your_dockerhub_idmysql   v1                  2dfc8038fc98        13 hours ago        448MB
 your_dockerhub_idphp     v1                  53959f571f38        13 hours ago        484MB
 ```
-- There should be 2 images that we have created at the end of the challenge 4. They're named as your_dockerhub_idmysql:v1 and your_dockerhub_idphp:v1. We're gonna add new tags to these images. 
+- There should be 2 images that we have created at the end of the challenge 4. They were tagged as your_dockerhub_idmysql:v1 and your_dockerhub_idphp:v1. We're gonna add new tags to these images. 
 
 Type: 
 ```shell
 $ docker image tag your_dockerhub_idphp:v1 acr_login_url/php:v1
 $ docker image tag your_dockerhub_idmysql:v1 acr_login_url/mysql:v1
 ```
-- Let's list all the images on the system and check the newly added tags.
+- Let's list all the images on the system and check these newly added tags.
 Type: 
 ```shell
 $ docker image ls
@@ -173,13 +175,16 @@ v1: digest: sha256:929ac51065d473c23229f1f85be02b854aaab147d1ebaa018884f1a5ee455
 
 <img src="./img/acr10.png">
 
-- Turn back to portal and confirm that the images were pushed and stored in the ACR. 
+- Turn back to portal and confirm that these images were pushed and stored in the ACR. 
 - We successfully re-tagged our images and pushed them to newly created ACR. Image part has been completed. 
 
 <img src="./img/acr11.png">
+</details>
 
 ***
 **2: Azure Kubernetes Service**
+<details>
+  <summary>Click to expand!</summary>
 
 It's time to create our first AKS cluster.  
 
@@ -217,16 +222,19 @@ It's time to create our first AKS cluster.
 <img src="./img/acr18.png">
 
 - Congrats. You have successfully built your first AKS cluster. 
+</details>
 
 ***
 **3: Deploy php app to AKS**
+<details>
+  <summary>Click to expand!</summary>
 
 Now it's time to deploy our php app to AKS cluster. 
 
-- We're gonna use ```kubectl``` tool to manage Kubernetes cluster. The Kubernetes command-line tool, kubectl, allows us to run commands against Kubernetes clusters. We can use kubectl to deploy applications, inspect and manage cluster resources, and view logs. You can either install ```kubectl``` in your terminal or you can use **Azure Cloud Shell** where ```kubectl``` is already installed. 
+- We're gonna use ```kubectl``` tool to manage Kubernetes cluster. Kubernetes command-line tool, kubectl, allows us to run commands against Kubernetes clusters. We can use kubectl to deploy applications, inspect and manage cluster resources, and view logs. You can either install ```kubectl``` in your terminal or you can use **Azure Cloud Shell** where ```kubectl``` is already installed. 
 - Click **Cloud Shell** icon on the top left right side of the portal screen and open it. 
 - If asked, select **Bash** and open the shell. 
-- When you interact with an AKS cluster using the kubectl tool, a configuration file is used that defines cluster connection information. This configuration file is typically stored in ~/.kube/config. Multiple clusters can be defined in this kubeconfig file. The az aks get-credentials command lets you get the access credentials for an AKS cluster and merges them into the kubeconfig file. Now we use that command and merge the credential into our kubeconfig file. Thus we can manage the Kubernetes cluster. 
+- When you interact with an AKS cluster using the kubectl tool, a configuration file is used that defines cluster connection information. This configuration file is typically stored in ~/.kube/config. Multiple clusters can be defined in this kubeconfig file. "az aks get-credentials" command lets you get access to the credentials for an AKS cluster and merges them into the kubeconfig file. Now we use that command and merge the credential into our kubeconfig file. Thus we can manage our Kubernetes cluster. 
 
 Type: 
 ```shell
@@ -256,7 +264,7 @@ aks-agentpool-10704589-vmss000002   Ready    agent   26m   v1.16.13
 <img src="./img/acr19.png">
 
 - There are 2 ways to spin up Kubernetes resources. Imperative method, which is basically using command line. But there’s an easier and more useful way to do, declarative method, creating configuration files using YAML. Most of the things you can deploy to a Cluster in Kubernetes can be described as a YAML file. YAML is a human-readable text-based format that let’s us easily specify configuration-type information by using a combination of maps of name-value pairs and lists of items.
-- We have created a yaml file to create 2 deployment and 2 service objects. All the config that needed to create these objects are defined in this yaml file. But what is a deployment, what is a service? These are the object types that you can create on the Kubernetes. Simply the deployment object is our application and the service object is the end-point that exposes these application to other services or external users. But all of these are Kubernetes related topics and we won't cover them today. We have a full Kubernetes day, Day 7, there you will get all the information related to Kubernetes. Today, we're gonna only deploy the applications and that's all. 
+- We have created a yaml file to create 2 deployment and 2 service objects. All the config that is needed to create these objects are defined in this yaml file. But what is a deployment, what is a service? These are the object types that you can create on Kubernetes. Simply, deployment object is our application and service object is an end-point that exposes this application to other services or external users. But all of these are Kubernetes related topics and we won't cover them today. We have a full Kubernetes day, Day 7, there you will get all the information related to Kubernetes. Today, we're gonna only deploy this application and that's all. 
 - So first let's open the yaml file. Go to ```day6/apps/kube``` folder and open ```app.yaml``` on a text editor. 
 - There are 2 lines that you have to update here. Go to line 19 and 66 and update the ACR url with your own.
 ```
@@ -331,12 +339,13 @@ kubernetes                                 ClusterIP      10.0.0.1       <none> 
 ***
 **4: Clean-up**
 
-When you completed the challenge, don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beginning of this challenge and delete it. All the resources **ACR, AKS** that you have created in the resource group will be automatically deleted too. 
+When you complete the challenge, please don't forget to delete the resources that you have created. Via the portal, find the resource group that you have created at the beginning of this challenge and delete it. All the resources **ACR, AKS** that you have created in this resource group will be automatically deleted too. 
 <img src="./img/acr26.png">
 
 <img src="./img/acr27.png">
 
 <img src="./img/acr28.png">
+</details>
 
 ***
 ## Wrap up
