@@ -2,9 +2,9 @@
 
 ## Here is what you'll learn
 
-- Creating Azure Container Registery Instance
-- Pushing and storing the images that we have created
-- Creating first AKS cluster and deploy phpapp application
+- Creating Azure Container Registry Instance
+- Pushing images that we have built to ACR 
+- Creating first AKS cluster and deploying phpapp application
 
 In this challenge, we're gonna create our ACR and AKS instances and deploy a php based webapp that we have containerized at the end of challenge 4. 
 
@@ -12,6 +12,8 @@ In this challenge, we're gonna create our ACR and AKS instances and deploy a php
 ## Exercises
 
 **1: Azure Container Registry**
+<details>
+  <summary>Click to expand!</summary>
 
 In this first task, we'll create a new Azure Container Registry (ACR) Instance. Azure Container Registry allows us to build, store, and manage container images and artifacts in a private registry for all types of container deployments. We're gonna store 2 images that we've created at the end of the challenge 4. Let's get started. We'll complete this via portal, so let's jump to https://portal.azure.com
 
@@ -177,9 +179,12 @@ v1: digest: sha256:929ac51065d473c23229f1f85be02b854aaab147d1ebaa018884f1a5ee455
 - We successfully re-tagged our images and pushed them to newly created ACR. Image part has been completed. 
 
 <img src="./img/acr11.png">
+</details>
 
 ***
 **2: Azure Kubernetes Service**
+<details>
+  <summary>Click to expand!</summary>
 
 It's time to create our first AKS cluster.  
 
@@ -217,9 +222,12 @@ It's time to create our first AKS cluster.
 <img src="./img/acr18.png">
 
 - Congrats. You have successfully built your first AKS cluster. 
+</details>
 
 ***
 **3: Deploy php app to AKS**
+<details>
+  <summary>Click to expand!</summary>
 
 Now it's time to deploy our php app to AKS cluster. 
 
@@ -337,6 +345,7 @@ When you complete the challenge, please don't forget to delete the resources tha
 <img src="./img/acr27.png">
 
 <img src="./img/acr28.png">
+</details>
 
 ***
 ## Wrap up

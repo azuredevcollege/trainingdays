@@ -14,6 +14,8 @@ In this challenge, we're gonna play with Volume and Network objects which are th
 
 
 **1: Creating the first volume**
+<details>
+  <summary>Click to expand!</summary>
 
 Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data, for example on a nfs drive or on the cloud. 
 After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. In this way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when container is deleted. Volumes allow us to keep files independent of containers' lifetime. Let's create our first volume and see that in action. 
@@ -115,9 +117,12 @@ this is a test line
 ```
 
 Yes! file is there. As you can see, we kept our data longer than the container's lifetime. Don't forget, containers are disposable and can be deleted but your data doesn't need to be.
+</details>
 
 ***
 **2: Other volume options**
+<details>
+  <summary>Click to expand!</summary>
 
 Another use case of the volumes is that you can mount same volume to multiple containers at the same time. Let's try that.
 
@@ -196,9 +201,12 @@ Output will be something like:
 ```shell
 first_volume
 ```
+</details>
 
 ***
 **3: Default networks - Bridge**
+<details>
+  <summary>Click to expand!</summary>
 
 Let's get started. First we're gonna list current network objects.
 
@@ -463,10 +471,12 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 As you can see, only the loopback adapter remains. Let's type CTRL-p CTRL-q and detach from the container again. Delete containers by typing ```docker container rm -f con1 con2```
-
+</details>
 
 ***
 **4: Default networks - Host**
+<details>
+  <summary>Click to expand!</summary>
 
 Another network that has been created when Docker starts is "host" network. If you attach a container to the "host" network, that container’s network stack is not isolated from Docker host's network stack (container shares the host’s networking namespace), and container does not get its own IP-address allocated. Let's create another container and connect that to the host network.
 
@@ -523,9 +533,12 @@ veth9f4c8b5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 ``` 
 
 Check the eth0 adapter. It's exactly the same adapter that the host has. So there isn't any network isolation. Container is running like a process on the host and uses network infrastructure of the host without any bridge or something like that in the middle. Type exit and close the connection. Container will be automatically deleted. 
+</details>
 
 ***
 **5: Default networks - None**
+<details>
+  <summary>Click to expand!</summary>
 
 If you want to disable networking stack completely on a container, you can use  --network none flag. Within the container, only the loopback device will be created. Let's try that. 
 
@@ -550,9 +563,12 @@ Output will be something like:
     link/sit 0.0.0.0 brd 0.0.0.0
 ``` 
 As you can see, there isn't any eth device that has created. This container can't communicate with any endpoint. Type exit, container will be automatically deleted. 
+</details>
 
 ***
 **6: User-defined bridge network**
+<details>
+  <summary>Click to expand!</summary>
 
 All containers without a --network specified are connected to the default bridge network. This can be a risk, as unrelated stacks/services/containers are then able to communicate. Using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate.
 If your containers use the default bridge network, you can configure it, but all the containers use the same settings, such as MTU and iptables rules. In addition, configuring the default bridge network happens outside of Docker itself, and requires a restart of Docker. User-defined bridge networks are created by using ```docker network create``` command. If different group of applications have different network requirements, you can configure each user-defined bridge network separately while creating them. Containers connected to the same user-defined bridge network effectively expose all ports to each other. For a port to be accessible to containers or non-Docker hosts on different networks, that port must be published using the -p or --publish flag which we will come later. For now let's create our first user-defined bridge network. 
@@ -720,9 +736,12 @@ a4c8780d68f4        host                host                local
 3f2520a5781c        none                null                local
 34d051989f2a        second_network      bridge              local
 ```
+</details>
 
 ***
 **7: Port publishing**
+<details>
+  <summary>Click to expand!</summary>
 
 By default, when you create a container, it does not publish any of its ports to outside world. To make a port available to clients outside the Docker, or to Docker containers which are not connected to the same network, we use ```--publish``` or ```-p``` flags. This creates a firewall rule which maps a container port to a port on the Docker host. Any package that reaches to that port on the host will be forwarded to the port that listens on the container. So you can access to services inside the container from outside. Also containers which are not connected to the container’s network can reach this container via that published port. Let's try this. We're gonna create 2 containers connected to 2 different networks. First one will be "web" and will be published TCP Port 80. Other one is just a busybox container that we'll try to connect to "web" container. 
 
@@ -809,6 +828,9 @@ Type:
 ```shell
 $ docker network rm first_network second_network
 ```
+</details>
+
+***
 ## Wrap up
 
 __Congratulations__ you have completed the Docker Objects challenge and learned how to create and manage Docker Volume and Network objects.

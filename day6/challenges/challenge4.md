@@ -13,6 +13,8 @@ In this challenge, we're gonna play with Docker Images. A Docker container image
 
 
 **1: Tagging**
+<details>
+  <summary>Click to expand!</summary>
 
 Let's pull an image. The command that we use is ```docker pull```. With that command, we're requesting from Docker that we want to download an image from its registry to the host. 
 
@@ -113,9 +115,12 @@ Output will be something like:
 This output shows us which commands have been executed and which layers have been created as a result of these commands. This also gives us some clues about how an image is created. 
 
 Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using ```docker build```, users can create an automated build that executes several command-line instructions in succession. Each instruction that changes anything creates a new layer. The Docker daemon runs the instructions in the Dockerfile one-by-one, committing the result of each instruction to a new image if necessary, before finally outputting the ID of your new image. It's now time to create our first image. 
+</details>
 
 ***
 **2: Building the first image**
+<details>
+  <summary>Click to expand!</summary>
 
 First, we should clone this Github repository.
 
@@ -213,10 +218,12 @@ Output will be something like:
 ```shell
 test_container
 ```
-
+</details>
 
 ***
 **3: Building a node.js image**
+<details>
+  <summary>Click to expand!</summary>
 
 This time we're gonna build a node.js app image. cd to the ```/trainingdays/day6/apps/nodejs``` folder and list all the files. 
 
@@ -404,9 +411,12 @@ Output will be something like:
 ```shell
 node_container
 ```
+</details>
 
 ***
 **4: Multi-stage build**
+<details>
+  <summary>Click to expand!</summary>
 
 Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
 
@@ -555,10 +565,12 @@ Successfully built 7b7c6b3a7f6a
 Successfully tagged ozgurozturknet/finaljava:latest
 ```
 Final image has been built. It's much smaller than the first one. Also only artifacts that we need are included. 
-
+</details>
 
 ***
 **5: Php contacts app**
+<details>
+  <summary>Click to expand!</summary>
 
 This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
 
@@ -723,9 +735,12 @@ Type:
 ```shell
 $ docker container rm -f mysqldb phpapp
 ```
+</details>
 
 ***
 **6: Docker commit**
+<details>
+  <summary>Click to expand!</summary>
 
 Dockerfile isn't the only way to create an image. We can convert a container to an image too. It can be useful to commit a container’s file changes or settings into a new image. This allows us to debug a container by running an interactive shell, or to export a working dataset to another server. Generally, it is better to use Dockerfiles to manage your images in a documented and maintainable way, but sometimes this type of commit method is also needed. Let's try this. First let's create a container and create a file in it. 
 
@@ -753,8 +768,9 @@ Output will be something like:
 sha256:8f5d8a8e42bd9419f6a932c0e70b0700f0618096d6c3f4a06753520fac236ed7
 ```
 Our image is ready. Now if we want, we can push it to our repository and move it to anywhere we want. 
+</details>
 
-
+***
 ## Wrap up
 
 __Congratulations__ you have completed the Image and Registry challenge and learned how to create Docker images and play with them. 
