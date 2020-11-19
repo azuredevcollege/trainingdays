@@ -7,7 +7,11 @@ To be able to follow all the challenges provided in this workshop, you need a fe
 
 <img src="./img/dockerlogo.png" width="200">
 
-It's obvious that it's expected you to have Docker installed on your computer. But installation process is not as seamless as it has to be. Docker publishes different packages for different operating systems. Please follow the section of your operating system below and install related Docker package published for your operating system. 
+It's obvious that it's expected you to have Docker installed on your computer.
+But installation process is not as seamless as it has to be. Docker publishes
+different packages for different operating systems. Please follow the section
+of your operating system below and install related Docker package published for
+your operating system. 
 
 ***If you can't install any software on your computer due to company policies or other reasons, please spin up an Ubuntu VM on Azure and follow the Linux section below***
 
