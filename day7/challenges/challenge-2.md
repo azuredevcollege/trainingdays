@@ -672,7 +672,7 @@ Transfer-Encoding: chunked
 
 As you can see, the API is working perfectly...and, traffic is load-balanced over the 4 running pods of the contacts API. Also, the connection from an API pod to the database via the `Service` is working as expected.
 
-## NodePort
+## NodePort (Optional)
 
 So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP adress. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
 

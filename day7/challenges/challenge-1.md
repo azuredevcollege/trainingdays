@@ -138,6 +138,8 @@ different namespaces.
 
 ![Dashboard Overview](./img/all-namespaces-dashboard.png)
 
+> **Security Note:** The dashboard component is considered a "security risk", because it is an additional way to access your cluster - and you have to take care of securing it. Normally, you would not install the dashboard component in production clusters. There is an option for disabling the dashboard, even after installation: `az aks disable-addons -a kube-dashboard -n my_cluster_name -g my_cluster_resource_group`.
+
 # Run your first pod
 
 Now we will run our first pod on our kubernetes cluster. Let's keep the `kubectl proxy` command

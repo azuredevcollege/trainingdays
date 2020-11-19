@@ -77,6 +77,8 @@ $ terraform apply
 # Answer with 'yes' when asked, that the changes will be applied.
 ```
 
+> **Note:** If you get an error because of the validation section in the `variables.tf` file, you probably used an older version of `terraform`. If you don't want to update to a newer version, just remove that section.
+
 **This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
 ```zsh
@@ -468,7 +470,7 @@ You should no see a similar output, having 8 deployments, 16 pods (each deployme
 
 If that is the case, open a browser and navigate to you nip.io domain and give it a try! Create contacts, create visit reports for an existing contact, search via the search bar at the top of the website, have a look at the statistics!
 
-## Monitoring
+## Monitoring (Optional)
 
 In case you missed it, we already created a service that is helping you with monitoring your application running in the Kubernetes cluster: Application Insights! Each service (API, background service, frontend) is communication with Application Insights (via the instrumentation key) and sending telemetry data like, request/response time, errors that may have occured, how your users navigate through the frontend.
 
