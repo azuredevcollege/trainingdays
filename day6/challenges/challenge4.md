@@ -621,7 +621,7 @@ All good so far but there's something strange in this Dockerfile. We don't have 
 
 Type: 
 ```shell
-$ cat Dockerfile
+$ cat Dockerfile.mysql
 ```
 Output will be something like:
 ```shell
