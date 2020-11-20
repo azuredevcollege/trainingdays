@@ -635,7 +635,7 @@ It's time to build 2 images.
 
 Type: 
 ```shell
-$ docker image build -t your_dockerhub_id\php:v1 .
+$ docker image build -t your_dockerhub_id/php:v1 .
 ```
 Output will be something like:
 ```shell
