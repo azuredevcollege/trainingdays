@@ -283,7 +283,7 @@ After that, copy whole text and turn back to **Cloud Shell**
 
 Type: 
 ```shell
-$ kubectl apply -f app.deploy # or app.yaml based on your filename. 
+$ kubectl apply -f app.yaml # or app.deploy based on your filename. 
 ```
 Output will be something like:
 ```shell
