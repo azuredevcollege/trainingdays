@@ -621,7 +621,7 @@ All good so far but there's something strange in this Dockerfile. We don't have 
 
 Type: 
 ```shell
-$ cat Dockerfile
+$ cat Dockerfile.mysql
 ```
 Output will be something like:
 ```shell
@@ -635,7 +635,7 @@ It's time to build 2 images.
 
 Type: 
 ```shell
-$ docker image build -t your_dockerhub_id\php:v1 .
+$ docker image build -t your_dockerhub_id/php:v1 .
 ```
 Output will be something like:
 ```shell
@@ -660,7 +660,7 @@ Php image is ready. Let's build mysql image now.
 
 Type: 
 ```shell
-$ docker image build -f Dockerfile.mysql -t your_dockerhub_id\mysql:v1 .
+$ docker image build -f Dockerfile.mysql -t your_dockerhub_id/mysql:v1 .
 ```
 Output will be something like:
 ```shell
@@ -689,7 +689,7 @@ Images are ready. Bridge network has been created. We're ready to create contain
 
 Type: 
 ```shell
-$ docker container run -d --name phpapp --network php-mysql-net -p 80:80 --env-file env.list your_dockerhub_id\php:v1
+$ docker container run -d --name phpapp --network php-mysql-net -p 80:80 --env-file env.list your_dockerhub_id/php:v1
 ```
 Output will be something like:
 ```shell
@@ -698,7 +698,7 @@ c580f355ad836c1021ee5959970bdf53c93de088c701af4110e1dfd8e976a80b
 
 Type: 
 ```shell
-$ docker container run -d --name mysqldb --network php-mysql-net --env-file envmysql.list your_dockerhub_id\mysql:v1
+$ docker container run -d --name mysqldb --network php-mysql-net --env-file envmysql.list your_dockerhub_id/mysql:v1
 ```
 Output will be something like:
 ```shell
