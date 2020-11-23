@@ -421,7 +421,8 @@ $ kubectl describe secret mysecret
 If you want to see the endcoded values you can do the following:
 
 ```shell
-$ kubectl get secret mysecret -o jsonpath={.data}
+$ kubectl get secret mysecret --output="jsonpath={.data}"
+
 ```
 
 Now create a file fith name `mysecretdemo.yaml`and add the following content:
