@@ -101,8 +101,8 @@ your_dockerhub_idphp     v1                  53959f571f38        13 hours ago   
 
 Type: 
 ```shell
-$ docker image tag your_dockerhub_idphp:v1 acr_login_url/php:v1
-$ docker image tag your_dockerhub_idmysql:v1 acr_login_url/mysql:v1
+$ docker image tag your_dockerhub_id/php:v1 acr_login_url/php:v1
+$ docker image tag your_dockerhub_id/mysql:v1 acr_login_url/mysql:v1
 ```
 - Let's list all the images on the system and check these newly added tags.
 Type: 
