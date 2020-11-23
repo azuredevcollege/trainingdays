@@ -98,6 +98,8 @@ subjects:
 
 Create a new `dashboard-admin.yaml` file and paste the above content.
 
+> **INFO:** you will be creating lots of YAML files today - hooray! :) Create a folder called `yaml` in the root directory of your repo and save all files you create within that location. You can apply the manifests via kubectl from that folder.
+
 We can apply the configuration using the following line:
 
 ```zsh

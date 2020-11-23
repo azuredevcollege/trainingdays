@@ -323,7 +323,7 @@ d0fe97fa8b8c: Mounted from test
 1.0: digest: sha256:b10195ef4c4f4efe1c8ace700ae24121f236ab73e91f2d6dce8d78d82b3967ec size: 2006
 ```
 
-Alternatively, you can also build directly within the container registry:
+There is also another approach - you can also build directly within the container registry. Let's do this:
 
 ```zsh
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
@@ -384,7 +384,7 @@ myapi-7c74475b88-jzmcx              1/1     Running   0          74s
 myapi-7c74475b88-s5gmj              1/1     Running   0          74s
 ```
 
-We are all set to test the API and the connection to the SQL server. As done before, let's "port-forward" a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj`.
+We are all set to test the API and the connection to the SQL server. As done before, let's "port-forward" a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj` - of course, replace the pod name with one from your environment.
 
 ```zsh
 $ kubectl port-forward myapi-7c74475b88-7hmcj 8080:5000
@@ -419,7 +419,7 @@ myapi-7c74475b88-jzmcx              1/1     Running   0          36m
 myapi-7c74475b88-s5gmj              1/1     Running   0          36m
 ```
 
-Now please open another tab/command line window and kill one of the pods. Here, we pick `myapi-7c74475b88-7jhtq`.
+Now please open another tab/command line window and kill one of the pods. Here, we pick `myapi-7c74475b88-7jhtq` - again, replace the pod name with one from your environment.
 
 ```zsh
 $ kubectl delete pod myapi-7c74475b88-7jhtq
@@ -955,12 +955,14 @@ var uisettings = {
 
 Save the file and - in a terminal - go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
 
+**Alternative 1 - Build locally:**
+
 ```zsh
 $ docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
 $ docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
 ```
 
-Alternatively, you can also use your Azure Container Registry for the build:
+**Alternative 2 - Use your Azure Container Registry:**
 
 ```zsh
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .

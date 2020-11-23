@@ -137,7 +137,7 @@ data:
   'VRSENDCONNSTR': '#{visitreports_send_connectionstring_base64}#'
 ```
 
-**IMPORTANT:** The value of a variable should not contain the opening/closing tags anymore, e.g. `'APPINSIGHTSKEY': '1234567890'`.
+**IMPORTANT:** The value of a variable should **not contain** the opening/closing tags anymore, e.g. `'APPINSIGHTSKEY': '1234567890'`.
 
 Do the same with the file `configmap.yaml`.
 
