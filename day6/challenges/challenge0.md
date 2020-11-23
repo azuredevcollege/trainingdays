@@ -182,9 +182,6 @@ Accept all the installer defaults. The installer takes a few minutes to install 
 - Oracle VM VirtualBox
 6. When notified by Windows Security the installer will make changes, make sure you allow the installer to make the necessary changes. When it completes, the installer reports it was successful.
 7. The installer adds Docker Toolbox, VirtualBox, and Kitematic to your Applications folder. On your Desktop, find the Docker QuickStart Terminal icon. 
-
-<img src="https://docs.docker.com/toolbox/images/icon-set.png">
-
 8. Click the Docker QuickStart icon to launch a pre-configured Docker Toolbox terminal. If the system displays a **User Account Control** prompt to allow VirtualBox to make changes to your computer. Choose **Yes**. The terminal does several things to set up Docker Toolbox for you. When it is done, the terminal displays the **$** prompt. The terminal runs a special bash environment instead of the standard Windows command prompt.
 
 9. After the installation, check if everything works as expected. On the terminal, execute the **docker version** and **docker run hello-world** commands. If you get the similar outputs as below, it means that your docker installation has been successfully completed.
