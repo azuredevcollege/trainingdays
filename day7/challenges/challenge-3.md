@@ -212,7 +212,7 @@ spec:
 Use `kubectl apply` command to create the Pod in your cluster:
 
 ```shell
-$ kubectl apply ./volumedemo.yaml
+$ kubectl apply -f ./volumedemo.yaml
 ```
 
 Next we can connect to the container by running the `kubectl exec` command
