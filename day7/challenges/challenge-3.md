@@ -212,7 +212,7 @@ spec:
 Use `kubectl apply` command to create the Pod in your cluster:
 
 ```shell
-$ kubectl apply ./volumedemo.yaml
+$ kubectl apply -f ./volumedemo.yaml
 ```
 
 Next we can connect to the container by running the `kubectl exec` command
@@ -421,7 +421,8 @@ $ kubectl describe secret mysecret
 If you want to see the endcoded values you can do the following:
 
 ```shell
-$ kubectl get secret mysecret -o jsonpath={.data}
+$ kubectl get secret mysecret --output="jsonpath={.data}"
+
 ```
 
 Now create a file fith name `mysecretdemo.yaml`and add the following content:
