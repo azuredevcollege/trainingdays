@@ -245,6 +245,8 @@ We are ready to deploy the API services (contacts, resources, search, visitrepor
 
 ### Contacts API
 
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `ca-deploy.yaml` and `ca-ingress.yaml` as described below:
+
 Settings to adjust:
 
 | File            | Setting            | Hint                                                                                            |
@@ -254,7 +256,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/2_apis`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 1_contactsapi
