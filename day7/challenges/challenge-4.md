@@ -268,6 +268,8 @@ service/contactsapi created
 
 ### Resources API
 
+Go to folder `day7/challenges/samples/challenge-4/2_apis`and adjust the `resources-deploy.yaml` and `resources-ingress.yaml` as described below:
+
 Settings to adjust:
 
 | File                   | Setting            | Hint                                                                                            |
@@ -277,7 +279,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/2_apis`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 2_resourcesapi
@@ -289,6 +291,8 @@ service/resourcesapi created
 
 ### Search API
 
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `search-deploy.yaml` and `search-ingress.yaml` as described below:
+
 Settings to adjust:
 
 | File                | Setting            | Hint                                                                                            |
@@ -298,7 +302,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/2_apis`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 3_searchapi
@@ -310,6 +314,8 @@ service/searchapi created
 
 ### Visit Reports API
 
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `visitreports-deploy.yaml` and `visitreports-ingress.yaml` as described below:
+
 Settings to adjust:
 
 | File                      | Setting            | Hint                                                                                            |
@@ -319,7 +325,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/2_apis`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 4_visitreports
@@ -337,6 +343,8 @@ Next, we deploy the background/daemon services. For each of these background ser
 
 ### Resources / Image Resizer
 
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `resources-function-deploy.yaml` as described below:
+
 Settings to adjust:
 
 | File                           | Setting    | Hint                                                                                            |
@@ -345,7 +353,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/3_functions`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 1_resourcesfunc
@@ -355,6 +363,8 @@ deployment.apps/resources-function-deploy created
 
 ### Search / Contacts Indexer
 
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `search-function-deploy.yaml` as described below:
+
 Settings to adjust:
 
 | File                        | Setting    | Hint                                                                                            |
@@ -363,7 +373,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/3_functions`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 2_searchfunc
@@ -373,6 +383,8 @@ deployment.apps/search-function-deploy created
 
 ### Text Analytics / Visit Reports Sentiment Analysis
 
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `textanalytics-function-deploy.yaml` as described below:
+
 Settings to adjust:
 
 | File                               | Setting    | Hint                                                                                            |
@@ -381,7 +393,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/3_functions`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 3_textanalyticsfunc
@@ -393,6 +405,8 @@ deployment.apps/textanalytics-function-deploy created
 
 Last, but not least, we also need to deploy the VueJS Single Page Application.
 
+Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below: 
+
 Settings to adjust:
 
 | File            | Setting            | Hint                                                                                            |
@@ -402,7 +416,7 @@ Settings to adjust:
 
 <br>
 
-Now apply the definitions. Go to folder `day7/challenges/samples/challenge-4/4_frontend`:
+Now apply the definitions in the mentioned path.
 
 ```zsh
 $ kubectl apply -f 1_ui
@@ -414,7 +428,7 @@ service/frontend created
 
 ## Check
 
-That was alot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
+That was a lot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
 
 ```zsh
 $ kubectl get deployment,pods,service,endpoints,ingress
