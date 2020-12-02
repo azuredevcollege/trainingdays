@@ -140,12 +140,14 @@ Resolving deltas: 100% (747/747), done.
 Updating files: 100% (1396/1396), done.
 ```
 
-Repo has been cloned. It's time to jump to the ```/trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and list all the files. 
+Repo has been cloned. It's time to jump to the
+```trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
+list all the files.
 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/first_docker_image
+$ cd trainingdays/day6/apps/first_docker_image
 $ ls -l
 ```
 Output will be something like:

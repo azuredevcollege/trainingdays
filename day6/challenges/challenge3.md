@@ -81,7 +81,6 @@ Now we're connected to the container. Let's jump to the /test folder and create 
 
 ```shell
 root@666540d6384b:/# cd test
-root@666540d6384b:/test# touch test.txt
 root@666540d6384b:/test# echo "this is a test line" > test.txt
 root@666540d6384b:/test# ls
 test.txt
