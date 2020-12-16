@@ -1,42 +1,63 @@
-# Challenge 2: ARM: Create a VM and other Azure Resources using an ARM Template 
-[back](../../README.md)  
-
-In this module you will **not learn** how to build an ARM template yourself. We'll do this at a later point in time.  
-**What you need** to know / understand is that an **ARM template is a txt file** (in a **machine readable json format**) that **describes** which **azure resources** you want.  
-ARM templates can be used as a **building plan** for fast azure resource creation.  
-ARM _'powered'_ deployments are:  
-- Less error prone - than clicking
-- Few typing required
-- No reading through (inaccurate) documentation with screenshots and try to replay it manually.
-
+# Challenge 2: VM - Managed Disks: Attach a Data Disk to a VM - Extend and Retype it.
 ## Here is what you will learn ##
+- Create a data disk and attach it to a vm
 
-- Creating some azure resources (VNET, Subnets, VM,...) using an ARM template and the portal.
+```
+[Azure Portal] -> Virtual machines -> e.g. 'vmfirst001' -> Data disks -> "+ Create and attach a new disk"
+```  
+| Name | Value |
+|---|---|
+| LUN (aka _logical unit number_)  |  e.g. **0** |
+| Disk name  |  e.g **vmfirst001-disk-001** |   
+| Account type | **Standard SSD** |
+| Size  |  **128GiB (E10)** | 
+| Host caching  |  **Read/write** | 
 
-## Deploy an ARM template using the portal
+Don't forget to **press the _save_ button!**
 
-0. _optional_ **Cleanup** all resources that have been created in this workshop until now e.g. by deleting the resource groups.  
-
-1. Login to your azure subscription **and search the marketplace for 'Template Deployment'**    
-![Azure Template Deployment](./TemplateDeployment.png)
+## Logon to your windows vm and partition the disk ##
+```
+[Azure Portal] -> Virtual machines -> e.g. 'vmfirst001' -> Connect -> RDP -> Download RDP File -> open...
+```  
+Once logged into the vm - execute **_diskmgmt.msc_** to open the **Disk Manager**. Your attached data disk will show up 'uninitialized'.  
+**Initialize** it:  
+![Disk Manager](./datadisk0.png)  
   
-2. Create -> select '**Build your own template in the editor**'
-3. Copy the RAW view of [this ARM template](./ARMOne.json) and paste it into the editor **clear first** window.  
-->Save  
-4. **Create a resource group and set the location**  
+**Partition and format** it:  
+![Disk Manager extended disk](./datadisk1.png)
 
-| Resource Type |  Name | Values  |
-|---|---|---|
-| Resource Group  |  rg-contosomortgage-www |  _location_ : North Europe |
+## Extend your disk ##
+To **modify an existing disk it must be first 'detached' first** from the vm
+```
+[Azure Portal] -> Virtual machines -> e.g. 'vmfirst001' -> Disks
+```
+**Detach !**  
+  
+![VM disk detach](./vmDiskDetach.png)  
+And don't forget the **SAVE** button!
 
-![Template Deployment Enter Parameters](./TemplateDeployment2.png)  
-and hit **Purchase** to trigger the deployment.
+**Find your disk in the resource group and change it's configuration**
+```
+[Azure Portal] -> Resource Groups -> rg-firstvm-test-001 -> vmfirst001-disk-001 -> Size + performance
+```
+**The new disk should**:
+- **support 99.9% availabilty**
+- have 256GiB disksize and **support 1100 IOPS disk**  
 
-5. **Once finished your deployment should look like**:
-[Azure Portal] -> Resource Group -> 'rg-contosomortgage-www' -> Deployments -> 'Microsoft.Template' -> 'Deployment details'
+>**Reference**:
+>- [What disk types are available in Azure?](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-types)
+  
 
-![Template Deployment Results](./TemplateDeployment3.png)  
+**Attach disk back to vm.**  
+Once done it'll show up in the vm like:  
+![VM with extended disk](./datadisk2.png)
 
-**Is this deployment fast? Redeployable? Replayable in another subscription?**
+>**Note**: **Attaching** data disks can be **done with a runnning vm**.
 
-[back](../../README.md) 
+> **Questions**:  
+> - How much is a E10 / month? (fix price, variable costs, region differences)
+> - Can a disk be resized without losing its data? 
+> - Can I easily downsize a disk? 
+  
+> **Cleanup - Note**:  
+> **If you do not want to do the [optional] labs** 'vm backup' or 'post deployment automation with CSE' t**hen you can delete this resource group** and all its containing artefacts. 

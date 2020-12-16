@@ -1,6 +1,5 @@
 # Challenge 10: Networking: Distribute traffic accross global Azure regions for optimal latency and availability using Traffic Manager
 
-[back](../../README.md)
 
 **[Traffic Manager](https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-overview)** uses DNS to load balance traffic to endpoints accross Azure regions. It can help you to:
 - **provide optimal latency** by serving clients from the **nearest location**.
@@ -112,6 +111,3 @@ Remove-AzResourceGroup -Name 'rg-wwwlb'    -Force -AsJob
 Get-Job -State Running | Wait-Job
 
 ```
-
-
-[back](../../README.md)

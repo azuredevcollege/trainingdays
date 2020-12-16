@@ -1,5 +1,4 @@
-# Challenge 5: Storage Account: Creating a Data Storage for VMs and Applications
-[back](../../README.md)  
+# Challenge 5: Storage Account: Creating a Data Storage for VMs and Applications 
 
 ## Here is what you will learn ##
 - how to create an azure storage account using the portal for the use as a 'cloud file share'
@@ -216,5 +215,3 @@ In your VM paste the code into a PowerShell window and execute it. Once successf
 > - Is the 'drive' available to other users that logon to the VM? [No]
 > - Is the 'drive' mounted 'automatically' after a reboot? [Yes]
 > - Can I mount a file share located in e.g. North Europe from a machine located in e.g. West Europe [Yes]  
-
-[back](../../README.md)  

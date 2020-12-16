@@ -1,7 +1,5 @@
 # Challenge 7: Networking: Loadbalancing your WWW Server Farm
 
-[back](../../README.md)
-
 ## Here is what you will learn ##
 
 - How to load balance http traffic to 2 webserver vms 
@@ -66,5 +64,3 @@ Restart the vm and check if the lb notices it and rebalances load.
 
 ## Cleanup ##
 **Delete the resource group** _rg-lbwww_
-
-[back](../../README.md)

@@ -1,7 +1,5 @@
 # Challenge 9: Networking: Connect Two Virtual Networks Using Azure VNET Peering
 
-[back](../../README.md)
-
 ## Here is what you will learn ##
 - How to connect 2 virtual networks with Azure VNET Peering
 
@@ -60,5 +58,3 @@ Connect to one vm through RDP using its public ip address: e.g. VMonVNET1 throug
 
 ## Cleanup ##
 **Delete the resource group** _rg-VNETPeering_
-
-[back](../../README.md)

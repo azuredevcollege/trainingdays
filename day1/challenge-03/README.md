@@ -1,12 +1,14 @@
-# Challenge 3: VM - Azure Backup: Save your VM state
-[back](../../README.md)  
+# [optional] Challenge 3: VM - Azure Backup: Save your VM state
 
 ## Here is what you will learn ##
-
 - How to backup an azure vm using the azure backup service.
 - Create a backup vault
 - Recover a file
 
+## Starting point ##  
+In case you need a vm to backup - **Click** on the 
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-x3%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
+button. 
 
 ## Create a Backup Vault ##
 ```
@@ -56,6 +58,3 @@ The backup is _'mounted'_ as drive to your local machine via the internet.
 Azure Portal -> Virtual Machines -> vmadds01 -> Operations -> Backup -> File Recovery  
   
 ![File Restore](./enableBackupFileRestore.png)
-
-
-[back](../../README.md) 
