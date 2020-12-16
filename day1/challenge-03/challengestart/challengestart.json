@@ -4,7 +4,7 @@
     "parameters": {
         "adminUser": {
             "type": "string",
-            "defaultValue": "demouser",
+            "defaultValue": "demoadmin",
             "metadata": {
                 "description": "Admin user name of vm"
             }
@@ -13,6 +13,20 @@
             "type": "securestring",
             "metadata": {
                 "description": "Password for admin user"
+            }
+        },
+        "rgName": {
+            "type": "string",
+            "defaultValue": "rg-backup-test-001",
+            "metadata": {
+                "description": "Resource group to carry all artefacts"
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "[deployment().location]",
+            "metadata": {
+                "description": "Resource group region"
             }
         },
         "vmSize": {
@@ -44,6 +58,15 @@
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "name": "[parameters('rgName')]",
+            "apiVersion": "2020-06-01",
+            "location": "[parameters('rgLocation')]",
+            "tags": {},
+            "properties": {
+            }
+        },
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-08-01",
@@ -224,7 +247,7 @@
                 }
             }
         },
-                {
+        {
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-07-01",
             "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
