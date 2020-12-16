@@ -2,6 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "ResourceGroupName": {
+            "type": "string",
+            "defaultValue": "rg-backup-test-001",
+            "metadata": {
+                "description": "Resource group to carry all artefacts"
+            }
+        },
         "adminUser": {
             "type": "string",
             "defaultValue": "demoadmin",
@@ -15,16 +22,18 @@
                 "description": "Password for admin user"
             }
         },
-        "rgName": {
-            "type": "string",
-            "defaultValue": "rg-backup-test-001",
-            "metadata": {
-                "description": "Resource group to carry all artefacts"
-            }
-        },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_B2s"
+            "defaultValue": "Standard_D2_v2",
+            "allowedValues": [
+                "Standard_DS2_v2",
+                "Standard_D2_v2",
+                "Standard_F2s_v2",
+                "Standard_D2_v3",
+                "Standard_E2_v3",
+                "Standard_B2ms",
+                "Standard_B2s"
+            ]
         },
         "DiskSku": {
             "type": "String",
@@ -42,18 +51,18 @@
     },
     "variables": {
         "vmNames": [
-            "vmazure"
+            "vmweb01"
         ],
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
-        "VMSubnet": "snet-vmazure",
-        "vmNamePrefix": "vpn",
+        "VMSubnet": "[concat('snet-vm-',variables('vmNamePrefix'))]",
+        "vmNamePrefix": "backup-test",
         "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
-            "name": "[parameters('rgName')]",
+            "name": "[parameters('ResourceGroupName')]",
             "apiVersion": "2020-06-01",
             "location": "[deployment().location]",
             "tags": {},
@@ -157,7 +166,7 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNames')[copyIndex()],'-nic1')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-nic')]",
             "copy": {
                 "name": "niccopy",
                 "count": "[length(variables('vmNames'))]"
@@ -197,7 +206,7 @@
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic1')  )]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic')  )]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -228,7 +237,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic1'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic'))]"
                         }
                     ]
                 },
@@ -257,31 +266,6 @@
                 "publisher": "Microsoft.Compute",
                 "type": "BGInfo",
                 "typeHandlerVersion": "2.1"
-            }
-        },
-        {
-            "apiVersion": "2018-10-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
-            ],
-            "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "dsccopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.73",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge9/EnablePingConfig.zip",
-                    "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
-                },
-                "protectedSettings": {
-                }
             }
         }
     ],
