@@ -56,7 +56,7 @@
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
         "VMSubnet": "[concat('snet-vm-',variables('vmNamePrefix'))]",
         "vmNamePrefix": "backup-test",
-        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
+        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(deployment().name),0,4)))]",
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
     "resources": [
@@ -73,7 +73,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-08-01",
             "name": "[variables('virtualNetworks_azurevnet_name')]",
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -104,7 +104,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-04-01",
             "name": "[variables('storageAccountName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "sku": {
                 "name": "Standard_LRS",
                 "tier": "Standard"
@@ -137,7 +137,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2018-01-01",
             "name": "[variables('nsgName')]",
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "properties": {
                 "securityRules": [
                     {
@@ -171,7 +171,7 @@
                 "name": "niccopy",
                 "count": "[length(variables('vmNames'))]"
             },
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "apiVersion": "2018-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
@@ -202,7 +202,7 @@
                 "name": "vmcopy",
                 "count": "[length(variables('vmNames'))]"
             },
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
@@ -253,7 +253,7 @@
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "apiVersion": "2019-07-01",
             "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
-            "location": "[resourceGroup().location]",
+            "location": "[deployment().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
             ],
