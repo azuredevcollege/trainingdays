@@ -22,13 +22,6 @@
                 "description": "Resource group to carry all artefacts"
             }
         },
-        "rgLocation": {
-            "type": "string",
-            "defaultValue": "[deployment().location]",
-            "metadata": {
-                "description": "Resource group region"
-            }
-        },
         "vmSize": {
             "type": "string",
             "defaultValue": "Standard_B2s"
@@ -62,7 +55,7 @@
             "type": "Microsoft.Resources/resourceGroups",
             "name": "[parameters('rgName')]",
             "apiVersion": "2020-06-01",
-            "location": "[parameters('rgLocation')]",
+            "location": "[deployment().location]",
             "tags": {},
             "properties": {
             }
