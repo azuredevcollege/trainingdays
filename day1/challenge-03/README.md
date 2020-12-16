@@ -9,6 +9,8 @@
 In case you need a vm to backup - **Click** on the 
 <a target="_blank" href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fday1changes%2Fday1%2Fchallenge-03%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
 button. 
+[deploy](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fday1changes%2Fday1%2Fchallenge-03%2Fchallengestart%2Fchallengestart.json){:target="_blank"}
+
 
 ## Create a Backup Vault ##
 ```
