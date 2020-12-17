@@ -1,4 +1,4 @@
-    {
+{
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -7,6 +7,13 @@
             "defaultValue": "rg-backup-test-001",
             "metadata": {
                 "description": "Resource group to carry all artefacts"
+            }
+        },
+        "rgLocation": {
+            "type": "string",
+            "defaultValue": "[deployment().location]",
+            "metadata": {
+                "description": "Location for the resourceGroup"
             }
         },
         "adminUser": {
@@ -49,234 +56,244 @@
             }
         }
     },
-    "variables": {
-        "vmNames": [
-            "vmweb01"
-        ],
-        "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
-        "VMSubnet": "[concat('snet-vm-',variables('vmNamePrefix'))]",
-        "vmNamePrefix": "backup-test",
-        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(deployment().name),0,4)))]",
-        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Resources/resourceGroups",
             "name": "[parameters('ResourceGroupName')]",
             "apiVersion": "2020-06-01",
-            "location": "[deployment().location]",
+            "location": "[parameters('rgLocation')]",
             "tags": {},
             "properties": {
             }
         },
         {
-            "type": "Microsoft.Network/virtualNetworks",
-            "apiVersion": "2019-08-01",
-            "name": "[variables('virtualNetworks_azurevnet_name')]",
-            "location": "[deployment().location]",
+            "type": "Microsoft.Resources/deployments",
+            "name": "nested",
+            "apiVersion": "2020-06-01",
+            "resourceGroup": "[parameters('ResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
+            ],
             "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.1.0.0/16"
-                    ]
+                "mode": "Incremental",
+                "expressionEvaluationOptions": {
+                    "scope": "Inner"
                 },
-                "subnets": [
-                    {
-                        "name": "[variables('VMSubnet')]",
-                        "properties": {
-                            "addressPrefix": "10.1.0.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
+                "parameters": {
+                    "i_rglocation": {
+                        "value": "[parameters('rgLocation')]"
+                    },
+                    "i_adminUser": {
+                        "value": "[parameters('adminUser')]"
+                    },
+                    "i_adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    },
+                    "i_vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    },
+                    "i_DiskSku": {
+                        "value": "[parameters('DiskSku')]"
                     }
-                ],
-                "virtualNetworkPeerings": [
-                ],
-                "enableDdosProtection": false,
-                "enableVmProtection": false
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2019-04-01",
-            "name": "[variables('storageAccountName')]",
-            "location": "[deployment().location]",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storagev2",
-            "properties": {
-                "networkAcls": {
-                    "bypass": "AzureServices",
-                    "virtualNetworkRules": [
-                    ],
-                    "ipRules": [
-                    ],
-                    "defaultAction": "Allow"
                 },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                    "services": {
-                        "file": {
-                            "enabled": true
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "i_rglocation": {
+                            "type": "string"
                         },
-                        "blob": {
-                            "enabled": true
-                        }
+                        "i_adminUser": { "type": "string" },
+                        "i_adminPassword": { "type": "securestring" },
+                        "i_vmSize": { "type": "string" },
+                        "i_DiskSku": { "type": "string" }
+
                     },
-                    "keySource": "Microsoft.Storage"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2018-01-01",
-            "name": "[variables('nsgName')]",
-            "location": "[deployment().location]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "default-allow-rdp",
-                        "properties": {
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "3389",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 1000,
-                            "direction": "Inbound",
-                            "sourcePortRanges": [
-                            ],
-                            "destinationPortRanges": [
-                            ],
-                            "sourceAddressPrefixes": [
-                            ],
-                            "destinationAddressPrefixes": [
-                            ]
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNames')[copyIndex()],'-nic')]",
-            "copy": {
-                "name": "niccopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "location": "[deployment().location]",
-            "apiVersion": "2018-10-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfig1",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
-                            },
-                            "primary": true,
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "networkSecurityGroup": {
-                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[variables('vmNames')[copyIndex()]]",
-            "copy": {
-                "name": "vmcopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "location": "[deployment().location]",
-            "apiVersion": "2019-07-01",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic')  )]"
-            ],
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[parameters('vmSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[variables('vmNames')[copyIndex()]]",
-                    "adminUsername": "[parameters('adminUser')]",
-                    "adminPassword": "[parameters('adminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "MicrosoftWindowsServer",
-                        "offer": "WindowsServer",
-                        "sku": "2019-Datacenter",
-                        "version": "latest"
+                    "variables": {
+                        "vmNamePrefix": "backuptest",
+                        "vmName": "vmweb01",
+                        "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
+                        "VMSubnet": "[concat('snet-vm-',variables('vmNamePrefix'))]",
+                        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(subscription().subscriptionId),0,4)))]",
+                        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
                     },
-                    "osDisk": {
-                        "osType": "Windows",
-                        "name": "[concat(variables('vmNames')[copyIndex()],'-osdisk')]",
-                        "createOption": "FromImage",
-                        "caching": "ReadWrite",
-                        "managedDisk": {
-                            "storageAccountType": "[parameters('DiskSku')]"
-                        }
-                    }
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
+                    "resources": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic'))]"
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "apiVersion": "2019-04-01",
+                            "name": "[variables('storageAccountName')]",
+                            "location": "[parameters('i_rglocation')]",
+                            "sku": {
+                                "name": "Standard_LRS",
+                                "tier": "Standard"
+                            },
+                            "kind": "Storagev2",
+                            "properties": {
+                                "networkAcls": {
+                                    "bypass": "AzureServices",
+                                    "virtualNetworkRules": [
+                                    ],
+                                    "ipRules": [
+                                    ],
+                                    "defaultAction": "Allow"
+                                },
+                                "supportsHttpsTrafficOnly": true,
+                                "encryption": {
+                                    "services": {
+                                        "file": {
+                                            "enabled": true
+                                        },
+                                        "blob": {
+                                            "enabled": true
+                                        }
+                                    },
+                                    "keySource": "Microsoft.Storage"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2019-08-01",
+                            "name": "[variables('virtualNetworks_azurevnet_name')]",
+                            "location": "[parameters('i_rglocation')]",
+                            "properties": {
+                                "addressSpace": {
+                                    "addressPrefixes": [
+                                        "10.1.0.0/16"
+                                    ]
+                                },
+                                "subnets": [
+                                    {
+                                        "name": "[variables('VMSubnet')]",
+                                        "properties": {
+                                            "addressPrefix": "10.1.0.0/24",
+                                            "serviceEndpoints": [
+                                            ],
+                                            "delegations": [
+                                            ],
+                                            "privateEndpointNetworkPolicies": "Enabled",
+                                            "privateLinkServiceNetworkPolicies": "Enabled"
+                                        }
+                                    }
+                                ],
+                                "virtualNetworkPeerings": [
+                                ],
+                                "enableDdosProtection": false,
+                                "enableVmProtection": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkSecurityGroups",
+                            "apiVersion": "2018-01-01",
+                            "name": "[variables('nsgName')]",
+                            "location": "[parameters('i_rglocation')]",
+                            "properties": {
+                                "securityRules": [
+                                    {
+                                        "name": "default-allow-rdp",
+                                        "properties": {
+                                            "protocol": "Tcp",
+                                            "sourcePortRange": "*",
+                                            "destinationPortRange": "3389",
+                                            "sourceAddressPrefix": "*",
+                                            "destinationAddressPrefix": "*",
+                                            "access": "Allow",
+                                            "priority": 1000,
+                                            "direction": "Inbound",
+                                            "sourcePortRanges": [
+                                            ],
+                                            "destinationPortRanges": [
+                                            ],
+                                            "sourceAddressPrefixes": [
+                                            ],
+                                            "destinationAddressPrefixes": [
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Network/networkInterfaces",
+                            "name": "[concat(variables('vmName'),'-nic')]",
+                            "location": "[parameters('i_rglocation')]",
+                            "apiVersion": "2018-10-01",
+                            "dependsOn": [
+                                "[variables('nsgName')]"
+                            ],
+                            "properties": {
+                                "ipConfigurations": [
+                                    {
+                                        "name": "ipconfig1",
+                                        "properties": {
+                                            "privateIPAllocationMethod": "Dynamic",
+                                            "subnet": {
+                                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
+                                            },
+                                            "primary": true,
+                                            "privateIPAddressVersion": "IPv4"
+                                        }
+                                    }
+                                ],
+                                "networkSecurityGroup": {
+                                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Compute/virtualMachines",
+                            "name": "[variables('vmName')]",
+                            "location": "[parameters('i_rglocation')]",
+                            "apiVersion": "2019-07-01",
+                            "dependsOn": [
+                                "[variables('storageAccountName')]",
+                                "[concat(variables('vmName'),'-nic')]"
+                            ],
+                            "properties": {
+                                "hardwareProfile": {
+                                    "vmSize": "[parameters('i_vmSize')]"
+                                },
+                                "osProfile": {
+                                    "computerName": "[variables('vmName')]",
+                                    "adminUsername": "[parameters('i_adminUser')]",
+                                    "adminPassword": "[parameters('i_adminPassword')]"
+                                },
+                                "storageProfile": {
+                                    "imageReference": {
+                                        "publisher": "MicrosoftWindowsServer",
+                                        "offer": "WindowsServer",
+                                        "sku": "2019-Datacenter",
+                                        "version": "latest"
+                                    },
+                                    "osDisk": {
+                                        "osType": "Windows",
+                                        "name": "[concat(variables('vmName'),'-osdisk')]",
+                                        "createOption": "FromImage",
+                                        "caching": "ReadWrite",
+                                        "managedDisk": {
+                                            "storageAccountType": "[parameters('i_DiskSku')]"
+                                        }
+                                    }
+                                },
+                                "networkProfile": {
+                                    "networkInterfaces": [
+                                        {
+                                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmName'),'-nic'))]"
+                                        }
+                                    ]
+                                },
+                                "diagnosticsProfile": {
+                                    "bootDiagnostics": {
+                                        "enabled": false
+                                    }
+                                }
+                            }
                         }
                     ]
-                },
-                "diagnosticsProfile": {
-                    "bootDiagnostics": {
-                        "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
-                    }
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
-            "location": "[deployment().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
-            ],
-            "copy": {
-                "name": "BGInfocopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "properties": {
-                "autoUpgradeMinorVersion": true,
-                "publisher": "Microsoft.Compute",
-                "type": "BGInfo",
-                "typeHandlerVersion": "2.1"
             }
         }
     ],
-    "outputs": {
-        "storageAccountName": {
-            "type": "string",
-            "value": "[variables('storageAccountName')]"
-        },
-        "storageUri": {
-            "type": "string",
-            "value": "[reference(variables('storageAccountName')).primaryEndpoints.blob]"
-        }
-    }
+    "outputs": {}
 }
