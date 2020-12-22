@@ -15,9 +15,9 @@ What it takes to implement a VPN tunnel between your onprem firewall <---VPN S2S
 ## Table of Contents ##
 1. [Starting Point](#Starting-Point)
 2. [Create a VPN Gateway and a Public IP using the portal](#Create-a-VPN-Gateway-and-a-Public-IP-using-the-portal)
-3. [[Azure] Create a Local Network Gateway](#[Azure]-Create-a-Local-Network-Gateway )
-4. [[Azure] Create a connection object with shared key](#[Azure]-Create-a-connection-object-with-shared-key)
-5. [[Onpremise] Configure your onpremise VPN counterpart e.g. ipfire](#[Onpremise]-Configure-your-onpremise-VPN-counterpart-e.g.-ipfire)
+3. [[Azure] Create a Local Network Gateway](#Create-a-Local-Network-Gateway )
+4. [[Azure] Create a connection object with shared key](#Create-a-connection-object-with-shared-key)
+5. [[Onpremise] Configure your onpremise VPN counterpart e.g. ipfire](#Configure-your-onpremise-VPN-counterpart-e.g.-ipfire)
 6. [Cleanup](#Cleanup)
 
 # Starting Point #
@@ -68,7 +68,7 @@ button **to get the Azure resources to start** with:
 When your **GW has** been assigned a **public IP** address then you know **it is online**.  
 ![VPN GW with public IP](./vpnGWPIP.png)
 
-# [Azure] Create a Local Network Gateway #
+# Create a Local Network Gateway #
 The purpose of this task is to tell azure how to contact the onpremise firewall:  
 ```
 [Azure Portal] -> '+ Add' -> type 'Local network gateway' -> Create
@@ -81,7 +81,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Resource Group | **rg-vpn** |
 | Location | **North Europe** |
 
-# [Azure] Create a connection object with shared key #
+# Create a connection object with shared key #
 ```
 [Azure Portal] -> Resource Groups -> rg-vpn -> myAzVPNGWay
  -> Connections -> 
@@ -97,7 +97,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Resource Group | rg-vpn |
 | Location | North Europe |
 
-# [Onpremise] Configure your onpremise VPN counterpart e.g. ipfire #
+# Configure your onpremise VPN counterpart e.g. ipfire #
 **We now need to configure the other end of the vpn tunnel**: **_the onpremise firewall_** in our case a linux FW called _IPFire_.  
 
 **1. For this use the remote desktop client to RDP into your onpremise environment**:  

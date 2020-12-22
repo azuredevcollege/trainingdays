@@ -9,7 +9,7 @@
 
 ## Table of Contents ##
 1. [Create a storage account and a container using the azure portal](#Create-a-storage-account-and-a-container-using-the-azure-portal)
-2. [[optional] Authorize access to blobs using AAD](#[optional]-Authorize-access-to-blobs-using-AAD)
+2. [[optional] Authorize access to blobs using AAD](#Authorize-access-to-blobs-using-AAD)
 3. [Add an azure file share to a server](#Add-an-azure-file-share-to-a-server)
 4. [Cleanup](#Cleanup)
 
@@ -113,8 +113,8 @@ Why? Because the SAS key was generated using the previous key1 -> which is no lo
 > When you now distribute this SAS URI to users or Apps you can later modify it's behaviour by modifying the access policy.  
 > So stored access policies can help to modify permissions to a container after the SAS has been issued to users / apps.
   
-
-# [optional] Authorize access to blobs using AAD #  
+# [optional]
+# Authorize access to blobs using AAD #  
 **You can** also **authorize access to storage accounts using Azure Active Directory (AAD) credentials**. [See](https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json).  
 Which means you assign users RBAC permissions to a e.g. container. This **is in fact the recommended way**.  
 Apps however might want to use 'service accounts' as users (aka Service Principals) in Azure.  
