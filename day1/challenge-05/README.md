@@ -1,217 +1,196 @@
-# Challenge 5: Storage Account: Creating a Data Storage for VMs and Applications 
+# Challenge 5: Cloud Shell: Coding Your Azure Resources
 
 ## Here is what you will learn ##
-- how to create an azure storage account using the portal for the use as a 'cloud file share'
-- enable 'secured' access to the storage account data (e.g. blobs) using Shared Access Signatures
-- create a SAS policy to enable permission modification after SAS tokens have been issued.
-- use AAD credentials as 'better' way for storage account authorization
-- create a file share and attach it to your azure virtual machine
 
-## Create a storage account and a container using the azure portal
+- Use the 'Cloud Shell' as _'launch point'_ for PowerShell | Bash scripts.
+- Use it to automate Azure resource creation and configuration.  
 
-1. Login to your azure subscription **and search the marketplace for 'Storage Account'**  
-![Storage Account Marketplace Item](./sa01.png)  
-**Create a storage account** with the following values:
+## Benefits of the Azure Cloud Shell ##
+Ok - quite impressive what the Azure portal as a single page application allows us to do, isn't it?  
+However sometimes a shell is faster and better for repetitive tasks. But you may not want to install software nor tools for this in your machine.  
+The Azure **Cloud Shell is a shell | console hosted in your browser window**. Ready to **execute commands to create, delete, modify Azure resources in your subscription**.  
+While it is also possible to use PowerShell on your local PC to administer Azure. Using the Cloud Shell brings some advantages compared to using your PC as 'launch point'.  
 
-| Name | Value |
-|---|---|
-| Resource Group  |  **(new)** rg-sachallenge |
-| Storage account name  |  _%unique lowercase value%_ |
-| Location | **North Europe** |
-| Account kind  |  StorageV2 |
-| Performance  |  Standard |
-| Replication  |  **Locally-redundand storage (LRS)** |
-| Access tier  |  Hot |
+Using the **Cloud Shell saves you time** as...:  
+- **no need to explicitly code the azure logon within the script** - you are already authenticated to Azure via the browser ;-)
+- **nothing needs to be installed on your PC** ([no "which version of PowerShell? What modules?](https://docs.microsoft.com/en-us/powershell/azure))"  
 
-See some use cases for SAS / [SAS use cases](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview#when-to-use-a-shared-access-signature)
 
-2. Once the sa is created - **generate a new "container"** within the storage account:  
+
+## Table Of Contents ##
+1. [Create an Azure Cloud Shell (if you don't have one.)](#Create-an-Azure-Cloud-Shell)
+2. [Playing with the Cloud Shell](#Playing-with-the-Cloud-Shell)
+3. [PowerShell Az Modules for Azure](#PowerShell-Az-Modules-for-Azure)
+4. [(optional) Create a VM with PowerShell](#(optional)-Create-a-VM-with-PowerShell)
+
+
+
+# Create an Azure Cloud Shell #
 ```
-[Azure Portal] -> %Your Storage Account% -> Containers -> "+ Container"
-```
-| Name | Value |
-|---|---|
-| Name  |  **secured** |
-| Public access level  |  Private (no anonymous access) |
-
-Now **upload a small file**.  
-![Upload a txt file to a storage account](./sa02.png)  
-
-**Can you download the file** using its URI in another browser session?  
-![Download URI](./sa03.png)  
-  
-**Answer: No. Because anonymous access is not allowed** and this URI does not 'carry' any auth token:  
-  
-
-![Download error](./downloadError.png)
-  
-
-  
-
-3. **Create a Shared Access Signature** [via the portal] to enable blob access. 
-```
-[Azure Portal] -> %Your Storage Account% -> Shared access signature -> "Generate SAS and connection string"
-```
-**Copy the Blob Service SAS URL to the clipboard**
-![SAS URL](./sas01.png)  
-  
-In the result copy the SAS URI:  
-![SAS URL](./sas02.png)  
-and **edit the SAS URL**: You need to add the path to uploaded file - it should look similar to:  
-
-> https://**%Your Storage Account Name%**.blob.core.windows.net/**secured/HelloWorld.txt**?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-01-26T00:03:42Z&st=2020-01-25T16:03:42Z&spr=https&sig=Pehc....  
-
-**Can you now download the file** in the browser [Yes]  
-![Download with edited URI works](./downloadSuccess.png)
-
-> **Note**: If a SAS,...  
-> - ... is leaked, it can be used by anyone who obtains it, which can potentially compromise your storage account.
-> - ... provided to a client application expires and the application is unable to retrieve a new SAS from your service, then the application's functionality may be hindered.
-
-4. [optional] **Revoke the storage account's access key1**.
-```
-[Azure Portal] -> %Your Storage Account% -> Access keys -> key1 -> 'regenerate'
-```
-Can you still download the file in the browser using aboves URL [No]  
-Why? Because the SAS key was generated using the previous key1 -> which is no longer valid.
-
-## Create a stored access policy to control permissions after SAS token is issued. ##
-
-1. Define a stored access policy ('mypolicy') on the container "secured" (write)  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' -> Access policy -> 'Storage access policy' -> '+' Add policy
-```
-| Name | Value |
-|---|---|
-| Identifier  |  **securedap** |
-| Permissions  |  **Write** |  
-
-**Note** Don't forget to use the **save** button!  
-![Access policy](./saaccpol01.png)
-
-2. **Create a SAS URL that is using this access policy** using Azure Storage Explorer  
-**Open** [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and  [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
-**Navigate to your storage account** and container.  
-**Right click** and do 'Get Shared Access Signature' based on our policy.  
-![Storage Explorer generate SAS URI](./saaccpol02.png)  
-**Copy the URI** to the clipboard.  
-**Edit the SAS URI** -> add the path to uploaded file -> can you now download the file in the browser [No]  
-**Edit the stored access policy 'securedap' to allow READ access**  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' -> Access policy -> Under 'Storage access policy' -> 'securedap' -> '...' -> Edit -> Permissions -> Add READ -> OK -> Save
-```
-![RW Access Policy](./saaccpol03.png)  
-**Can you now download the file in the browser** [Yes]
-
-> **Note**:  
-> When you now distribute this SAS URI to users or Apps you can later modify it's behaviour by modifying the access policy.  
-> So stored access policies can help to modify permissions to a container after the SAS has been issued to users / apps.
-
-## [optional] Authorize access to blobs using AAD ##  
-**You can** also **authorize access to storage accounts using Azure Active Directory (AAD) credentials**. [See](https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json).  
-Which means you assign users RBAC permissions to a e.g. container. This **is in fact the recommended way**.  
-Apps however might want to use 'service accounts' as users (aka Service Principals) in Azure.  
-The following PowerShell code creates a Service Principal in AAD.  
-Run this in your cloud shell:  
-
-```PowerShell
-$servicePrincipalName = "myADCServicePrincipal$(get-random -min 100 -max 999)"   #must be unique within AAD tenant
-
-#using Azure CLI is more comfortable to use for creating a Service Principal
-$jsonResult = &az ad sp create-for-rbac --name $servicePrincipalName 
-
-$SPPassword = ($jsonResult | convertfrom-json).password
-$SPName = ($jsonResult | convertfrom-json).name
-
-#Get your AAD ID
-$tenantID = $((Get-AzContext).Tenant.Id)  #e.g. '72f988bf-8.....'
-
-Write-Host "You created SP: $servicePrincipalName with password: $SPPassword in tenant: $tenantID" -ForegroundColor Cyan  
-
-```
-You can give this 'user' or better 'service principal' permissions to your storage account -> container  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' ->  Access Control (IAM) -> Add a role assignment...
-    Role: e.g. "Storage Blob Data Contributor"
-    Select: "myADCServicePrincipal..."
-```
-Below is some PowerShell Code that should 'simulate' your app. It'll login to Azure as Service Principal and access the storage account.  
-Run this in the Cloud Shell:  
-
-```PowerShell
-#Now sign in as this service principal
-$passwd = ConvertTo-SecureString $SPPassword -AsPlainText -Force
-$pscredential = New-Object System.Management.Automation.PSCredential($SPName, $passwd)
-Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantID
-
-Write-Host "Select the proper storage account" -ForegroundColor Blue
-
-#select your storage account
-do {
-    $saccts = @("")
-    Get-AzResource -ResourceType 'Microsoft.Storage/storageAccounts' | foreach -Begin { $i = 0 } -Process {
-        $i++
-        $saccts += "{0}. {1}" -f $i, $_.Name
-    } -outvariable menu
-    $saccts | Format-Wide { $_ } -Column 4 -Force
-    $r = Read-Host "Select the storage account"
-    $SA = $saccts[$r].Split()[1]
-    if ($SA -eq $null) { Write-Host "You must make a valid selection" -ForegroundColor Red }
-    else {
-        Write-Host "Selecting storage account: $($saccts[$r])" -ForegroundColor Green
-    }
-}
-until ($SA -ne $null)
-
-$ctx = $null
-$ctx = New-AzStorageContext -StorageAccountName $SA -UseConnectedAccount
-$container = Get-AzStorageContainer -Context $ctx -Name 'secured'
-Get-AzStorageBlob -Container $($container.Name) -Context $ctx
-
-#in case of error - do you have the correct role permissions? (e.g. Storage Blob Data Contributor)
-#Get-AzRoleAssignment -ServicePrincipalName $SPName
-
-#Display the content of the first file
-$myfiles = Get-AzStorageBlob -Container $($container.Name) -Context $ctx 
-$myfile = ($myfiles | Select-Object -First 1).Name
-Get-AzStorageBlobContent $myfile -Force -Context $ctx -container $($container.Name)
-Write-Host "the content...."  -ForegroundColor Cyan
-get-content -path $myfile
-
-Logout-AzAccount -Username $SPName  
-
-```
-You now want to delete your service principal?
-
-```PowerShell
-#cleanup
-Read-Host -Prompt "Ready to cleanup? (key)"
-$SPDisplayName = ($jsonResult | convertfrom-json).displayName
-Remove-AzADApplication -DisplayName $SPDisplayName -Force
-```
-
-## Add an azure file share to a server. ##
-1. **Add the file share** via the portal:  
-```
-[Azure Portal] -> Storage Account -> File Shares -> "+" File Share
-```
-| Name | Value |
-|---|---|
-| Name  |  **myfiles** |
-| Quota  |  _empty_ |   
-  
-2. **In your Azure VM mount the share** as drive by executing the command taken from:  
-```
-[Azure Portal] -> Storage Account -> File Shares -> 'myfiles' -> Connect -> copy the code into the clipboard
+[Azure Portal] -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
 ```  
-![Azure Files](./azfiles01.png))  
-  
-In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted.  
-![Mounted Azure File Share](./azfiles02.png)
+![Cloud Shell](./CloudShell.png))  
+The **'Cloud Shell' is an in-browser-accessible shell for managing Azure resources**. It already has the required SDKs and tools installed to interact with Azure. The **Azure Cloud Shell comes in 2 flavors: bash or PowerShell**  
+![Bash or PowerShell](./2variations.png)  
 
-> Questions:
-> - What is the default quota of an azure file share? 
-> - Which user account is used for establishing the connection? 
-> - Is the 'drive' available to other users that logon to the VM? [No]
-> - Is the 'drive' mounted 'automatically' after a reboot? [Yes]
-> - Can I mount a file share located in e.g. North Europe from a machine located in e.g. West Europe [Yes]  
+When being asked **choose PowerShell this time**.  
+**The first time you use the 'Cloud Shell' you will be asked to setup a storage account** e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
+
+```
+[Azure Portal] -> Click 'Show advanced settings'
+```  
+![Cloud Shell Storage Account Setup](./CloudShell1.png)  
+
+| Name | Value |
+|---|---|
+| Subscription  |  _your subscription_ |
+| Cloud Shell Region  |  e.g. **North Europe** |   
+| Resource Group  |  e.g. **rg-cloudshell** |   
+| Storage Account  |  **_some unique value_** |   
+| File Share  |  **cloudshell**|   
+
+```
+[Azure Portal] -> Create storage
+```  
+Once successful your shell should appear at the bottom of the page:  
+![Cloud Shell in the Azure portal](./CloudShell2.png)
+
+# Playing with the Cloud Shell #
+**Execute your first commands**. Using 'PowerShell' as environment you can either call:  
+**Azure CLI code** snippets, **go execute**:
+```
+az account show
+```  
+or **execute Azure PowerShell commands**, like:
+```PowerShell
+Get-AzSubscription
+```
+**Most Azure documentation offers script snippets shows both ways.**  
+My 2cts:
+- az commands tend to be shorter 
+- PowerShell (as .net based scripting language) gives you more flexibility when scripts get longer.
+
+**Note that Azure uses PowerShell Core on a Linux OS for PowerShell: Execute...**
+```PowerShell
+$psversiontable
+```  
+should return something like:  
+![PowerShell Version output](./CloudShell3.png)  
+>Keep this in mind - especially when you copy and pasted non PowerShell Core scripts - as they may need 'treatment' before they can run ;-)
+
+Let's query e.g. the available VM sizes in a specific region:
+```PowerShell
+Get-AzVMSize -Location 'west europe'
+```
+Output should be something like:
+```
+Name                   NumberOfCores MemoryInMB MaxDataDiskCount OSDiskSizeInMB ResourceDiskSizeInMB
+----                   ------------- ---------- ---------------- -------------- --------------------
+Standard_A0                        1        768                1        1047552                20480
+Standard_A1                        1       1792                2        1047552                71680
+Standard_A2                        2       3584                4        1047552               138240
+Standard_A3                        4       7168                8        1047552               291840
+.
+.
+.
+
+```
+
+List your Azure resources by executing:  
+```PowerShell
+Get-AzResource
+```
+>Note:  
+>Ok. So there are PowerShell cmds (so-called cmdlets "_action_-_target_") to administer azure. In Azure Cloud Shell they are 'pre'-installed for you. If you would want to run them from your PC you would need to install them (`install-module Az`) & update them (`update-module Az*`) on a regular basis. In PowerShell cmdlets are grouped into modules. If you want to find out which modules are installed - try `Get-Module az* -ListAvailable`. There is not a single Azure module. Instead the Azure services have their own modules - i.e. there is a module that hosts cmdlets for treating virtual machines, one for networking,...  
+
+# PowerShell Az Modules for Azure #
+To query the **specific modules for Azure administration - go execute:**  
+```PowerShell
+Get-Module az* -ListAvailable
+```
+**to list the pre-installed Az modules**:  
+```
+Directory: C:\Program Files\WindowsPowerShell\Modules
+
+    Directory: /usr/local/share/powershell/Modules
+
+ModuleType Version    PreRelease Name                                PSEdition ExportedCommands
+---------- -------    ---------- ----                                --------- ----------------
+Script     4.6.1                 Az                                  Core,Desk
+Script     1.9.3                 Az.Accounts                         Core,Desk {Disable-AzDataCollection, Disable-AzContextAutosave, Enable-AzDataCollection, Enable-AzCon…
+Script     1.1.1                 Az.Advisor                          Core,Desk {Get-AzAdvisorRecommendation, Enable-AzAdvisorRecommendation, Disable-AzAdvisorRecommendati…
+Script     1.2.0                 Az.Aks                              Core,Desk {Get-AzAksCluster, New-AzAksCluster, Remove-AzAksCluster, Import-AzAksCredential…}
+Script     1.1.4                 Az.AnalysisServices                 Core,Desk {Resume-AzAnalysisServicesServer, Suspend-AzAnalysisServicesServer, Get-AzAnalysisServicesS…
+Script     2.1.0                 Az.ApiManagement                    Core,Desk {Add-AzApiManagementApiToGateway, Add-AzApiManagementApiToProduct, Add-AzApiManagementProdu…
+Script     1.1.0                 Az.ApplicationInsights              Core,Desk {Get-AzApplicationInsights, New-AzApplicationInsights, Remove-AzApplicationInsights, Update…
+Script     1.4.0                 Az.Automation                       Core,Desk {Get-AzAutomationHybridWorkerGroup, Remove-AzAutomationHybridWorkerGroup, Get-AzAutomationJ…
+Script     3.1.0                 Az.Batch                            Core,Desk {Remove-AzBatchAccount, Get-AzBatchAccount, Get-AzBatchAccountKey, New-AzBatchAccount…}
+Script     1.0.3                 Az.Billing                          Core,Desk {Get-AzBillingInvoice, Get-AzBillingPeriod, Get-AzEnrollmentAccount, Get-AzConsumptionBudge…
+Script     1.4.3                 Az.Cdn                              Core,Desk {Get-AzCdnProfile, Get-AzCdnProfileSsoUrl, New-AzCdnProfile, Remove-AzCdnProfile…}
+.
+.
+.
+```
+**To find out which module hosts which cmdlet** (e.g. Get-AzVMSize) **type** something like:
+```PowerShell
+get-command *vmsize*
+```
+Result similar to:  
+```
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+Alias           Get-AzureRmVMSize
+Cmdlet          Get-AzDtlAllowedVMSizesPolicy                      1.0.2      Az.DevTestLabs
+Cmdlet          Get-AzVMSize                                       4.3.1      Az.Compute
+Cmdlet          Set-AzDtlAllowedVMSizesPolicy                      1.0.2      Az.DevTestLabs
+```  
+
+To find out all commands hosted in the Az.Compute module type:
+```PowerShell
+Get-Command -Module Az.Compute
+```
+delivers e.g.:
+```
+CommandType     Name                                               Version    Source
+-----------     ----                                               -------    ------
+.
+.
+.
+Cmdlet          New-AzSnapshotUpdateConfig                         4.3.1      Az.Compute
+Cmdlet          New-AzVM                                           4.3.1      Az.Compute
+Cmdlet          New-AzVMConfig                                     4.3.1      Az.Compute
+Cmdlet          New-AzVMDataDisk                                   4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerAutoBackupConfig                  4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerAutoPatchingConfig                4.3.1      Az.Compute
+Cmdlet          New-AzVMSqlServerKeyVaultCredentialConfig          4.3.1      Az.Compute
+.
+.
+.
+```  
+To learn more about a specific cmdlet. You can e.g. **execute**:  
+```PowerShell
+help New-AzVM -examples
+```
+# (optional) Create a VM with PowerShell #
+Now **let's create a VM using PowerShell**. **Execute**:  
+```PowerShell
+help New-AzVM -online
+```
+this **should open a new browser tab with online help for New-AzVM**. Examine the explanation and look at the code samples.
+
+Try **creating a simple VM by executing**:  
+```PowerShell
+$VMName = 'MyVM'    # variable for easy reuse
+New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_A0'
+```
+**Enter a user name** (not 'admin' nor 'administrator') **and a complex password** when asked.
+![progress in azure cloud shell](./newvm.png) 
+After a successful run you should have a VM in your subscription:  
+ ![MyVM in Azure Portal](./newvm2.png)  
+  
+**Cleanup** e.g. **by deleting** the resource group with the vm **using the portal or via executing**:
+```PowerShell
+Remove-AzResourceGroup $VMName -Force -AsJob   # -AsJob will execute this operation in the background 
+```
+> **In case of a error** try restarting the cloud shell as it times out.  
+  

@@ -1,113 +1,66 @@
-# Challenge 10: Networking: Distribute traffic accross global Azure regions for optimal latency and availability using Traffic Manager
-
-
-**[Traffic Manager](https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-overview)** uses DNS to load balance traffic to endpoints accross Azure regions. It can help you to:
-- **provide optimal latency** by serving clients from the **nearest location**.
-- **increase availability** as it monitors its endpoints and **provides failover**.
-- **redirect traffic** to online endpoints while others are in **maintenance**.
-- ...
+# Challenge 7: Networking: Loadbalancing your WWW Server Farm
 
 ## Here is what you will learn ##
-- How to setup Traffic Manager using the Azure portal.
-- Setup 2 endpoints located in 2 Azure regions ('North Europe', 'West Europe')
-- Configure loadbalancing based on clients origin geography. 
 
-Our **final architecture** will look like this: 
-![Final architecture](./TMArchitecture.png)  
-  
-> To speed things up you will execute a script that creates the VMs and Load balancers in the 2 regions automatically. Then you will setup the Traffic Manager using the portal.
+- How to load balance http traffic to 2 webserver vms 
+- Create an external load balancer using the azure portal
+- Learn to know the requirements for an azure external loadbalancer and how to configure it.
+
+Our **final architecture** should look like this: 
+![Final architecture](./finalArchitecture.png)  
+At **first** you will deploy the _start environment_ and in the **second** step you will add the external loadbalancer.
 
 ## 1. Deploy the 'starting point' ##
-Now let's **create some vms** using the 'Cloud Shell' in the Azure Portal.
-```
-[Azure Portal] -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
-```  
-![Cloud Shell](./CloudShell.png))  
-The **'Cloud Shell' is an in-browser-accessible shell for managing Azure resources**. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
-When being asked **choose PowerShell this time**.  
-**The first time you use the 'Cloud Shell' you will be asked to setup a storage account** e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
+In this directory there is an ARM-template which includes 2 web server vms and its requirements (networking, disks,...).:  
 
-```
-[Azure Portal] -> Click 'Show advanced settings'
-```  
-![Cloud Shell Storage Account Setup](./CloudShell1.png)  
+!['Starting Point' Architecture](./startingpoint01.png)  
+
+**Deploy this scenario** into your subscription by clicking on the 
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge7%2FChallenge7Start.json"><img src="./deploytoazure.png"/></a>
+button.  
 
 | Name | Value |
 |---|---|
-| Subscription  |  _your subscription_ |
-| Cloud Shell Region  |  **North Europe** |   
-| Resource Group  |  **rg-cloudshell** |   
-| Storage Account  |  **_some unique value_** |   
-| File Share  |  **cloudshell**|   
+| Resource group  |  **(new)** rg-lbwww |
+| Location  |  **North Europe** |   
+| Admin user  |  demouser |   
+| Admin password  |  **_some complex value_** |   
+| Vm Size  |  **Standard_B2s**  or try e.g. **Standard_F2s_v2**|   
+| Disk Sku  |  StandardSSD_LRS |  
+  
+The result should look similar to this:  
+![Deployment result](./startingpoint02.png)  
 
+## 2. Deploy the load balancer ##
+Now let's **add an external azure loadbalancer** in front of the 2 parallel web server machines.  
 ```
-[Azure Portal] -> Create storage
+[Azure Portal] -> '+' Add -> Search the marketplace for 'Load balancer'
 ```  
-Once successful your shell should appear at the bottom of the page:  
-![Cloud Shell in the Azure portal](./CloudShell2.png)
-  
-To setup the starting point **copy & paste the following code into the Cloud Shell**:  
-```PowerShell
-#Creates some resource groups in different azure regions
-New-AzResourceGroup -Name 'rg-wwwlb-NE' -Location 'North Europe'
-New-AzResourceGroup -Name 'rg-wwwlb-WE' -Location 'West Europe'
-New-AzResourceGroup -Name 'rg-wwwlb' -Location 'North Europe'
-
-$TemplateParameters = @{
-    "adminUser" = [string]'demouser';
-    "adminPassword" = [System.Security.SecureString](Read-Host -Prompt "adminUser password please" -AsSecureString);
-    "vmNames" = [array]@('vmblue','vmred');
-    "vmSize" = [string]'Standard_F2s_v2' # or 'Standard_B2s'
-    "DiskSku" = [string]'StandardSSD_LRS'
-}
-
-```
-**Enter the password as asked.**  Then execute the deployment by adding 2 lines
-
-```PowerShell
-#will create some vms in different azure regions in parallel
-New-AzResourceGroupDeployment -Name 'NE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenges/Challenge10/Challenge10Start.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
-
-$TemplateParameters.vmNames = @('vmyellow','vmgreen')
-New-AzResourceGroupDeployment -Name 'WE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenges/Challenge10/Challenge10Start.json" -ResourceGroupName 'rg-wwwlb-WE' -TemplateParameterObject $TemplateParameters -AsJob  
-
-#wait until both deployments are done
-get-job -State Running | wait-job  
-
-```
-
-
-## 2. Deploy a Traffic Manager instance ##
-[Add Traffic Manager Profile](https://docs.microsoft.com/en-us/azure/traffic-manager/quickstart-create-traffic-manager-profile#add-traffic-manager-endpoints) in resource group **rg-wwwlb** with a routing method based on e.g. **performance**  
-  
-Add 2 endpoints to the traffic manager.
-| Name | Value |
-|---|---|
-| Type  |  **Azure endpoint** |
-| Name  |  **Dublin** |
-| Target resource type  |  **Public IP address** |
-| Public IP address  |  **pip-wwwlb-NE** |
 
 | Name | Value |
 |---|---|
-| Type  |  **Azure endpoint** |
-| Name  |  **Amsterdam** |
-| Target resource type  |  **Public IP address** |
-| Public IP address  |  **pip-wwwlb-WE** |
-
-Now test by opening the traffic managers DNS name in your browser (you might need to open multiple different browsers to see some change):  
-
-| ![VM Yellow](./testvmyellow.png)   | ![VM Green](./testvmgreen.png)   | ![VM Blue](./testvmblue.png)  | ![VM Red](./testvmred.png)  |
-|---|---|---|---|
-| vmyellow (Amsterdam)   | vmgreen (Amsterdam) |  vmblue (Dublin) | vmred (Dublin) |
+| Resource group  |  rg-lbwww |
+| Name  | **lb-wwwfarm** |
+| Region  |  **North Europe** |   
+| Type  |  Public |   
+| SKU  |  Basic |   
+| Public IP address  |  **Use existing**|   
+| Choose public IP address  |  pip-wwwfarm |  
   
+> **Note**: To **get your loadbalancer working** you need to **configure** the following:
+> - ... [**a backend pool**](./lbconfig01.png) that contains the 'endpoints' i.e. the vms to which the traffic will be routed.
+> - ... [**a health probe**](./lbconfig02.png) for TCP port 80 (http) to check if the endpoints are 'responsive' to web requests
+> - ... [**a lb rule**](./lbconfig03.png) to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)  
+
+**Finally**  
+To **check** if your **lb is working** do a **http://_%PIP of your lb%_**  
+Depending which endpoint serves your request the **result should something like**:  
+<a href="lbresult1.png"><img src="lbresult1.png" width=150px></a>
+<a href="lbresult2.png"><img src="lbresult2.png" width=150px></a>
+
+## [optional] Test server outage ##
+Stop one vm and verifiy if the webpage is still served.  
+Restart the vm and check if the lb notices it and rebalances load.
+
 ## Cleanup ##
-**Delete the resource groups _rg-wwwlb...._** or execute this in the Cloud Shell:  
-```PowerShell
-Remove-AzResourceGroup -Name 'rg-wwwlb-NE' -Force -AsJob
-Remove-AzResourceGroup -Name 'rg-wwwlb-WE' -Force -AsJob
-Remove-AzResourceGroup -Name 'rg-wwwlb'    -Force -AsJob
-
-Get-Job -State Running | Wait-Job
-
-```
+**Delete the resource group** _rg-lbwww_

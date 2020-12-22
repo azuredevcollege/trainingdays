@@ -7,17 +7,20 @@ This day is about getting a **basic understanding of Azure and how to use its fu
 > - **ARM** 
   
 ## Challenges ##
-- [Challenge 0: Networking: Create a Virtual Network (IPv4) for your first VM.](./challenge-00/README.md)
-- [Challenge 1: Cloud Shell: Using PowerShell for Azure Administration and Automation](./challenge-01/README.md)
-- [Challenge 2: ARM: Create a VM and other Azure Resources using an ARM Template](./challenge-02/README.md)
-- [Challenge 3 (optional): VM - Azure Backup: Save your VM state](./challenge-03/README.md)
-- [Challenge 4: VM - Managed Disks: Attach a Data Disk to a VM - Extend and Retype it.](./challenge0-4/README.md)
-- [Challenge 5: Storage Account: Creating a Data Storage for VMs and Applications](./challenge-05/README.md)
-- [Challenge 6: VM - Custom Script Extensions: Post deployment automation - or - configure / setup / install something within an empty vm](./challenge-06/README.md)
-- [Challenge 7: Networking: Loadbalancing your WWW Server Farm](./challenge-07/README.md)
-- [Challenge 8: Networking - VPN: Enabling Hybrid Networking with a Site-2-Site (Onprem to Azure) VPN Connection](./challenge-08/README.md)
+- [Challenge 0: **Networking**: **Create a Virtual Network** (IPv4) for your first VM.](./challenge-00/README.md)
+- [Challenge 1: **VM**: **Create a virtual machine** using the Azure portal](./challenge-01/README.md)
+- [Challenge 2: **VM** - Managed Disks: **Attach a Data Disk to a VM** - Extend and Retype it.](./challenge-02/README.md)
+- [Challenge 3 **(optional): VM**- Azure Backup: Save your VM state](./challenge-03/README.md)
+- [Challenge 4 **(optional): VM** - Custom Script Extensions: Post deployment automation - or - configure / setup / install something within an empty vm](./challenge-04/README.md)
+- [Challenge 5 **Cloud Shell**: Using PowerShell for Azure Administration and Automation](./challenge-05/README.md)
+- [Challenge 6: **Storage Account**: **Creating Data Storage for VMs and Applications**](./challenge-06/README.md)
+- [Challenge 7: **ARM**: Azure Resource Manager (ARM) Templates](./challenge-07/README.md)
+- [Challenge 8: **Networking**: **Enabling Hybrid Networking with a Site-2-Site VPN Connection** (Onprem to Azure) VPN Connection](./challenge-08/README.md)
 - [Challenge 9: Networking: Connect Two Virtual Networks Using Azure VNET Peering](./challenge-09/README.md)
-- [Challenge 10 (optional): Networking: Distribute traffic accross global Azure regions using Traffic Manager](./challenge-10/README.md)
+- [Challenge 10: Networking: Loadbalancing your WWW Server Farm](./challenge-07/README.md)
+- [Challenge 11 (optional): Networking: Distribute traffic accross global Azure regions using Traffic Manager](./challenge-11/README.md)
+
+
 
 ## Networking ##
 _(VNET, peering, loadbalancer, VPN, Traffic Manager)_  

@@ -10,16 +10,16 @@
 
 ## Do you need a VM? ##
 **For this lab you need an Azure virtual machine that runs Windows Server**. And some storage accessible to hold your automation code.  
-Just **click**  <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge6%2FChallenge6Start.json"><img src="./deploytoazure.png"/></a> **to spin up a new VM** for this lab.
+Just **click**  <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-04%2Fchallengestart%2Fchallengestart.json"><img src="./deploytoazure.png"/></a> **to spin up a new VM** for this lab.
 
 
 | Name | Value |
 |---|---|
-| Resource group  |  **(new)** rg-www |
-| Location  |  **North Europe** |   
-| Admin user  |  demouser |   
+| Resource group  |  e.g. rg-www-test-001 |
+| Location  |  e.g. North Europe |   
+| Admin user  |  demoadmin |   
 | Admin password  |  **_some complex value_** |   
-| Vm Size  |  **Standard_B2s**  or try e.g. **Standard_F2s_v2**|   
+| Vm Size  |  e.g  Standard_F2s_v2|   
 | Disk Sku  |  StandardSSD_LRS |  
 
 ## Attach a simple HelloWorld Custom Script Extension (CSE) to a VM using the Portal ##
@@ -43,7 +43,7 @@ Get-Date | Out-File $filePath -Append
 ```
 2. Upload this file to a storage account
 ```
-[Azure Portal] -> Resource Group -> rg-www -> sawww... (_your storage account_)  -> containers -> 'csescripts' -> Upload  
+[Azure Portal] -> Resource Group -> rg-www-test... -> sawww... (_your storage account_)  -> containers -> 'csescripts' -> Upload  
 ->File "HelloWorld.ps1" -> Upload
 ```
 ![Upload CSE script to storage account](./UploadCSEtoContainer.png)
@@ -67,7 +67,7 @@ Final result should show a success:
 ## See what has happened inside the VM
 Now we **RDP into the VM** and see what has happened **and where to find logs** in case something breaks.
 ```
-[Azure Portal] -> Resource Groups -> 'rg-www' -> 'vmblue'
+[Azure Portal] -> Resource Groups -> 'rg-www...' -> 'vmblue'
   -> Connect -> Download RDP file -> Open -> Connect
 ```
 **User**: demouser  
@@ -134,8 +134,8 @@ Once uploaded you can copy the blobs URL from the azure portal
 **Select the right resource group and VM and deploy:**
 | Name | Value |
 |---|---|
-| Resource group  |  **rg-www** |
-| Region  |  **North Europe** |   
+| Resource group  |  e.g. **rg-www-test-001** |
+| Region  |  e.g. North Europe |   
 | VM name  |  vmblue |   
 
 Deployment will take some minutes: A role is installed and an IIS feature is downloaded and installed.  
