@@ -39,7 +39,7 @@
         ],
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
         "VMSubnet": "snet-vmch-06",
-        "vmNamePrefix": "sa",
+        "vmNamePrefix": "chall06",
         "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
@@ -149,7 +149,8 @@
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-10-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
+                "[concat(variables('vmNames')[copyIndex()],'-pip')]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -161,13 +162,36 @@
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
                             },
                             "primary": true,
-                            "privateIPAddressVersion": "IPv4"
+                            "privateIPAddressVersion": "IPv4",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmNames')[copyIndex()],'-pip'))]"
+                            }
                         }
                     }
                 ],
                 "networkSecurityGroup": {
                     "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
                 }
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-pip')]",
+            "copy": {
+                "name": "pipcopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "ipTags": [
+                ]
             }
         },
         {
