@@ -17,7 +17,7 @@ This day is about getting a **basic understanding of Azure and how to use its fu
 - [Challenge 7: **ARM**: Azure Resource Manager (ARM) Templates](./challenge-07/README.md)
 - [Challenge 8: **Networking**: **Enabling Hybrid Networking with a Site-2-Site VPN Connection** (Onprem to Azure) VPN Connection](./challenge-08/README.md)
 - [Challenge 9: Networking: Connect Two Virtual Networks Using Azure VNET Peering](./challenge-09/README.md)
-- [Challenge 10: Networking: Loadbalancing your WWW Server Farm](./challenge-07/README.md)
+- [Challenge 10: Networking: Loadbalancing your WWW Server Farm](./challenge-10/README.md)
 - [Challenge 11 (optional): Networking: Distribute traffic accross global Azure regions using Traffic Manager](./challenge-11/README.md)
 
 
