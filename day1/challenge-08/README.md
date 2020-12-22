@@ -6,24 +6,31 @@ What it takes to implement a VPN tunnel between your onprem firewall <---VPN S2S
 ![Hybrid Network with Azure](./goal.png)
 
 
-## An Azure S2S VPN requires: ##
-**Azure**
-- VPN Gateway in its own subnet.
-- VPN GWay requires a dynamic Public IP
-- Settings how the onprem VPN / FWall is to be contacted (aka LocalNetworkGateway)
-- Connection Objekt with e.g. shared key
+**An Azure S2S VPN requires:**
+| onprem | Azure |
+|--|--|
+| A supported device Azure can talk to. | <ul><li>VPN Gateway in its own subnet.</li><li>VPN GWay requires a dynamic Public IP</li><li>Settings how the onprem VPN / FWall is to be contacted (aka LocalNetworkGateway)</li><li>Connection Object with e.g. shared key</li></ul> |
 
-**onprem**
-- A supported device Azure can talk to.
 
-## 1. Starting Point ##
+## Table of Contents ##
+1. [Starting Point](#Starting-Point)
+2. [Create a VPN Gateway and a Public IP using the portal](#Create-a-VPN-Gateway-and-a-Public-IP-using-the-portal)
+3. [[Azure] Create a Local Network Gateway](#[Azure]-Create-a-Local-Network-Gateway )
+4. [[Azure] Create a connection object with shared key](#[Azure]-Create-a-connection-object-with-shared-key)
+5. [[Onpremise] Configure your onpremise VPN counterpart e.g. ipfire](#[Onpremise]-Configure-your-onpremise-VPN-counterpart-e.g.-ipfire)
+6. [Cleanup](#Cleanup)
+
+# Starting Point #
 Your **instructor** (_ask him for the details_) **has setup for you the onprem** part:  
 ![Onpremise](./onpremise.png)
 
 **Click** on the 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FChallenge8Start.json"><img src="./deploytoazure.png"/></a>
-button **you will get some Azure resources to start** with:  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-08%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
+button **to get the Azure resources to start** with:  
 ![azure vpn starting point](./vpnLabAzureStart.png)
+
+
+
 
 | Name | Value |
 |---|---|
@@ -35,7 +42,7 @@ button **you will get some Azure resources to start** with:
 | Disk Sku  |  StandardSSD_LRS |  
 
 
-## 2. Create a VPN Gateway and a Public IP using the portal ##
+# Create a VPN Gateway and a Public IP using the portal #
 ```
 [Azure Portal] -> '+ Create a resource' -> type "Virtual network gateway"
   -> Create
@@ -61,7 +68,7 @@ button **you will get some Azure resources to start** with:
 When your **GW has** been assigned a **public IP** address then you know **it is online**.  
 ![VPN GW with public IP](./vpnGWPIP.png)
 
-## 3. [Azure] Create a Local Network Gateway ##
+# [Azure] Create a Local Network Gateway #
 The purpose of this task is to tell azure how to contact the onpremise firewall:  
 ```
 [Azure Portal] -> '+ Add' -> type 'Local network gateway' -> Create
@@ -74,7 +81,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Resource Group | **rg-vpn** |
 | Location | **North Europe** |
 
-## 4. [Azure] Create a connection object with shared key ##
+# [Azure] Create a connection object with shared key #
 ```
 [Azure Portal] -> Resource Groups -> rg-vpn -> myAzVPNGWay
  -> Connections -> 
@@ -90,12 +97,14 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 | Resource Group | rg-vpn |
 | Location | North Europe |
 
-## 5. [Onpremise] Configure your onpremise VPN counterpart e.g. ipfire ##
-**We now need to configure the other end of the vpn tunnel**: **_the onpremise firewall_** in our case IPFire.  
-1. For this **use the remote desktop client to RDP into your onpremise environment**:  
-  
+# [Onpremise] Configure your onpremise VPN counterpart e.g. ipfire #
+**We now need to configure the other end of the vpn tunnel**: **_the onpremise firewall_** in our case a linux FW called _IPFire_.  
 
-**Internet -- 1st RDP--> onprem Lab (HyperV Host) -- 2nd RDP--> cmW2k19** (192.168.0.11) **--https-->IPFire** (192.168.0.100)  
+**1. For this use the remote desktop client to RDP into your onpremise environment**:  
+  
+```
+Internet -- 1st RDP--> onprem Lab (HyperV Host) -- 2nd RDP--> cmW2k19 (192.168.0.11) --https-->IPFire (192.168.0.100)  
+```
 ![Connection Flow](./connectionFlow.png)
 
 | Parameter Name | Values  |
@@ -106,7 +115,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
   
 >Note: **_ask your instructor for connection details_**  
 
-2. Add the VPN details
+**2. Add the VPN details**
 ```
    IPFire -> Services -> IPSec -> 'Connection Status and -Control' -> Add
 ```
@@ -128,6 +137,7 @@ The purpose of this task is to tell azure how to contact the onpremise firewall:
 ![IPFire: connection settings](./vpn2.png) 
 **Save**
 
+**3. Modify the algorithms used for the connection**  
 **Click on the pencil symbol and choose 'Advanced'**:
 ![IPFire: Advanced cipher settings](./vpn3.png) 
 
@@ -160,5 +170,5 @@ button and select correct parameters to apply new ciphers to your current connec
 However you also need to apply this to the onprem firewall:  
 ![VPN more secure cipher](./vpn6-moresecure.png) 
 
-## Cleanup ##
+# Cleanup #
 **Delete the resource group** _rg-vpn_

@@ -2,6 +2,12 @@
 ## Here is what you will learn ##
 - Create a data disk and attach it to a vm
 
+## Table Of Contents ##
+1. [Create and attach a new disk](#Create-and-attach-a-new-disk)
+2. [Extend your disk](#Extend-your-disk)
+3. [Cleanup](#Cleanup)
+
+# Create and attach a new disk
 ```
 [Azure Portal] -> Virtual machines -> e.g. 'vmfirst001' -> Data disks -> "+ Create and attach a new disk"
 ```  
@@ -26,7 +32,7 @@ Once logged into the vm - execute **_diskmgmt.msc_** to open the **Disk Manager*
 **Partition and format** it:  
 ![Disk Manager extended disk](./datadisk1.png)
 
-## Extend your disk ##
+# Extend your disk
 To **modify an existing disk it must be first 'detached' first** from the vm
 ```
 [Azure Portal] -> Virtual machines -> e.g. 'vmfirst001' -> Disks
@@ -59,5 +65,8 @@ Once done it'll show up in the vm like:
 > - Can a disk be resized without losing its data? 
 > - Can I easily downsize a disk? 
   
-> **Cleanup - Note**:  
-> **If you do not want to do the [optional] labs** 'vm backup' or 'post deployment automation with CSE' t**hen you can delete this resource group** and all its containing artefacts. 
+# Cleanup  
+Delete this resource group (that will also delete its containing artefacts.)
+```
+[Azure Portal] -> Resource Groups -> rg-firstvm-test-001 -> 'Delete resource group'
+```

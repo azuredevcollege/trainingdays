@@ -4,7 +4,7 @@
     "parameters": {
         "adminUser": {
             "type": "string",
-            "defaultValue": "demouser",
+            "defaultValue": "demoadmin",
             "metadata": {
                 "description": "Admin user name of vm"
             }
@@ -35,11 +35,11 @@
     },
     "variables": {
         "vmNames": [
-            "vmazure"
+            "vmch-06"
         ],
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
-        "VMSubnet": "snet-vmazure",
-        "vmNamePrefix": "vpn",
+        "VMSubnet": "snet-vmch-06",
+        "vmNamePrefix": "sa",
         "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
@@ -141,7 +141,7 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNames')[copyIndex()],'-nic1')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-nic')]",
             "copy": {
                 "name": "niccopy",
                 "count": "[length(variables('vmNames'))]"
@@ -181,7 +181,7 @@
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic1')  )]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic')  )]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -212,7 +212,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic1'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic'))]"
                         }
                     ]
                 },
@@ -221,50 +221,6 @@
                         "enabled": true,
                         "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
                     }
-                }
-            }
-        },
-                {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2019-07-01",
-            "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
-            ],
-            "copy": {
-                "name": "BGInfocopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "properties": {
-                "autoUpgradeMinorVersion": true,
-                "publisher": "Microsoft.Compute",
-                "type": "BGInfo",
-                "typeHandlerVersion": "2.1"
-            }
-        },
-        {
-            "apiVersion": "2018-10-01",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
-            ],
-            "location": "[resourceGroup().location]",
-            "copy": {
-                "name": "dsccopy",
-                "count": "[length(variables('vmNames'))]"
-            },
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.73",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge9/EnablePingConfig.zip",
-                    "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
-                },
-                "protectedSettings": {
                 }
             }
         }

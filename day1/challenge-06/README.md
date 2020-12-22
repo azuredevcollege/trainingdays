@@ -11,6 +11,7 @@
 1. [Create a storage account and a container using the azure portal](#Create-a-storage-account-and-a-container-using-the-azure-portal)
 2. [[optional] Authorize access to blobs using AAD](#[optional]-Authorize-access-to-blobs-using-AAD)
 3. [Add an azure file share to a server](#Add-an-azure-file-share-to-a-server)
+4. [Cleanup](#Cleanup)
 
 # Create a storage account and a container using the azure portal #
 
@@ -211,7 +212,14 @@ Remove-AzADApplication -DisplayName $SPDisplayName -Force
   
 
 # Add an azure file share to a server #
-1. **Add the file share** via the portal:  
+
+## Prerequisites  
+
+**Create a vm** to attach the file share to if you don't have one - **Click** on the 
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-06%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
+button. 
+
+## Create a file share via the portal:  
 ```
 [Azure Portal] -> Storage Account -> File Shares -> "+" File Share
 ```
@@ -220,7 +228,8 @@ Remove-AzADApplication -DisplayName $SPDisplayName -Force
 | Name  |  **myfiles** |
 | Quota  |  _empty_ |   
   
-2. **In your Azure VM mount the share** as drive by executing the command taken from:  
+## In your Azure VM mount the share  
+as drive by executing the command taken from:  
 ```
 [Azure Portal] -> Storage Account -> File Shares -> 'myfiles' -> Connect -> copy the code into the clipboard
 ```  
@@ -235,3 +244,6 @@ In your VM paste the code into a PowerShell window and execute it. Once successf
 > - Is the 'drive' available to other users that logon to the VM? [No]
 > - Is the 'drive' mounted 'automatically' after a reboot? [Yes]
 > - Can I mount a file share located in e.g. North Europe from a machine located in e.g. West Europe [Yes]  
+  
+# Cleanup
+Delete Resource Group _rg-sachallenge_

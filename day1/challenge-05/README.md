@@ -16,12 +16,12 @@ Using the **Cloud Shell saves you time** as...:
 - **nothing needs to be installed on your PC** ([no "which version of PowerShell? What modules?](https://docs.microsoft.com/en-us/powershell/azure))"  
 
 
-
 ## Table Of Contents ##
 1. [Create an Azure Cloud Shell (if you don't have one.)](#Create-an-Azure-Cloud-Shell)
 2. [Playing with the Cloud Shell](#Playing-with-the-Cloud-Shell)
 3. [PowerShell Az Modules for Azure](#PowerShell-Az-Modules-for-Azure)
-4. [(optional) Create a VM with PowerShell](#(optional)-Create-a-VM-with-PowerShell)
+4. [(optional) Create a VM with PowerShell](#Create-a-VM-with-PowerShell)
+5. [Cleanup](#Cleanup)
 
 
 
@@ -171,7 +171,8 @@ To learn more about a specific cmdlet. You can e.g. **execute**:
 ```PowerShell
 help New-AzVM -examples
 ```
-# (optional) Create a VM with PowerShell #
+# (optional)
+# Create a VM with PowerShell
 Now **let's create a VM using PowerShell**. **Execute**:  
 ```PowerShell
 help New-AzVM -online
@@ -187,10 +188,11 @@ New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Si
 ![progress in azure cloud shell](./newvm.png) 
 After a successful run you should have a VM in your subscription:  
  ![MyVM in Azure Portal](./newvm2.png)  
-  
+
+# Cleanup
 **Cleanup** e.g. **by deleting** the resource group with the vm **using the portal or via executing**:
 ```PowerShell
 Remove-AzResourceGroup $VMName -Force -AsJob   # -AsJob will execute this operation in the background 
 ```
-> **In case of a error** try restarting the cloud shell as it times out.  
+> **In case of an error** try restarting the cloud shell as it times out.  
   

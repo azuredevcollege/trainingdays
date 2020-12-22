@@ -299,10 +299,10 @@
                     "typeHandlerVersion": "2.73",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/wwwFarmConfig.zip",
+                        "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-10/wwwFarmConfig.zip",
                         "configurationFunction": "wwwFarmConfig.ps1\\wwwFarmConfig",
                         "properties": {
-                            "webZipURI": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/web.zip"
+                            "webZipURI": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-10/web.zip"
                         }
                     },
                     "protectedSettings": {

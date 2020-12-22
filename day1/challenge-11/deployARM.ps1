@@ -16,10 +16,10 @@ $TemplateParameters = @{
     "vmSize" = [string]'Standard_F2s_v2' # or 'Standard_B2s'
     "DiskSku" = [string]'StandardSSD_LRS'
 }
-New-AzResourceGroupDeployment -Name 'NE' -TemplateFile "/home/bernhard/Challenge10Start.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
+New-AzResourceGroupDeployment -Name 'NE' -TemplateFile "/home/bernhard/challengestart.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
 
 $TemplateParameters.vmNames = @('vmyellow','vmgreen')
-New-AzResourceGroupDeployment -Name 'WE' -TemplateFile "/home/bernhard/Challenge10Start.json" -ResourceGroupName 'rg-wwwlb-WE' -TemplateParameterObject $TemplateParameters -AsJob
+New-AzResourceGroupDeployment -Name 'WE' -TemplateFile "/home/bernhard/challengestart.json" -ResourceGroupName 'rg-wwwlb-WE' -TemplateParameterObject $TemplateParameters -AsJob
 
 #cleanup
 Remove-AzResourceGroup -Name 'rg-wwwlb-NE' -force -AsJob

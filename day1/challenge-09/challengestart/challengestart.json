@@ -2,14 +2,6 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "virtualNetworks_azurevnet_name": {
-            "defaultValue": "azurevnet",
-            "type": "String"
-        },
-        "vmName": {
-            "defaultValue": "vmweb01",
-            "type": "string"
-        },
         "adminUser": {
             "type": "string",
             "defaultValue": "demouser",
@@ -42,31 +34,36 @@
         }
     },
     "variables": {
-        "virtualNetworks_azurevnet_name": "azurevnet",
-        "VMSubnet": "snet-testing",
-        "storageAccountName": "[toLower(concat(parameters('vmName'),substring(uniqueString(resourceGroup().id),0,4)))]",
-        "vmNicName": "[concat(parameters('vmName'),'-nic1')]",
-        "nsgName": "[concat(parameters('vmName'),'-nsg')]",
-        "PIPName": "[concat(parameters('vmName'),'-pip')]",
-        "availabilitySetName": "vmweb-avset"
+        "vmNames": [
+            "VMonVNET1",
+            "VMonVNET2"
+        ],
+        "vnetNames": [
+            "VNET1",
+            "VNET2"
+        ],
+        "VMSubnet": "VMSubnet1",
+        "storageAccountName": "[toLower(concat('sadiag',substring(uniqueString(resourceGroup().id),0,4)))]",
+        "nsgName": "[concat('nsg-','vms')]",
+        "PIPName": "pip-"
     },
     "resources": [
         {
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2019-08-01",
-            "name": "[parameters('virtualNetworks_azurevnet_name')]",
+            "name": "[variables('vnetNames')[0]]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "10.1.0.0/16"
+                        "172.16.100.0/24"
                     ]
                 },
                 "subnets": [
                     {
-                        "name": "snet-testing",
+                        "name": "[variables('VMSubnet')]",
                         "properties": {
-                            "addressPrefix": "10.1.0.0/24",
+                            "addressPrefix": "172.16.100.0/26",
                             "serviceEndpoints": [
                             ],
                             "delegations": [
@@ -74,95 +71,30 @@
                             "privateEndpointNetworkPolicies": "Enabled",
                             "privateLinkServiceNetworkPolicies": "Enabled"
                         }
-                    },
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                ],
+                "enableDdosProtection": false,
+                "enableVmProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2019-08-01",
+            "name": "[variables('vnetNames')[1]]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "192.168.100.0/24"
+                    ]
+                },
+                "subnets": [
                     {
-                        "name": "GatewaySubnet",
+                        "name": "[variables('VMSubnet')]",
                         "properties": {
-                            "addressPrefix": "10.1.254.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-adds",
-                        "properties": {
-                            "addressPrefix": "10.1.253.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-cmweb",
-                        "properties": {
-                            "addressPrefix": "10.1.2.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-cmapp",
-                        "properties": {
-                            "addressPrefix": "10.1.3.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-cmaweb",
-                        "properties": {
-                            "addressPrefix": "10.1.4.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-cmaapp",
-                        "properties": {
-                            "addressPrefix": "10.1.5.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-cmdb",
-                        "properties": {
-                            "addressPrefix": "10.1.6.0/24",
-                            "serviceEndpoints": [
-                            ],
-                            "delegations": [
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
-                        }
-                    },
-                    {
-                        "name": "snet-apgw",
-                        "properties": {
-                            "addressPrefix": "10.1.7.0/24",
+                            "addressPrefix": "192.168.100.0/26",
                             "serviceEndpoints": [
                             ],
                             "delegations": [
@@ -220,9 +152,7 @@
                 "securityRules": [
                     {
                         "name": "default-allow-rdp",
-                        "etag": "W/\"c25a8216-dcb2-4cab-a583-f85260a85696\"",
                         "properties": {
-                            "provisioningState": "Succeeded",
                             "protocol": "Tcp",
                             "sourcePortRange": "*",
                             "destinationPortRange": "3389",
@@ -247,8 +177,12 @@
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2019-09-01",
-            "name": "[variables('PIPName')]",
+            "name": "[concat(variables('PIPName'),variables('vmNames')[copyIndex()])]",
             "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "pipcopy",
+                "count": "[length(variables('vmNames'))]"
+            },
             "sku": {
                 "name": "Basic"
             },
@@ -262,12 +196,16 @@
         },
         {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('vmNicName')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-nic1')]",
+            "copy": {
+                "name": "niccopy",
+                "count": "[length(variables('vmNames'))]"
+            },
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses/', variables('PIPName'))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('PIPName'),variables('vmNames')[copyIndex()]))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -276,10 +214,10 @@
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses/', variables('PIPName'))]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('PIPName'),variables('vmNames')[copyIndex()]))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('vnetNames')[copyIndex()], variables('VMSubnet'))]"
                             },
                             "primary": true,
                             "privateIPAddressVersion": "IPv4"
@@ -292,37 +230,24 @@
             }
         },
         {
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "[variables('availabilitySetName')]",
-            "apiVersion": "2019-07-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-
-                "platformFaultDomainCount": 2,
-                "platformUpdateDomainCount": 2
-            },
-            "sku": {
-                "name": "Aligned"
-            }
-        },
-        {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
+            "name": "[variables('vmNames')[copyIndex()]]",
+            "copy": {
+                "name": "vmcopy",
+                "count": "[length(variables('vmNames'))]"
+            },
             "location": "[resourceGroup().location]",
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', variables('vmNicName'))]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic1')  )]"
             ],
             "properties": {
-                "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
-                },
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmName')]",
+                    "computerName": "[variables('vmNames')[copyIndex()]]",
                     "adminUsername": "[parameters('adminUser')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -335,7 +260,7 @@
                     },
                     "osDisk": {
                         "osType": "Windows",
-                        "name": "[concat(parameters('vmName'), '-osdisk')]",
+                        "name": "[concat(variables('vmNames')[copyIndex()],'-osdisk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -346,7 +271,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('vmNicName'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic1'))]"
                         }
                     ]
                 },
@@ -357,13 +282,53 @@
                     }
                 }
             }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-07-01",
+            "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
+            ],
+            "copy": {
+                "name": "BGInfocopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Compute",
+                "type": "BGInfo",
+                "typeHandlerVersion": "2.1"
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
+            ],
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "dsccopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.73",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-09/EnablePingConfig.zip",
+                    "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
+                },
+                "protectedSettings": {
+                }
+            }
         }
     ],
     "outputs": {
-        "vmName": {
-            "type": "string",
-            "value": "[parameters('vmName')]"
-        },
         "storageAccountName": {
             "type": "string",
             "value": "[variables('storageAccountName')]"

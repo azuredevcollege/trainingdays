@@ -17,7 +17,7 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_F2s_v2"
+            "defaultValue": "Standard_B2s"
         },
         "DiskSku": {
             "type": "String",
@@ -31,25 +31,17 @@
             "metadata": {
                 "description": "description"
             }
-        },
-        "vmNames": {
-            "type": "array",
-            "defaultValue": [
-                "vmred",
-                "vmblue"
-            ]
         }
     },
     "variables": {
+        "vmNames": [
+            "vmazure"
+        ],
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
-        "VMSubnet": "snet-frontend",
-        "vmNamePrefix": "[replace(resourceGroup().name,'rg-','')]",
-        "storageAccountName": "[toLower(concat('sa',replace(variables('vmNamePrefix'),'-',''),substring(uniqueString(resourceGroup().id),0,4)))]",
-        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]",
-        "PIPName": "[concat('pip-',variables('vmNamePrefix'))]",
-        "availabilitySetName": "[concat('av-',variables('vmNamePrefix'))]",
-        "domainNameLabel": "[toLower(concat('farm',substring(uniqueString(resourceGroup().id),0,4)))]",
-        "lbName": "[variables('vmNamePrefix')]"
+        "VMSubnet": "snet-vmazure",
+        "vmNamePrefix": "vpn",
+        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
+        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
     },
     "resources": [
         {
@@ -60,14 +52,14 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "192.168.200.0/24"
+                        "10.1.0.0/16"
                     ]
                 },
                 "subnets": [
                     {
                         "name": "[variables('VMSubnet')]",
                         "properties": {
-                            "addressPrefix": "192.168.200.0/26",
+                            "addressPrefix": "10.1.0.0/24",
                             "serviceEndpoints": [
                             ],
                             "delegations": [
@@ -92,7 +84,7 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
-            "kind": "Storage",
+            "kind": "Storagev2",
             "properties": {
                 "networkAcls": {
                     "bypass": "AzureServices",
@@ -143,62 +135,21 @@
                             "destinationAddressPrefixes": [
                             ]
                         }
-                    },
-                    {
-                        "name": "default-allow-http",
-                        "properties": {
-                            "protocol": "Tcp",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "80",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 1001,
-                            "direction": "Inbound",
-                            "sourcePortRanges": [
-                            ],
-                            "destinationPortRanges": [
-                            ],
-                            "sourceAddressPrefixes": [
-                            ],
-                            "destinationAddressPrefixes": [
-                            ]
-                        }
                     }
                 ]
             }
         },
         {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2019-09-01",
-            "name": "[variables('PIPName')]",
-            "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
-                "dnsSettings": {
-                    "domainNameLabel": "[variables('domainNameLabel')]"
-                },
-                "ipTags": [
-                ]
-            }
-        },
-        {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('vmNames')[copyIndex()],'-nic1')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-nic1')]",
             "copy": {
                 "name": "niccopy",
-                "count": "[length(parameters('vmNames'))]"
+                "count": "[length(variables('vmNames'))]"
             },
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-10-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
-                "[resourceId('Microsoft.Network/loadBalancers/', variables('lbName'))]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -210,12 +161,7 @@
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
                             },
                             "primary": true,
-                            "privateIPAddressVersion": "IPv4",
-                            "loadBalancerBackendAddressPools": [
-                                {
-                                    "id": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', variables('lbName'), 'bepool1')]"
-                                }
-                            ]
+                            "privateIPAddressVersion": "IPv4"
                         }
                     }
                 ],
@@ -225,41 +171,24 @@
             }
         },
         {
-            "type": "Microsoft.Compute/availabilitySets",
-            "name": "[variables('availabilitySetName')]",
-            "apiVersion": "2019-07-01",
-            "location": "[resourceGroup().location]",
-            "properties": {
-
-                "platformFaultDomainCount": 2,
-                "platformUpdateDomainCount": 2
-            },
-            "sku": {
-                "name": "Aligned"
-            }
-        },
-        {
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmNames')[copyIndex()]]",
+            "name": "[variables('vmNames')[copyIndex()]]",
             "copy": {
                 "name": "vmcopy",
-                "count": "[length(parameters('vmNames'))]"
+                "count": "[length(variables('vmNames'))]"
             },
             "location": "[resourceGroup().location]",
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', concat(parameters('vmNames')[copyIndex()],'-nic1')  )]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic1')  )]"
             ],
             "properties": {
-                "availabilitySet": {
-                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
-                },
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmNames')[copyIndex()]]",
+                    "computerName": "[variables('vmNames')[copyIndex()]]",
                     "adminUsername": "[parameters('adminUser')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -272,7 +201,7 @@
                     },
                     "osDisk": {
                         "osType": "Windows",
-                        "name": "[concat(parameters('vmNames')[copyIndex()],'-osdisk')]",
+                        "name": "[concat(variables('vmNames')[copyIndex()],'-osdisk')]",
                         "createOption": "FromImage",
                         "caching": "ReadWrite",
                         "managedDisk": {
@@ -283,7 +212,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(parameters('vmNames')[copyIndex()],'-nic1'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic1'))]"
                         }
                     ]
                 },
@@ -295,17 +224,36 @@
                 }
             }
         },
+                {
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "apiVersion": "2019-07-01",
+            "name": "[concat(variables('vmNames')[copyIndex()], '/BGInfo')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
+            ],
+            "copy": {
+                "name": "BGInfocopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Compute",
+                "type": "BGInfo",
+                "typeHandlerVersion": "2.1"
+            }
+        },
         {
             "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmNames')[copyIndex()],'/','dscextension')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmNames')[copyIndex()])]"
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
             ],
             "location": "[resourceGroup().location]",
             "copy": {
                 "name": "dsccopy",
-                "count": "[length(parameters('vmNames'))]"
+                "count": "[length(variables('vmNames'))]"
             },
             "properties": {
                 "publisher": "Microsoft.Powershell",
@@ -313,83 +261,11 @@
                 "typeHandlerVersion": "2.73",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/wwwFarmConfig.zip",
-                    "configurationFunction": "wwwFarmConfig.ps1\\wwwFarmConfig",
-                    "properties": {
-                        "webZipURI": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenges/Challenge7/web.zip"
-                    }
+                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-09/EnablePingConfig.zip",
+                    "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
                 },
                 "protectedSettings": {
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Network/loadBalancers",
-            "apiVersion": "2019-11-01",
-            "name": "[variables('lbName')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', variables('PIPName'))]"
-            ],
-            "sku": {
-                "name": "Basic"
-            },
-            "properties": {
-                "frontendIPConfigurations": [
-                    {
-                        "name": "LoadBalancerFrontEnd",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('PIPName'))]"
-                            },
-                            "privateIPAddressVersion": "IPv4"
-                        }
-                    }
-                ],
-                "backendAddressPools": [
-                    {
-                        "name": "bepool1"
-                    }
-                ],
-                "loadBalancingRules": [
-                    {
-                        "name": "lbhttp",
-                        "properties": {
-                            "frontendIPConfiguration": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/frontendIPConfigurations/LoadBalancerFrontEnd')]"
-                            },
-                            "frontendPort": 80,
-                            "backendPort": 80,
-                            "enableFloatingIP": false,
-                            "idleTimeoutInMinutes": 4,
-                            "protocol": "Tcp",
-                            "enableTcpReset": false,
-                            "loadDistribution": "Default",
-                            "backendAddressPool": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/backendAddressPools/bepool1')]"
-                            },
-                            "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('lbName')), '/probes/http80')]"
-                            }
-                        }
-                    }
-                ],
-                "probes": [
-                    {
-                        "name": "http80",
-                        "properties": {
-                            "protocol": "Tcp",
-                            "port": 80,
-                            "intervalInSeconds": 5,
-                            "numberOfProbes": 2
-                        }
-                    }
-                ],
-                "inboundNatRules": [
-                ],
-                "inboundNatPools": [
-                ]
             }
         }
     ],
