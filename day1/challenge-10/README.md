@@ -1,4 +1,4 @@
-# Challenge 7: Networking: Loadbalancing your WWW Server Farm
+# Challenge 10: Networking: Loadbalancing your WWW Server Farm
 
 ## Here is what you will learn ##
 

@@ -1,0 +1,474 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "ResourceGroupName": {
+            "type": "string",
+            "defaultValue": "rg-myAzureCost",
+            "metadata": {
+                "description": "Resource group to carry all artefacts"
+            }
+        },
+        "o_myAzureCostSmtpRecipient": {
+            "type": "string",
+            "metadata": {
+                "description": "The email address the consumption is sent to"
+            }
+        },
+        "o_myAzureCostSmtpSender": {
+            "type": "string",
+            "metadata": {
+                "description": "The senders O365 email address"
+            }
+        },
+        "o_myAzureCostSmtpSenderPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sender account password"
+            }
+        },
+        "o_myAzureCostSmtpServer": {
+            "type": "string",
+            "defaultValue": "smtp.office365.com",
+            "metadata": {
+                "description": "The sender's SMTP Server"
+            }
+        },
+        "o_myAzureCostSmtpServerSSLPort": {
+            "type": "string",
+            "defaultValue": "587",
+            "metadata": {
+                "description": "The sender's SMTP Server's SSL Port"
+            }
+        },
+        "o_baseTime": {
+            "type": "string",
+            "defaultValue": "[utcnow('yyyy-MM-dd T00:00:00')]"
+
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Resources/resourceGroups",
+            "name": "[parameters('ResourceGroupName')]",
+            "apiVersion": "2020-06-01",
+            "location": "westeurope",
+            "tags": {},
+            "properties": {
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "name": "myazurecost",
+            "apiVersion": "2020-06-01",
+            "resourceGroup": "[parameters('ResourceGroupName')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "expressionEvaluationOptions": {
+                    "scope": "Inner"
+                },
+                "parameters": {
+                    "rglocation": {
+                        "value": "westeurope"
+                    },
+                    "automationAccountPrefix": {
+                        "value": "aaazurecost"
+                    },
+                    "_artifactsLocation": {
+                        "value": "https://raw.githubusercontent.com/bfrankMS/myAzureCost/master/SetupArtefacts/"
+                    },
+                    "_artifactsLocationSasToken": {
+                        "value": ""
+                    },
+                    "AASku": {
+                        "value": "Free"
+                    },
+                    "ConsumptionStorageAccountNamePrefix": {
+                        "value": "azconsumption"
+                    },
+                    "myAzureCostSmtpRecipient": {
+                        "value": "[parameters('o_myAzureCostSmtpRecipient')]"
+                    },
+                    "myAzureCostSmtpSender": {
+                        "value": "[parameters('o_myAzureCostSmtpSender')]"
+                    },
+                    "myAzureCostSmtpSenderPassword": {
+                        "value": "[parameters('o_myAzureCostSmtpSenderPassword')]"
+                    },
+                    "myAzureCostSmtpServer": {
+                        "value": "[parameters('o_myAzureCostSmtpServer')]"
+                    },
+                    "myAzureCostSmtpServerSSLPort": {
+                        "value": "[parameters('o_myAzureCostSmtpServerSSLPort')]"
+                    },
+                    "baseTime": {
+                        "value": "[parameters('o_baseTime')]"
+                    },
+                    "myAzureCostCultureInfo": {
+                        "value": "de-DE"
+                    }
+                },
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "rglocation": {
+                            "type": "string"
+                        },
+                        "automationAccountPrefix": {
+                            "type": "string"
+                        },
+                        "_artifactsLocation": {
+                            "type": "string"
+                        },
+                        "_artifactsLocationSasToken": {
+                            "type": "securestring"
+                        },
+                        "AASku": {
+                            "type": "string"
+                        },
+                        "ConsumptionStorageAccountNamePrefix": {
+                            "type": "string"
+                        },
+                        "myAzureCostSmtpRecipient": {
+                            "type": "string"
+                        },
+                        "myAzureCostSmtpSender": {
+                            "type": "string"
+                        },
+                        "myAzureCostSmtpSenderPassword": {
+                            "type": "securestring"
+                        },
+                        "myAzureCostSmtpServer": {
+                            "type": "string"
+                        },
+                        "myAzureCostSmtpServerSSLPort": {
+                            "type": "string"
+                        },
+                        "baseTime": {
+                            "type": "string"
+                        },
+                        "myAzureCostCultureInfo": {
+                            "type": "string"
+                        }
+
+                    },
+                    "variables": {
+                        "myAzureCostStorageAccountName": "[concat(parameters('ConsumptionStorageAccountNamePrefix'),substring(uniqueString(resourceGroup().id),0,4))]",
+                        "myAzureCostSAContainer": "consumption",
+                        "myAzureCostSATable": "consumptiontable",
+                        "automationAccountName": "[concat(parameters('automationAccountPrefix'),substring(uniqueString(resourceGroup().id),0,4))]",
+                        "PrereqModule": {
+                            "name": "Az.Accounts",
+                            "url": "https://www.powershellgallery.com/api/v2/package/Az.Accounts/2.2.2"
+                        },
+                        "myAzureCostPriceSheetURI": "ToDo-upload-price-sheet-and-create-URI-with-SAS-and-place-it-here",
+                        "AAVariables": [
+                            {
+                                "name": "myAzureCostAzureSubscriptionId",
+                                "description": "Azure subscription Id",
+                                "value": "[concat('\"',subscription().subscriptionId,'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostStorageAccountName",
+                                "description": "The storage account used for storage of consumption .csv files",
+                                "value": "[concat('\"',variables('myAzureCostStorageAccountName'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostSAContainer",
+                                "description": "The container within the SA account used for storage of consumption .csv files",
+                                "value": "[concat('\"',variables('myAzureCostSAContainer'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostSATable",
+                                "description": "The culture info string e.g. 'de-DE' used for encoding .csv attached to email",
+                                "value": "[concat('\"',variables('myAzureCostSATable'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostPriceSheetURI",
+                                "description": "The SAS URI to the pricelist.csv file",
+                                "value": "[concat('\"',variables('myAzureCostPriceSheetURI'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostSmtpRecipient",
+                                "description": "The email address the consumption is sent to",
+                                "value": "[concat('\"',parameters('myAzureCostSmtpRecipient'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostSmtpServer",
+                                "description": "The sender's email server address",
+                                "value": "[concat('\"',parameters('myAzureCostSmtpServer'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostSmtpServerSSLPort",
+                                "description": "The sender's email server secure ssl port to connect to",
+                                "value": "[concat('\"',parameters('myAzureCostSmtpServerSSLPort'),'\"')]",
+                                "isEncrypted": false
+                            },
+                            {
+                                "name": "myAzureCostCultureInfo",
+                                "description": "The culture info string e.g. 'de-DE' used for encoding .csv attached to email",
+                                "value": "[concat('\"',parameters('myAzureCostCultureInfo'),'\"')]",
+                                "isEncrypted": false
+                            }
+                        ],
+                        "AA": {
+                            "runbooks": [
+                                {
+                                    "name": "RunBk_GetUsageAggregates",
+                                    "url": "[concat(parameters('_artifactsLocation'), '/RunBk_GetUsageAggregates.ps1', parameters('_artifactsLocationSasToken'))]",
+                                    "version": "1.0.0.0",
+                                    "type": "PowerShell",
+                                    "description": "Runbook to gather azure consumption of the day.",
+                                    "linkedToSchedule": "daily"
+                                },
+                                {
+                                    "name": "RunBk_CreateTable",
+                                    "url": "[concat(parameters('_artifactsLocation'), '/RunBk_CreateTable.ps1', parameters('_artifactsLocationSasToken'))]",
+                                    "version": "1.0.0.0",
+                                    "type": "PowerShell",
+                                    "description": "Runbook to create a table after the deployment.",
+                                    "linkedToSchedule": ""
+                                },
+                                {
+                                    "name": "RunBk_SendCostEmail",
+                                    "url": "[concat(parameters('_artifactsLocation'), '/RunBk_SendCostEmail.ps1', parameters('_artifactsLocationSasToken'))]",
+                                    "version": "1.0.0.0",
+                                    "type": "PowerShell",
+                                    "description": "Runbook to calculate costs and send them as email.",
+                                    "linkedToSchedule": "emaildaily"
+                                },
+                                {
+                                    "name": "RunBk_SendUsageEmail",
+                                    "url": "[concat(parameters('_artifactsLocation'), '/RunBk_SendUsageEmail.ps1', parameters('_artifactsLocationSasToken'))]",
+                                    "version": "1.0.0.0",
+                                    "type": "PowerShell",
+                                    "description": "Send consumption as .csv attached to an email.",
+                                    "linkedToSchedule": ""
+                                }
+                            ],
+                            "modules": [
+                                {
+                                    "name": "Az.Resources",
+                                    "url": "https://www.powershellgallery.com/api/v2/package/Az.Resources/3.1.0"
+                                },
+                                {
+                                    "name": "Az.Storage",
+                                    "url": "https://www.powershellgallery.com/api/v2/package/Az.Storage/3.1.0"
+                                },
+                                {
+                                    "name": "Az.Billing",
+                                    "url": "https://www.powershellgallery.com/api/v2/package/Az.Billing/2.0.0"
+                                },
+                                {
+                                    "name": "AzTable",
+                                    "url": "https://www.powershellgallery.com/api/v2/package/AzTable/2.0.3"
+                                }
+                            ],
+                            "schedules": [
+                                {
+                                    "name": "daily",
+                                    "startTime": "[dateTimeAdd(parameters('baseTime'),'P1DT8H30M')]",
+                                    "expiryTime": "9999-12-31T23:59:59.9999999+00:00",
+                                    "interval": 1,
+                                    "frequency": "Day",
+                                    "timeZone": "UTC"
+                                },
+                                {
+                                    "name": "emaildaily",
+                                    "startTime": "[dateTimeAdd(parameters('baseTime'),'P1DT8H58M')]",
+                                    "expiryTime": "9999-12-31T23:59:59.9999999+00:00",
+                                    "interval": 1,
+                                    "frequency": "Day",
+                                    "timeZone": "UTC"
+                                }
+                            ]
+                        }
+                    },
+                    "resources": [
+                        {
+                            "type": "Microsoft.Storage/storageAccounts",
+                            "apiVersion": "2019-04-01",
+                            "name": "[variables('myAzureCostStorageAccountName')]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/modules',variables('automationAccountName'), variables('PrereqModule').name)]"
+                            ],
+                            "sku": {
+                                "name": "Standard_LRS",
+                                "tier": "Standard"
+                            },
+                            "kind": "StorageV2",
+                            "properties": {
+                                "accessTier": "Hot"
+                            },
+                            "resources": [
+                                {
+                                    "name": "[concat('default/', variables('myAzureCostSAContainer'))]",
+                                    "type": "blobServices/containers",
+                                    "apiVersion": "2018-07-01",
+                                    "dependsOn": [
+                                        "[variables('myAzureCostStorageAccountName')]"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "[variables('automationAccountName')]",
+                            "type": "Microsoft.Automation/automationAccounts",
+                            "apiVersion": "2015-10-31",
+                            "location": "[resourceGroup().location]",
+                            "properties": {
+                                "sku": {
+                                    "name": "[parameters('AASku')]"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Automation/automationAccounts/credentials",
+                            "apiVersion": "2015-10-31",
+                            "name": "[concat(variables('automationAccountName'), '/myAzureCostSmtpSender')]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]"
+                            ],
+                            "properties": {
+                                "userName": "[parameters('myAzureCostSmtpSender')]",
+                                "password": "[parameters('myAzureCostSmtpSenderPassword')]"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Automation/automationAccounts/schedules",
+                            "apiVersion": "2015-10-31",
+                            "name": "[concat(variables('automationAccountName'), '/',variables('AA').schedules[copyIndex()].name)]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/', variables('automationAccountName'))]"
+                            ],
+                            "copy": {
+                                "name": "schedulescopy",
+                                "count": "[length(variables('AA').schedules)]"
+                            },
+                            "properties": {
+                                "startTime": "[variables('AA').schedules[copyIndex()].startTime]",
+                                "expiryTime": "[variables('AA').schedules[copyIndex()].expiryTime]",
+                                "interval": "[variables('AA').schedules[copyIndex()].interval]",
+                                "frequency": "[variables('AA').schedules[copyIndex()].frequency]",
+                                "timeZone": "[variables('AA').schedules[copyIndex()].timeZone]"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Automation/automationAccounts/jobSchedules",
+                            "apiVersion": "2015-10-31",
+                            "name": "[concat(variables('automationAccountName'), '/',guid(concat(string(copyIndex()),parameters('baseTime')),variables('automationAccountName')))]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts', variables('automationAccountName'))]",
+                                "runbooksLoop",
+                                "schedulescopy"
+                            ],
+                            "condition": "[not(empty(variables('AA').runbooks[copyIndex()].linkedToSchedule))]",
+                            "copy": {
+                                "name": "jobSchedules",
+                                "count": "[length(variables('AA').runbooks)]"
+                            },
+                            "properties": {
+                                "runbook": {
+                                    "name": "[variables('AA').runbooks[copyIndex()].name]"
+                                },
+                                "schedule": {
+                                    "name": "[variables('AA').runbooks[copyIndex()].linkedToSchedule]"
+                                }
+                            }
+                        },
+                        {
+                            "name": "[concat(variables('automationAccountName'), '/',variables('AAVariables')[copyIndex()].name)]",
+                            "type": "Microsoft.Automation/automationAccounts/variables",
+                            "apiVersion": "2015-10-31",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/', variables('automationAccountName'))]"
+                            ],
+                            "copy": {
+                                "name": "variablescopy",
+                                "count": "[length(variables('AAVariables'))]",
+                                "mode": "Serial"
+                            },
+                            "properties": {
+                                "description": "[variables('AAVariables')[copyIndex()].description]",
+                                "value": "[variables('AAVariables')[copyIndex()].value]",
+                                "isEncrypted": "[variables('AAVariables')[copyIndex()].isEncrypted]"
+                            }
+                        },
+                        {
+                            "apiVersion": "2015-10-31",
+                            "type": "Microsoft.Automation/automationAccounts/runbooks",
+                            "name": "[concat(variables('automationAccountName'), '/', variables('AA').runbooks[copyIndex()].Name)]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/', variables('automationAccountName'))]"
+                            ],
+                            "copy": {
+                                "name": "runbooksLoop",
+                                "count": "[length(variables('AA').runbooks)]"
+                            },
+                            "properties": {
+                                "description": "[variables('AA').runbooks[copyIndex()].description]",
+                                "runbookType": "[variables('AA').runbooks[copyIndex()].type]",
+                                "logProgress": false,
+                                "logVerbose": true,
+                                "publishContentLink": {
+                                    "uri": "[variables('AA').runbooks[copyIndex()].url]",
+                                    "version": "[variables('AA').runbooks[copyIndex()].version]"
+                                }
+                            }
+                        },
+                        {
+                            "apiVersion": "2015-10-31",
+                            "type": "Microsoft.Automation/automationAccounts/modules",
+                            "name": "[concat(variables('automationAccountName'), '/', variables('PrereqModule').name)]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/', variables('automationAccountName'))]"
+                            ],
+                            "properties": {
+                                "contentLink": {
+                                    "uri": "[variables('PrereqModule').url]"
+                                }
+                            }
+                        },
+                        {
+                            "apiVersion": "2015-10-31",
+                            "type": "Microsoft.Automation/automationAccounts/modules",
+                            "name": "[concat(variables('automationAccountName'), '/', variables('AA').modules[copyIndex()].Name)]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Automation/automationAccounts/', variables('automationAccountName'))]",
+                                "[resourceId('Microsoft.Storage/storageAccounts',variables('myAzureCostStorageAccountName'))]"
+                            ],
+                            "copy": {
+                                "name": "modulesLoop",
+                                "count": "[length(variables('AA').modules)]",
+                                "mode": "Serial"
+                            },
+                            "properties": {
+                                "contentLink": {
+                                    "uri": "[variables('AA').modules[copyIndex()].url]"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

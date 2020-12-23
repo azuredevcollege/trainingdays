@@ -1,4 +1,4 @@
-# Challenge 10: Networking: Distribute traffic accross global Azure regions for optimal latency and availability using Traffic Manager
+# Challenge 11: Networking: Distribute traffic accross global Azure regions for optimal latency and availability using Traffic Manager
 
 
 **[Traffic Manager](https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-overview)** uses DNS to load balance traffic to endpoints accross Azure regions. It can help you to:
