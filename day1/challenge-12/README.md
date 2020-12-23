@@ -120,8 +120,7 @@ Upload this to your storage account:
 
 **Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this file** (when you have done [challenge 6](../challenge-06/README.md) you know how to do this ;-))
 
-**Copy & paste the URI (with the SAS token)** into the AA variable 
-And your **AA variable 'myAzureCostPriceSheetURI' contains a URI to the pricesheet**:  
+**Copy & paste the URI (with the SAS token)** into the **AA variable 'myAzureCostPriceSheetURI'** so that runbooks can download the pricesheet**:  
 ```
 [Azure Portal] -> Resource Groups -> "rg-AzureCost" -> 'aaazurecost...' (Your Automation Account) -> Variables
 ```  
