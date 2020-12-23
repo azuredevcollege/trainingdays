@@ -109,7 +109,7 @@ Once completed you should have a new table in:
 >**Note**: **Price information for Azure resources** is accessible through the [**RateCard API**](https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/usage-rate-card-overview#azure-resource-ratecard-api-preview).  
 [optional] If you want to dig into some details go [here for a sample](https://github.com/bfrankMS/myAzureCost/tree/master/SetupChallenges/GenerateAPriceSheet)
 
-**I'll provide a sample price list for you**.  [day1\challenge-12\challengestart\Sample_PriceSheet_EN.csv](./day1/challenge-12/challengestart/Sample_PriceSheet_EN.csv)
+**I'll provide a sample price list for you**.  [day1\challenge-12\challengestart\Sample_PriceSheet_EN.csv](./challengestart/Sample_PriceSheet_EN.csv)
 
 Upload this to your storage account:
 ```
