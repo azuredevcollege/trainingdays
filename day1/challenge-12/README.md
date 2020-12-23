@@ -6,12 +6,12 @@ adapted from [MyAzure Cost](https://github.com/bfrankMS/myAzureCost) this will s
 - Get insights in your azure consumption for the day.  
   
 ## In your inbox you'll get a report each day of the usage and the costs:  
-| ![daily email](./pics/email.png) | ![cost report](./pics/CostsCSV.PNG) |
+| ![daily email](./pics/email.png) | ![cost report](./pics/CostsCSV.png) |
 |--|--|
 | your **daily cost email** looks similar to this | sample **cost report** (as .csv) |  
   
 It'll also contain e.g.
-| ![7days History](./pics/7DaysHistory.PNG)  | ![Costs Per Category](./pics/CostPerCategory.PNG) |
+| ![7days History](./pics/7DaysHistory.png)  | ![Costs Per Category](./pics/CostPerCategory.png) |
 |--|--|
 | **historic data** (using an Azure table) | Cost Per Category |
 
@@ -116,7 +116,7 @@ Upload this to your storage account:
 [Azure Portal] -> Resource Groups -> "rg-AzureCost" -> 'azconsumption...' (Your Storage Account) -> Containers -> 'consumption'
 ```
 
-![Pricelist on storage account](./pics/RateCardCSV.PNG)  
+![Pricelist on storage account](./pics/RateCardCSV.png)  
 
 **Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this file** (when you have done [challenge 6](../challenge-06/README.md) you know how to do this ;-))
 
@@ -124,7 +124,7 @@ Upload this to your storage account:
 ```
 [Azure Portal] -> Resource Groups -> "rg-AzureCost" -> 'aaazurecost...' (Your Automation Account) -> Variables
 ```  
-![pricelist URI in AA variables](./pics/RateCardCSVURI.PNG)  
+![pricelist URI in AA variables](./pics/RateCardCSVURI.png)  
 
 # Run a report
 Here you'll **kick off the runbooks to test your myAzureCost implementation**. You'll also might **want** to **link** the **runbook** to a **schedule** to receive a **daily report**.  
