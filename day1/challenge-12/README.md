@@ -118,9 +118,9 @@ Upload this to your storage account:
 
 ![Pricelist on storage account](./pics/RateCardCSV.PNG)  
 
-Generate a URI with a Read only SAS token for this file (when you have done challenge6 you should know how to do this.)
+**Generate a URI with a Read only SAS token for this file** (when you have done [challenge 6](../challenge-06/README.md) you know how to do this ;-))
 
-Copy & paste the URI into the AA variable 
+**Copy & paste the URI (with the SAS token)** into the AA variable 
 And your **AA variable 'myAzureCostPriceSheetURI' contains a URI to the pricesheet**:  
 ```
 [Azure Portal] -> Resource Groups -> "rg-AzureCost" -> 'aaazurecost...' (Your Automation Account) -> Variables
