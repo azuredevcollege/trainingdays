@@ -39,7 +39,7 @@ The infrastructure to store files is now ready. Let's create the local Azure Fun
 
 ### Create the local Function App
 
-Open a new Visual Studio Code window and switch to the Azure Tools Exentsion. In the section for "Functions", click on "Create New Project":
+Open a new Visual Studio Code window and switch to the Azure Tools Exentsion. In the section for "Functions", click on "Create New Project" and select a new, empty folder on your local machine:
 
 ![func_create](./img/function_create.png "func_create")
 
@@ -68,6 +68,8 @@ When everything is setup in VS Code, let's test the function.
 Open _BlobTriggerCSharp.cs_ file and set a breakpoint in the "_Run_" method.
 
 Start the Azure Function by hitting **F5**.
+
+> **Info**: If you get a message that the core function tools are required, install them by executing `npm i -g azure-functions-core-tools@3 --unsafe-perm true`. If you still see an error, it's likely that remote-signed Powerhell scripts aren't allowed on your machine. To fix that, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned` in a Powershell environment (as admin!).
 
 The debug console should print logs like that:
 
@@ -162,12 +164,12 @@ Go to the Azure Tools Extension and click on the "Deploy to Azure..." button in 
 
 Choose the following options, when asked:
 
+- Runtime: .NET Core 3.1
 - OS: Windows
 - Hosting Plan: Consumption
-- Runtime: .NET
-- You can skip the creation of an Application Insights instance
 - resource groupe: **serverless-rg**
 - when asked, select the same storage account used in the local sample
+- You can skip the creation of an Application Insights instance (--> "Skip for now")
 
 We still have to configure our Functions App, to be able to listen to blob changes in the Storage Account (BlobTrigger information). Therefore, got to the Portal and open the Functions App you previously created.
 Open the Application settings under **Configuration** and add a new application setting (**you can check your _local.settings.json_ file for the correct values!**):
