@@ -9,6 +9,8 @@
 
 ## Create an Azure Web App
 
+You have two options to create a web app - use either the Azure Portal or the Azure Command Line Interface. You can also work with both, just make sure to use different names when creating the web app the second time!
+
 ### Option 1: Azure Portal
 
 To create an Azure Web App, go to the Azure Portal and click on **"Create a resource"**, in the next view choose **"Web App"**.
@@ -248,7 +250,11 @@ Now, we are all set to add a sample application.
 
 We will use a .NET Core MVC application to demonstrate the deployment process to an Azure Web App. So first, let's create a demo application.
 
-Create a local folder called _devcollege_ and open it in the comannd line. CD into that folder and execute:
+Create a local folder called _devcollege_ and open it in the comannd line.
+
+ `cd` into that folder and execute:
+
+> **One more thing**: If you have installed the latest SDK version, e.g. "5.0.1", run the command `dotnet new globaljson --sdk-version 3.1.404` in the `devcollege` folder to pin the dotnet version to the LTS one! Any `dotnet` command run in any folder in the tree will use version '3.1.404' now.
 
 ```shell
 $ dotnet new mvc -o myFirstCoreApp
@@ -265,7 +271,7 @@ Restore succeeded.
 
 ### Visual Studio Code
 
-After the wizard has finished, cd into the new folder _myFirstCoreApp_ and open it in VS Code:
+After the wizard has finished, `cd` into the new folder _myFirstCoreApp_ and open it in VS Code:
 
 ```shell
 $ code .
@@ -305,7 +311,7 @@ Run it again locally and check, if the changes appear.
 
 ## Deploy the sample app to Azure
 
-Now let's deploy the webapp to Azure.
+Now let's deploy the webapp to Azure. Therefor, open the "Azure Extension" on the left side of Visual Studio Code.
 
 If you haven't done so far, add the Azure App Service Extension (see: [Challenge 0 - Setup your system](./challenge-0.md))
 
@@ -321,11 +327,11 @@ After a few seconds the browser will show you your first web app running in Azur
 
 ![browser-webapp](./img/browser_webappdevcollege.png "browser-webapp")
 
-## Working with Deployment Slots
+## Working with Deployment Slots (OPTIONAL - but recommended)
 
 Open your web app in the portal and go to "Deployment Slots".
 
-Create a new slot called "Staging" (choose clone settings from your production slot).
+Create a new slot called "Staging" (choose "clone settings" from your production slot).
 
 ![portal-staging](./img/portal_staging.png "portal-staging")
 
@@ -345,7 +351,7 @@ Your current application will now be deployed to your "Staging" slot.
 
 ### Show Staging application
 
-To see your staging slot in action, go to the slot in the portal and copy the URL in the overview blade.
+To see your staging slot in action, go to the deployment slot in the portal and copy the URL in the overview blade.
 
 ![portal-slot-overview](./img/portal_slotoverview.png "portal-slot-overview")
 
