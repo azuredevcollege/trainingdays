@@ -48,9 +48,10 @@ Follow the wizard and when asked, enter the following information (only importan
   - Function App name: choose a globally unique name
   - Publish: _Code_
   - Runtime Stack: _.NET Core_
+  - Version: _3.1_
   - Region: _West Europe_
 - Hosting Tab
-  - Storage Account: choose the one you created above
+  - Storage Account: choose the one you created before in this challenge
   - Operating System: _Windows_
   - Plan Type: _Consumption_
 - Monitoring
@@ -62,7 +63,7 @@ When the Function has been created, we need to add a few **Configuration setting
 
 Please open the Azure Function and switch to the **Configuration** view.
 
-Add the following Configuration settings:
+Add the following Configuration settings (_you should open the portal in a second tab in your browser, because you need to switch back and forth copying values from different locations_):
 
 | Name                                                    | Value / Hints                                                                      |
 | ------------------------------------------------------- | ---------------------------------------------------------------------------------- |
