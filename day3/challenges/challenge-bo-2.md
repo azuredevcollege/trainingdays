@@ -45,8 +45,9 @@ Create the Azure Function App in West Europe with the following parameters.
 | Resource Group   | Create a new resource group, e.g. **scm-breakout-tuxfunc-rg**      |
 | Publish          | _Code_                                                             |
 | Runtime Stack    | _Node.js_                                                          |
+| Version    | _12 LTS_                                                          |
 | Region           | _West Europe_                                                      |
-| Storage Account  | use the Storage Account you created in the breakout resource group |
+| Storage Account  | use the Storage Account you created in the breakout resource group (or you can also create a new one) |
 | Operating System | _Linux_                                                            |
 | Plan Type        | _Consumption_                                                      |
 
@@ -54,7 +55,7 @@ Create it and when the Function App has been deployed, go to the Configuration s
 
 | Name                        | Value / Hint                                                                                                                                                                                                                                     |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ServiceBusConnectionString  | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br>**Important**: Please remove the entitypath variable (incl. the value) at the end of the connection string! |
+| ServiceBusConnectionString  | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
 | COSMOSDB                    | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                           |
 | COSMOSKEY                   | Primary Key of your Cosmos DB                                                                                                                                                                                                                    |
 | TA_SUBSCRIPTION_KEY         | the Azure Cognitive Services **subscription key**. Obtain it from the _Keys and Endpoint_ view under _Resource Management_ of your Cognitive Services account                                                                                    |

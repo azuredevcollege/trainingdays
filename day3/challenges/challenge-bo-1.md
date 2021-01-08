@@ -29,7 +29,7 @@ Create a new Azure SQL DB either via the Azure Portal or Azure CLI.
 Database Properties:
 
 - use your existing resource group: **scm-breakout-rg**
-- SKU: Basic
+- Compute + storage: choose the _Basic_ tier
 - Location: _West Europe_
 - Create a new server in _West Europe_
 - Networking Tab: _Connectivity => Public_ and **Allow Azure services and resources to access this server** is set to **YES**.
@@ -45,20 +45,22 @@ Create a new Azure Cosmos Account either via the Azure Portal or Azure CLI. BTW:
 Account Properties:
 
 - use your existing resource group: **scm-breakout-rg**
-- Location: _West Europe_
 - API: _Core SQL_
+- Location: _West Europe_
+- Capacity mode (**OPTIONAL**): if you want to, you can choose _Serverless_ which is your "goto"-tier for development environments (find out more here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>)
+
 
 Leave all other settings as proposed by Azure.
 
 ![bo_data_cosmos](./img/bo_data_cosmos.png "bo_data_cosmos")
 
-When the deployment has finished, create a new _Database_ and _Container_ for the Visis Reports microservice.
+When the deployment has finished (creating the account takes some time - you can grab a coffee), create a new _Database_ and _Container_ under "Data Explorer" in the portal for the Visis Reports microservice.
 
 Database Properties:
 
 - Database ID: _scmvisitreports_
-- Provision Database Throughput: _true_
-- RU/s: _Manual / 400_
+- Provision Database Throughput: _true_ (not neccessary, if you chose to enable _Serverless_ mode)
+- RU/s: _Manual / 400_ (not neccessary, if you chose to enable _Serverless_ mode)
 
 Container Properties:
 
@@ -66,9 +68,9 @@ Container Properties:
 - Container ID: _visitreports_
 - Partition: _/type_
 
-### Azure Search
+### Azure Cognitive Search
 
-Create a new Azure Search Account either via the Azure Portal or Azure CLI.
+Create a new Azure Cognitive Search Account either via the Azure Portal or Azure CLI.
 
 Account Properties:
 
@@ -181,9 +183,9 @@ Because we refactored the Contacts and Resources APIs to use Azure Service Bus f
 
 ### Alter App Configuration/Settings
 
-We will **reuse the Web Apps for Contacts and Resource**s as well as the Azure Function for image manipulation we created yesterday. So, first we will adjust the App Configuration for each of the services.
+We will **reuse the Web Apps for Contacts and Resources** as well as the Azure Function for image manipulation we created yesterday. So, first we will adjust the App Configuration for each of the services.
 
-> Use a second window to be able to switch back and forth.
+> Use a second window/tab to be able to switch back and forth.
 
 Azure Web App for **Contacts Service**:
 
@@ -281,9 +283,10 @@ Create the Azure function in the **scm-breakout-rg** resource group with the fol
 
 | Name            | Value / Hint                                                       |
 | --------------- | ------------------------------------------------------------------ |
-| Region          | _West Europe_                                                      |
 | Publish         | _Code_                                                             |
 | Runtime         | _.NET Core_                                                        |
+| Version         | _3.1_                                                        |
+| Region          | _West Europe_                                                      |
 | OS              | _Windows_                                                          |
 | Storage Account | Use the storage account you created in the breakout resource group |
 | Plan Type       | _Consumption_                                                      |
@@ -295,7 +298,7 @@ When finished, apply these settings to the App Configuration settings:
 | ContactIndexerOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                                                                                                                                              |
 | ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                        |
 | ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                |
-| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **scmtopic**) for listening for messages - **scmtopiclisten**. <br><br>**Important**: Please remove the entitypath variable (incl. the value) at the end of the connection string! |
+| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **scmtopic**) for listening for messages - **scmtopiclisten**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
 | FUNCTIONS_EXTENSION_VERSION          | ~3                                                                                                                                                                                                                                                                   |
 
 <hr>
