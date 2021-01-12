@@ -30,7 +30,7 @@ Now add a Cosmos DB account:
 - Notebooks: *Off*  
 - Location: *westeurope*
 - Capacity mode: *Provisioned throughput*
-- Apply Free Tier Account: *Apply*
+- Apply Free Tier Account: *Do Not Apply*
 - Account Type: *Non-Production*
 - Geo-Redundancy: *Disable*
 - Multi-region Writes: *Enable*
