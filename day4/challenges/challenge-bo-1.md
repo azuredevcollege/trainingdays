@@ -3,7 +3,7 @@
 ## Here is what you will learn
 Deploy the sample application to Azure.
 
-In [challenge-3](./challenge-3.md) and [challenge-4](./challenge-4.md) you have learned how to create a CI/CD Pipeline to continuously and consistently deploy services to Azure.
+In [challenge-3](./challenge-3.md), [challenge-4](./challenge-4.md) and [challenge-5](./challenge-5.md) you have learned how to create a CI/CD Pipeline to continuously and consistently deploy services to Azure.
 You have learned how to use PullRequests, validation builds and how you track your work with Azure Boards. You may have noticed that there is still some work left to do until the sample application is deployed to your Develeopment and Testing stage.
 
 In this Break Out Session we want you to deploy the remaining Microservices to your stages:
@@ -11,9 +11,8 @@ In this Break Out Session we want you to deploy the remaining Microservices to y
 - SCM Search API
 - SCM Visitreports API
 - SCM Textanalytics
-- SCM Frontend
 
-As in [challenge-4](./challenge-4.md) we will always perform the following steps for each service:
+As in [challenge-4](./challenge-4.md) and [challenge-5](./challenge-5.md) we will always perform the following steps for each service:
 1. Set the corresponding UserStories to active
 2. Create a new feature branch and check it out
 3. Create the CI Build definition and validate it
@@ -22,7 +21,8 @@ As in [challenge-4](./challenge-4.md) we will always perform the following steps
 6. Merge the feature branch into the master branch
 7. Update your master branch's policies to trigger the PR Build to validate a PullRequest
 8. Test the build flow
-9. Complete the UserStories
+9. Update the SCM-Frontend-CD Release Pipeline, set the missing service endpoint in the variable section and run the pipeline
+10. Complete the UserStories
 
 
 ## SCM Resource API
@@ -89,6 +89,8 @@ CD Build variables stage *Testing*:
    |ApplicationInsightsName|your ApplicationInsights instance name of stage Testing|Testing| applicationInsightsName |
    |ServiceBusNamespaceName|your ServiceBus namespace name of stage Testing|Testing| serviceBusNamespaceName|
 
+CI Build yaml:
+
 ```yaml
 pr: none
 trigger:
@@ -146,6 +148,12 @@ jobs:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
         artifactName: drop
+```
+
+ARM Template override parameters:
+
+``` Shell
+-webAppName $(ApiAppName) -sku $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(ResizerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName)
 ```
 
 ## SCM Search API
@@ -220,6 +228,7 @@ CD Build variables stage *Testing*:
    |AzureSearchReplicaCount|1|Testing|azureSearchReplicaCount|
    |AzureSearchPartitionCount|1|Testing|azureSearchPartitionCount|
 
+CI Build yaml:
 ```yaml
 pr: none
 trigger:
@@ -277,6 +286,11 @@ jobs:
       inputs:
         targetPath: $(Build.ArtifactStagingDirectory)
         artifactName: drop
+```
+
+ARM Template override parameters:
+```Shell
+-webAppName $(ApiAppName) -appPlanSKU $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(IndexerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName) -azureSearchServiceName $(AzureSearchServiceName) -azureSearchSKU $(AzureSearchSKU) -azureSearchReplicaCount $(AzureSearchReplicaCount) -azureSearchPartitionCount $(AzureSearchPartitionCount) -
 ```
 
 ## SCM Visitreports API
@@ -366,6 +380,8 @@ that you apply the ARM Template __scm-visitreport-nodejs-infra.json__ to Resourc
 
 **Hint:** to build a NodeJs application you have to install NodeJs on your build agent first. After the installation you can run a bash script that executes *npm install* in your project folder. Next, you can create a zip file and copy it to the artifacts staging directory to publish it in the next step.
 
+CI Build yaml:
+
 ```yaml
 pr: none
 trigger:
@@ -409,6 +425,16 @@ steps:
       artifactName: drop
 
 ```
+
+ARM Template override parameters:
+- scm-visitreport-nodejs-db.json
+  ```Shell
+  -cosmosDbAccount $(CosmosDbAccount) -cosmosDatabaseName $(CosmosDatabaseName) -cosmosDatabaseContainerName $(CosmosDatabaseContainerName)
+  ```
+- scm-visitreport-nodejs-infra.json:
+  ```Shell
+  -sku $(AppServicePlanSKU) -skuCode $(AppServicePlanSKUCode) -webAppName $(ApiAppName) -applicationInsightsName $(ApplicationInsightsName) -cosmosDbAccount $(CosmosDbAccount) -serviceBusNamespaceName $(ServiceBusNamespaceName) -commonResGroup $(ResourceGroupName)
+  ```
 
 Make sure that your AppService deployment task is configured as follows:
 
@@ -498,6 +524,7 @@ that you apply the ARM Template __scm-textanalytics-nodejs-infra.json__ to Resou
 
 **Hints:** To build SCM Textanalytics we need to use NodeJs version 10.x.
 
+CI Build yaml:
 ```yaml
 pr: none
 trigger:
@@ -541,114 +568,19 @@ steps:
       artifactName: drop
 ```
 
+ARM Template override parameters:
+- scm-textanalytics-nodejs-common.json
+  ```Shell
+  -taname $(TextAnalyticsName) -tatier $(TextAnalyticsTier) -storageAccountName $(StorageAccountName)
+  ```
+- scm-textanalytics-nodejs-infra.json
+  ```Shell
+  -functionAppName $(FunctionAppName) -storageAccountName $(StorageAccountName) -taname $(TextAnalyticsName) -applicationInsightsName $(ApplicationInsightsName) -cosmosDbAccount $(CosmosDbAccount) -serviceBusNamespaceName $(ServiceBusNamespaceName) -commonResGroup $(ResourceGroupName)
+  ```
+
 Make sure that your AppService deployment task is configured as follows:
 
 ![App Service Deployment Task](./images/textanalytics-deployment-task.png)
-
-## SCM Frontend
-
-Corresponding UserStories: __S14__ and __S15__
-
-Feature branch: __features/scmfrontendcicd__
-
-Projects to build: __apps/frontend/scmfe__
-
-Project runtime: __NodeJs__
-
-ARM Templates: __apps/infrastructure/templates/scm-fe.json__
-
-Build trigger path filters: 
-- day4/apps/frontend/*
-- day4/apps/infrastructure/templates/scm-fe.json
-  
-CI Build name: __SCM-Frontend-CI__
-
-PR Build name: __SCM-Frontend-PR__
-
-CD Build name: __SCM-Frontend-CD__
-
-CD Build agent runs on: Latest Ubuntu version
-
-CD Build variables stage *Development*:
-
-   | Variable | Value | Scope | ARM Template Parameter |
-   |----------|-------|-------|------------------------|
-   |ResourceGroupName | ADC-DAY4-SCM-DEV | Development | |
-   |Location| westeurope|Development| |
-   |StorageAccountName|__'prefix'__ day4scmfedev|Development| storageAccountName |
-   |ApplicationInsightsName|your ApplicationInsights instance name of stage Development|Development||
-   |ContactsEndpoint|the https endpoint of the SCM Contacts API in your Development stage|Development||
-   |ResourcesEndpoint|the https endpoint of the SCM Resources API in your Development stage|Development||
-   |SearchEndpoint|the https endpoint of the SCM Search API in your Development stage|Development||
-   |ReportsEndpoint|the https endpoint of the SCM Visitreports API in your Development stage|Development||
-
-CD Build variables stage *testing*:
-
-   | Variable | Value | Scope | ARM Template Parameter |
-   |----------|-------|-------|------------------------|
-   |ResourceGroupName | ADC-DAY4-SCM-TEST | Testing | |
-   |Location| westeurope|Testing| |
-   |StorageAccountName|__'prefix'__ day4scmfetest|Testing| storageAccountName |
-   |ApplicationInsightsName|your ApplicationInsights instance name of stage Testing|Testing||
-   |ContactsEndpoint|the https endpoint of the SCM Contacts API in your Testing stage|Testing||
-   |ResourcesEndpoint|the https endpoint of the SCM Resources API in your Testing stage|Testing||
-   |SearchEndpoint|the https endpoint of the SCM Search API in your Testing stage|Testing||
-   |ReportsEndpoint|the https endpoint of the SCM Visitreports API in your Testing stage|Testing||
-
-
-**Hints:** To build the SCM Frontend VueJs Single Page Application use the build steps as follows:
-
-```yaml
-pr: none
-trigger:
-  branches:
-    include:
-      - master
-  paths:
-    include:
-      - day4/apps/frontend/*
-      - day4/apps/infrastructure/templates/scm-fe.json
-steps:
-  - task: Npm@1
-    inputs:
-      command: "install"
-      workingDir: "day4/apps/frontend/scmfe"
-  - task: Npm@1
-    inputs:
-      command: "custom"
-      workingDir: "day4/apps/frontend/scmfe"
-      customCommand: "run build"
-  - task: CopyFiles@2
-    inputs:
-      SourceFolder: "day4/apps/frontend/scmfe/dist"
-      Contents: "**"
-      TargetFolder: "$(Build.ArtifactStagingDirectory)/dist"
-  - task: CopyFiles@2
-    inputs:
-      sourceFolder: day4/apps/infrastructure/templates
-      contents: |
-        scm-fe.json
-      targetFolder: $(Build.ArtifactStagingDirectory)/templates
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: $(Build.ArtifactStagingDirectory)
-      artifactName: drop
-```
-
-**Hints:** To deploy the SCM Frontend Single Page Application to a staging environment we need to set the endpoints of the APIs and the InstrumentationKey of ApplicationInsights. As we deploy the Single Application to a StorageAccount we need to enable the static website hosting for the StorageAccount. Use the following Azure CLI tasks before the application is deployed to the StorageAccount and after the ResourceGroup deployment task:
-
-1. Azure CLI task "Enable static website hosting" inline script:
-   ```shell
-   az storage blob service-properties update --account-name $(StorageAccountName) --static-website  --index-document index.html --404-document index.html
-   ```
-2. Azure CLI task "Configure SPA settings" inline script:
-   ```shell
-   echo "var uisettings = { \"enableStats\": true, \"endpoint\": \"$(ContactsEndpoint)\", \"resourcesEndpoint\": \"$(ResourcesEndpoint)\", \"searchEndpoint\": \"$(SearchEndpoint)\", \"reportsEndpoint\": \"$(ReportsEndpoint)\", \"aiKey\": \"`az resource show -g $(ResourceGroupName) -n $(ApplicationInsightsName) --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(System.ArtifactsDirectory)/_SCM-Frontend-CI/drop/dist/settings/settings.js
-   ```
-3. Azure CLI task "Copy SPA to StorageAccount" inline script:
-   ```shell
-   az storage blob upload-batch -d '$web' --account-name $(StorageAccountName) -s $(System.ArtifactsDirectory)/_SCM-Frontend-CI/drop/dist
-   ```
 
 ## Test the application
 
