@@ -41,7 +41,7 @@ Use the following parameter for the `Testing` stage:
 |UI-APP-NAME|scmfe-test|
 |UI-APP-REPLY-URL|the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`))|
 
-Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrstructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
+Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
 
 __Note:__ Please note down the `UI AppId` and `API AppId` from the output after each run!
 
@@ -88,7 +88,7 @@ Use the following parameter for the `Testing` stage:
 |UiAppName|scmfe-test|
 |UiAppReplyUrl|the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`))|
 
-Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrstructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
+Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
 
 __Note:__ Please note down the `UiAppId` and `ApiAppId` from the output after each run!
 
