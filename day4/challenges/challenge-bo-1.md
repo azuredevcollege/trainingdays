@@ -440,16 +440,6 @@ Make sure that your AppService deployment task is configured as follows:
 
 ![AppService Deployment Task](./images/visitreports-deployment-task.png)
 
-ARM Template parameter overrides:
-- scm-visitreport-nodejs-db.json
-  ```Shell
-  -cosmosDbAccount $(CosmosDbAccount) -cosmosDatabaseName $(CosmosDatabaseName) -cosmosDatabaseContainerName $(CosmosDatabaseContainerName)
-  ```
-- scm-visitreport-nodejs-infra.json:
-  ```Shell
-  -sku $(AppServicePlanSKU) -skuCode $(AppServicePlanSKUCode) -webAppName $(ApiAppName) -applicationInsightsName $(ApplicationInsightsName) -cosmosDbAccount $(CosmosDbAccount) -serviceBusNamespaceName $(ServiceBusNamespaceName) -commonResGroup $(ResourceGroupName)
-  ```
-
 ## SCM Textanalytics
 
 Corresponding UserStories: __S12__ and __S13__
