@@ -150,7 +150,7 @@ jobs:
         artifactName: drop
 ```
 
-ARM Template parameter overrides:
+ARM Template override parameters:
 
 ``` Shell
 -webAppName $(ApiAppName) -sku $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(ResizerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName)
@@ -288,7 +288,7 @@ jobs:
         artifactName: drop
 ```
 
-ARM Template parameter overrides:
+ARM Template override parameters:
 ```Shell
 -webAppName $(ApiAppName) -appPlanSKU $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(IndexerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName) -azureSearchServiceName $(AzureSearchServiceName) -azureSearchSKU $(AzureSearchSKU) -azureSearchReplicaCount $(AzureSearchReplicaCount) -azureSearchPartitionCount $(AzureSearchPartitionCount) -
 ```
@@ -426,7 +426,7 @@ steps:
 
 ```
 
-ARM Template parameter overrides:
+ARM Template override parameters:
 - scm-visitreport-nodejs-db.json
   ```Shell
   -cosmosDbAccount $(CosmosDbAccount) -cosmosDatabaseName $(CosmosDatabaseName) -cosmosDatabaseContainerName $(CosmosDatabaseContainerName)
@@ -568,7 +568,7 @@ steps:
       artifactName: drop
 ```
 
-ARM Template parameter overrides:
+ARM Template override parameters:
 - scm-textanalytics-nodejs-common.json
   ```Shell
   -taname $(TextAnalyticsName) -tatier $(TextAnalyticsTier) -storageAccountName $(StorageAccountName)
