@@ -325,6 +325,3 @@ az group delete -n basicarm-rg --no-wait --yes
 az group delete -n rg-MyFirstARM
 
 ```
-
-# After Word
-Of course
