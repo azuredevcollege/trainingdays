@@ -194,7 +194,7 @@ Now it's time to see the whole build flow in action.
 
 1. Checkout the master branch and pull the latest changes
 2. Create and checkout a new feature branch _features/scmfrontendflow_
-3. Open the file [day4/apps/frontend/scmfe/src/components/home/vue.js](../apps/frontend/scmfe/src/components/home/vue.js) and change the name the _Welcome_ text in line 13:
+3. Open the file [day4/apps/frontend/scmfe/src/components/home/Home.vue](../apps/frontend/scmfe/src/components/home/Home.vue) and change the name the _Welcome_ text in line 13:
    ```HTML
    <h1 class="display-2 font-weight-bold mb-3">Welcome to My SCM Contacts App</h1>
    ```
