@@ -30,97 +30,6 @@ We don't need to create additional Azure AD applications for the remaining servi
 
 **Note:** Be carefull that you don't confuse the IDs of the stage `Development` and `Testing`.
 
-## SCM Resource API
-
-Feature branch: __features/scmresourcesaad__
-
-Build definition yaml: __scm-resources-ci.yaml__
-
-Release defintion: __SCM-Resources-CD__
-
-CD Build variables for stage __Development__:
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadInstance|https://login.microsoftonline.com|aadInstance|Development|
-|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application|aadClientId|Development|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
-|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Development|
-|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
-
-CD Build variables for stage __Testing__
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadInstance|https://login.microsoftonline.com|aadInstance|Testing|
-|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application for stage Testing|aadClientId|Testing|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
-|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Testing|
-|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
-
-## SCM Search API
-
-Feature branch: __features/scmsearchaad__
-
-Build definition yaml: __scm-search-ci.yaml__
-
-Release definition: __SCM-Search-CD__
-
-CD Build variables for stage __Development__:
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadInstance|https://login.microsoftonline.com|aadInstance|Development|
-|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application|aadClientId|Development|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
-|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Development|
-|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
-
-CD Build variables for stage __Testing__
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadInstance|https://login.microsoftonline.com|aadInstance|Testing|
-|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application for stage Testing|aadClientId|Testing|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
-|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Testing|
-|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
-
-## SCM VisitReports API
-
-Feature branch: __features/scmvisitreportsaad__
-
-Build definition yaml: __scm-visitreports-ci.yaml__
-
-Release definition: __SCM-VisitReports-CD__
-
-CD Build variables for stage __Development__:
-
-**Note:** You only need to adjust the deployment task that uses the ARM template __scm-visitreport-nodejs-infra.json__
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
-|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
-
-CD Build variables for stage __Testing__
-
-|Name|Value|ARM Template parameter| Stage |
-|----|-----|----------------------|-------|
-|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
-|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
-
-
-## SCM Textanalytics
-
-Feature branch: __features/scmtextanalyticsaad__
-
-Build definition yaml: __scm-textanalytics-ci.yaml__
-
-Release definition: __SCM-TextAnalytics-CD__
-
-**Note:** As the service SCM TextAnalytics does not offer an accessible API there is no need to adjust the Release build. We only need to adjust the build definition, create a new build and deploy it to Azure.
-
 ## SCM Frontend
 
 Feature branch: __features/scmfrontendaad__
@@ -154,6 +63,112 @@ echo "var uisettings = { \"tenantId\": \"$(AadTenantId)\", \"audience\": \"$(Aad
 > variable replacement should already be in place.
 
 Make sure that you copy the whole line!
+
+## SCM Resource API
+
+Feature branch: __features/scmresourcesaad__
+
+Build definition yaml: __scm-resources-ci.yaml__
+
+Release defintion: __SCM-Resources-CD__
+
+CD Build variables for stage __Development__:
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadInstance|https://login.microsoftonline.com|aadInstance|Development|
+|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application|aadClientId|Development|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
+|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Development|
+|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
+
+CD Build variables for stage __Testing__
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadInstance|https://login.microsoftonline.com|aadInstance|Testing|
+|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application for stage Testing|aadClientId|Testing|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
+|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Testing|
+|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
+
+ARM Template override template parameters:
+```
+-webAppName $(ApiAppName) -sku $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(ResizerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName) -aadInstance $(AadInstance) -aadClientId $(AadClientId) -aadTenantId $(AadTenantId) -aadDomain $(AadDomain) -aadClientIdUri $(AadClientIdUri)
+```
+
+## SCM Search API
+
+Feature branch: __features/scmsearchaad__
+
+Build definition yaml: __scm-search-ci.yaml__
+
+Release definition: __SCM-Search-CD__
+
+CD Build variables for stage __Development__:
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadInstance|https://login.microsoftonline.com|aadInstance|Development|
+|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application|aadClientId|Development|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
+|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Development|
+|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
+
+CD Build variables for stage __Testing__
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadInstance|https://login.microsoftonline.com|aadInstance|Testing|
+|AadClientId|API AppId, the value that you received from the output when you created the Azure AD application for stage Testing|aadClientId|Testing|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
+|AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Testing|
+|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
+
+ARM Template overrides template parameters:
+```Shell
+-webAppName $(ApiAppName) -appPlanSKU $(AppServicePlanSKU) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -storageAccountName $(StorageAccountName) -functionAppName $(IndexerFunctionName) -applicationInsightsName $(ApplicationInsightsName) -serviceBusNamespaceName $(ServiceBusNamespaceName) -azureSearchServiceName $(AzureSearchServiceName) -azureSearchSKU $(AzureSearchSKU) -azureSearchReplicaCount $(AzureSearchReplicaCount) -azureSearchPartitionCount $(AzureSearchPartitionCount) -aadInstance $(AadInstance) -aadClientId $(AadClientId) -aadTenantId $(AadTenantId) -aadDomain $(AadDomain) -aadClientIdUri $(AadClientIdUri)
+```
+
+## SCM VisitReports API
+
+Feature branch: __features/scmvisitreportsaad__
+
+Build definition yaml: __scm-visitreports-ci.yaml__
+
+Release definition: __SCM-VisitReports-CD__
+
+CD Build variables for stage __Development__:
+
+**Note:** You only need to adjust the deployment task that uses the ARM template __scm-visitreport-nodejs-infra.json__
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Development|
+|AadClientIdUri|http://scmapi-dev|aadClientIdUri|Development|
+
+CD Build variables for stage __Testing__
+
+|Name|Value|ARM Template parameter| Stage |
+|----|-----|----------------------|-------|
+|AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
+|AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
+
+ARM Template overrides template parameters for __scm-visitreport-nodejs-infra.json__
+```Shell
+-sku $(AppServicePlanSKU) -skuCode $(AppServicePlanSKUCode) -webAppName $(ApiAppName) -applicationInsightsName $(ApplicationInsightsName) -cosmosDbAccount $(CosmosDbAccount) -serviceBusNamespaceName $(ServiceBusNamespaceName) -commonResGroup $(ResourceGroupName) -aadTenantId $(AadTenantId) -aadClientIdUri $(AadClientIdUri)
+```
+
+## SCM Textanalytics
+
+Feature branch: __features/scmtextanalyticsaad__
+
+Build definition yaml: __scm-textanalytics-ci.yaml__
+
+Release definition: __SCM-TextAnalytics-CD__
+
+**Note:** As the service SCM TextAnalytics does not offer an accessible API there is no need to adjust the Release build. We only need to adjust the build definition, create a new build and deploy it to Azure.
+
 
 ## Wrap up
 
