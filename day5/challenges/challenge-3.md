@@ -32,7 +32,7 @@ Please use the following parameters to run the script for the `Development` stag
 |UI-APP-NAME|scmfe-dev|
 |UI-APP-REPLY-URL|the url of your SCM Frontend deployment of stage `Development` (This is the Url to the static website e.g. `https://scmfedev.z20.web.core.windows.net`)|
 
-Use the following parameter for the *Testing* stage:
+Use the following parameter for the `Testing` stage:
 
 |Parameter|Value|
 |---------|-----|
@@ -41,12 +41,12 @@ Use the following parameter for the *Testing* stage:
 |UI-APP-NAME|scmfe-test|
 |UI-APP-REPLY-URL|the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`))|
 
-Navigate to the directory that contains the oauth2-permissions.json file and run the script twice.
+Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
 
 __Note:__ Please note down the `UI AppId` and `API AppId` from the output after each run!
 
 ```
-scripts> ./aad-integration.sh <API-APP-NAME> <API-APP-URI> <UI-APP-NAME> <UI-APP-REPLY-URL>
+/scripts> ./aad-integration.sh <API-APP-NAME> <API-APP-URI> <UI-APP-NAME> <UI-APP-REPLY-URL>
 ```
 
 The output:
@@ -79,7 +79,7 @@ Please use the following parameters to run the script for the `Development` stag
 |UiAppName|scmfe-dev|
 |UiAppReplyUrl|the url of your SCM Frontend deployment of stage `Development` (This is the Url to the static website e.g. `https://scmfedev.z20.web.core.windows.net`)|
 
-Use the following parameter for the *Testing* stage:
+Use the following parameter for the `Testing` stage:
 
 |Parameter|Value|
 |---------|-----|
@@ -88,7 +88,7 @@ Use the following parameter for the *Testing* stage:
 |UiAppName|scmfe-test|
 |UiAppReplyUrl|the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`))|
 
-Navigate to the directory that contains the oauth2-permissions.json file and run the script twice.
+Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and oauth2-permissions.json configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
 
 __Note:__ Please note down the `UiAppId` and `ApiAppId` from the output after each run!
 
@@ -139,6 +139,11 @@ Yesterday we have created CI/CD Builds for all services. Today we want to contin
     |AadTenantId|The id of your Azure AD Tenant|aadTenantId|Testing|
     |AadDomain|The domain name of your Azure AD e.g. azuredevcollege.onmicrosoft.com|aadDomain|Testing|
     |AadClientIdUri|http://scmapi-test|aadClientIdUri|Testing|
+
+    ARM Template override template parameters:
+    ```Shell
+    -sku $(AppServicePlanSKU) -webAppName $(ApiAppName) -use32bitworker $(Use32BitWorker) -alwaysOn $(AlwaysOn) -applicationInsightsName $(ApplicationInsightsName) -sqlServerName $(SqlServerName) -sqlUserName $(SqlAdminUserName) -sqlPassword $(SqlAdminPassword) -sqlDatabaseName $(SqlDatabaseName) -serviceBusNamespaceName $(ServiceBusNamespaceName) -aadInstance $(AadInstance) -aadClientId $(AadClientId) -aadTenantId $(AadTenantId) -aadDomain $(AadDomain) -aadClientIdUri $(AadClientIdUri)
+    ```
 7.  Run the release build
 
 ## Validate the SCM Contacts API
@@ -150,7 +155,7 @@ Now that you have deployed the SCM Contacts API to your environment on Azure it'
 That is what we expected! Your SCM Contacts API now requires a valid access token.
 To acquire a valid acces token we can create a simple request as we already did in [challenge-2](./challenge-2.md).
 
-We use the `Token Echo Server` again to request an access token from Azure AD for the SCM Contacts API. The tool is listening on port 5001 on your local machine. Tokens are accepted on the route `http://localhost:5001/api/tokenechofragment`. Before we can start the token request we have to add the url `http://localhost:5001/api/tokenechofragment` as a valid reply url to the client Azure AD application. Go to your Azure AD in the Azure portal, open the client application `scmfe-dev`that you created for the `Development` stage and add the url. You can add the reply url under *Authentication --> Redirect URIs*.
+We use the `Token Echo Server` again to request an access token from Azure AD for the SCM Contacts API. The tool is listening on port 5001 on your local machine. Tokens are accepted on the route `http://localhost:5001/api/tokenechofragment`. Before we can start the token request we have to add the url `http://localhost:5001/api/tokenechofragment` as a valid reply url to the client Azure AD application. Go to your Azure AD in the Azure portal, open the client application `scmfe-dev`that you created for the `Development` stage and add the url. You can add the reply url under *Authentication --> Web --> Redirect URIs --> Add URI*.
 
 ![TokenEchoServer Reply Url](./images/tokenechoserver-redirecturl.png)
 
