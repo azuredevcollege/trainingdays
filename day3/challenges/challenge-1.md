@@ -297,6 +297,12 @@ Do select **Configure Git later** (found on the second screen). Click through al
 
 ![Data Factory Configure GIT later](./img/ConfigureGITLater.png)
 
+> In case you get a validation error please use the Azure Cloud Shell and enter the following command
+>```Shell
+>$ az datafactory factory create -g adc-cosmos-db-rg -n ImportNutritionDataAppdevCollege(yourname) -l westeurope
+>```
+
+
 1. After creation, open your newly created Data Factory. Select **Author & Monitor** and you will launch ADF. You should see a screen similar to the screenshot below. 
 (We will be using ADF for a one-time copy of data from a source JSON file on Azure Blob Storage to a database in Cosmos DB’s SQL API. ADF can also be used for more frequent data transfers from Cosmos DB to other data stores.)
 
