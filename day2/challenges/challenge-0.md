@@ -4,7 +4,7 @@ To be able to follow all the challenges provided in this workshop, you need a fe
 
 ## dotnet SDK
 
-Download and install dotnet core SDK from <https://dotnet.microsoft.com/download>
+Download and install dotnet core SDK from <https://dotnet.microsoft.com/download>. You should choose the LTS version (.NET Core 3.1)!
 
 ![dotnet](./img/netcore.png "dotnet")
 
@@ -24,11 +24,14 @@ Options:
 
 path-to-application:
   The path to an application .dll file to execute.
+
+$ dotnet --list-sdks
+3.1.404 [C:\Program Files\dotnet\sdk]
 ```
 
 ## Node JS
 
-Download and install the current LTS version (12.y.z) of Node JS from <https://nodejs.org/en/download/>
+Download and install the current LTS version (14.y.z) of Node JS from <https://nodejs.org/en/download/>
 
 ![nodejs](./img/nodejs.png "nodejs")
 
@@ -37,7 +40,7 @@ Again, after the installtion is complete, check from the command line that every
 ```shell
 $ node --version
 
-v12.14.1
+v14.15.4
 
 $ npm
 
@@ -77,7 +80,7 @@ $ npm install -g @vue/cli
 
 $ vue --version
 
-3.8.4
+@vue/cli 4.5.10
 ```
 
 ## Azure CLI
