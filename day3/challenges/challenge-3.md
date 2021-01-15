@@ -238,7 +238,7 @@ Begin by opening the Cloud Shell in the Browser, a Bash console, Powershell cons
     md adv-search
     cd adv-search
     git clone https://github.com/Azure-Samples/azure-search-javascript-samples.git
-    cd azure-search-javascript-samples/quickstart
+    cd azure-search-javascript-samples/quickstart/REST
     code .
     ```   
 
