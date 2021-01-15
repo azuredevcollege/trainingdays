@@ -269,7 +269,7 @@ First and foremost, we will be creating an new database plus a new container. Go
 
 1. In the **Partition key** field, enter the value ```/foodGroup```.
 
-1. In the **Throughput** field, enter the value ```11000```.
+1. After ticking the box **Provision dedicated throughput for this container** enter the value ```11000``` in the **Throughput** field.
 
 1. Click the **OK** button.
 ![Cosmos DB: Food Collection](./img/CosmosFoodCollection.png)
@@ -438,24 +438,29 @@ This query will return the id, description, servings, tags, foodGroup, manufactu
 Your first result document should be:
 
 ```json
-{
-  "id": "14026",
-  "description": "Beverages, Energy Drink, sugar-free with guarana",
-  "tags": [
-    {
-      "name": "beverages"
+ {
+        "id": "14461",
+        "description": "Beverages, COCA-COLA, POWERADE, lemon-lime flavored, ready-to-drink",
+        "tags": [
+            {
+                "name": "beverages"
+            },
+            {
+                "name": "coca-cola"
+            },
+            {
+                "name": "powerade"
+            },
+            {
+                "name": "lemon-lime flavored"
+            },
+            {
+                "name": "ready-to-drink"
+            }
+        ],
+        "foodGroup": "Beverages",
+        "version": 1
     },
-    {
-      "name": "energy drink"
-    },
-    {
-      "name": "sugar-free with guarana"
-    }
-  ],
-  "foodGroup": "Beverages",
-  "manufacturerName": "The Coca-Cola Company",
-  "version": 1
-}
 ```
 
 You should note that where the query returned the results of tags node it projected the entire contents of the property which in this case is an array.
