@@ -40,20 +40,20 @@ Navigate to the azure portal and open the cloud shell. We use the Azure CLI to c
 
 1. Create a resource group:
    ```Shell
-   az group create --name <your rg name> --location <your Azure region>
+   $ az group create --name adc-sql-db-rg --location westeurope
    ```
 2. Create the server instance and note down the __fullyQualifiedDomainName__ of your server from the output
-> The Azure SQL Server name has to be unique.
+   > The Azure SQL Server name has to be unique.
    ```Shell
-   az sql server create --name <name of the server> --resource-group <your rg name> --location <your Azure region> --admin-user <name of your admin> --admin-password <pwd>
+   $ az sql server create --name <name of the server> --resource-group adc-sql-db-rg --location westeurope --admin-user <name of your admin> --admin-password <pwd>
    ```
 3. Per default the access is not permitted via the Azure SQL Server. Configure the server's firewall to allow your IPv4
    ```Shell
-   az sql server firewall-rule create --server <name of your server> --resource-group <your rg name> --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
+   $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
    ```
 4. Create the SQL Database with vCore-based purchasing Gen4, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
    ```Shell
-   az sql db create --name MSFTEmployees --resource-group <your rg name> --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
+   $ az sql db create --name MSFTEmployees --resource-group adc-sql-db-rg --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
    ```
 
 ## Add Data to SQL DB
@@ -63,26 +63,26 @@ Now that your SQL Database is up and running it's time to add some data. First w
 Get to know your environment
 
    ```Shell
-   az sql server list --resource-group <your rg name>
+   $ az sql server list --resource-group adc-sql-db-rg
    ```
    ```Shell
-   az sql db list --resource-group <your rg name> --server <name of your server>
+   $ az sql db list --resource-group adc-sql-db-rg --server <name of your server>
    ```
   
    If you run the command like this you are getting a lot of information to make sense of. You can restrict this by using a query:
    
    ```Shell
-   az sql db list --resource-group <your rg name> --server <name of your server> --query '[].{Name: name}'
+   $ az sql db list --resource-group adc-sql-db-rg --server <name of your server> --query '[].{Name: name}'
    ```
   
    ```Shell
-   az sql db show --resource-group <your rg name> --server <name of your server> --query '{Name: name, maxSizeBytes: maxSizeBytes, status: status}'
+   $ az sql db show --resource-group adc-sql-db-rg --server <name of your server> --name MSFTEmployees --query '{Name: name, maxSizeBytes: maxSizeBytes, status: status}'
    ```
   
 ### Connect to your SQL DB
 
    ```Shell
-   az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
+   $ az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
    ```
 
    For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
@@ -92,7 +92,7 @@ Get to know your environment
    ```
    > You might need to renew the firewall-rule at this point.
    >   ```Shell
-   >az sql server firewall-rule create --server <name of your server> --resource-group <your rg name> --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
+   > $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
    >```
   
    After running this you should see a ```1>```. Now you can run SQL Queries. If you are unfamiliar with their Syntax feel free to take some time getting used to it.
@@ -114,7 +114,7 @@ Add Data to your table
 Update the Age of Satya Nadella in the Table
 
    ```Sql
-   UPDATE CEOs SET Age=52 WHERE EmployerID=42;
+   UPDATE CEOs SET Age=53 WHERE EmployerID=42;
    GO
    ```
   
@@ -138,8 +138,12 @@ Open the `Azure Data Studio` and connect to your server:
 
 ![Azure Data Studio](./img/azure-data-studio-connect.png)
 
-After you have connected to your server `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
+After you have connected to your server, `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
 Next we want to create our first table in the ContactsDb. Navigate to the ContactDb, open the context menu and select `New Query`.
+   > If your server is not detected under your account you might need to renew the firewall-rule again.
+   >   ```Shell
+   > $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
+   >```
 
 ![New Query](./img/azure-data-studio-new-query.png)
 
@@ -219,12 +223,6 @@ Before we did grant the ```TestUser``` select access to the Table CEOs. Similarl
 
  ![Fixed Rules](./img/permissions-of-database-roles.png)
 
-## Clean up
-
-Delete Resource Group
-
-```az group delete -name <your rg name>```
-
 ## OPTIONAL: SQL Databace backup and retention policies
 
 You make the choice between configuring your server for either locally redundant backups or geographically redundant backups at server creation.
@@ -243,31 +241,31 @@ Go to the Azure portal and navigate to your SQL server. Under Manage Backups you
 Create another Azure SQL Server in another azure region
 
    ```Shell
-   az sql server create --name <name of your second server> --resource-group <your rg name> --location <a different Azure region> --admin-user <name of your admin> --admin-password <pwd>
+   $ az sql server create --name <name of your second server> --resource-group adc-sql-db-rg --location <a different Azure region> --admin-user <name of your admin> --admin-password <pwd>
    ```
    
 Create a failover group between the servers and add the database
 
    ```Shell
-   az sql failover-group create --name <name of your fg> --partner-server <name of your second server> --resource-group <your rg name> --server <name of your server> --add-db MSFTEmployees --failover-policy Automatic
+   $ az sql failover-group create --name <name of your fg> --partner-server <name of your second server> --resource-group adc-sql-db-rg --server <name of your server> --add-db MSFTEmployees --failover-policy Automatic
    ```
    
 Verify which server is secondary 
 
    ```Shell
-   az sql failover-group list --server <name of your server> --resource-group <your rg name>
+   $ az sql failover-group list --server <name of your server> --resource-group adc-sql-db-rg
    ```
    
 Failover to the secondary server
 
    ```Shell
-   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --server <name of your second server>
+   $ az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your second server>
    ```
 
 Revert failover group back to the primary server
 
    ```Shell
-   az sql failover-group set-primary --name <name of your fg> --resource-group <your rg name> --server <name of your server>
+   $ az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your server>
    ```
   
 ## OPTIONAL: Connect the Azure SQL DB to a Web Application ##
@@ -277,7 +275,7 @@ This tutorial shows how to create a .NET Core app and connect it to a SQL Databa
 Clone the sample application
 
    ```Shell
-   git clone https://github.com/azure-samples/dotnetcore-sqldb-tutorial
+   $ git clone https://github.com/azure-samples/dotnetcore-sqldb-tutorial
    ```
    ```Shell
    cd dotnetcore-sqldb-tutorial
@@ -286,10 +284,10 @@ Clone the sample application
 Install the required packages, run database migrations, and start the application.
 
    ```Shell
-      dotnet tool install --global dotnet-ef 
-      dotnet restore
-      dotnet ef database update
-      dotnet run
+      $ dotnet tool install --global dotnet-ef 
+      $ dotnet restore
+      $ dotnet ef database update
+      $ dotnet run
    ```
       
   Navigate to ```http://localhost:5000``` in a browser. Select the Create New link and create a couple to-do items.
@@ -299,13 +297,13 @@ Install the required packages, run database migrations, and start the applicatio
 Create a new database in the previously created SQL Server.
 
    ```Shell
-   az sql db create --resource-group <your rg name> --server <name of your server> --name coreDB
+   $ az sql db create --resource-group adc-sql-db-rg --server <name of your server> --name coreDB
    ```
    
 Create the connection string
 
    ```Shell
-   az sql db show-connection-string --name coreDB --server <name of your server> --client sqlcmd
+   $ az sql db show-connection-string --name coreDB --server <name of your server> --client sqlcmd
    ```
    
    The result should look something like this:
@@ -317,25 +315,25 @@ Create the connection string
 Configure a local git deployment. FTP and local Git can deploy to an Azure web app by using a deployment user. Once you configure your deployment user, you can use it for all your Azure deployments.
 
    ```Shell
-   az webapp deployment user set --user-name <name of your app user> --password <pwd>
+   $ az webapp deployment user set --user-name <name of your app user> --password <pwd>
    ```
 
 Create an App Service plan. An App Service plan defines a set of compute resources for a web app to run. These compute resources are analogous to the server farm in conventional web hosting. One or more apps can be configured to run on the same computing resources (or in the same App Service plan).
 
    ```Shell
-   az appservice plan create --name <name of your asp> --resource-group <your rg name> --sku FREE
+   $ az appservice plan create --name <name of your asp> --resource-group adc-sql-db-rg --sku FREE
    ```
 
 Create a web app in the recently created App Service plan.
    
    ```Shell
-   az webapp create --resource-group <your rg name> --plan <name of your asp> --name <your app name> --deployment-local-git
+   $ az webapp create --resource-group adc-sql-db-rg --plan <name of your asp> --name <your app name> --deployment-local-git
    ```
    
 Configure the connection string. To set connection strings for your Azure app, use the az webapp config appsettings set command in the Cloud Shell. In the following command replace the [Your Connection String] parameter with the connection string you created earlier.
 
    ```Shell
-   az webapp config connection-string set --resource-group <your rg name> --name <name of your app> --settings MyDbConnection="<Your Connection String>" --connection-string-type SQLServer
+   $ az webapp config connection-string set --resource-group adc-sql-db-rg --name <name of your app> --settings MyDbConnection="<Your Connection String>" --connection-string-type SQLServer
    ```
    
    In ASP.NET Core, you can use this named connection string (```MyDbConnection```) using the standard pattern, like any connection string specified in appsettings.json. In this case, ```MyDbConnection``` is also defined in your appsettings.json. When running in App Service, the connection string defined in App Service takes precedence over the connection string defined in your appsettings.json. The code uses the appsettings.json value during local development, and the same code uses the App Service value when deployed.
@@ -343,7 +341,7 @@ Configure the connection string. To set connection strings for your Azure app, u
 Configure environment variable. Next, set ASPNETCORE_ENVIRONMENT app setting to Production. This setting lets you know whether you're running in Azure, because you use SQLite for your local development environment and SQL Database for your Azure environment.
 
    ```Shell
-   az webapp config appsettings set --name <name of your app> --resource-group <your rg name> --settings ASPNETCORE_ENVIRONMENT="Production"
+   $ az webapp config appsettings set --name <name of your app> --resource-group adc-sql-db-rg --settings ASPNETCORE_ENVIRONMENT="Production"
    ```
 
 Connect to SQL Database in production by opening the Startup.cs and finding the following code in your local repository:
@@ -375,22 +373,22 @@ Connect to SQL Database in production by opening the Startup.cs and finding the 
    Save your changes, then commit it into your Git repository.
    
    ```Shell
-   git add .
+   $ git add .
    ```
    ```Shell
-   git commit -m "connect to SQL DB in Azure"
+   $ git commit -m "connect to SQL DB in Azure"
    ```
    
 Push to Azure from Git. Add an Azure remote to your local Git repository. Replace [Local Git URL] with the URL of the Git remote from step 7, when ypu did create the web app.
 
    ```Shell
-   git remote add azure <Local Git URL>
+   $ git remote add azure <Local Git URL>
    ```
 
    Push to the Azure remote to deploy your app with the following command. When Git Credential Manager prompts you for credentials, make sure you enter the credentials you created in Configure a deployment user, not the credentials you use to sign in to the Azure portal. This might take some time.
    
    ```Shell
-   git push azure master
+   $ git push azure master
    ```
    
 Browse to the deployed app using your web browser.
@@ -398,3 +396,11 @@ Browse to the deployed app using your web browser.
    ```Shell
    http://<name of your app>.azurewebsites.net
    ```
+
+## Clean up
+
+Delete Resource Group
+
+```Shell
+$ az group delete --name adc-sql-db-rg
+```

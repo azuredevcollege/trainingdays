@@ -183,7 +183,7 @@ Now we have to enable the PR-Build to be triggered whenever a PullRequest is cre
 2. Add a build policy and select your SCM-Frontend-PR build
 3. Set the path filter as follow:
    ```Shell
-   day4/apps/infrastructure/templates/scm-fe.json;day4/apps/frontend/*
+   /day4/apps/infrastructure/templates/scm-fe.json;/day4/apps/frontend/*
    ```
    With this filter the PR build is only triggered when files were changed that belongs to the SCM Frontend.
 4. Save your changes
