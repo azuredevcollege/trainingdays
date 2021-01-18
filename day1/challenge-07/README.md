@@ -293,6 +293,39 @@ Azure resources go into a resource group. A resource group is located in an azur
 Lucky us. There is a function available - that we can use.  
 Replace _"string"_ with "`[resourceGroup().location]`"  
 
+As example you can compare your ARM Template with the following code snippet:
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "IPAddress": {
+          "type": "string",
+          "metadata": {
+              "description": "description"
+           }
+      }
+   },
+  "resources": [
+      {
+        "name": "myFirstIpAddressviaARM",
+        "type": "Microsoft.Network/publicIPAddresses",
+        "apiVersion": "2020-06-01",
+        "location": "[resourceGroup().location]",
+        "sku": {
+            "name": "Basic",
+            "tier": "Regional"
+        },
+        "properties": {
+            "publicIPAllocationMethod": "Static",
+            "publicIPAddressVersion": "IPv4"
+        }
+    }
+  ]
+}
+```
+
 **4. Create a parameter**  
 Add the parameter section to the template - use out [Basic Template](##A-Basic-Template) as reference.
 
@@ -300,6 +333,20 @@ Add the parameter section to the template - use out [Basic Template](##A-Basic-T
 Use VS Code to generate a parameter file for you:  
 ![VS Code can generate parameter file](./vscodegeneratedparams.png)
 **and enter a value**  
+
+As example you can compare your parameters file with the following code snippet:
+
+```json
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IPAddress": {
+            "value": "40.85.113.39"
+        }
+    }
+}
+```
 
 **6. Kick off the deployment using Azure CLI**  
 To Do this you can upload the template and parameter file to your Azure Cloud Shell:  
