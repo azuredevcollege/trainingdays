@@ -66,10 +66,10 @@ $TemplateParameters = @{
 
 ```PowerShell
 #will create some vms in different azure regions in parallel
-New-AzResourceGroupDeployment -Name 'NE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-11/challengestart.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
+New-AzResourceGroupDeployment -Name 'NE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-11/challengestart/challengestart.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
 
 $TemplateParameters.vmNames = @('vmyellow','vmgreen')
-New-AzResourceGroupDeployment -Name 'WE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-11/challengestart.json" -ResourceGroupName 'rg-wwwlb-WE' -TemplateParameterObject $TemplateParameters -AsJob  
+New-AzResourceGroupDeployment -Name 'WE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-11/challengestart/challengestart.json" -ResourceGroupName 'rg-wwwlb-WE' -TemplateParameterObject $TemplateParameters -AsJob  
 
 #wait until both deployments are done
 get-job -State Running | wait-job  
