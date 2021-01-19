@@ -1,6 +1,4 @@
-provider "azuredevops" {
-  version = ">= 0.0.1"
-}
+provider "azuredevops" {}
 
 locals {
   project_name  = "DevCollegeDay5Restore"
@@ -15,7 +13,7 @@ resource "random_string" "prefix" {
 }
 
 resource "azuredevops_project" "project" {
-  project_name       = local.project_name
+  name               = local.project_name
   description        = "Restored checkpoint for the dev college trainingdays day 5."
   visibility         = "private"
   version_control    = "Git"
@@ -33,9 +31,7 @@ data "azuredevops_git_repositories" "default" {
   name       = local.project_name
 }
 
-provider "null" {
-  version = "~> 2.1.2"
-}
+provider "null" {}
 
 resource "null_resource" "git_restore" {
   triggers = {
@@ -324,20 +320,15 @@ data "azurerm_subscription" "current" {
 }
 
 provider "azurerm" {
-  version = "~> 2.25.0"
   features {}
 }
 
-provider "azuread" {
-  version = "~> 0.11.0"
-}
+provider "azuread" {}
 
-provider "random" {
-  version = "~> 2.3.0"
-}
+provider "random" {}
 
 resource "azuread_application" "azdevopssp" {
-  name = "azdevopsterraform"
+  display_name = "azdevopsterraform"
 }
 
 resource "random_string" "password" {
