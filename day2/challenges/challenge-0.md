@@ -26,7 +26,7 @@ path-to-application:
   The path to an application .dll file to execute.
 
 $ dotnet --list-sdks
-3.1.404 [C:\Program Files\dotnet\sdk]
+3.1.405 [C:\Program Files\dotnet\sdk]
 ```
 
 ## Node JS
@@ -85,7 +85,7 @@ $ vue --version
 
 ## Azure CLI
 
-We will also be using the Azure command line interface to create and interact with reosurces running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
+We will also be using the Azure command line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
 When finished, login to your Azure account from the command line:
 
@@ -111,7 +111,7 @@ A browser window will open, login to Azure and go back to the command prompt. Yo
 }
 ```
 
-If you have multiple subscriptions, make sure your are working with the correct one!
+If you have multiple subscriptions, make sure you are working with the correct one!
 
 ```shell
 $ az account show
@@ -140,15 +140,15 @@ $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 
 ## Visual Studio Code
 
-To work with all the smaples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it runs cross-platform.
+To work with all the samples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it works cross-platform.
 
-Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
+Therefor, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
 
 > Please do not use VSCodium. You will run into problems building/debugging some of the samples provided in this workshop.
 
 ### Useful Extensions
 
-After the setup is complete. Open Visual Studio an open the "Extensions" sidebar:
+After the setup is complete, open Visual Studio and select the "Extensions" sidebar:
 
 ![Visual Studio Extensions](./img/vscode_extensions.png "VS Code Extensions")
 
@@ -182,7 +182,7 @@ Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-dat
 ## jq
 
 jq is a lightweight and flexible command-line JSON processor. In some challenges we use jq to process the JSON documents that we get back from Azure CLI.
-To install jq got to <https://stedolan.github.io/jq/download/> and follow the instructions.
+To install jq go to <https://stedolan.github.io/jq/download/> and follow the instructions.
 
 ![jq](./img/jq.png)
 
