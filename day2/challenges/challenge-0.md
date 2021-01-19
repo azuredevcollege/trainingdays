@@ -144,6 +144,8 @@ To work with all the smaples provided in this workshop, you will need an IDE. To
 
 Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
 
+> Please do not use VSCodium. You will run into problems building/debugging some of the samples provided in this workshop.
+
 ### Useful Extensions
 
 After the setup is complete. Open Visual Studio an open the "Extensions" sidebar:
