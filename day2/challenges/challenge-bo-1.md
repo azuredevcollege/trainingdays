@@ -1,6 +1,6 @@
 # Break Out #1: Deploy the Azure Dev College sample application to Azure
 
-Now it's time to get familiar with our sample application. You will now clone the repository to your local machine, setup your "local loop" and deploy a frist version to Azure.
+Now it's time to get familiar with our sample application. You will now clone the repository to your local machine, setup your "local loop" and deploy a first version to Azure.
 
 ![architecture_bo1](./img/architecture_bo1.png "architecture_bo1")
 
