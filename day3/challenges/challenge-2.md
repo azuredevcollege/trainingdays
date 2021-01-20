@@ -51,7 +51,7 @@ Navigate to the azure portal and open the cloud shell. We use the Azure CLI to c
    ```Shell
    $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
    ```
-4. Create the SQL Database with vCore-based purchasing Gen4, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
+4. Create the SQL Database with vCore-based purchasing Gen5, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
    ```Shell
    $ az sql db create --name MSFTEmployees --resource-group adc-sql-db-rg --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
    ```
@@ -85,7 +85,7 @@ Get to know your environment
    $ az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
    ```
 
-   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
+   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password (at least 8 letters, must contain capital letters and numbers, refrain from using $). The command should look something like this:
   
    ```Shell
    sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
@@ -139,7 +139,7 @@ Open the `Azure Data Studio` and connect to your server:
 ![Azure Data Studio](./img/azure-data-studio-connect.png)
 
 After you have connected to your server, `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
-Next we want to create our first table in the ContactsDb. Navigate to the ContactDb, open the context menu and select `New Query`.
+Next we want to create our first table in the MSFTEmployee. Navigate to the MSFTEmployee, open the context menu and select `New Query`.
    > If your server is not detected under your account you might need to renew the firewall-rule again.
    >   ```Shell
    > $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
@@ -153,7 +153,7 @@ Add and run the following query, creating a new Table:
    CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
    ```
 
-Create a new query and insert a row:
+Create a new query and insert additional contacts :
 
    ```Sql
    INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
