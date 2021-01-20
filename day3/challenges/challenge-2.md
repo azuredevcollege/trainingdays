@@ -139,7 +139,7 @@ Open the `Azure Data Studio` and connect to your server:
 ![Azure Data Studio](./img/azure-data-studio-connect.png)
 
 After you have connected to your server, `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
-Next we want to create our first table in the ContactsDb. Navigate to the ContactDb, open the context menu and select `New Query`.
+Next we want to create our first table in the MSFTEmployee. Navigate to the MSFTEmployee, open the context menu and select `New Query`.
    > If your server is not detected under your account you might need to renew the firewall-rule again.
    >   ```Shell
    > $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
@@ -153,7 +153,7 @@ Add and run the following query, creating a new Table:
    CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
    ```
 
-Create a new query and insert a row:
+Create a new query and insert additional contacts:
 
    ```Sql
    INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
