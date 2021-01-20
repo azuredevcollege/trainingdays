@@ -85,7 +85,7 @@ Get to know your environment
    $ az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
    ```
 
-   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
+   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password (at least 8 letters, must contain capital letters and numbers, refrain from using $). The command should look something like this:
   
    ```Shell
    sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
@@ -153,7 +153,7 @@ Add and run the following query, creating a new Table:
    CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
    ```
 
-Create a new query and insert additional contacts:
+Create a new query and insert additional contacts :
 
    ```Sql
    INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
