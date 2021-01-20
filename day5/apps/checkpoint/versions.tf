@@ -4,7 +4,7 @@ terraform {
       source = "hashicorp/azuread"
     }
     azuredevops = {
-      source = "terraform-providers/azuredevops"
+      source = "microsoft/azuredevops"
     }
     azurerm = {
       source = "hashicorp/azurerm"
