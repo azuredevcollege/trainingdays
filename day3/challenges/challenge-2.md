@@ -44,6 +44,7 @@ Navigate to the azure portal and open the cloud shell. We use the Azure CLI to c
    ```
 2. Create the server instance and note down the __fullyQualifiedDomainName__ of your server from the output
    > The Azure SQL Server name has to be unique.
+   > The password should be at least 8 letters, must contain capital letters and numbers, refrain from using $.
    ```Shell
    $ az sql server create --name <name of the server> --resource-group adc-sql-db-rg --location westeurope --admin-user <name of your admin> --admin-password <pwd>
    ```
@@ -85,7 +86,7 @@ Get to know your environment
    $ az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
    ```
 
-   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password (at least 8 letters, must contain capital letters and numbers, refrain from using $). The command should look something like this:
+   For the next part to work you either have the sqlcmd extension or go on using the Azure Cloud Shell. Copy the sqlcmd command and enter your admin name and password. The command should look something like this:
   
    ```Shell
    sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
