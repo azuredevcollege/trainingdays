@@ -71,7 +71,7 @@ Add the following structure to the document on the right side of the Documents p
 }
 ```
 
-Select **New Document** again, and create and save another document with a unique id, and any other properties and values you want. Your documents can have any structure, because Azure Cosmos DB doesn't impose any schema on your data.
+Select **New Item** again, and create and save another document with a unique id, and any other properties and values you want. Your documents can have any structure, because Azure Cosmos DB doesn't impose any schema on your data.
 
 At the top of the **Items** tab in Data Explorer, review the default query ```SELECT * FROM c```. This query retrieves and displays all documents in the collection.
 
@@ -97,7 +97,7 @@ Choose a partition key...
 - that spreads the workload evenly across all partitions and evenly over time. 
 - that might include properties that appear frequently as a filter in your queries. Queries can be efficiently routed by including the partition key in the filter predicate.
 
-> **IMPORTANT**: A single logical partition has an upper limit of 10 GB of storage.
+> **IMPORTANT**: A single logical partition has an upper limit of 20 GB of storage.
 
 You can form a partition key by concatenating multiple property values into a single artificial partition key property. These keys are referred to as *synthetic keys*. 
 

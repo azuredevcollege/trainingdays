@@ -51,7 +51,7 @@ Navigate to the azure portal and open the cloud shell. We use the Azure CLI to c
    ```Shell
    $ az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip> 
    ```
-4. Create the SQL Database with vCore-based purchasing Gen4, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
+4. Create the SQL Database with vCore-based purchasing Gen5, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
    ```Shell
    $ az sql db create --name MSFTEmployees --resource-group adc-sql-db-rg --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
    ```
