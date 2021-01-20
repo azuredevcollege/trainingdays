@@ -97,7 +97,7 @@ Choose a partition key...
 - that spreads the workload evenly across all partitions and evenly over time. 
 - that might include properties that appear frequently as a filter in your queries. Queries can be efficiently routed by including the partition key in the filter predicate.
 
-> **IMPORTANT**: A single logical partition has an upper limit of 10 GB of storage.
+> **IMPORTANT**: A single logical partition has an upper limit of 20 GB of storage.
 
 You can form a partition key by concatenating multiple property values into a single artificial partition key property. These keys are referred to as *synthetic keys*. 
 
