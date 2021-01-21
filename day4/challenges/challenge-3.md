@@ -87,7 +87,7 @@ Go to Azure Boards and set the UserStory S3 to active. We create a new build def
 11. Select *"Existing Azure Pipelines YAML file"*
 12. Select your feature branch and specify the path: *"/day4/apps/pipelines/scm-common-ci.yaml"*
 13. Run your CI Build by clicking the action *"Run"*
-14. Rename your CI Build to *"SCM-Common-CI"*
+14. Rename your pipeline to *"SCM-Common-CI"*
 15. Navigate to the Pipelines page and open the last run of the build *"SCM-Common-CI"*. You see that the artifact is linked to your build.
     ![Published Artifact](./images/published-artifact.png)
 
