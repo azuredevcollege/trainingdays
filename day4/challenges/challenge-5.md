@@ -73,7 +73,7 @@ steps:
 11. Select your feature branch and specify the path: _"/day4/apps/pipelines/scm-frontend-ci.yaml"_
 12. Run your CI Build by clicking the action _"Run"_
 13. Rename your CI Build to _"SCM-Frontend-CI"_
-14. Navigate to the Pipelines page and open the last run of the build _"SCM--CI"_. You see that the artifact is linked to your build.
+14. Navigate to the Pipelines page and open the last run of the build _"SCM-Frontend-CI"_. You see that the artifact is linked to your build.
 
 ## Create the PullRequest validation Build
 
