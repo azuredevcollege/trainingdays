@@ -139,7 +139,7 @@ jobs:
 
 Now we have created the deployment artifacts with the build _SCM-Contacts-CI_. It is time to create a Release build to deploy the SCM Contacts API to Azure. As in [challenge-3](./challenge-3.md) we deploy the artifacts to the stages _Development_ and _Testing_ and we create a manual _Pre-deployment condition_ to approve the deployment to the _Testing_ stage.
 
-1. Create a new release build and name it _SCM-Contacts-CD_
+1. Create a new release pipeline and name it _SCM-Contacts-CD_
 2. Add the SCM-Contacts-CI build's artifacts
 3. Create a _Development_ stage
 4. Add the the following variables and replace **'prefix'** with your own value:
