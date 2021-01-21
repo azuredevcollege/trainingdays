@@ -109,7 +109,7 @@ steps:
 
 ## Create the CD Build
 
-Now we have created the deployment artifacts with the build _SCM-Frontend-CI_. It is time to create a Release build to deploy the SCM Frontend to Azure. As in [challenge-3](./challenge-3.md) we deploy the artifacts to the stages _Development_ and _Testing_ and we create a manual _Pre-deployment condition_ to approve the deployment to the _Testing_ stage.
+Now we have created the deployment artifacts with the build _SCM-Frontend-CI_. It is time to create a Release pipeline to deploy the SCM Frontend to Azure. As in [challenge-3](./challenge-3.md) we deploy the artifacts to the stages _Development_ and _Testing_ and we create a manual _Pre-deployment condition_ to approve the deployment to the _Testing_ stage.
 
 1. Create a new release build and name it _SCM-Frontend-CD_
 2. Add the SCM-Frontend-CI build's artifacts
