@@ -223,7 +223,7 @@ Now it's time to see the whole build flow in action.
 
 1. Checkout the master branch and pull the latest changes
 2. Create and checkout a new feature branch _features/scmcontactsflow_
-3. Open the file [day4/apps/dotnetcore/scm/Adc.Scm.Api/Startup.cs](../apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs) and change the name of the API in the Swagger configurations:
+3. Open the file [day4/apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs](../apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs) and change the name of the API in the Swagger configurations:
    ```C#
    // here
    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ADC Contacts API", Version = "v1" });
