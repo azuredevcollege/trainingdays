@@ -26,7 +26,7 @@ As in [challenge-3](./challenge-3.md) we always perform the following steps for 
 7. Merge the feature branch into the master branch
 
 
-We don't need to create additional Azure AD applications for the remaining services. All APIs uses the same Azure AD application that we already created in [challenge-3](./challenge-3.md) for each stage (Development and Production). The Frontend services uses the client application.
+We don't need to create additional Azure AD applications for the remaining services. All APIs uses the same Azure AD application that we already created in [challenge-3](./challenge-3.md) for each stage (Development and Testing). The Frontend services uses the client application.
 
 **Note:** Be carefull that you don't confuse the IDs of the stage `Development` and `Testing`.
 
