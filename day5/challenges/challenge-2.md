@@ -40,16 +40,16 @@ In this sample we create an API that exposes four OAuth2 permissions:
 
 Firstly, create a new Azure AD application and write the output to a variable:
 ```Shell
-API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
+$API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
 ``` 
 
 After that we have created an Azure AD application that contains one default OAuth2 permission which was created by Azure AD.
 To make your own OAuth2 permission, the default permission must be disabled first:
 ```shell
 # get the app id
-API_APP_ID=$(echo $API_APP | jq -r '.appId')
+$API_APP_ID=$(echo $API_APP | jq -r '.appId')
 # disable default exposed scope
-DEFAULT_SCOPE=$(az ad app show --id $API_APP_ID | jq '.oauth2Permissions[0].isEnabled = false' | jq -r '.oauth2Permissions')
+$DEFAULT_SCOPE=$(az ad app show --id $API_APP_ID | jq '.oauth2Permissions[0].isEnabled = false' | jq -r '.oauth2Permissions')
 az ad app update --id $API_APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
 ```
 Now your own OAuth2 permissions can be added:
