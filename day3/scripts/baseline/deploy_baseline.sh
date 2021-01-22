@@ -2,58 +2,61 @@
 
 # Deploy common stuff...
 
+PREFIX="azdc${RANDOM}"
+echo "Prefix is $PREFIX."
+
 if [ -z $BASE_REGION_NAME ]; then
-    echo "Region env name (BASE_REGION_NAME) is empty."
-    exit 0
+    BASE_REGION_NAME="westeurope"
+    echo "Region env name (BASE_REGION_NAME) is empty. Using $BASE_REGION_NAME."
 else
     echo "Region env name is: $BASE_REGION_NAME"
 fi
 
 if [ -z $BASE_RG_COMMON_NAME ]; then
-    echo "Resource Group COMMON env name (BASE_RG_COMMON_NAME) is empty."
-    exit 0
+    BASE_RG_COMMON_NAME="$PREFIX-rg"
+    echo "Resource Group COMMON env name (BASE_RG_COMMON_NAME) is empty. Using $BASE_RG_COMMON_NAME."
 else
     echo "Resource Group COMMON env name is: $BASE_RG_COMMON_NAME"
 fi
 
 if [ -z $BASE_AI_NAME ]; then
-    echo "AppInsights env name (BASE_AI_NAME) is empty."
-    exit 0
+    BASE_AI_NAME="${PREFIX}ai"
+    echo "AppInsights env name (BASE_AI_NAME) is empty. Using $BASE_AI_NAME."
 else
     echo "AppInsights env name is: $BASE_AI_NAME"
 fi
 
 if [ -z $BASE_STORAGEACCOUNT_FE_NAME ]; then
-    echo "Storage Account Frontend env name (BASE_STORAGEACCOUNT_FE_NAME) is empty."
-    exit 0
+    BASE_STORAGEACCOUNT_FE_NAME="${PREFIX}fe"
+    echo "Storage Account Frontend env name (BASE_STORAGEACCOUNT_FE_NAME) is empty. Using $BASE_STORAGEACCOUNT_FE_NAME."
 else
     echo "Storage Account Frontend env name is: $BASE_STORAGEACCOUNT_FE_NAME"
 fi
 
 if [ -z $BASE_STORAGEACCOUNT_RES_NAME ]; then
-    echo "Storage Account Resources env name (BASE_STORAGEACCOUNT_RES_NAME) is empty."
-    exit 0
+    BASE_STORAGEACCOUNT_RES_NAME="${PREFIX}res"
+    echo "Storage Account Resources env name (BASE_STORAGEACCOUNT_RES_NAME) is empty. Using $BASE_STORAGEACCOUNT_RES_NAME."
 else
     echo "Storage Account Resources env name is: $BASE_STORAGEACCOUNT_RES_NAME"
 fi
 
 if [ -z $BASE_API_WEBAPP_NAME ]; then
-    echo "WebApp API env name (BASE_API_WEBAPP_NAME) is empty."
-    exit 0
+    BASE_API_WEBAPP_NAME="${PREFIX}webapi"
+    echo "WebApp API env name (BASE_API_WEBAPP_NAME) is empty. Using $BASE_API_WEBAPP_NAME."
 else
     echo "WebApp API env name is: $BASE_API_WEBAPP_NAME"
 fi
 
 if [ -z $BASE_RES_WEBAPP_NAME ]; then
-    echo "WebApp RES env name (BASE_RES_WEBAPP_NAME) is empty."
-    exit 0
+    BASE_RES_WEBAPP_NAME="${PREFIX}webres"
+    echo "WebApp RES env name (BASE_RES_WEBAPP_NAME) is empty. Using $BASE_RES_WEBAPP_NAME."
 else
     echo "WebApp RES env name is: $BASE_RES_WEBAPP_NAME"
 fi
 
 if [ -z $BASE_RES_FUNCAPP_NAME ]; then
-    echo "FuncApp RES env name (BASE_RES_FUNCAPP_NAME) is empty."
-    exit 0
+    BASE_RES_FUNCAPP_NAME="${PREFIX}func"
+    echo "FuncApp RES env name (BASE_RES_FUNCAPP_NAME) is empty. Using $BASE_RES_FUNCAPP_NAME."
 else
     echo "FuncApp RES env name is: $BASE_RES_FUNCAPP_NAME"
 fi
@@ -107,3 +110,5 @@ cd ../../../day2/apps/frontend/scmfe && npm install && npm run build && cd ../..
 
 echo "var uisettings = { \"endpoint\": \"https://$BASE_API_WEBAPP_NAME.azurewebsites.net\", \"resourcesEndpoint\": \"https://$BASE_RES_WEBAPP_NAME.azurewebsites.net\", \"aiKey\": \"$aiKey\" };" > ../../../day2/apps/frontend/scmfe/dist/settings/settings.js
 az storage blob upload-batch -d '$web' --account-name $BASE_STORAGEACCOUNT_FE_NAME -s ../../../day2/apps/frontend/scmfe/dist
+
+echo "Done. Resources have been deployed in resource group $PREFIX-rg."
