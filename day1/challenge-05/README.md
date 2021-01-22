@@ -182,7 +182,7 @@ this **should open a new browser tab with online help for New-AzVM**. Examine th
 Try **creating a simple VM by executing**:  
 ```PowerShell
 $VMName = 'MyVM'    # variable for easy reuse
-New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_A0'
+New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_B2s'
 ```
 **Enter a user name** (not 'admin' nor 'administrator') **and a complex password** when asked.
 ![progress in azure cloud shell](./newvm.png) 
