@@ -180,7 +180,7 @@ Create a PullRequest and merge all changes into the master branch. Don't forget 
 Now we have to enable the PR-Build to be triggered whenever a PullRequest is created and when files are changed that belongs to the SCM Frontend.
 
 1. Open the branch policies of the master branch
-2. Add a build policy and select your SCM-Frontend-PR build
+2. Add a build validation and select your SCM-Frontend-PR build
 3. Set the path filter as follow:
    ```Shell
    /day4/apps/infrastructure/templates/scm-fe.json;/day4/apps/frontend/*
