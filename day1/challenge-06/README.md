@@ -61,7 +61,7 @@ Now **upload a small file**.
 **Copy the Blob Service SAS URL to the clipboard**
 ![SAS URL](./sas01.png)  
   
-In the result copy the SAS URI:  
+In the result copy the SAS token:  
 ![SAS URL](./sas02.png)  
 and **edit the SAS URL**: You need to add the path to uploaded file - it should look similar to:  
 
