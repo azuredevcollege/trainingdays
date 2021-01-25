@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^2.10.0",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "core-js": "^3.6.2",
     "echarts": "^4.6.0",
     "lodash": "^4.17.15",

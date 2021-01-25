@@ -5,6 +5,9 @@ const msalConfig = {
         clientId: `${window.uisettings.clientId}`,
         authority: `https://login.microsoftonline.com/${window.uisettings.tenantId}`,
         redirectUri: `${window.location.origin}`,
+    },
+    cache:{
+        cacheLocation: "localStorage"
     }
 };
 
@@ -26,14 +29,20 @@ const tokenRequest = {
     ]
 };
 
-msalInstance.handleRedirectPromise().then(handleResponse).catch(err => {
-    console.log(err)
-});
+export function handleCallbackResponse() {
+    return msalInstance.handleRedirectPromise().then(handleResponse).catch(err => {
+        console.log(err)
+    });
+}
+
+// msalInstance.handleRedirectPromise().then(handleResponse).catch(err => {
+//     console.log(err)
+// });
 
 function handleResponse(resp) {
     if (resp !== null) {
         msalInstance.setActiveAccount(resp.account);
-        getAccessToken();
+        getInitialAccessToken();
     } else {
         const currentAccounts = msalInstance.getAllAccounts();
         if (!currentAccounts || currentAccounts.length < 1) {
@@ -46,14 +55,12 @@ function handleResponse(resp) {
     }
 }
 
-
 export function login() {
     msalInstance.loginRedirect(loginRequest);
 }
 
 export function getAccount() {
     let acc = msalInstance.getActiveAccount();
-    console.log(acc);
     return acc;
 }
 
@@ -64,12 +71,15 @@ export function logout() {
 
 export function isAuthenticated() {
     let actAccount = msalInstance.getActiveAccount();
-    return actAccount != null || actAccount != undefined;
+    return actAccount != null && actAccount != undefined;
 }
 
-export function getAccessToken() {
-    msalInstance.acquireTokenSilent(tokenRequest).then(result => {
-        store.commit("auth/setAccessToken", result.accessToken)
+export function getAccessTokenSilent() {
+    return msalInstance.acquireTokenSilent(tokenRequest);
+}
+
+export function getInitialAccessToken() {
+    msalInstance.acquireTokenSilent(tokenRequest).then(() => {
         store.commit("auth/setAccount", msalInstance.getActiveAccount())
     }).catch(error => {
         if (error instanceof msal.InteractionRequiredAuthError) {

@@ -14,7 +14,7 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import "echarts/lib/component/dataset";
-import {login} from "./components/auth/auth"
+import { login, handleCallbackResponse, isAuthenticated } from "./components/auth/auth"
 
 Vue.config.productionTip = false
 Vue.use(VueWait);
@@ -42,6 +42,10 @@ const myapp = new Vue({
   render: h => h(App)
 });
 
-login()
+if (isAuthenticated()) {
+  myapp.$mount('#app');
+} else {
+  login();
+  handleCallbackResponse().then(() => myapp.$mount('#app'));
+}
 
-myapp.$mount('#app');
