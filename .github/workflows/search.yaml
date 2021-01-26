@@ -1,0 +1,137 @@
+name: Search API
+
+on:
+  push:
+    branches: [features/github-actions]
+    paths:
+      - .github/workflows/search.yaml
+      - day4/apps/dotnetcore/Scm.Search/*
+      - day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+
+env:
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
+  SEARCH_APP_NAME: scm-search-api-github
+  FUNCTION_APP_NAME: scm-search-function-github
+  STORAGE_ACCOUNT_NAME: scmsearchstorage
+  SEARCH_SERVICE_NAME: scm-contacts-search
+
+jobs:
+  extract-arm-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: template
+          path: day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+          if-no-files-found: error
+          retention-days: 90
+
+  deploy-template:
+    runs-on: ubuntu-latest
+    needs: extract-arm-template
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-search-api-dotnetcore.json
+          deploymentMode: Incremental
+          parameters: >
+            webAppName=${{ env.SEARCH_APP_NAME }}
+            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
+            functionAppName=${{ env.FUNCTION_APP_NAME }} 
+            applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }} 
+            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
+            azureSearchServiceName=${{ env.SEARCH_SERVICE_NAME }}
+
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: Upload as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-build
+          path: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/build
+          if-no-files-found: error
+          retention-days: 90
+
+  build-indexer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: Upload as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: indexer-build
+          path: day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/build
+          if-no-files-found: error
+          retention-days: 90
+
+  deploy-api:
+    runs-on: ubuntu-latest
+    needs:
+      - build-api
+      - deploy-template
+    steps:
+      - name: Download the build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: api-build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.SEARCH_APP_NAME }}
+
+  deploy-indexer:
+    runs-on: ubuntu-latest
+    needs:
+      - build-indexer
+      - deploy-template
+    steps:
+      - name: Download the build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: indexer-build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure WebApp
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNCTION_APP_NAME }}

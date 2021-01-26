@@ -1,0 +1,55 @@
+name: Common Infrastructure
+on:
+  push:
+    branches: [features/github-actions]
+    paths:
+      - .github/workflows/common.yaml
+      - day4/apps/infrastructure/templates/scm-common.json
+
+env:
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATIONS_INSIGHTS_NAME: scm-contacts-insights
+  COSMOS_DB_ACCOUNT_NAME: scm-contacts-cosmos-db
+  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
+  LOCATION: WestEurope
+
+jobs:
+  arm-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: template
+          path: day4/apps/infrastructure/templates/scm-common.json
+          if-no-files-found: error
+          retention-days: 90
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: arm-template
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Create resource group
+        run: >
+          az group create
+          -l ${{ env.LOCATION }}
+          -n ${{ env.RESOURCE_GROUP_NAME }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-common.json
+          deploymentMode: Incremental
+          parameters: >
+            applicationInsightsName=${{ env.APPLICATIONS_INSIGHTS_NAME }}
+            cosmosDbAccountName=${{ env.COSMOS_DB_ACCOUNT_NAME }}
+            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}

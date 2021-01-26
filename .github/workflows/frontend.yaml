@@ -1,0 +1,130 @@
+name: Frontend
+
+on:
+  push:
+    branches: [features/github-actions]
+    paths:
+      - .github/workflows/frontend.yaml
+      - day4/apps/infrastructure/templates/scm-fe.json
+      - day4/apps/frontend/scm-fe/**
+
+env:
+  NODE_VERSION: '12'
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  STORAGE_ACCOUNT_NAME: scmcontactswebsite
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  CONTACTS_ENDPOINT: https://scm-contacts-api-github.azurewebsites.net
+  RESOURCES_ENDPOINT: https://scm-resources-api-github.azurewebsites.net
+  SEARCH_ENDPOINT: https://scm-search-api-github.azurewebsites.net
+  VISITREPORTS_ENDPOINT: https://scm-visitreport-api-github.azurewebsites.net
+
+jobs:
+  extract-arm-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: template
+          path: day4/apps/infrastructure/templates/scm-fe.json
+          if-no-files-found: error
+          retention-days: 90
+
+  build:
+    name: Build Vue.js static website
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        name: Cache npm dependencies to speed up deployment
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('day4/apps/frontend/scmfe/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: npm install, build, and test
+        working-directory: day4/apps/frontend/scmfe
+        run: | # The following lines are joined by a newline (\n) character
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+      - name: Upload the static website as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: day4/apps/frontend/scmfe/dist
+          if-no-files-found: error
+          retention-days: 90
+
+  deploy-arm-template:
+    runs-on: ubuntu-latest
+    needs: extract-arm-template
+    environment: development
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-fe.json
+          deploymentMode: Incremental
+          parameters: storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
+      - name: Enable static website hosting
+        run: > # The following lines are joined by a space ( ) character
+          az storage blob service-properties update
+          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
+          --static-website
+          --index-document index.html
+          --404-document index.html
+
+  deploy-static-website:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - deploy-arm-template
+    environment: development
+    steps:
+      - name: Download the static website
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Get Application Insights Key
+        uses: waeltken/get-application-insights-key-action@v1
+        with:
+          resource-group-name: ${{ env.RESOURCE_GROUP_NAME }}
+          application-insights-name: ${{ env.APPLICATION_INSIGHTS_NAME }}
+      - name: Create settings.js
+        run: echo $FILE_CONTENT > $FILE_NAME
+        env:
+          FILE_NAME: 'settings/settings.js'
+          FILE_CONTENT: | # Lines joined with newline (\n)
+            var uisettings = {
+              "enableStats": true,
+              "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
+              "resourcesEndpoint": "${{ env.RESOURCES_ENDPOINT }}",
+              "searchEndpoint": "${{env.SEARCH_ENDPOINT }}",
+              "reportsEndpoint": "${{ env.VISITREPORTS_ENDPOINT }}",
+              "aiKey": "${{ env.APPLICATION_INSIGHTS_KEY }}"
+            }
+
+      - name: Enable static website hosting
+        run: >
+          az storage blob upload-batch
+          -s ./
+          -d '$web'
+          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}

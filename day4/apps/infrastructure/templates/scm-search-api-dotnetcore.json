@@ -4,7 +4,7 @@
     "parameters": {
         "appPlanSKU": {
             "type": "string",
-            "defaultValue": "B1",
+            "defaultValue": "S1",
             "metadata": {
                 "description": "The SKU of App Service Plan, default is S1"
             }
@@ -20,13 +20,15 @@
             "type": "bool",
             "metadata": {
                 "description": "Use 32bit worker process or not. Some App Service Plan SKUs does only allow 32bit e.g. D1"
-            }
+            },
+            "defaultValue": false
         },
         "alwaysOn": {
             "type": "bool",
             "metadata": {
                 "description": "Use alwaysOn for the App Service Pan or not? Some App Service Plan SKUs does not support it e.g. D1"
-            }
+            },
+            "defaultValue": false
         },
         "storageAccountName": {
             "type": "string",
@@ -52,7 +54,7 @@
         },
         "azureSearchSKU": {
             "type": "string",
-            "defaultValue": "Standard",
+            "defaultValue": "standard",
             "allowedValues": [
                 "free",
                 "basic",
@@ -127,7 +129,6 @@
         {
             "apiVersion": "2018-11-01",
             "type": "Microsoft.Web/sites",
-            "kind": "api",
             "name": "[variables('webAppPortalName')]",
             "location": "[variables('location')]",
             "properties": {

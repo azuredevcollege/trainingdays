@@ -1,0 +1,97 @@
+name: Contacts API
+on:
+  push:
+    branches: [features/github-actions]
+    paths:
+      - .github/workflows/contacts-api.yaml
+      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day4/apps/dotnetcore/Scm/**
+
+env:
+  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
+  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
+  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
+  AZURE_WEBAPP_NAME: scm-contacts-api-github
+
+jobs:
+  extract-arm-template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Upload the ARM Template as build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: template
+          path: day4/apps/infrastructure/templates/scm-api-dotnetcore.json
+          if-no-files-found: error
+          retention-days: 90
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-dotnet@v1
+        with:
+          # SDK Version to use; x will use the latest version of the 3.1 channel
+          dotnet-version: '3.1.x'
+      - name: dotnet build and publish
+        working-directory: day4/apps/dotnetcore/Scm
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o build
+      - name: upload build artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: day4/apps/dotnetcore/Scm/build
+          if-no-files-found: error
+          retention-days: 90
+
+  deploy-arm-template:
+    runs-on: ubuntu-latest
+    needs: extract-arm-template
+    environment: development
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: template
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: scm-api-dotnetcore.json
+          deploymentMode: Incremental
+          parameters: > # Lines are joined with spaces
+            applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }}
+            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
+            alwaysOn=False
+            use32bitworker=False
+            sqlDatabaseName=scm-contacts-db
+            sqlServerName=scm-contacts
+            sqlPassword=${{ secrets.SQL_PASSWORD }}
+            sqlUserName=${{ secrets.SQL_USERNAME }}
+            webAppName=${{ env.AZURE_WEBAPP_NAME }}
+
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+      - deploy-arm-template
+    steps:
+      - name: Download the arm template
+        uses: actions/download-artifact@v2
+        with:
+          name: build
+      - uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Azure WebApp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}

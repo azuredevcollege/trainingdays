@@ -77,7 +77,6 @@
         {
             "apiVersion": "2018-02-01",
             "type": "Microsoft.Web/serverfarms",
-            "kind": "app",
             "name": "[variables('appServicePlanName')]",
             "location": "[variables('location')]",
             "properties": {
@@ -91,7 +90,6 @@
         {
             "apiVersion": "2018-11-01",
             "type": "Microsoft.Web/sites",
-            "kind": "api",
             "name": "[variables('webAppPortalName')]",
             "location": "[variables('location')]",
             "properties": {
