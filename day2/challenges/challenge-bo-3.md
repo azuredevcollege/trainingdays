@@ -1,4 +1,4 @@
-# Break Out #3: Create the infrastructure for our sample app with ARM templates
+# Break Out #3 (Optional): Create the infrastructure for our sample app with ARM templates
 
 So, this is our last Break-Out session for today. You will now have the challenge to create the ARM template for our SCM Contacts application and deploy it to Azure.
 

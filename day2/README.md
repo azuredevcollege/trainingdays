@@ -4,7 +4,7 @@
 - [Challenge 1 - Azure Web Applications](challenges/challenge-1.md)
 - :small_orange_diamond: *[Breakout! - Deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
 - [Challenge 2 - Serverless](challenges/challenge-2.md)
-- [Challenge 3 - Messaging](challenges/challenge-3.md)
+- [OPTIONAL Challenge 3 - Messaging](challenges/challenge-3.md)
 - :small_orange_diamond: *[Breakout! - Add a serverless microservice to our sample app and include messaging](challenges/challenge-bo-2.md)* :small_orange_diamond:
 - :small_orange_diamond: *[OPTIONAL Breakout! - Create an Azure Web App and Storage Account with ARM templates](challenges/challenge-bo-3.md)* :small_orange_diamond:
 
