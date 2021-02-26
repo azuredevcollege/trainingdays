@@ -1,6 +1,6 @@
 # Messaging
 
-In this chapter, you will get to know Azure messaging offerings to loosely connect services with each other. You will use _Azure Service Bus Topics_ as an example. _Azure Storage Queues_ will be used in the next Break Out session, our SCM Contacts application.
+In this **optional** chapter, you will get to know Azure messaging offerings to loosely connect services with each other. You will use _Azure Service Bus Topics_ as an example. _Azure Storage Queues_ will be used in the next Break Out session, our SCM Contacts application.
 
 ## Here is what you will learn
 
