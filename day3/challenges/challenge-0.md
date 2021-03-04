@@ -42,7 +42,7 @@ cd day3/scripts/baseline
 
 ## Results
 
-To check, if everything works as expected, go to the Azure Portal an open the resource group (named _"azdcXXXX-rg"_). Open the "Frontend Storage Account" (named _"azdcXXXXfe"_) and choose "Static website" from the settings pane. Copy the **primary endpoint URL** and open it in a browser. You should now see the SCM Contacts application as it should be running after *Day 2* of the Azure Developer College.
+To check, if everything works as expected, go to the Azure Portal an open the resource group (named _"azdcXXXX-rg"_). Check that all resources have been deployed. Futhermore, the script outputs the URL for the website (sth. like "https://azdcXXXXfe.z6.web.core.windows.net/"). Copy the URL and open it in a browser. You should now see the SCM Contacts application as it should be running after *Day 2* of the Azure Developer College.
 
 ## Optional
 
