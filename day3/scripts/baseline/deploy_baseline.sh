@@ -111,4 +111,11 @@ cd ../../../day2/apps/frontend/scmfe && npm install && npm run build && cd ../..
 echo "var uisettings = { \"endpoint\": \"https://$BASE_API_WEBAPP_NAME.azurewebsites.net\", \"resourcesEndpoint\": \"https://$BASE_RES_WEBAPP_NAME.azurewebsites.net\", \"aiKey\": \"$aiKey\" };" > ../../../day2/apps/frontend/scmfe/dist/settings/settings.js
 az storage blob upload-batch -d '$web' --account-name $BASE_STORAGEACCOUNT_FE_NAME -s ../../../day2/apps/frontend/scmfe/dist
 
+echo "Cleaning up publish folders..."
+rm -rf publish*
+
 echo "Done. Resources have been deployed in resource group $BASE_RG_COMMON_NAME."
+echo ""
+echo "Website can be accessed via:"
+echo ""
+az storage account show -n $BASE_STORAGEACCOUNT_FE_NAME --query "primaryEndpoints.web" --output tsv
