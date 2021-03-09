@@ -254,10 +254,8 @@ Create a local folder called _devcollege_ and open it in the comannd line.
 
  `cd` into that folder and execute:
 
-> **One more thing**: If you have installed the latest SDK version, e.g. "5.0.1", run the command `dotnet new globaljson --sdk-version 3.1.404` in the `devcollege` folder to pin the dotnet version to the LTS one! Any `dotnet` command run in any folder in the tree will use version '3.1.404' now.
-
 ```shell
-$ dotnet new mvc -o myFirstCoreApp
+$ dotnet new mvc -o myFirstCoreApp -f netcoreapp3.1
 
 The template "ASP.NET Core Web App (Model-View-Controller)" was created successfully.
 This template contains technologies from parties other than Microsoft, see https://aka.ms/aspnetcore/3.0-third-party-notices for details.

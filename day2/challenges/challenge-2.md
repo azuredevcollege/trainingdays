@@ -171,7 +171,7 @@ Choose the following options, when asked:
 - when asked, select the same storage account used in the local sample
 - You can skip the creation of an Application Insights instance (--> "Skip for now")
 
-We still have to configure our Functions App, to be able to listen to blob changes in the Storage Account (BlobTrigger information). Therefore, got to the Portal and open the Functions App you previously created.
+We still have to configure our Functions App, to be able to listen to blob changes in the Storage Account (BlobTrigger information). Therefore, go to the Portal and open the Functions App you previously created.
 Open the Application settings under **Configuration** and add a new application setting (**you can check your _local.settings.json_ file for the correct values!**):
 
 | Name                           | Value                                                                                                       |
