@@ -76,7 +76,7 @@ Account Properties:
 
 - use your existing resource group: **scm-breakout-rg**
 - Location: _West Europe_
-- Pricing Tier: _Free_ (for development purposes)
+- Pricing Tier: _Free_ (for development purposes - if that is not possible, choose _Basic_)
 
 Leave all other settings as proposed by Azure.
 
