@@ -54,7 +54,7 @@ Leave all other settings as proposed by Azure.
 
 ![bo_data_cosmos](./img/bo_data_cosmos.png "bo_data_cosmos")
 
-When the deployment has finished (creating the account takes some time - you can grab a coffee), create a new _Database_ and _Container_ under "Data Explorer" in the portal for the Visis Reports microservice.
+When the deployment has finished (creating the account takes some time - you can grab a coffee), create a new _Database_ and _Container_ under "Data Explorer" in the portal for the Visit Reports microservice.
 
 Database Properties:
 
@@ -131,6 +131,7 @@ Subscription for Visit Reports Service
 
 - Name: _scmcontactvisitreport_
 - Max delivery count: 10
+- **Enable Sessions**: _false_
 
 When you have successfully added the two subscriptions, go back to **Shared Access Policies** of the Service Bus Topic **scmtopic** and add two policies:
 
