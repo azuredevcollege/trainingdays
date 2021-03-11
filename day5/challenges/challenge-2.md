@@ -39,12 +39,17 @@ In this sample we create an API that exposes four OAuth2 permissions:
 ### Azure CLI
 
 Firstly, create a new Azure AD application and write the output to a variable:
+
 ```Shell
 API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
 ``` 
 
+>_*Note:*_ The example here describes how to execute the commands in a bash. If you don't have a bash on your system, you can use the Azure Cloud
+> Shell
+
 After that we have created an Azure AD application that contains one default OAuth2 permission which was created by Azure AD.
 To make your own OAuth2 permission, the default permission must be disabled first:
+
 ```shell
 # get the app id
 API_APP_ID=$(echo $API_APP | jq -r '.appId')
@@ -54,7 +59,7 @@ az ad app update --id $API_APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
 ```
 Now your own OAuth2 permissions can be added:
 ```shell
-# set needed scopes from file 'oath2-permissions'
+# set needed scopes from file 'ouath2-permissions (day5/challenges/oauth2-permissions)'
 az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.json
 ```
 To keep it simple, the needed OAuth2 permissions are defined in a [.json](oauth2-permissions.json) file.
