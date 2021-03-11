@@ -80,7 +80,6 @@ If you want to use the command line do the following:
 git add .
 git commit -m "Comment"
 ```
-You can use The ["Azure Repos"](https://marketplace.visualstudio.com/items?itemName=ms-vsts.team) extension for VS Code to manage your Azure Repos from VS Code. After you have installed the extension you first have to signin to your Azure DevOps Project. Go to View->Command Palette and then type "Team" and you will get a dropdown with all available commands for Azure DevOps. Select *"Team:Signin"* and use the device login to signin to your Azure DevOps Project. Alternatively, you can create a *"Personal access token"* and use it for authentication. Have a look [here](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate?view=azure-devops&tabs=preview-page) and read the instructions on how to setup a *"Personal Access Token"*.
 
 #### Push your local branch to the remote repository
 Now your changes are only available in your local branch. To make the changes available for all your team members you have to push your changes to the remote repository. You can either use VS Code or the command line to push your changes.
