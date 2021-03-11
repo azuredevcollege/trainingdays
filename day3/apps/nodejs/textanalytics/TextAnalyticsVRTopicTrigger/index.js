@@ -21,10 +21,14 @@ module.exports = async function (context, mySbMsg) {
     var current_sentiment_score = -1;
     var current_keyphrases = [];
 
+    // do we have a valid message?
     if (mySbMsg != null) {
+        // check the types: only VR update/create need to be handled
         if (mySbMsg.eventType == "VisitReportUpdatedEvent" || mySbMsg.eventType == "VisitReportCreatedEvent") {
             context.log('Message is of type "create" or "update".');
+            // is "text" available (result of the visitreport)?
             if (mySbMsg.result != null && mySbMsg.result != undefined && mySbMsg.result != '') {
+                // query cognitive services
                 current_language = await detectLanguage(mySbMsg, context);
                 current_sentiment_score = await getSentimentScore(mySbMsg, current_language);
                 current_keyphrases = await getKeyPhrases(mySbMsg, current_language);
