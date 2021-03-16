@@ -110,6 +110,8 @@ So, first of all, let's deploy the backend to Azure. You already know how to do 
 
 > **Hint for Step 3**: now that we have a lot of projects in our folder, VS Code is not able to determine which project to pick when deploying via the Azure Tools App Services extension. We first need to publish the project to a local folder and take that as our deployment source. There is already a predefined task for you, called **day2publishScmContacts** (btw, all tasks are defined in the **.vscode** folder). To run it, simply press **F1** and choose **"Tasks: Run Task"**. In the dropdown, select **day2publishScmContacts**. A release build will be started and the outputs placed in the folder **apps/dotnetcore/Scm/Adc.Scm.Api/publish** folder. Choose that folder when "right-click-deploying" from the Azure AppService extension (via "Browse...").
 
+> **WARNING**: Please don't confirm the message that asks to always deploy that service to the Azure AppService! If you accidentially did, delete the file _.vscode/settings.json_! Then you will be able to select the folder to publish again.
+
 When everything works as expected in Azure, go back to the **settings.js** file of your SPA and adjust the **endpoint** property. Enter the value of your newly deployed API for it, e.g. https://mynewcontactsapi.azurewebsites.net/.
 
 Open the browser and check, if your application still works as expected.
