@@ -272,6 +272,7 @@ Restore succeeded.
 After the wizard has finished, `cd` into the new folder _myFirstCoreApp_ and open it in VS Code:
 
 ```shell
+$ cd myFirstCoreApp
 $ code .
 ```
 
