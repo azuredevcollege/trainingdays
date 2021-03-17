@@ -4,13 +4,13 @@ If you could not finish the challenges and/or breakout parts of *Day 2*, here is
 
 ## Pre-Requisites
 
-The script itself is a `bash` script. If you want to use ```bash``` on you own machine, make sure you have the ```zip``` package installed:
+The script itself is a `bash` script. If you want to use ```bash``` **on your own/local machine**, make sure you have the ```zip``` package installed:
 
 ```shell
 sudo apt install zip
 ```
 
-You can run the bash script either in the Azure Cloud Shell (https://shell.azure.com) or on your own machine. Either way, it will use your local Azure CLI. So make sure you are logged in and have selected the correct subscription. You can check the current subscription by running:
+You can run the bash script either in the Azure Cloud Shell (https://shell.azure.com - recommended) or on your own machine. Either way, it will use your Azure CLI credentials. So make sure you are logged in and have selected the correct subscription. You can check the current subscription by running:
 
 ```shell
 az account show
@@ -42,7 +42,9 @@ cd day3/scripts/baseline
 
 ## Results
 
-To check, if everything works as expected, go to the Azure Portal an open the resource group (named _"azdcXXXX-rg"_). Check that all resources have been deployed. Futhermore, the script outputs the URL for the website (sth. like "https://azdcXXXXfe.z6.web.core.windows.net/"). Copy the URL and open it in a browser. You should now see the SCM Contacts application as it should be running after *Day 2* of the Azure Developer College.
+To check, if everything works as expected after the script has finished, go to the Azure Portal an open the resource group (named _"azdcXXXX-rg"_). Check that all resources have been deployed. 
+
+Futhermore, the script outputs the URL for the website (sth. like "https://azdcXXXXfe.z6.web.core.windows.net/"). Copy the URL and open it in a browser. You should now see the SCM Contacts application as it would be running after *Day 2* of the Azure Developer College.
 
 ## Optional
 
