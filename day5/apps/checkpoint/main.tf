@@ -367,7 +367,7 @@ resource "azuredevops_serviceendpoint_azurerm" "endpointazure" {
 }
 
 resource "azurerm_resource_group" "container_rg" {
-  name     = "adc_registry_rg"
+  name     = "${local.unique_prefix}_adc_registry_rg"
   location = "westeurope"
 }
 
