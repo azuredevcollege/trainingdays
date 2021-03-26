@@ -4,7 +4,7 @@
 
 In order to be able to store the custom Docker images you will be creating throughout this workshop, we need a container registry. Azure provides its own service for that, the Azure Container Registry. Let's create one via the Azure CLI:
 
-```zsh
+```shell
 $ az group create --name adc-acr-rg --location westeurope
 $ az acr create --name <ACR_NAME> --resource-group adc-acr-rg --sku basic --admin-enabled
 
@@ -17,7 +17,7 @@ $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr <ACR
 
 First, let's build a custom Docker image. Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`. Take a look at the - very simple - Dockerfile and run the following commands.
 
-```zsh
+```shell
 $ docker build -t test:1.0 .
 $ docker run -p 8080:80 test:1.0
 ```
@@ -26,7 +26,7 @@ Open your browser and navigate to `http://localhost:8080`. You should see a page
 
 Now let's push the image to our registry. To be able to interact with our registry, we first need to login.
 
-```zsh
+```shell
 $ ACRPWD=$(az acr credential show -n <ACR_NAME> --query "passwords[0].value" -o tsv)
 $ docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
 ```
@@ -35,14 +35,14 @@ $ docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
 
 We are now ready to push the image to our container registry.
 
-```zsh
+```shell
 $ docker tag test:1.0 <ACR_NAME>.azurecr.io/test:1.0
 $ docker push <ACR_NAME>.azurecr.io/test:1.0
 ```
 
 You can also build directly within the Azure Container Registry service, in case you don't have Docker on your machine. Let's have a try...
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/test:2.0 .
 ```
 
@@ -70,13 +70,13 @@ spec:
 
 Create a file called `myfirstpod.yaml` with the content above and apply it to your cluster.
 
-```zsh
+```shell
 $ kubectl apply -f myfirstpod.yaml
 ```
 
 Check that everything works as expected:
 
-```zsh
+```shell
 $ kubectl get pods -w
 NAME         READY   STATUS              RESTARTS   AGE
 myfirstpod   0/1     ContainerCreating   0          6s
@@ -88,7 +88,7 @@ myfirstpod   1/1     Running             0          17s
 
 Also, "describe" the pod to see some more details like status, the node it's running on, events etc.
 
-```zsh
+```shell
 $ kubectl describe pod myfirstpod
 Name:         myfirstpod
 Namespace:    default
@@ -144,7 +144,7 @@ So, the pod is running, but how do we access it?! Let's have a look at one optio
 
 With `kubectl` you can "port-forward" a local port to a port on a pod. This is how it works in our case:
 
-```zsh
+```shell
 $ kubectl port-forward myfirstpod 8080:80
 ```
 
@@ -152,7 +152,7 @@ Our pod is listening on port `80` and we forward our local port `8080` to that o
 
 To proof that the requests arrive at the pod, check the logs:
 
-```zsh
+```shell
 $ kubectl logs myfirstpod -f=true
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
@@ -215,7 +215,7 @@ spec:
 
 Create a file called `sqlserver.yaml` and apply the configuration.
 
-```zsh
+```shell
 $ kubectl apply -f sqlserver.yaml
 
 deployment.apps/mssql-deployment created
@@ -229,7 +229,7 @@ mssql-deployment-5559884974-q2j4w   1/1     Running             0          39s
 
 After about 30-40 sec, you should see that the pod with SQL Server 2019 is up and running. Also, let's have a look at the deployment.
 
-```zsh
+```shell
 $ kubectl get deployments
 
 NAME               READY   UP-TO-DATE   AVAILABLE   AGE
@@ -275,7 +275,7 @@ Events:
 
 As we need to connect to this pod over the network, let's find out what IP adress has been assigned to it.
 
-```zsh
+```shell
 $ kubectl get pods -o wide
 
 NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
@@ -286,7 +286,7 @@ The adress may vary in your environment, for the sample here, it's `10.244.0.5`.
 
 Now, we can deploy a simple API that is able to manage `Contacts` objects, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image needs to be built upfront and put in your container registry. So, please go to the folder `day7/apps/dotnetcore/Scm` and build the API image:
 
-```zsh
+```shell
 $ docker build -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 
 Sending build context to Docker daemon  64.51kB
@@ -308,7 +308,7 @@ Successfully tagged adccontainerreg.azurecr.io/adc-api-sql:1.0
 
 After a successful build, push the local image to the Azure Container Registry:
 
-```zsh
+```shell
 $ docker push <ACR_NAME>.azurecr.io/adc-api-sql:1.0
 
 The push refers to repository [adccontainerreg.azurecr.io/adc-api-sql]
@@ -325,7 +325,7 @@ d0fe97fa8b8c: Mounted from test
 
 There is also another approach - you can also build directly within the container registry. Let's do this:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 ```
 
@@ -365,7 +365,7 @@ A few notes on the deployment above. Firt and foremost, we tell Kubernetes to ru
 
 Again, create a file (`api.yaml`) with the contents above - don't forget to replace the IP adress - and apply the configuration to your cluster.
 
-```zsh
+```shell
 $ kubectl apply -f api.yaml
 
 deployment.apps/myapi created
@@ -373,7 +373,7 @@ deployment.apps/myapi created
 
 Let's have a look at the pods...we should now have 4 replicas running in the cluster.
 
-```zsh
+```shell
 $ kubectl get pods
 
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -386,7 +386,7 @@ myapi-7c74475b88-s5gmj              1/1     Running   0          74s
 
 We are all set to test the API and the connection to the SQL server. As done before, let's "port-forward" a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod `myapi-7c74475b88-7hmcj` - of course, replace the pod name with one from your environment.
 
-```zsh
+```shell
 $ kubectl port-forward myapi-7c74475b88-7hmcj 8080:5000
 
 Forwarding from 127.0.0.1:8080 -> 5000
@@ -408,7 +408,7 @@ As discussed before, Kubernetes takes care of your deployments by constantly che
 
 Let's try this...first, let's query the pods in our cluster. An this time, we are "watching" (`-w`) them so that we get notified of any changes of their states:
 
-```zsh
+```shell
 $ kubectl get pods -w
 
 NAME                                READY   STATUS    RESTARTS   AGE
@@ -421,7 +421,7 @@ myapi-7c74475b88-s5gmj              1/1     Running   0          36m
 
 Now please open another tab/command line window and kill one of the pods. Here, we pick `myapi-7c74475b88-7jhtq` - again, replace the pod name with one from your environment.
 
-```zsh
+```shell
 $ kubectl delete pod myapi-7c74475b88-7jhtq
 
 pod "myapi-7c74475b88-7jhtq" deleted
@@ -429,7 +429,7 @@ pod "myapi-7c74475b88-7jhtq" deleted
 
 In the first tab/window where we are watching for "pod changes", you should now see a similar output...
 
-```zsh
+```shell
 myapi-7c74475b88-7jhtq              1/1     Terminating   0          45m
 myapi-7c74475b88-rpv8x              0/1     Pending       0          0s
 myapi-7c74475b88-rpv8x              0/1     Pending       0          0s
@@ -446,7 +446,7 @@ As you can see, Kubernetes immediately starts a new pod (`myapi-7c74475b88-rpv8x
 
 Of course, you can scale such a deployment on purpose to e.g. 3 or 6 replicas. Therefor, you should use the `scale` command (or simply edit the deployment manifest). Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:
 
-```zsh
+```shell
 # Scale up to 6 replicas
 $ kubectl scale deployment --replicas 6 myapi
 
@@ -474,7 +474,7 @@ Let's see it in action...
 For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster).
 Let's scale the API deployment back down to 4 replicas in case you haven't already done so.
 
-```zsh
+```shell
 $ kubectl scale deployment --replicas 4 myapi
 
 deployment.apps/myapi scaled
@@ -482,7 +482,7 @@ deployment.apps/myapi scaled
 
 After executing that command, the current state should look similar to that one:
 
-```zsh
+```shell
 $ kubectl get pods,deployments,services
 
 NAME                                    READY   STATUS    RESTARTS   AGE
@@ -513,7 +513,7 @@ spec:
 
 So, let's see, if we have these labels attached to the API pods.
 
-```zsh
+```shell
 kubectl get pods --show-labels -o wide
 
 NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES   LABELS
@@ -559,7 +559,7 @@ spec:
 
 Let's apply both definitions.
 
-```zsh
+```shell
 $ kubectl apply -f sqlserver-service.yaml
 service/mssqlsvr created
 
@@ -571,7 +571,7 @@ So, how do we check, that the service(s) really find pods to route traffic to? T
 
 Let's see how that looks like in our case.
 
-```zsh
+```shell
 $ kubectl get services,endpoints
 
 NAME                  TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
@@ -598,21 +598,21 @@ Now, there is one more step to do, before we can test the setup: adjust the conn
 
 Please replace the IP adress, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 re-created API pods.
 
-```zsh
+```shell
 $ kubectl apply -f api.yaml
 deployment.apps/myapi configured
 ```
 
 Let's test the setup...we now spin up another pod in the cluster, connect to the commandline of that pod and run several calls against our API service.
 
-```zsh
+```shell
 $ kubectl run -it --rm --image csaocpger/httpie:1.0 http --restart Never -- /bin/sh
 If you don't see a command prompt, try pressing enter.
 ```
 
 You are now connected to the pod and should see a command prompt. We can now issue some requests.
 
-```zsh
+```shell
 
 # CREATE a contact
 $ echo '{ "firstname": "Satya", "lastname": "Nadella", "email": "satya@microsoft.com", "company": "Microsoft", "avatarLocation": "", "phone": "+1 32 6546 6545", "mobile": "+1 32 6546 6542", "description": "CEO of Microsoft", "street": "Street", "houseNumber": "1", "city": "Redmond", "postalCode": "123456", "country": "USA" }' | http POST http://contactsapi:8080/contacts
@@ -697,7 +697,7 @@ spec:
 
 Create a file called `api-service-nodeport.yaml` and apply the definition to your cluster.
 
-```zsh
+```shell
 $ kubectl apply -f api-service-nodeport.yaml
 
 service/nodeport-contactsapi created
@@ -710,7 +710,7 @@ By using the same label selectors for the service, we get the same endpoints as 
 
 Now, let's call such a service via a node's IP adress and the port `30010`. We first need to determine the IP adress of each node.
 
-```zsh
+```shell
 # get node IP adresses
 $ kubectl get nodes -o wide
 
@@ -722,7 +722,7 @@ aks-nodepool1-11985439-vmss000002   Ready    agent   5d20h   v1.17.11   10.240.0
 
 In this case, we have the IP adresses `10.240.0.4`, `10.240.0.5` and `10.240.0.6`. Let's use one of them to call the contacts API.
 
-```zsh
+```shell
 $ kubectl run -it --rm --image csaocpger/httpie:1.0 http --restart Never -- /bin/sh
 
 # inside the pod, execute...
@@ -781,7 +781,7 @@ spec:
 
 Please create a file called `api-service-loadbalancer.yaml` and apply it.
 
-```zsh
+```shell
 $ kubectl apply -f api-service-loadbalancer.yaml
 
 service/loadbalancer-contactsapi created
@@ -823,7 +823,7 @@ To install the [NGINX ingress controller](https://kubernetes.github.io/ingress-n
 
 Now, let's install the ingress controller:
 
-```zsh
+```shell
 # create ingress namespace
 $ kubectl create namespace ingress
 
@@ -851,7 +851,7 @@ You can watch the status by running 'kubectl --namespace ingress get services -o
 
 After the controller has been installed, check the correspondig service:
 
-```zsh
+```shell
 
 $ kubectl --namespace ingress get services my-ingress-ingress-nginx-controller
 
@@ -867,7 +867,7 @@ You can test the setup, by opening a browser and navigating to that URL...you sh
 
 So, the IP adress of the ingress controller will be the only one exposed in our cluster now. Therefor, we can get rid of the one created in the previuos chapter. To have a clean environment, let's also remove the `NodePort` service.
 
-```zsh
+```shell
 # this one will take some time, because Kubernetes needs to delete the public IP at the Azure Loadbalancer
 $ kubectl delete service loadbalancer-contactsapi
 
@@ -919,7 +919,7 @@ spec:
 
 Create the file `api-ingress.yaml` and apply it:
 
-```zsh
+```shell
 $ kubectl apply -f api-ingress.yaml
 ```
 
@@ -957,14 +957,14 @@ Save the file and - in a terminal - go to the folder `day7/apps/frontend/scmfe` 
 
 **Alternative 1 - Build locally:**
 
-```zsh
+```shell
 $ docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
 $ docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
 ```
 
 **Alternative 2 - Use your Azure Container Registry:**
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
 ```
 
@@ -1035,7 +1035,7 @@ spec:
 
 Create a file called `frontend.yaml` with the content above and apply it:
 
-```zsh
+```shell
 $ kubectl apply -f frontend.yaml
 
 deployment.apps/myfrontend created
@@ -1045,7 +1045,7 @@ ingress.networking.k8s.io/ing-frontend created
 
 Please check, that everything is in place:
 
-```zsh
+```shell
 $ kubectl get deployment,service,endpoints,ingress
 NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/mssql-deployment   1/1     1            1           2d2h

@@ -238,7 +238,7 @@ var uisettings = {
 
 To apply these changes, adjust the `ConfigMap´ called `uisettings`, apply it to the cluster and "re-rollout" the frontend deployment:
 
-```zsh
+```shell
 $ kubectl rollout restart deployment frontend-deploy
 
 deployment.apps/frontend-deploy restarted

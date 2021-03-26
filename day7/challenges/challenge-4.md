@@ -28,7 +28,7 @@ If you have successfully installed Terrraform CLI, let's create the Azure servic
 
 You can leave all other variables with their default values. The file should then look similar to that:
 
-```tf
+```hcl
 variable "location" {
   type    = string
   default = "westeurope"
@@ -71,7 +71,7 @@ variable "sqldbpassword" {
 
 After adjusting the file, you can execute the following commands (in folder `day7/challenges/samples/challenge-4/0_tf`):
 
-```zsh
+```shell
 $ terraform init
 $ terraform apply
 # Answer with 'yes' when asked, that the changes will be applied.
@@ -81,7 +81,7 @@ $ terraform apply
 
 **This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
-```zsh
+```shell
 $ terraform output > azure_output.txt
 ```
 
@@ -89,7 +89,7 @@ $ terraform output > azure_output.txt
 
 We will put our application into a namespace called `contactsapp`. Let's create it:
 
-```zsh
+```shell
 $ kubectl create ns contactsapp
 
 namespace/contactsapp created
@@ -97,7 +97,7 @@ namespace/contactsapp created
 
 We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands.
 
-```zsh
+```shell
 $ kubectl config set-context --current --namespace=contactsapp
 
 Context "adc-cluster" modified.
@@ -162,7 +162,7 @@ The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress con
 
 Please apply both files to your cluster:
 
-```zsh
+```shell
 $ kubectl apply -f configmap.yaml
 configmap/uisettings created
 
@@ -178,49 +178,49 @@ Now, build all the required images one by one...of course, replace `<ACR_NAME>` 
 
 1. Contacts API: Folder `day7/apps/dotnetcore/Scm`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-contacts-api:2.0 -f ./Adc.Scm.Api/Dockerfile .
 ```
 
 2. Resources API: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-api:2.0 .
 ```
 
 3. Image Resizer Function: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-func:2.0 .
 ```
 
 4. Search API: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-api:2.0 .
 ```
 
 5. Search Indexer Function: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-func:2.0 .
 ```
 
 6. Visit Reports API: Folder `day7/apps/nodejs/visitreport`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-visitreports-api:2.0 .
 ```
 
 7. Text Analytics Function: Folder `day7/apps/nodejs/textanalytics`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-textanalytics-func:2.0 .
 ```
 
 8. Frontend / UI: Folder `day7/apps/frontend/scmfe`:
 
-```zsh
+```shell
 $ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0 .
 ```
 
@@ -234,7 +234,7 @@ We are now all set to deploy the services to the Kubernetes cluster.
 
 **But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
-```zsh
+```shell
 $ kubectl delete ingress ing-frontend -n default
 $ kubectl delete ingress ing-contacts -n default
 ```
@@ -258,7 +258,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_contactsapi
 
 deployment.apps/ca-deploy created
@@ -281,7 +281,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 2_resourcesapi
 
 deployment.apps/resources-deploy created
@@ -304,7 +304,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 3_searchapi
 
 deployment.apps/search-deploy created
@@ -327,7 +327,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 4_visitreports
 
 deployment.apps/visitreports-deploy created
@@ -355,7 +355,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_resourcesfunc
 
 deployment.apps/resources-function-deploy created
@@ -375,7 +375,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 2_searchfunc
 
 deployment.apps/search-function-deploy created
@@ -395,7 +395,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 3_textanalyticsfunc
 
 deployment.apps/textanalytics-function-deploy created
@@ -405,7 +405,7 @@ deployment.apps/textanalytics-function-deploy created
 
 Last, but not least, we also need to deploy the VueJS Single Page Application.
 
-Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below: 
+Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below:
 
 Settings to adjust:
 
@@ -418,7 +418,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_ui
 
 deployment.apps/frontend-deploy created
@@ -430,7 +430,7 @@ service/frontend created
 
 That was a lot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
 
-```zsh
+```shell
 $ kubectl get deployment,pods,service,endpoints,ingress
 NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/ca-deploy                       2/2     2            2           23h

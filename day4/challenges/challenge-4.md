@@ -47,11 +47,11 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: "day4/apps/dotnetcore/Scm/**/*.csproj"
+          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: "day4/apps/dotnetcore/Scm/**/*.csproj"
+          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
@@ -101,7 +101,7 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - task: UseDotNet@2
-        displayName: "Acquire .NET Core Sdk 3.1.x"
+        displayName: 'Acquire .NET Core Sdk 3.1.x'
         inputs:
           packageType: Sdk
           version: 3.1.x
@@ -109,11 +109,11 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: "day4/apps/dotnetcore/Scm/**/*.csproj"
+          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: "day4/apps/dotnetcore/Scm/**/*.csproj"
+          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
@@ -211,7 +211,7 @@ Now we have to enable the PR-Build to be triggered whenever a PullRequest is cre
 1. Open the branch policies of the master branch
 2. Add a build validation and select your SCM-Contacts-PR build
 3. Set the path filter as follow:
-   ```Shell
+   ```shell
    /day4/apps/infrastructure/templates/scm-api-dotnetcore.json;/day4/apps/dotnetcore/Scm/*
    ```
    With this filter the PR build is only triggered when files were changed that belongs to the SCM Contacts API
@@ -224,7 +224,7 @@ Now it's time to see the whole build flow in action.
 1. Checkout the master branch and pull the latest changes
 2. Create and checkout a new feature branch _features/scmcontactsflow_
 3. Open the file [day4/apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs](../apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs) and change the name of the API in the Swagger configurations:
-   ```C#
+   ```csharp
    // here
    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ADC Contacts API", Version = "v1" });
    // and here

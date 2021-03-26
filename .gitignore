@@ -18,4 +18,5 @@ day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/publish/**
 day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/publish/**
 day3/apps/dotnetcore/Scm/Adc.Scm.Api/publish/**
 day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/publish/**
+day4/apps/dotnetcore/Scm/build/
 **/node_modules/**

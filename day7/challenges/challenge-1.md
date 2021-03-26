@@ -7,7 +7,7 @@ In this section we will create a Kubernetes cluster using the Azure CLI, configu
 To have a clean overview of what is beeing provisioned under the hood, we create a new resource
 group and and create our Kubernetes cluster within.
 
-```zsh
+```shell
 az group create --name adc-aks-rg --location westeurope
 az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.19.7
 ```
@@ -35,7 +35,7 @@ Now it's time to access our cluster. To authenticate us against the cluster Kube
 certificates and access tokens. To obtain these access credentials for our newly created cluster we
 use the `az aks get-credentials` command:
 
-```zsh
+```shell
 $ az aks get-credentials --resource-group adc-aks-rg --name adc-cluster
 Merged "adc-cluster" as current context in /home/waltken/.kube/config
 
@@ -101,7 +101,7 @@ Create a new `dashboard-admin.yaml` file and paste the above content.
 
 We can apply the configuration using the following line:
 
-```zsh
+```shell
 $ kubectl apply -f dashboard-admin.yaml
 serviceaccount/admin-user created
 clusterrolebinding.rbac.authorization.k8s.io/admin-user created
@@ -109,7 +109,7 @@ clusterrolebinding.rbac.authorization.k8s.io/admin-user created
 
 We need to discover the created users secret access token, to gain access to the dashboard.
 
-```zsh
+```shell
 $ kubectl -n kubernetes-dashboard get secret
 NAME                               TYPE                                  DATA   AGE
 admin-user-token-22554             kubernetes.io/service-account-token   3      32s
@@ -122,7 +122,7 @@ kubernetes-dashboard-token-zmvj4   kubernetes.io/service-account-token   3      
 
 Find the secret that belongs to the `admin-user-token` and let `kubectl describe` it to see the content of the secret:
 
-```zsh
+```shell
 $ kubectl -n kubernetes-dashboard describe secret admin-user-token-smw2j
 Name:         admin-user-token-22554
 Namespace:    kubernetes-dashboard
@@ -145,7 +145,7 @@ Copy the token to your clipboard for the next step.
 
 Now we start the kubernetes proxy to access the remote api safely on our local machine:
 
-```zsh
+```shell
 $ kubectl proxy
 Starting to serve on 127.0.0.1:8001
 ```
@@ -169,7 +169,7 @@ different namespaces.
 Now we will run our first pod on our kubernetes cluster. Let's keep the `kubectl proxy` command
 running and execute this in new tab in your console.
 
-```zsh
+```shell
 $ kubectl run -i -t pod1 --image=busybox --restart=Never --rm=true
 If you don't see a command prompt, try pressing enter.
 / #
@@ -180,7 +180,7 @@ We've just started a `Pod` named _pod1_ based on the _busybox_ image.
 To understand the different flags we've added to the command take a look at the built in
 documentation to `kubectl run`.
 
-```zsh
+```shell
 $ kubectl run --help
 Create and run a particular image in a pod.
 
