@@ -8,13 +8,9 @@ To have a clean overview of what is beeing provisioned under the hood, we create
 group and and create our Kubernetes cluster within.
 
 ```zsh
-$ az group create --name adc-aks-rg --location westeurope
-$ az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.17.13
+az group create --name adc-aks-rg --location westeurope
+az aks create --resource-group adc-aks-rg --name adc-cluster --generate-ssh-keys --kubernetes-version 1.19.7
 ```
-
-> Note that we deploy Kubernetes with the latest available version on azure at the time of writing.
-> If you use a different version, you might run into trouble during the _Access the Dashboard_
-> section.
 
 Let's inspect the created resources:
 
@@ -41,9 +37,11 @@ use the `az aks get-credentials` command:
 
 ```zsh
 $ az aks get-credentials --resource-group adc-aks-rg --name adc-cluster
+Merged "adc-cluster" as current context in /home/waltken/.kube/config
+
 $ kubectl version # check client and server version of kubernetes
-Client Version: version.Info{Major:"1", Minor:"18", GitVersion:"v1.18.6", GitCommit:"dff82dc0de47299ab66c83c626e08b245ab19037", GitTreeState:"clean", BuildDate:"2020-07-16T06:30:04Z", GoVersion:"go1.14.5", Compiler:"gc", Platform:"linux/amd64"}
-Server Version: version.Info{Major:"1", Minor:"17", GitVersion:"v1.17.7", GitCommit:"5737fe2e0b8e92698351a853b0d07f9c39b96736", GitTreeState:"clean", BuildDate:"2020-06-24T19:54:11Z", GoVersion:"go1.13.6", Compiler:"gc", Platform:"linux/amd64"}
+Client Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.2", GitCommit:"faecb196815e248d3ecfb03c680a4507229c2a56", GitTreeState:"clean", BuildDate:"2021-01-14T18:56:46Z", GoVersion:"go1.15.6", Compiler:"gc", Platform:"linux/amd64"}
+Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.7", GitCommit:"14f897abdc7b57f0850da68bd5959c9ee14ce2fe", GitTreeState:"clean", BuildDate:"2021-01-22T17:29:38Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
 `kubectl version` prints both the version of the locally runnig commandline tool as well as the
@@ -55,8 +53,16 @@ cluster.
 
 ## Access the dashboard
 
-AKS comes with the kubernetes-dashboard installed by default. Accessing the dashboard requires us to
-create a `ServiceAccount` with the _cluster-admin_ `ClusterRole`.
+AKS no longer comes with the kubernetes-dashboard installed by default. Lucky
+for us there is a one-liner to quickly install the dashboard into our
+cluster:
+
+```shell
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+```
+
+Now, accessing the dashboard requires us to create a `ServiceAccount` with the
+_cluster-admin_ `ClusterRole`.
 
 To create these `Resources` within our Kubernetes cluster we will first declare the desired
 configuration for our `ServiceAccount` in a yaml file and apply the desired configuration to our
@@ -65,21 +71,14 @@ cluster using the `kubectl apply` command.
 ```yaml
 # dashboard-admin.yaml
 
-# First we create a new namespace for our role to live in. This way we can
-# later delete the entire namespace and remove all configurations made here.
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: kubernetes-dashboard
-
-# This separates multiple resource definitions in a single file
----
+# Create a ServiceAccount that we can use to access the Dashboard
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: admin-user # Create a ServiceAccount named admin-user
   namespace: kubernetes-dashboard
 
+# This separates multiple resource definitions in a single file
 ---
 # Bind the cluster-admin ClusterRole to the admin-user ServiceAccount
 apiVersion: rbac.authorization.k8s.io/v1
@@ -104,21 +103,43 @@ We can apply the configuration using the following line:
 
 ```zsh
 $ kubectl apply -f dashboard-admin.yaml
+serviceaccount/admin-user created
+clusterrolebinding.rbac.authorization.k8s.io/admin-user created
 ```
 
 We need to discover the created users secret access token, to gain access to the dashboard.
 
 ```zsh
 $ kubectl -n kubernetes-dashboard get secret
+NAME                               TYPE                                  DATA   AGE
+admin-user-token-22554             kubernetes.io/service-account-token   3      32s
+default-token-8fjcr                kubernetes.io/service-account-token   3      76s
+kubernetes-dashboard-certs         Opaque                                0      76s
+kubernetes-dashboard-csrf          Opaque                                1      76s
+kubernetes-dashboard-key-holder    Opaque                                2      75s
+kubernetes-dashboard-token-zmvj4   kubernetes.io/service-account-token   3      76s
 ```
 
-Find the secret that belongs to the `admin-user` and let kubectl `describe` it to see the content of the secret:
+Find the secret that belongs to the `admin-user-token` and let `kubectl describe` it to see the content of the secret:
 
 ```zsh
 $ kubectl -n kubernetes-dashboard describe secret admin-user-token-smw2j
+Name:         admin-user-token-22554
+Namespace:    kubernetes-dashboard
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: admin-user
+              kubernetes.io/service-account.uid: 02a8e2e7-c25d-48a2-b8b8-f6ce99e77a5d
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1765 bytes
+namespace:  20 bytes
+token:      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-> Watch out! You token will have a differnet random 5 character suffix.
+> Watch out! You token will have a different random 5 character suffix.
 
 Copy the token to your clipboard for the next step.
 
@@ -126,11 +147,12 @@ Now we start the kubernetes proxy to access the remote api safely on our local m
 
 ```zsh
 $ kubectl proxy
+Starting to serve on 127.0.0.1:8001
 ```
 
-The process keeps running unitl you interrupt it using `Ctrl-C`. Let's keep it running for now.
+The process keeps running until you interrupt it using `Ctrl-C`. Let's keep it running for now.
 
-[Access the dashboard](http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/)
+[Access the dashboard](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 and login using the token you've aquired for the _admin-user_ `ServiceAccount`.
 
 ![Dashboard Login](./img/dashboard-login.png)
@@ -142,7 +164,7 @@ different namespaces.
 
 > **Security Note:** The dashboard component is considered a "security risk", because it is an additional way to access your cluster - and you have to take care of securing it. Normally, you would not install the dashboard component in production clusters. There is an option for disabling the dashboard, even after installation: `az aks disable-addons -a kube-dashboard -n my_cluster_name -g my_cluster_resource_group`.
 
-# Run your first pod
+## Run your first pod
 
 Now we will run our first pod on our kubernetes cluster. Let's keep the `kubectl proxy` command
 running and execute this in new tab in your console.
@@ -160,6 +182,13 @@ documentation to `kubectl run`.
 
 ```zsh
 $ kubectl run --help
+Create and run a particular image in a pod.
+
+Examples:
+  # Start a nginx pod.
+  kubectl run nginx --image=nginx
+
+...
 ```
 
 ## Questions
