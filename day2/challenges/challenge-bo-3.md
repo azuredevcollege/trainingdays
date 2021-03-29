@@ -1,12 +1,21 @@
-# Break Out #3 (Optional): Create the infrastructure for our sample app with ARM templates
+# :small_orange_diamond: Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates :small_orange_diamond:
 
-So, this is our last Break-Out session for today. You will now have the challenge to create the ARM template for our SCM Contacts application and deploy it to Azure.
+## Here is what you will learn 🎯
+
+So, this is our last Break-Out session for today. You will now have the challenge to create the _ARM template_ for our SCM Contacts application and deploy it to Azure.
+
+## Table Of Contents
+
+1. [Services](#services)
+2. [ToDo for You](#todo-for-you)
+3. [References / Links](#references-links)
+4. [Warp-Up](#wrap-up)
 
 ## Services
 
 As a reminder, here is the architecture, we want to create:
 
-![architecture_day2](./img/architecture_day2.png "architecture_day2")
+![architecture_day2](../images/architecture_day2.png "architecture_day2")
 
 ### Services to be added
 
@@ -46,13 +55,13 @@ As a reminder, here is the architecture, we want to create:
     - Kind: StorageV2
     - Static Website Hosting can't be enabled via ARM templates at the time of writing. Enable it via Azure CLI after the deployment: `az storage blob service-properties update --account-name <STORAGE_ACCOUNT_NAME> --static-website --index-document index.html --404-document index.html`. To show the URL for it, use: `az storage account show -n <STORAGE_ACCOUNT_NAME> --query "primaryEndpoints.web" --output tsv`
 
-## TODO for You
+## ToDo for You
 
 Create one ARM template (plus parameters file) that contains all resources we need. Deploy the resources to a new resource group.
 
 ## References / Links
 
-- You can access/see the current template/JSON of running resources via <https://resources.azure.com>. (That is a good starting point, when you want to know what UI setting influences which JSON parameter.)
+- You can access/see the current template/JSON of running resources via <https://resources.azure.com>. This is a good starting point, when you want to know what UI setting influences which JSON parameter.
 - Azure Resource Manager Template Reference: <https://docs.microsoft.com/en-us/azure/templates/>
   - find documentation for all available properties of a service/resource
 - Azure Quickstart Templates: <https://github.com/Azure/azure-quickstart-templates>
@@ -62,4 +71,10 @@ Create one ARM template (plus parameters file) that contains all resources we ne
 
 # Wrap-Up
 
-**_Congratulations_**! You have just automated the deployment of an Azure infrastructure. The next step would be to also automatically deploy the Web Apps / SPA to your infrastructure. We will learn about that on **Day 4**, when we are talking about **Continuous Integration and Continuous Deployment (CI/CD)**. On **Day 3**, we will learn about some additional Azure services that we can add to our application, to be able to store data, search for it and to show you how to do service-to-service communication with a _microsoervice approach_.
+🎉 **_Congratulations_** 🎉
+
+You have just automated the deployment of an Azure infrastructure. The next step would be to also automatically deploy the Web Apps / SPA to your infrastructure. We will learn about that on [Day 4](../../day4/README.md), when we are talking about _Continuous Integration and Continuous Deployment (CI/CD)_.
+
+On [Day 3](../../day3/README.md), we will learn about some additional Azure services that we can add to our application, to be able to store data, search for it and to show you how to do service-to-service communication with a _microsoervice approach_.
+
+[◀ Previous challenge](./challenge-bo-2.md) | [🔼 Day 2](../README.md)
