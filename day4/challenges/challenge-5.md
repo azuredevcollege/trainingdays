@@ -40,18 +40,18 @@ Here we specified when the build must be triggered. The build is triggered only 
 steps:
   - task: Npm@1
     inputs:
-      command: "install"
-      workingDir: "day4/apps/frontend/scmfe"
+      command: 'install'
+      workingDir: 'day4/apps/frontend/scmfe'
   - task: Npm@1
     inputs:
-      command: "custom"
-      workingDir: "day4/apps/frontend/scmfe"
-      customCommand: "run build"
+      command: 'custom'
+      workingDir: 'day4/apps/frontend/scmfe'
+      customCommand: 'run build'
   - task: CopyFiles@2
     inputs:
-      SourceFolder: "day4/apps/frontend/scmfe/dist"
-      Contents: "**"
-      TargetFolder: "$(Build.ArtifactStagingDirectory)/dist"
+      SourceFolder: 'day4/apps/frontend/scmfe/dist'
+      Contents: '**'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
   - task: CopyFiles@2
     inputs:
       sourceFolder: day4/apps/infrastructure/templates
@@ -88,13 +88,13 @@ trigger: none
 steps:
   - task: Npm@1
     inputs:
-      command: "install"
-      workingDir: "day4/apps/frontend/scmfe"
+      command: 'install'
+      workingDir: 'day4/apps/frontend/scmfe'
   - task: Npm@1
     inputs:
-      command: "custom"
-      workingDir: "day4/apps/frontend/scmfe"
-      customCommand: "run build"
+      command: 'custom'
+      workingDir: 'day4/apps/frontend/scmfe'
+      customCommand: 'run build'
 ```
 
 3. Commit your changes and push the branch to your remote repository.
@@ -115,16 +115,16 @@ Now we have created the deployment artifacts with the build _SCM-Frontend-CI_. I
 2. Add the SCM-Frontend-CI build's artifacts
 3. Create a _Development_ stage
 4. Add the the following variables and replace **'prefix'** with your own value:
-   | Variable                | Value                                                       | Scope       |
+   | Variable | Value | Scope |
    |-------------------------|-------------------------------------------------------------|-------------|
-   |ResourceGroupName        | ADC-DAY4-SCM-DEV                                            | Development |
-   |Location                 | westeurope                                                  | Development |
-   |StorageAccountName       | __'prefix'__ day4scmfedev                                   | Development |
-   |ApplicationInsightsName  | your ApplicationInsights instance name of stage Development | Development |
-   |ContactsEndpoint         | https endpoint of the SCM Contacts API in Development stage | Development |
-   |ResourcesEndpoint        | _leave blank, will be needed later_                         | Development |
-   |SearchEndpoint           | _leave blank, will be needed later_                         | Development |
-   |ReportsEndpoint          | _leave blank, will be needed later_                         | Development |
+   |ResourceGroupName | ADC-DAY4-SCM-DEV | Development |
+   |Location | westeurope | Development |
+   |StorageAccountName | **'prefix'** day4scmfedev | Development |
+   |ApplicationInsightsName | your ApplicationInsights instance name of stage Development | Development |
+   |ContactsEndpoint | https endpoint of the SCM Contacts API in Development stage | Development |
+   |ResourcesEndpoint | _leave blank, will be needed later_ | Development |
+   |SearchEndpoint | _leave blank, will be needed later_ | Development |
+   |ReportsEndpoint | _leave blank, will be needed later_ | Development |
 
 5. Go to the Tasks section of the _"Development"_ stage and use the latest Ubuntu version to run the agent on
 6. Add the task _"ARM template deployment"_
@@ -141,15 +141,15 @@ Now we have created the deployment artifacts with the build _SCM-Frontend-CI_. I
     1. Azure CLI task "Enable static website hosting" inline script:
        ```shell
        az storage blob service-properties update --account-name $(StorageAccountName) --static-website  --index-document index.html --404-document index.html
-       ``` 
+       ```
     2. Azure CLI task "Configure SPA settings" inline script:
        ```shell
        echo "var uisettings = { \"enableStats\": true, \"endpoint\": \"$(ContactsEndpoint)\", \"resourcesEndpoint\": \"$(ResourcesEndpoint)\", \"searchEndpoint\": \"$(SearchEndpoint)\", \"reportsEndpoint\": \"$(ReportsEndpoint)\", \"aiKey\": \"`az resource show -g $(ResourceGroupName) -n $(ApplicationInsightsName) --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv`\" };" > $(System.ArtifactsDirectory)/_SCM-Frontend-CI/drop/dist/settings/settings.js
-       ``` 
+       ```
     3. Azure CLI task "Copy SPA to StorageAccount" inline script:
        ```shell
        az storage blob upload-batch -d '$web' --account-name $(StorageAccountName) -s $(System.ArtifactsDirectory)/_SCM-Frontend-CI/drop/dist
-       ``` 
+       ```
 13. Save the release definition and create a release to check if everything works
 
 ### Create the _Testing_ stage.
@@ -158,16 +158,16 @@ Now we have created the deployment artifacts with the build _SCM-Frontend-CI_. I
 2. Clone the _Development_ stage and rename the cloned stage to _Testing_
 3. Open the Release definition's variable view and add new variables as follow:
 
-   | Variable                | Value                                                       | Scope       |
-   |-------------------------|-------------------------------------------------------------|-------------|
-   |ResourceGroupName        | ADC-DAY4-SCM-TEST                                           | Testing     |
-   |Location                 | westeurope                                                  | Testing     |
-   |StorageAccountName       | __'prefix'__ day4scmfetest                                  | Testing     |
-   |ApplicationInsightsName  | your ApplicationInsights instance name of stage Testing     | Testing     |
-   |ContactsEndpoint         | https endpoint of the SCM Contacts API in Testing stage     | Testing     |
-   |ResourcesEndpoint        | _leave blank, will be needed later_                         | Testing     |
-   |SearchEndpoint           | _leave blank, will be needed later_                         | Testing     |
-   |ReportsEndpoint          | _leave blank, will be needed later_                         | Testing     |
+   | Variable                | Value                                                   | Scope   |
+   | ----------------------- | ------------------------------------------------------- | ------- |
+   | ResourceGroupName       | ADC-DAY4-SCM-TEST                                       | Testing |
+   | Location                | westeurope                                              | Testing |
+   | StorageAccountName      | **'prefix'** day4scmfetest                              | Testing |
+   | ApplicationInsightsName | your ApplicationInsights instance name of stage Testing | Testing |
+   | ContactsEndpoint        | https endpoint of the SCM Contacts API in Testing stage | Testing |
+   | ResourcesEndpoint       | _leave blank, will be needed later_                     | Testing |
+   | SearchEndpoint          | _leave blank, will be needed later_                     | Testing |
+   | ReportsEndpoint         | _leave blank, will be needed later_                     | Testing |
 
 4. Save the definition and create a release
 
@@ -182,7 +182,7 @@ Now we have to enable the PR-Build to be triggered whenever a PullRequest is cre
 1. Open the branch policies of the master branch
 2. Add a build validation and select your SCM-Frontend-PR build
 3. Set the path filter as follow:
-   ```Shell
+   ```shell
    /day4/apps/infrastructure/templates/scm-fe.json;/day4/apps/frontend/*
    ```
    With this filter the PR build is only triggered when files were changed that belongs to the SCM Frontend.
@@ -212,7 +212,6 @@ Now it's time to see the whole build flow in action.
 
 **Congratulation** you have completed the UserStories S14 and S15. Go to Azure Boards and set the stories to completed.
 Now you have seen how you can create a PullRequest validation build that protects your master branch from build breaks. After changes are merged into the master branch, the CI build is triggered and it creates the deployment artifacts. The deployment artifacts are then deployed to your stages. After this challenge we have deployed the SCM Frontend to Azure. The SCM Contact API and SCM Frontend is running on Azure.
-
 
 Now that you have deployed the Frontend to Azure it's time to test it! Go to the Azure Portal and navigate to the ResourceGroup ADC-DAY4-SCM-DEV. Open the StorageAccount 'prefix' day4scmfedev and go to Static website. Copy the url of the Primary endpoint, open a new browser window and paste the url.
 If everything is configured correctly you can add some contacts.

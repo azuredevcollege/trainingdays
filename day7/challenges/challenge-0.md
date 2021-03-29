@@ -65,7 +65,7 @@ $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 
 If you already have the Azure CLI on your machine, you can just install it using the following command:
 
-```zsh
+```shell
 $ az aks install-cli
 ```
 
