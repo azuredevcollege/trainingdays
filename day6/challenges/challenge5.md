@@ -93,11 +93,11 @@ $ docker image ls
 ```
 Output will be something like:
 ```shell
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-your_dockerhub_idmysql   v1                  2dfc8038fc98        13 hours ago        448MB
-your_dockerhub_idphp     v1                  53959f571f38        13 hours ago        484MB
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+your_dockerhub_id/mysql   v1                  2dfc8038fc98        13 hours ago        448MB
+your_dockerhub_id/php     v1                  53959f571f38        13 hours ago        484MB
 ```
-- There should be 2 images that we have created at the end of the challenge 4. They were tagged as your_dockerhub_idmysql:v1 and your_dockerhub_idphp:v1. We're gonna add new tags to these images. 
+- There should be 2 images that we have created at the end of the challenge 4. They were tagged as your_dockerhub_id/mysql:v1 and your_dockerhub_id/php:v1. We're gonna add new tags to these images. 
 
 Type: 
 ```shell
@@ -111,11 +111,11 @@ $ docker image ls
 ```
 Output will be something like:
 ```shell
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-your_dockerhub_idmysql   v1                  2dfc8038fc98        13 hours ago        448MB
-your_dockerhub_idphp     v1                  53959f571f38        13 hours ago        484MB
-acr_login_url/mysql:v1   v1                  2dfc8038fc98        13 hours ago        448MB
-acr_login_url/php:v1    v1                  53959f571f38        13 hours ago        484MB
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+your_dockerhub_id/mysql v1                  2dfc8038fc98        13 hours ago        448MB
+your_dockerhub_id/php   v1                  53959f571f38        13 hours ago        484MB
+acr_login_url/mysql     v1                  2dfc8038fc98        13 hours ago        448MB
+acr_login_url/php       v1                  53959f571f38        13 hours ago        484MB
 ```
 
 <img src="./img/acr9.png">

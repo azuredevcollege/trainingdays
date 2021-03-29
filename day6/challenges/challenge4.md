@@ -44,7 +44,7 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 ubuntu              latest              1e4467b07108        2 weeks ago         73.9MB
  ```
 
-I want you to pay attention to the image id part. Like containers, images also have unique ids. The image ID is a digest, and is a computed SHA256 hash of the image configuration object, which contains the digests of the layers that contribute to the image's filesystem definition. If two different images have the same ids, this means that they're literally same images with different names. 
+I want you to pay attention to the image id part. Like containers, images also have unique ids. The image ID is a digest, and is a computed SHA256 hash of the image configuration object, which contains the digests of the layers that contribute to the image's filesystem definition. If two different images have the same ids, this means that they're literally the same images with different names. 
 Yes it's possible to tag an image with different tags. Let's do that and add another name to this image. 
 
 Type: 
@@ -66,7 +66,7 @@ ozgurozturknet/day6   ubuntu              1e4467b07108        2 weeks ago       
 
 We have 2 images that are stored on our host. Image ids are same, so these are literally the same images but with different names. 
 
-We have added a new tag-name to ubuntu:latest image. We tagged it with our Docker Hub id. This means that this image is stored "or will be stored" on Docker Hub (Remember, image names are also indicates where image is located). But it isn't at the moment. Let's correct this and push this image to its repository. But before that we have to login and authenticate. In this way, Docker Hub knows that we're the right person who can push this image to its respository. Let's login first. 
+We have added a new tag-name to ubuntu:latest image. We tagged it with our Docker Hub id. This means that this image is stored "or will be stored" on Docker Hub (Remember, image names also indicate where the image is located). But it isn't at the moment. Let's correct this and push this image to its repository. But before that we have to login and authenticate. This way, Docker Hub knows that we're the right person who can push this image to its respository. Let's login first. 
 
 Type: 
 ```shell
@@ -95,9 +95,9 @@ a37e74863e72: Mounted from library/ubuntu
 ce3011290956: Mounted from library/ubuntu
 ubuntu: digest: sha256:60f560e52264ed1cb7829a0d59b1ee7740d7580e0eb293aca2d722136edb1e24 size: 11529MB
 ```
-It was fast, wasn't it? Please pay attention to the output. ```Mounted from library/ubuntu```. You know that images consist of multiple layers. And each layer has its unique id. When we pull or push any image, if the target (registry or your computer) has the same layer with same id stored on it, it doesn't pull or push that layer phyiscally again. Just checks and mounts that. This is the reason why it was fast. We didn't transfer any file to Docker Hub. Docker Hub detected that these 4 layers are already stored on it, so instead of getting it again, Docker hub just mounted these files to our repository. This is also same on our computer. We have 2 images stored on it. But they are literally the same images with different names. Docker doesn't store multiple files for these 2 images. Image files are stored just once but multiple tags added to the same files.
+That was fast, wasn't it? Please pay attention to the output. ```Mounted from library/ubuntu```. You know that images consist of multiple layers. And each layer has its unique id. When we pull or push any image, if the target (registry or your computer) has the same layer with tha same id stored on it, it doesn't pull or push that layer phyiscally again. Just checks and mounts that. This is the reason why it was fast. We didn't transfer any file to Docker Hub. Docker Hub detected that these 4 layers are already stored on it, so instead of getting it again, Docker hub just mounted these files to our repository. This is also same on our computer. We have 2 images stored on it. But they are literally the same images with different names. Docker doesn't store multiple files for these 2 images. Image files are stored just once but multiple tags are added to the same files.
 
-But what are these layers? Is there any way to see how are they created? Yes and the command that we'll use is ```docker image history```. History sub-command shows us history of the image and it also shows how all these layers were created. Let's check this. 
+But what are these layers? Is there any way to see how they are created? Yes and the command that we'll use is ```docker image history```. History sub-command shows us history of the image and it also shows how all these layers were created. Let's check this. 
 
 Type: 
 ```shell
