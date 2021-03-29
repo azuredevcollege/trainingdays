@@ -763,7 +763,7 @@ Let's assume that we have an important container. We have connected to it and ma
 
 Type: 
 ```shell
-$ docker commit commit_test ozgurozturknet/commit:latest
+$ docker commit commit_test your_dockerhub_id/commit:latest
 ```
 Output will be something like:
 ```shell
