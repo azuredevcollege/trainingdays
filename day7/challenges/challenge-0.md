@@ -85,6 +85,6 @@ https://helm.sh/docs/intro/install/
 
 ## Terraform
 
-`Terraform` is an open-source "infrastructure as code" software tool created by HashiCorp. It is a tool for building, changing, and versioning infrastructure safely and efficiently. We will use terraform to create several PaaS services like Azure SQL Db, ComsosDB etc. in this workshop.
+`Terraform` is an open-source "infrastructure as code" software tool created by HashiCorp. It is a tool for building, changing, and versioning infrastructure safely and efficiently. We will use terraform to create several PaaS services like Azure SQL Db, CosmosDB etc. in this workshop.
 
 https://www.terraform.io/downloads.html

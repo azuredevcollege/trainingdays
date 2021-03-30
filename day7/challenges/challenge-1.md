@@ -4,7 +4,7 @@ In this section we will create a Kubernetes cluster using the Azure CLI, configu
 
 ## Create the cluster
 
-To have a clean overview of what is beeing provisioned under the hood, we create a new resource
+To have a clean overview of what is being provisioned under the hood, we create a new resource
 group and and create our Kubernetes cluster within.
 
 ```shell
@@ -44,7 +44,7 @@ Client Version: version.Info{Major:"1", Minor:"20", GitVersion:"v1.20.2", GitCom
 Server Version: version.Info{Major:"1", Minor:"19", GitVersion:"v1.19.7", GitCommit:"14f897abdc7b57f0850da68bd5959c9ee14ce2fe", GitTreeState:"clean", BuildDate:"2021-01-22T17:29:38Z", GoVersion:"go1.15.5", Compiler:"gc", Platform:"linux/amd64"}
 ```
 
-`kubectl version` prints both the version of the locally runnig commandline tool as well as the
+`kubectl version` prints both the version of the locally running commandline tool as well as the
 Kubernetes version running on our cluster. To inspect the access credentials and cluster
 configuration stored for us in our `~/.kube/config` file run `kubectl config view`.
 
@@ -153,7 +153,7 @@ Starting to serve on 127.0.0.1:8001
 The process keeps running until you interrupt it using `Ctrl-C`. Let's keep it running for now.
 
 [Access the dashboard](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
-and login using the token you've aquired for the _admin-user_ `ServiceAccount`.
+and login using the token you've acquired for the _admin-user_ `ServiceAccount`.
 
 ![Dashboard Login](./img/dashboard-login.png)
 
