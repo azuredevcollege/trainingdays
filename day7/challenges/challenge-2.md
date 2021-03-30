@@ -18,8 +18,8 @@ $ az aks update --resource-group adc-aks-rg --name adc-cluster --attach-acr <ACR
 First, let's build a custom Docker image. Go to the folder `day7/challenges/samples/challenge-2/singlecontainer`. Take a look at the - very simple - Dockerfile and run the following commands.
 
 ```shell
-$ docker build -t test:1.0 .
-$ docker run -p 8080:80 test:1.0
+docker build -t test:1.0 .
+docker run -p 8080:80 test:1.0
 ```
 
 Open your browser and navigate to `http://localhost:8080`. You should see a page with a welcome message.
@@ -27,8 +27,8 @@ Open your browser and navigate to `http://localhost:8080`. You should see a page
 Now let's push the image to our registry. To be able to interact with our registry, we first need to login.
 
 ```shell
-$ ACRPWD=$(az acr credential show -n <ACR_NAME> --query "passwords[0].value" -o tsv)
-$ docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
+ACRPWD=$(az acr credential show -n <ACR_NAME> --query "passwords[0].value" -o tsv)
+docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
 ```
 
 > In this sample, we used the `admin` account of our registry to login - basically with username/password. In secure/production environments, you should not enable the `admin` account on the registry and login via Azure Active Directory: `az acr login -n <ACR_NAME>`. The token that is issued will be valid for 3 hours.
@@ -36,14 +36,14 @@ $ docker login <ACR_NAME>.azurecr.io -u <ACR_NAME> -p $ACRPWD
 We are now ready to push the image to our container registry.
 
 ```shell
-$ docker tag test:1.0 <ACR_NAME>.azurecr.io/test:1.0
-$ docker push <ACR_NAME>.azurecr.io/test:1.0
+docker tag test:1.0 <ACR_NAME>.azurecr.io/test:1.0
+docker push <ACR_NAME>.azurecr.io/test:1.0
 ```
 
 You can also build directly within the Azure Container Registry service, in case you don't have Docker on your machine. Let's have a try...
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/test:2.0 .
+az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/test:2.0 .
 ```
 
 The command will send the current build context to Azure, kick-off a docker build and add the image to your registry.
@@ -71,8 +71,10 @@ spec:
 Create a file called `myfirstpod.yaml` with the content above and apply it to your cluster.
 
 ```shell
-$ kubectl apply -f myfirstpod.yaml
+kubectl apply -f myfirstpod.yaml
 ```
+
+> **HINT**: If you could not connect your Azure Container Registry to the cluster due to missing permissions, use an [Image Pull Secret](./image-pull-secret.md) to grant your Kubernetes cluster the rights to pull images from your private registry.
 
 Check that everything works as expected:
 
@@ -145,7 +147,7 @@ So, the pod is running, but how do we access it?! Let's have a look at one optio
 With `kubectl` you can "port-forward" a local port to a port on a pod. This is how it works in our case:
 
 ```shell
-$ kubectl port-forward myfirstpod 8080:80
+kubectl port-forward myfirstpod 8080:80
 ```
 
 Our pod is listening on port `80` and we forward our local port `8080` to that one. You can check the result by navigating - once again - to `http://localhost:8080`.
@@ -326,7 +328,7 @@ d0fe97fa8b8c: Mounted from test
 There is also another approach - you can also build directly within the container registry. Let's do this:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
+az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 ```
 
 Now we are ready to use the image in our deployment:
@@ -585,7 +587,7 @@ endpoints/kubernetes    20.50.162.80:443                                        
 endpoints/mssqlsvr      10.244.0.5:1433                                                 8m22s
 ```
 
-This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP addresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP addresses to route traffic to. From now on, we could use the service name to call our pods, e.g. http://contactsapi:8080.
+This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP addresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP addresses to route traffic to. From now on, we could use the service name to call our pods, e.g. <http://contactsapi:8080>.
 
 Now, there is one more step to do, before we can test the setup: adjust the connection string of the "myapi" deployment.
 
@@ -799,7 +801,7 @@ nodeport-contactsapi       NodePort       10.0.87.165   <none>           8080:30
 loadbalancer-contactsapi   LoadBalancer   10.0.163.1    52.236.151.220   8080:30320/TCP   56s
 ```
 
-As you can see, after a short amount of time, the `loadbalancer-contactsapi` is receiving an external IP adress from the Azure Loadbalancer. Our contacts API should now be accessible - in this case - via http://52.236.151.220:8080. If you open that link in a browser (of course, replace the IP adress with the one your service has received), you should see the swagger UI.
+As you can see, after a short amount of time, the `loadbalancer-contactsapi` is receiving an external IP adress from the Azure Loadbalancer. Our contacts API should now be accessible - in this case - via <http://52.236.151.220:8080>. If you open that link in a browser (of course, replace the IP adress with the one your service has received), you should see the swagger UI.
 
 ![swagger_external](./img/swagger-external.png)
 
@@ -920,7 +922,7 @@ spec:
 Create the file `api-ingress.yaml` and apply it:
 
 ```shell
-$ kubectl apply -f api-ingress.yaml
+kubectl apply -f api-ingress.yaml
 ```
 
 You should now be able to navigate to the adress <http://20-67-122-249.nip.io/api/contacts> and get the list of available contacts. Traffic is now managed by the ingress controller and dynamically routed to the `contactsapi` service (that is by default not accessible publicly - only now through the ingress controller/definition).
@@ -958,14 +960,14 @@ Save the file and - in a terminal - go to the folder `day7/apps/frontend/scmfe` 
 **Alternative 1 - Build locally:**
 
 ```shell
-$ docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
-$ docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
+docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
+docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
 ```
 
 **Alternative 2 - Use your Azure Container Registry:**
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
+az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
 ```
 
 As soon as the image is present in your registry, let's deploy it to the cluster. We need three definitions: a deployment, a `ClusterIP` service and an ingress object. This time, we will deploy everything via one file, separating each object by `---`.
