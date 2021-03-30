@@ -9,7 +9,7 @@ We have been working with the Contacts API now for some time, let's deploy the "
 ![app_contacts_details](./img/app_contact_details.png)
 ![app_stats](./img/app_stats.png)
 
-The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org). It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possiblity to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc. We also followed a "microservice" approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.). Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers!
+The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org). It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possibility to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc. We also followed a "microservice" approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.). Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers!
 
 That said, we are also following the best practice to push all possible state of the application out of your cluster. That means, we won't host any database within the cluster. Stateless clusters are much easier to manage!
 
@@ -24,7 +24,7 @@ To create the Azure infrastructure, we are using [Terraform](https://www.terrafo
 If you have successfully installed Terrraform CLI, let's create the Azure service, we need. Go to folder `day7/challenges/samples/challenge-4/0_tf` and open the file `variables.tf`. You need to adjust a few settings:
 
 - default vaule of `location` - choose the same location as your AKS cluster to create all services in the same location
-- default value of `prefix` - we use a prefix to have consitent naming of services. Please choose one that fits for you, but be careful to NOT use more than 6 characters for it.
+- default value of `prefix` - we use a prefix to have consistent naming of services. Please choose one that fits for you, but be careful to NOT use more than 6 characters for it.
 
 You can leave all other variables with their default values. The file should then look similar to that:
 
@@ -158,7 +158,7 @@ data:
     }
 ```
 
-The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
+The variable `YOUR_HOST_NAME` should be the `nip.io` address for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
 
 Please apply both files to your cluster:
 
@@ -172,7 +172,7 @@ secret/scmsecrets created
 
 ## Build all required Docker images
 
-Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for conveniance reasons, we build all images in the container registry!
+Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for convenience reasons, we build all images in the container registry!
 
 Now, build all the required images one by one...of course, replace `<ACR_NAME>` with the name of your container registry.
 

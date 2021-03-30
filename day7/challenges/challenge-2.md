@@ -173,7 +173,7 @@ Until now we only showed, how Kubernetes is dealing with single container/pod en
 
 ### Deployments
 
-In a `Deployment`, you can tell Kubernetes a few more things, that you definetely need in production environments:
+In a `Deployment`, you can tell Kubernetes a few more things, that you definitely need in production environments:
 
 - number of instances of our container/pod
 - how to do the upgrade, in case we deploy the next version of our service (e.g. always keep two instances up and running)
@@ -273,7 +273,7 @@ Events:
   Normal  ScalingReplicaSet  2m25s  deployment-controller  Scaled up replica set mssql-deployment-5559884974 to 1
 ```
 
-As we need to connect to this pod over the network, let's find out what IP adress has been assigned to it.
+As we need to connect to this pod over the network, let's find out what IP address has been assigned to it.
 
 ```shell
 $ kubectl get pods -o wide
@@ -282,7 +282,7 @@ NAME                                READY   STATUS    RESTARTS   AGE     IP     
 mssql-deployment-5559884974-q2j4w   1/1     Running   0          4m44s   10.244.0.5   aks-nodepool1-11985439-vmss000000   <none>           <none>
 ```
 
-The adress may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the adress down, as you will need it in the next step.
+The address may vary in your environment, for the sample here, it's `10.244.0.5`. Please note the address down, as you will need it in the next step.
 
 Now, we can deploy a simple API that is able to manage `Contacts` objects, that means Create/Read/Update/Delete contacts of a very simple CRM app. The image needs to be built upfront and put in your container registry. So, please go to the folder `day7/apps/dotnetcore/Scm` and build the API image:
 
@@ -361,9 +361,9 @@ spec:
             - containerPort: 5000
 ```
 
-A few notes on the deployment above. Firt and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database (the API will use this env variable to get the connection string). Please replace \<IP_OF_THE_SQL_POD\> with the correct IP adress. We also set resource limits and expose port `5000`, so that the API can be reached from outside of the pod.
+A few notes on the deployment above. First and foremost, we tell Kubernetes to run 4 replicas of our service `replicas: 4`. We also configure the pod to set an environment variable called `ConnectionStrings__DefaultConnectionString` which contains the connection string to the database (the API will use this env variable to get the connection string). Please replace \<IP_OF_THE_SQL_POD\> with the correct IP address. We also set resource limits and expose port `5000`, so that the API can be reached from outside of the pod.
 
-Again, create a file (`api.yaml`) with the contents above - don't forget to replace the IP adress - and apply the configuration to your cluster.
+Again, create a file (`api.yaml`) with the contents above - don't forget to replace the IP address - and apply the configuration to your cluster.
 
 ```shell
 $ kubectl apply -f api.yaml
@@ -404,7 +404,7 @@ Try out the API, e.g. create a contact via `POST` method, read (all) contacts vi
 
 ### Failover / Health
 
-As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the correspondig deployment. E.g. when a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and re-creates the 4th pod again to reestablish the desired state.
+As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to "heal" the corresponding deployment. E.g. when a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have 4 replicas of the service, your cluster will notice the difference and re-creates the 4th pod again to reestablish the desired state.
 
 Let's try this...first, let's query the pods in our cluster. An this time, we are "watching" (`-w`) them so that we get notified of any changes of their states:
 
@@ -455,11 +455,11 @@ deployment.apps/myapi scaled
 # kubectl get pods should now show 6 "myapi"-pods
 ```
 
-Now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have mutliple pods running. We would need to find out all IP adresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
+Now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP adresses within the cluster. It even got worse, because we now have multiple pods running. We would need to find out all IP addresses of our pods to being able to send requests to them. This is not ideal. So, let's introduce another object called `Service` to have a common, load-balanced endpoint for all of our pods.
 
 ## Services
 
-Kubernetes comes with its own service discovery component, called `Service`. A service is a way to expose a set of pods as a network endpoint with a unique name. This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP adresses therefor change or aren't valid the next time you would call such a pod. So, the `Service` is the one component that keeps track of what pods make up a certain service (and what IP adresses are valid to call) - and is also able to load-balance traffic across those pods.
+Kubernetes comes with its own service discovery component, called `Service`. A service is a way to expose a set of pods as a network endpoint with a unique name. This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP addresses therefor change or aren't valid the next time you would call such a pod. So, the `Service` is the one component that keeps track of what pods make up a certain service (and what IP addresses are valid to call) - and is also able to load-balance traffic across those pods.
 
 To be able to determine which pods form a service, Kubernetes uses `Labels` and `LabelSelectors`: you assign labels to a (set of) pod(s) e.g. `app = myapi` and the corresponding service uses the same key/value combination as selector.
 
@@ -524,7 +524,7 @@ myapi-7c74475b88-s5gmj              1/1     Running   0          6h20m   10.244.
 myapi-7c74475b88-vhw6n              1/1     Running   0          34m     10.244.0.16   aks-nodepool1-11985439-vmss000000   <none>           <none>            app=myapi,pod-template-hash=7c74475b88
 ```
 
-Looks good! As you can see, the SQL server pod also already has some labels (`app=mssql`). Now, let's add two services: one for the SQL server (remember, we used the IP adress in the connection string, which is really bad as we now know) and one for the API pods.
+Looks good! As you can see, the SQL server pod also already has some labels (`app=mssql`). Now, let's add two services: one for the SQL server (remember, we used the IP address in the connection string, which is really bad as we now know) and one for the API pods.
 
 ```yaml
 # Content of file sqlserver-service.yaml
@@ -567,7 +567,7 @@ $ kubectl apply -f api-service.yaml
 service/contactsapi created
 ```
 
-So, how do we check, that the service(s) really find pods to route traffic to? Therefor, another Kubernetes object comes into play: `Endpoints`. An endpoint tracks the IP adresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed to. Any time a pod gets created or deleted (and is part of a certain service), the corresponding `Endpoint` gets updated.
+So, how do we check, that the service(s) really find pods to route traffic to? Therefor, another Kubernetes object comes into play: `Endpoints`. An endpoint tracks the IP addresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed to. Any time a pod gets created or deleted (and is part of a certain service), the corresponding `Endpoint` gets updated.
 
 Let's see how that looks like in our case.
 
@@ -585,7 +585,7 @@ endpoints/kubernetes    20.50.162.80:443                                        
 endpoints/mssqlsvr      10.244.0.5:1433                                                 8m22s
 ```
 
-This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP adresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP adresses to route traffic to. From now on, we could use the service name to call our pods, e.g. http://contactsapi:8080.
+This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP addresses. In case of the `contactsapi` service/endpoint, it finds multiple pods/IP addresses to route traffic to. From now on, we could use the service name to call our pods, e.g. http://contactsapi:8080.
 
 Now, there is one more step to do, before we can test the setup: adjust the connection string of the "myapi" deployment.
 
@@ -596,7 +596,7 @@ Now, there is one more step to do, before we can test the setup: adjust the conn
 [...]
 ```
 
-Please replace the IP adress, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 re-created API pods.
+Please replace the IP address, with the DNS name of the service `mssqlsvr` and reapply the manifest. This will result in 4 re-created API pods.
 
 ```shell
 $ kubectl apply -f api.yaml
@@ -674,7 +674,7 @@ As you can see, the API is working perfectly...and, traffic is load-balanced ove
 
 ## NodePort (Optional)
 
-So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP adress. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
+So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`. A `NodePort` service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP address. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
 
 To demonstrate the behavior, we'll create a new service called `nodeport-contactsapi` that will select all of the API pods currently running in the cluster - basically the same behavior as the ClusterIP service, but accessible via \<NodeIp>:\<NodePort>.
 
@@ -708,7 +708,7 @@ $ kubectl get services,endpoints
 
 By using the same label selectors for the service, we get the same endpoints as for our `ClusterIP` API service.
 
-Now, let's call such a service via a node's IP adress and the port `30010`. We first need to determine the IP adress of each node.
+Now, let's call such a service via a node's IP address and the port `30010`. We first need to determine the IP address of each node.
 
 ```shell
 # get node IP adresses
@@ -720,7 +720,7 @@ aks-nodepool1-11985439-vmss000001   Ready    agent   5d20h   v1.17.11   10.240.0
 aks-nodepool1-11985439-vmss000002   Ready    agent   5d20h   v1.17.11   10.240.0.6    <none>        Ubuntu 16.04.7 LTS   4.15.0-1096-azure   docker://19.3.12
 ```
 
-In this case, we have the IP adresses `10.240.0.4`, `10.240.0.5` and `10.240.0.6`. Let's use one of them to call the contacts API.
+In this case, we have the IP addresses `10.240.0.4`, `10.240.0.5` and `10.240.0.6`. Let's use one of them to call the contacts API.
 
 ```shell
 $ kubectl run -it --rm --image csaocpger/httpie:1.0 http --restart Never -- /bin/sh
