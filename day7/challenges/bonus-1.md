@@ -14,7 +14,7 @@ Let's get started!
 To separate the `cert-manager` from the rest of our resources, let's create a new namespace:
 
 ```shell
-$ kubectl create namespace cert-manager
+kubectl create namespace cert-manager
 ```
 
 ## Add the Jetstack Helm Repository
@@ -24,8 +24,8 @@ $ kubectl create namespace cert-manager
 First, we have to add the official repository from jetstack which contains the `cert-manager` helm chart.
 
 ```shell
-$ helm repo add jetstack https://charts.jetstack.io
-$ helm repo update
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
 ```
 
 We will prepare a small configuration for the helm chart. Basically we want the Kubernetes Custom Resource Definitions to be installed together with the chart and set some default values in terms of how TLS certificates are issued for our Ingress resources.
@@ -120,7 +120,7 @@ you.
 Let's apply our configuration:
 
 ```shell
-$ kubectl apply -f letsencrypt-prod-cluster-issuer.yaml
+kubectl apply -f letsencrypt-prod-cluster-issuer.yaml
 ```
 
 ## Update your frontend ingress configuration
@@ -207,23 +207,15 @@ spec:
               servicePort: 8080
 ```
 
-Please also adjust **all other ingress definitions** and apply the new configuration.
+You also need to adjust (and apply) **all other ingress definitions**, for:
 
-## Check
-
-Now let's check if everything connects as expected.
-
-Navigate to you contacts website and use your browsers developer tools to make sure
-both the initial request to the website, as well as any subsequent request to
-the contacts API use secure HTTPS endpoints.
-
-![A display of the browsers developer tools](./img/https-inspector.png)
-
-If both requests are being served over https were good to got!
+- Search Service
+- Visit Reports Service
+- Resources Service
 
 ## Note about settings/settings.js
 
-It might be necessary to update the `settings/settings.js` file for the frontend deployment. One elegant way to make sure the corresponding protocol is being used is just to set the path to the API as absolute on the same host.
+It is also necessary to update the `settings/settings.js` file for the frontend deployment. One elegant way to make sure the corresponding protocol is being used, is just to set the path to the API as absolute on the same host.
 
 ```js
 var uisettings = {
@@ -236,7 +228,7 @@ var uisettings = {
 }
 ```
 
-To apply these changes, adjust the `ConfigMap´ called `uisettings`, apply it to the cluster and "re-rollout" the frontend deployment:
+To apply these changes, adjust the `ConfigMap` called `uisettings` (remember, you already did that in [Challenge 4](./challenge-4.md#deploy-configuration-secrets)). After the changes to the `ConfigMap` have been applied, , "re-rollout" the frontend deployment via:
 
 ```shell
 $ kubectl rollout restart deployment frontend-deploy
@@ -244,4 +236,16 @@ $ kubectl rollout restart deployment frontend-deploy
 deployment.apps/frontend-deploy restarted
 ```
 
-Kubernetes will now recreate the frontend pods and you should be able to use the application as expected!
+Kubernetes will now recreate the frontend pods and apply the new configuration!
+
+## Check
+
+Now let's check if everything connects as expected.
+
+Navigate to you contacts website and use your browsers developer tools to make sure
+both the initial request to the website, as well as any subsequent request to
+the contacts API use secure HTTPS endpoints.
+
+![A display of the browsers developer tools](./img/https-inspector.png)
+
+If both requests are being served over https were good to got!
