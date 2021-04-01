@@ -1,31 +1,55 @@
 # Day 2 Azure Development
 
-- [Challenge 0 - Setup your system](challenges/challenge-0.md)
-- [Challenge 1 - Azure Web Applications](challenges/challenge-1.md)
-- :small_orange_diamond: *[Breakout! - Deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
-- [Challenge 2 - Serverless](challenges/challenge-2.md)
-- [OPTIONAL Challenge 3 - Messaging](challenges/challenge-3.md)
-- :small_orange_diamond: *[Breakout! - Add a serverless microservice to our sample app and include messaging](challenges/challenge-bo-2.md)* :small_orange_diamond:
-- :small_orange_diamond: *[OPTIONAL Breakout! - Create an Azure Web App and Storage Account with ARM templates](challenges/challenge-bo-3.md)* :small_orange_diamond:
+## Welcome
 
-# Day 2 - Goal #
+This day is about getting your hands dirty with application development in Azure. We will dig into the topics
 
-To give you a little bit more context on what we will be building, here's the description of our sample application and the resulting architecture for *Day 2*.
+- Azure Web Application
+- Serverless
+- Storage
+- Messaging
 
-## Application ##
+## Challenges
 
-The sample application we will be using to get to know all the Azure services throughout the workshop, will be a **Simple Contacts Management** (SCM) application. You can - surprisingly - create, read, update and delete contacts with it. Currently, we will be storing the contacts in an in-memory database. On *Day 3* we will learn about the various database services of Azure and add proper persistance to our services. 
+- [Challenge 0:  Setup your system](challenges/challenge-0.md)
+- [Challenge 1: Azure Web Applications](challenges/challenge-1.md)
+- :small_orange_diamond: *[Breakout 1: Deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
+- [Challenge 2: Serverless](challenges/challenge-2.md)
+- [Challenge 3 (optional): Messaging](challenges/challenge-3.md)
+- :small_orange_diamond: *[Breakout 2: Add a serverless microservice to our sample app and include messaging](challenges/challenge-bo-2.md)* :small_orange_diamond:
+- :small_orange_diamond: *[Breakout 3 (optional): Create an Azure Web App and Storage Account with ARM templates](challenges/challenge-bo-3.md)* :small_orange_diamond:
 
-Later that day, we will also add a second service to be able to add contact images - which will be stored in an *Azure Storage Account* (Blob). An *Azure Function* which will automatically be trigger through an *Azure Storage Queue* will be responsible to create thumbnails of the images in background.
+## Day 2 - Goal
 
-The frontend for the application is a small, responsive Single Page Application written in *VueJS* (which is one of the popular frameworks at the moment). We will be using the cheapest option to host a static website like that: Azure Blob storage.
+Today is the starting point for the application that we will build and refine during this week. To give you more context on what we will be building, here is the description of our sample application and the resulting architecture for *Day 2*.
 
-![day2_1](./challenges/img/day2_goal1.png "day2_1")
-![day2_2](./challenges/img/day2_goal2.png "day2_2")
-![day2_3](./challenges/img/day2_goal3.png "day2_3")
+### Application
 
-## Architecture ##
+We are going to use the sample application to get to know all the Azure services throughout the workshop. The application is a **Simple Contacts Management** (SCM). You can - surprisingly - create, read, update and delete contacts with it. Currently, we will be storing the contacts in an in-memory database. On *Day 3* we will learn about the various database services of Azure and add proper persistance to our services.
 
-At the end of the day, we will have the following architecture up and running in your own Azure subscription.
+Later that day, we will add a second service to add contact images, which will be stored in an *Azure Storage Account* (Blob). We will also create thumbnails of the images in background via an *Azure Function* which will automatically be triggered through an *Azure Storage Queue*.
 
-![architecture](./challenges/img/architecture_day2.png "architecture")
+The frontend for the application is a small, responsive Single Page Application written in *Vue.js* (which is one of the popular frameworks at the moment). We will be using the cheapest option to host a static website like that namely *Azure Blob storage*.
+
+To make things more tangible, here are some screenshots of the application:
+
+- Welcome page of the app
+  ![day2_1](./images/day2_goal1.png "day2_1")
+- List of contacts
+  ![day2_2](./images/day2_goal2.png "day2_2")
+- Detail view of a contact
+  ![day2_3](./images/day2_goal3.png "day2_3")
+
+### Architecture
+
+At the end of the day, you will have the following architecture up and running in your own Azure subscription:
+
+![architecture](./images/architecture_day2.png "architecture")
+
+### Remarks
+
+The challenges marked with the ":small_orange_diamond:" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before to the SCM app. They results of the  ":small_orange_diamond:" challenges will be reused in the next days.
+
+But *do not panic* in case you cannot finish them in time today: we got you covered tomorrow by a baseline deployment of today's results.
+
+😎 Enjoy your day! 😎

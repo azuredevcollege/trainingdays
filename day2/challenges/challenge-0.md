@@ -1,14 +1,32 @@
-# Challenge 0 - Setup your System
+# Challenge 0: Setup your System
+
+## Here is what you will learn 🎯
 
 To be able to follow all the challenges provided in this workshop, you need a few prerequisites on your machine. This challenge is for setting up your system.
 
-## dotnet SDK
+## Table Of Contents
 
-Download and install dotnet core SDK from <https://dotnet.microsoft.com/download>. You should choose the LTS version (.NET Core 3.1)!
+1. [.NET SDK](#net-sdk)
+2. [Node.js](#node-js)
+3. [Vue.js CLI](#vue-js-cli)
+4. [Azure CLI](#azure-cli)
+5. [Visual Studio Code](#visual-studio-code)
+6. [Azure Storage Explorer](#azure-storage-explorer)
+7. [Azure Data Studio](#azure-data-studio)
+8. [jq](#jq)
+9. [git Version Control](#git-version-control)
 
-![dotnet](./img/netcore.png "dotnet")
+## .NET SDK
 
-After the installation, check if everything works as expected. Open a command prompt and execute the dotnet CLI.
+Download and install .NET Core SDK from <https://dotnet.microsoft.com/download>. 
+
+:::tip
+📝 Choose the LTS version (currently .NET Core 3.1).
+:::
+
+![dotnet](./images/netcore.png "dotnet")
+
+After the installation is complete, check if everything works as expected. Open a command prompt and execute the .NET CLI.
 
 ```shell
 $ dotnet
@@ -29,13 +47,17 @@ $ dotnet --list-sdks
 3.1.405 [C:\Program Files\dotnet\sdk]
 ```
 
-## Node JS
+## Node.js
 
-Download and install the current LTS version (14.y.z) of Node JS from <https://nodejs.org/en/download/>
+Download and install Node.js from <https://nodejs.org/en/download/>
 
-![nodejs](./img/nodejs.png "nodejs")
+:::tip
+📝 Choose the LTS version (currently Node.js 14).
+:::
 
-Again, after the installtion is complete, check from the command line that everything works as expected.
+![nodejs](./images/nodejs.png "nodejs")
+
+After the installation is complete, check if everything works as expected. Open a command prompt and execute the following commands.
 
 ```shell
 $ node --version
@@ -67,9 +89,9 @@ npm help npm      involved overview
 
 ## Vue CLI
 
-![vuejs](./img/vuejs.png "vuejs")
+![vuejs](./images/vuejs.png "vuejs")
 
-We will be using VueJS as our frontend framework. Install it from the command line:
+We will be using VueJS as our frontend framework. Install it from the command-line via npm:
 
 ```shell
 $ npm install -g @vue/cli
@@ -85,9 +107,9 @@ $ vue --version
 
 ## Azure CLI
 
-We will also be using the Azure command line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
+We will also be using the Azure command-line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
-When finished, login to your Azure account from the command line:
+When finished, login to your Azure account from the command-line:
 
 ```shell
 $ az login
@@ -111,7 +133,9 @@ A browser window will open, login to Azure and go back to the command prompt. Yo
 }
 ```
 
-If you have multiple subscriptions, make sure you are working with the correct one!
+:::tip
+📝If you have multiple subscriptions, make sure you are working with the correct one!
+:::
 
 ```shell
 $ az account show
@@ -129,7 +153,7 @@ $ az account show
 }
 ```
 
-If that is not the correct one, follow the steps below:
+If the displayed subscription is not the correct one, follow the steps below:
 
 ```shell
 $ az account list -o table
@@ -140,17 +164,17 @@ $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 
 ## Visual Studio Code
 
-To work with all the samples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Stduio Code as it works cross-platform.
+To work with all the samples provided in this workshop, you will need an IDE. To target a wide range of developers/architects, we will be using Visual Studio Code (VS Code) as it works cross-platform. Therefore, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
 
-Therefor, go to <https://code.visualstudio.com/docs/setup/setup-overview> and install it on your machine.
-
-> Please do not use VSCodium. You will run into problems building/debugging some of the samples provided in this workshop.
+:::warning
+Please do not use VSCodium. You will run into problems building/debugging some of the samples provided in this workshop.
+:::
 
 ### Useful Extensions
 
-After the setup is complete, open Visual Studio and select the "Extensions" sidebar:
+After the setup is complete, open Visual Studio Code and select the "Extensions" sidebar:
 
-![Visual Studio Extensions](./img/vscode_extensions.png "VS Code Extensions")
+![Visual Studio Extensions](./images/vscode_extensions.png "VS Code Extensions")
 
 Search and install the following extensions:
 
@@ -159,35 +183,36 @@ Search and install the following extensions:
 - Debugger for Chrome <https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome>
 - Azure Functions <https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions>
 
-The _Azure Functions_ extension should have already been installed as part of the _Azure Tools_ extension, but you additionally need to make sure to follow the OS-specific instructions.
+:::tip
+📝 The _Azure Functions_ extension should have already been installed as part of the _Azure Tools_ extension, but you additionally need to make sure to follow the OS-specific instructions.
+:::
 
 ## Azure Storage Explorer
 
-In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer.
+In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer. Go to <https://azure.microsoft.com/en-us/features/storage-explorer/>, download and install the tool.
 
-Go to <https://azure.microsoft.com/en-us/features/storage-explorer/>, download and install the tool.
+![Azure Storage Explorer](./images/storage_explorer.png "Azure Storage Explorer")
 
-![Azure Storage Explorer](./img/storage_explorer.png "Azure Storage Explorer")
-
-![Azure Storage Explorer](./img/storage_explorer_view.png "Azure Storage Explorer")
+![Azure Storage Explorer](./images/storage_explorer_view.png "Azure Storage Explorer")
 
 ## Azure Data Studio
 
-We will also work with Azure SQL Databases. You can, of course, use SQL Server Management Studio if you are on a Windows machine. If you want to work "cross-platform", use Azure Data Studio.
+We will also work with Azure SQL Databases. You can, of course, use SQL Server Management Studio if you are on a Windows machine. If you want to work cross-platform, use Azure Data Studio.
 
 Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio>, download and install the tool.
 
-![Azure Data Studio](./img/azure_data_studio.png "Azure Data Studio")
+![Azure Data Studio](./images/azure_data_studio.png "Azure Data Studio")
 
 ## jq
 
-jq is a lightweight and flexible command-line JSON processor. In some challenges we use jq to process the JSON documents that we get back from Azure CLI.
-To install jq go to <https://stedolan.github.io/jq/download/> and follow the instructions.
+jq is a lightweight and flexible command-line JSON processor. In some challenges we use jq to process the JSON documents that we get back from Azure CLI. To install jq go to <https://stedolan.github.io/jq/download/> and follow the instructions.
 
-![jq](./img/jq.png)
+![jq](./images/jq.png)
 
 ## git Version Control
 
-The repository is located at github, so - obviously - we'll need a local git client to interact with the repo. Download and install the appropriate version of git for you here: <https://git-scm.com/download>
+The repository is located at [GitHub](https://github.com/), so - obviously - we will need a local git client to interact with the repository. Download and install the appropriate version of git here: <https://git-scm.com/download>
 
-![git](./img/logo@2x.png)
+![git](./images/logo@2x.png)
+
+[🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-1.md)

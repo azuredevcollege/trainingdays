@@ -1,61 +1,82 @@
-# Challenge 1 - Azure Web Apps
+# Challenge 1: Azure Web Apps
 
-## Here is what you will learn
+## Here is what you will learn 🎯
 
-- Create an AppService Plan / Azure Web App
-- Create and deploy an ASP.NET Core Web App to Azure
-- Create and configure WebApp slots
-- Use slots to deploy new versions of your web application with near-zero downtime
+In this challenge you will learn how to:
+
+- create an AppService Plan / Azure Web App
+- create and deploy an ASP.NET Core Web App to Azure
+- create and configure WebApp slots
+- use slots to deploy new versions of your web application with near-zero downtime
+
+## Table Of Contents
+
+1. [Create an Azure Web App](#create-an-azure-web-app)
+2. [Create a Sample Application](#create-a-sample-application)
+3. [Deploy the Sample App to Azure](#deploy-the-sample-app-to-azure)
+4. [Working with Deployment Slots (optional - but recommended)](#working-with-deployment-slots-optional-but-recommended)
+5. [Cleanup](#cleanup)
 
 ## Create an Azure Web App
 
-You have two options to create a web app - use either the Azure Portal or the Azure Command Line Interface. You can also work with both, just make sure to use different names when creating the web app the second time!
+You have two options to create an Azure Web App: use either the *Azure Portal* or the *Azure Command Line Interface*. We will walk you through both options in the following sections.
+
+:::tip
+📝 You can also work with both, just make sure to use different names when creating the web app the second time!
+:::
 
 ### Option 1: Azure Portal
 
-To create an Azure Web App, go to the Azure Portal and click on **"Create a resource"**, in the next view choose **"Web App"**.
+Go to the Azure Portal and click on **"Create a resource"**, in the next view choose **"Web App"**.
 
-![create](./img/portal_createresources.png "create")
+![create](./images/portal_createresources.png "create")
 
-When you reached the "Create Web App" wizard, follow the steps below:
+When you reached the **"Create Web App"** wizard, follow the steps below:
 
-- Choose the correct subscription
-- Create a new resource group, name it "myFirstWebApps-rg"
-- Under instance details, enter a name for your Web App (be careful: this must be a global unique name!)
-- Publish: Code
-- Runtime: .NET Core 3.1 (LTS)
-- Operation System: Windows
-- Region: West Europe
-- create a new AppSerice plan
-  - SKU and Size: S1
-  - To get familiar with other sizes, click "Change size"
+|Name|Value|
+|---  |---  |
+| *Subscription* | Choose the correct subscription |
+| *Resource Group*|create a new one and name it "myFirstWebApps-rg" |
+| *Instance Details* | Enter a name for your Web App (this must be a _globally unique_ name!) |
+| *Publish* | Code |
+| *Runtime* |.NET Core 3.1 (LTS)|
+| *Operation System* | Windows |
+| *Region* | West Europe |
+| *App Service Plan* | Create a new plan and choose S! for `SKU and Size` |
 
-Click "Next: Monitoring".
+:::tip
+📝 To get familiar with other sizes, click **"Change size"** in the App Service Plan section.
+:::
 
-- Enable AppInsights
-- Create a new AppInsights instance for it
+Click **"Next: Monitoring"**.
 
-When done, proceed to the "Review + create" screen.
+|Name|Value|
+|---|---|
+| *AppInsights* | Enable AppInsights and create a new instance for it|
 
-![review](./img/portal_webapp.png "review")
+When done, proceed to the **"Review + create"** screen.
 
-Again, check that all the properties are filled with the expected values and click "Create".
+![review](./images/portal_webapp.png "review")
+
+Check that all the properties are filled with the expected values and click **"Create"**.
 
 When the deployment has finished, got to the resource and get familiar with all the configuration options discussed in the introduction talk.
 
-![overview](./img/portal_webappoverview.png "overview")
+![overview](./images/portal_webappoverview.png "overview")
 
 Open the web app in your browser.
 
-![browser](./img/browser_webapp.png "browser")
+![browser](./images/browser_webapp.png "browser")
 
 ### Option 2: Azure CLI
 
-If you have created the web application already with option 1, go to the portal and delete the resource group - including all the newly created resources (you have to wait until it has finished, before proceeding). We will be creating the exact same resources now with the Azure CLI.
+If you have created the web application already with option 1, go to the portal and delete the resource group including all the newly created resources (you have to wait until it has finished, before proceeding). We will be creating the exact same resources now with the Azure CLI.
 
-First, let's create the resource group.
+:::tip
+📝 You can check the results of each command in the Portal.
+:::
 
-> BTW: You can check the results of each command in the Portal.
+First, let's create the resource group:
 
 ```shell
 $ az group create --name myFirstWebApps-rg --location westeurope
@@ -73,7 +94,7 @@ $ az group create --name myFirstWebApps-rg --location westeurope
 }
 ```
 
-Next, add an App Service Plan.
+Next, add an App Service Plan:
 
 ```shell
 $ az appservice plan create -g myFirstWebApps-rg -n myFirstWebAppsPlan --sku S1
@@ -117,7 +138,7 @@ $ az appservice plan create -g myFirstWebApps-rg -n myFirstWebAppsPlan --sku S1
 }
 ```
 
-When the App Service Plan has been created, we can now add the Web App.
+When the App Service Plan has been created, we can add the Web App:
 
 ```shell
 $ az webapp create -g myFirstWebApps-rg -p myFirstWebAppsPlan -n myFirstWebAppDevCollege
@@ -199,9 +220,7 @@ $ az webapp create -g myFirstWebApps-rg -p myFirstWebAppsPlan -n myFirstWebAppDe
 }
 ```
 
-The last step we need to have the same environment like when we created everything via the portal, is to add Application Insights.
-
-The Azure CLI Application Insights component is still in preview. To access it, you first need to run:
+The last step we need to have the same environment like when we created everything via the portal, is to add Application Insights. The Azure CLI Application Insights component is still in preview. To access it, you first need to run:
 
 ```shell
 $ az extension add -n application-insights
@@ -209,9 +228,9 @@ $ az extension add -n application-insights
 The installed extension 'application-insights' is in preview.
 ```
 
-Now, let's create the AppInsights component for our application.
+Now, let's create the AppInsights component for our application:
 
-```shell
+```shell{13}
 $ az monitor app-insights component create --app myFirstWebAppsAppIn --location westeurope --kind web -g myFirstWebApps-rg  --application-type web
 
 {
@@ -238,19 +257,17 @@ $ az monitor app-insights component create --app myFirstWebAppsAppIn --location 
 }
 ```
 
-Add the Application Insights instrumentation key to your WebApp. Therefore, use the instrumentation key from the above output in the next command.
+Add the Application Insights instrumentation key to your WebApp. Use the `instrumentation key` from the above output in the next command.
 
 ```shell
-$ az webapp config appsettings set --settings APPINSIGHTS_INSTRUMENTATIONKEY=<YOUR_INSTRUMENTATION_KEY> -n myFirstWebAppDevCollege -g myFirstWebApps-rg
+az webapp config appsettings set --settings APPINSIGHTS_INSTRUMENTATIONKEY=<YOUR_INSTRUMENTATION_KEY> -n myFirstWebAppDevCollege -g myFirstWebApps-rg
 ```
 
 Now, we are all set to add a sample application.
 
-## Create a sample application
+## Create a Sample Application
 
-We will use a .NET Core MVC application to demonstrate the deployment process to an Azure Web App. So first, let's create a demo application.
-
-Create a local folder called _devcollege_ and open it in the comannd line.
+We will use a .NET Core MVC application to demonstrate the deployment process to an Azure Web App. So first, let's create a demo application. Create a local folder called _devcollege_ and open it in the command-line.
 
  `cd` into that folder and execute:
 
@@ -269,113 +286,121 @@ Restore succeeded.
 
 ### Visual Studio Code
 
-After the wizard has finished, `cd` into the new folder _myFirstCoreApp_ and open it in VS Code:
+After the wizard has finished, `cd` into the new folder `myFirstCoreApp` and open it in VS Code:
 
 ```shell
-$ cd myFirstCoreApp
-$ code .
+cd myFirstCoreApp
+code .
 ```
 
-![vscode](./img/vscode_start.png "vscode")
+![vscode](./images/vscode_start.png "vscode")
 
-Get familiar with the environment and have a look at the controller HomeController.
+:::tip
+📝 Get familiar with the environment and have a look at the controller `HomeController`.
+:::
 
-Set a breakpoint (F9) on method **public IActionResult Index()** in Controllers/HomeController.cs
+Set a breakpoint (**F9**) on method `public IActionResult Index()` in `Controllers/HomeController.cs` and press **F5**. If VS Code asks you about the environment, choose _.NET Core_.
 
-Press F5 - if VS Code asks you about the environment, choose _.NET Core_
+The project will now be built and after that, your browser will point to [https:/localhost:5001](https:/localhost:5001).
 
-The project will now be built and after that, your browser will point to _https:/localhost:5001_.
+:::tip
+Here is a workaround, if port _5001_ is blocked on your machine.
 
-#### Optional / Workaround
-
-> Here is a workaround, if port _5001_ is blocked on your machine.
-
-Open file _launch.json_ in the folder _.vscode_ and add the env variable **ASPNETCORE_URLS** with a value that works for you.
+Open file `launch.json` in the folder `.vscode` and add the env variable `ASPNETCORE_URLS` with a value that works for you.
 
 Example:
 
-![vscode-launch](./img/vscode_launch.png "vscode-launch")
+![vscode-launch](./images/vscode_launch.png "vscode-launch")
+:::
 
 ### Debug Tools
 
 When the breakpoint gets hit, get familiar with the tools of the debugger.
 
-![vscode-debug](./img/vscode_debug.png "vscode-debug")
+![vscode-debug](./images/vscode_debug.png "vscode-debug")
 
-Open _Views/Home/Index.cshtml_ and change the welcome text to "Welcome to the Azure Developer College".
+Open `Views/Home/Index.cshtml` and change the welcome text to "Welcome to the Azure Developer College".
 
 Run it again locally and check, if the changes appear.
 
-![browser-welcome](./img/browser_welcome.png "browser-welcome")
+![browser-welcome](./images/browser_welcome.png "browser-welcome")
 
-## Deploy the sample app to Azure
+## Deploy the Sample App to Azure
 
-Now let's deploy the webapp to Azure. Therefor, open the "Azure Extension" on the left side of Visual Studio Code.
+Now let's deploy the webapp to Azure. Therefore, open the "Azure Extension" on the left side of Visual Studio Code.
 
-If you haven't done so far, add the Azure App Service Extension (see: [Challenge 0 - Setup your system](./challenge-0.md))
+If you haven't done so far, add the Azure App Service Extension (see: [Challenge 0: Setup your System](./challenge-0.md))
 
 Find your webapp in the extension and right-click --> Deploy to Web App...
 
-> If you can't find your subscription, press **F1** and choose the Task _Azure: Sign In_.
+:::tip
+📝 If you can't find your subscription, press **F1** and choose the Task _Azure: Sign In_.
+:::
 
-![vscode-deploy](./img/vscode_deploy.png "vscode-deploy")
+![vscode-deploy](./images/vscode_deploy.png "vscode-deploy")
 
-![vscode-deploying](./img/vscode_deploying.png "vscode-deploying")
+![vscode-deploying](./images/vscode_deploying.png "vscode-deploying")
 
 After a few seconds the browser will show you your first web app running in Azure.
 
-![browser-webapp](./img/browser_webappdevcollege.png "browser-webapp")
+![browser-webapp](./images/browser_webappdevcollege.png "browser-webapp")
 
-## Working with Deployment Slots (OPTIONAL - but recommended)
+## Working with Deployment Slots (optional - but recommended)
 
-Open your web app in the portal and go to "Deployment Slots".
+Open your web app in the portal and go to **"Deployment Slots"**.
 
-Create a new slot called "Staging" (choose "clone settings" from your production slot).
+Create a new slot called **"Staging"** (choose **"clone settings"** from your production slot).
 
-![portal-staging](./img/portal_staging.png "portal-staging")
+![portal-staging](./images/portal_staging.png "portal-staging")
 
 When finished, go back to VS Code.
 
-## Deploy sample application to Staging slot
+## Deploy Sample Application to Staging Slot
 
-Open _Views/Home/Index.cshtml_ again and change the welcome text to "Welcome to the Azure Developer College - this time with slots!".
+Open `Views/Home/Index.cshtml` again and change the welcome text to _"Welcome to the Azure Developer College - this time with slots!"_.
 
 Check that your local development environment works as expected.
 
-![browser-staging](./img/browser_staging.png "browser-staging")
+![browser-staging](./images/browser_staging.png "browser-staging")
 
-To deploy the application to the **Staging** slot, find your webapp in the **Azure AppService extension**, drill down to **Deployment Slots** and right-click --> Deploy to Slot...
+To deploy the application to the _"Staging"__ slot, find your webapp in the **Azure AppService extension**, drill down to **Deployment Slots** and right-click --> **Deploy to Slot...**
 
-Your current application will now be deployed to your "Staging" slot.
+Your current application will now be deployed to your _"Staging"_ slot.
 
-### Show Staging application
+### Show Staging Application
 
 To see your staging slot in action, go to the deployment slot in the portal and copy the URL in the overview blade.
 
-![portal-slot-overview](./img/portal_slotoverview.png "portal-slot-overview")
+![portal-slot-overview](./images/portal_slotoverview.png "portal-slot-overview")
 
 Open your browser, navigate to the URL and check, if the headline contains the new text.
 
-![browser-slot-website](./img/browser_slotwebsite.png "browser-slot-website")
+![browser-slot-website](./images/browser_slotwebsite.png "browser-slot-website")
 
-> Also check the production slot (URL without "-staging").
+:::tip
+📝 Also check the production slot (URL without "-staging").
+:::
 
 ### Swapping Slots
 
-Now that everything works as expected, go back to "Deployment Slots" and click on "Swap" (selecting the staging slot as source).
+Now as everything works as expected, go back to **"Deployment Slots"** and click on **"Swap"** selecting the staging slot as source.
 
-With this command, we are swapping the current "poduction" slot with our "Staging" slot...which basically means that the Load Balancer in front of our Web App points to "Staging" and promotes it as the new "production" slot.
+With this command, we are swapping the current _"production"_ slot with our _"Staging"_ slot, which basically means that the load balancer in front of our Web App points to _"Staging"_ and promotes it as the new _"production"_ slot.
 
-![portal-swap](./img/portal_swap.png "portal-swap")
+![portal-swap](./images/portal_swap.png "portal-swap")
 
 Now check, that the production slot serves the new version of the website.
 
-> **Optional**: Split traffic 50:50 to staging and production a see what happens when you reload your page in the browser pointing to the _production_ slot. What do you think, why does this happen??
+:::tip
+📝 Split traffic 50:50 to staging and production a see what happens when you reload your page in the browser pointing to the _production_ slot. What do you think, why does this happen?
+:::
 
-## House Keeping
+## Cleanup
 
-Remove the sample resource group.
+Remove the sample resource group via:
 
 ```shell
-$ az group delete -n myFirstWebApps-rg
+az group delete -n myFirstWebApps-rg
 ```
+
+[◀ Previous challenge](./challenge-0.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-bo-1.md)
