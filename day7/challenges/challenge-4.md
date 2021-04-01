@@ -174,54 +174,61 @@ secret/scmsecrets created
 
 Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for convenience reasons, we build all images in the container registry!
 
-Now, build all the required images one by one...of course, replace `<ACR_NAME>` with the name of your container registry.
+Now, build all the required images one by one...
 
-1. Contacts API: Folder `day7/apps/dotnetcore/Scm`:
-
+Therefore first create a shell variable `ACR_NAME` with the name of your container registry like this:
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-contacts-api:2.0 -f ./Adc.Scm.Api/Dockerfile .
+ACR_NAME=yourRegistryNameHere
 ```
 
-2. Resources API: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api`:
+This variable is used for all the following Docker builds in ACR. Go to the root directory of the repository `trainingdays` and fire all docker builds one after another:
+
+1. Contacts API:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-api:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-contacts-api:2.0 ./day7/apps/dotnetcore/Scm/Adc.Scm.Api
 ```
 
-3. Image Resizer Function: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer`:
+2. Resources API:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-func:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-api:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
 ```
 
-4. Search API: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api`:
+3. Image Resizer Function:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-api:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-func:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
 ```
 
-5. Search Indexer Function: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer`:
+4. Search API:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-func:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-api:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
 ```
 
-6. Visit Reports API: Folder `day7/apps/nodejs/visitreport`:
+5. Search Indexer Function:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-visitreports-api:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-func:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
 ```
 
-7. Text Analytics Function: Folder `day7/apps/nodejs/textanalytics`:
+6. Visit Reports API:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-textanalytics-func:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-visitreports-api:2.0 ./day7/apps/nodejs/visitreport
 ```
 
-8. Frontend / UI: Folder `day7/apps/frontend/scmfe`:
+7. Text Analytics Function:
 
 ```shell
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0 .
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-textanalytics-func:2.0 ./day7/apps/nodejs/textanalytics
+```
+
+8. Frontend / UI:
+
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-frontend-ui:2.0 ./day7/apps/frontend/scmfe
 ```
 
 Now, all images are present in your container registry. You can check the repositories in the portal, if you want:
