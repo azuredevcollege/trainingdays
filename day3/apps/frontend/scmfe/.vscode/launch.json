@@ -5,19 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "name": "Day3 - Launch Frontend",
             "request": "launch",
-            "name": "Day3 - Launch SCM Visit Reports API",
-            "program": "${workspaceFolder}/server.js",
-            "cwd": "${workspaceFolder}/",
             "preLaunchTask": "npm: install",
             "outputCapture": "std",
+            "runtimeArgs": [
+                "run-script",
+                "serve"
+            ],
+            "runtimeExecutable": "npm",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "env": {
-                "SCM_ENV": "development"
-            }
+            "type": "pwa-node"
         },
+
     ]
 }
