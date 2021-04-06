@@ -148,6 +148,11 @@ Try adding slots to your app and deploy the service to the slot. Afterwards swap
 
 ## Wrap-Up
 
-We have now set up our local development environment. We cloned the repo, installed dependencies of the SPA, ran both services locally and deployed the contacts API to Azure.
+🎉 **_Congratulations_** 🎉
+
+You have now set up your local development environment. You cloned the repository, installed the dependencies of the Single Page Application, ran both services locally and deployed the contacts API to Azure. You made use of:
+
+- [Azure AppServices](https://docs.microsoft.com/de-de/azure/app-service/)
+- [Vue.JS](https://vuejs.org/)
 
 [◀ Previous challenge](./challenge-1.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-2.md)
