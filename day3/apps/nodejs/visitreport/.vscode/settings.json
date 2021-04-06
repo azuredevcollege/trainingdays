@@ -1,5 +1,4 @@
 {
-    // "appService.preDeployTask": "npm: install",
     "appService.deploySubpath": ".",
     "appService.zipIgnorePattern": [
         ".vscode{,/**}",
