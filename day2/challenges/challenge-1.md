@@ -33,16 +33,16 @@ Go to the Azure Portal and click on **"Create a resource"**, in the next view ch
 
 When you reached the **"Create Web App"** wizard, follow the steps below:
 
-|Name|Value|
-|---  |---  |
-| *Subscription* | Choose the correct subscription |
-| *Resource Group*|create a new one and name it "myFirstWebApps-rg" |
+| Name               | Value                                                                  |
+| ------------------ | ---------------------------------------------------------------------- |
+| *Subscription*     | Choose the correct subscription                                        |
+| *Resource Group*   | create a new one and name it "myFirstWebApps-rg"                       |
 | *Instance Details* | Enter a name for your Web App (this must be a _globally unique_ name!) |
-| *Publish* | Code |
-| *Runtime* |.NET Core 3.1 (LTS)|
-| *Operation System* | Windows |
-| *Region* | West Europe |
-| *App Service Plan* | Create a new plan and choose S! for `SKU and Size` |
+| *Publish*          | Code                                                                   |
+| *Runtime*          | .NET Core 3.1 (LTS)                                                    |
+| *Operation System* | Windows                                                                |
+| *Region*           | West Europe                                                            |
+| *App Service Plan* | Create a new plan and choose S! for `SKU and Size`                     |
 
 :::tip
 📝 To get familiar with other sizes, click **"Change size"** in the App Service Plan section.
@@ -50,9 +50,9 @@ When you reached the **"Create Web App"** wizard, follow the steps below:
 
 Click **"Next: Monitoring"**.
 
-|Name|Value|
-|---|---|
-| *AppInsights* | Enable AppInsights and create a new instance for it|
+| Name          | Value                                               |
+| ------------- | --------------------------------------------------- |
+| *AppInsights* | Enable AppInsights and create a new instance for it |
 
 When done, proceed to the **"Review + create"** screen.
 

@@ -17,14 +17,6 @@
 			"path": "apps/dotnetcore/Scm/Adc.Scm.Repository.Interfaces"
 		},
 		{
-			"name": "Resources API",
-			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api"
-		},
-		{
-			"name": "Image Resizer Function",
-			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
-		},
-		{
 			"name": "Frontend",
 			"path": "apps/frontend/scmfe"
 		},

@@ -1,6 +1,5 @@
 # Challenge 3 (optional): Messaging
 
-
 ## Here is what you will learn 🎯
 
 In this _optional_ challenge, you will get to know Azure messaging offerings to loosely connect services with each other. You will use _Azure Service Bus Topics_ as an example. _Azure Storage Queues_ will be used in the next [Break Out session](./challenge-bo-2.md).
@@ -39,10 +38,10 @@ Give the _Topic_ a name, e.g. `message` and leave the other parameters as propos
 
 When the topic has been created:
 
-- Open it in the portal 
+- Open it in the portal
 - create a _Subscription_ via the menu bar
 - Give it a name, e.g. _testsubscription_
-- Set the _"Max delivery count"_ to `10` 
+- Set the _"Max delivery count"_ to `10`
 - Leave all other parameters as proposed by the portal
 
 :::tip
@@ -115,7 +114,7 @@ In the Portal create a new _Azure Logic App_:
 
 When the Logic App has been deployed:
 
-- Open it in the Portal 
+- Open it in the Portal
 - Click on **"Blank logic App"** in the _Templates_ section
 - Search for **"service bus topic"** in the search box
 - Choose **"When a message is received in a topic subscription (auto-complete)**.

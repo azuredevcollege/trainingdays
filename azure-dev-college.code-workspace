@@ -4,7 +4,9 @@
 			"path": "./"
 		}
 	],
-	"settings": {},
+	"settings": {
+		"markdown.extension.toc.updateOnSave": false
+	},
 	"launch": {
 		"version": "0.2.0",
 		"configurations": []
