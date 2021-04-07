@@ -2,7 +2,7 @@
 
 Now that we have made experience with Azure SQL DB, Azure CosmosDB and Azure (Cognitive) Search, it is time to add these services to our sample application. At the end of the day, the architecture will have progressed to this:
 
-![Architecture Day 3](./img/architecture_day3breakout.png "Architecture Day 3")
+![Architecture Day 3 - Breakout 1](./img/architecture_day3breakout.png "Architecture Day 3 - Breakout 1")
 
 As you can see, we will introduce a new microservice (with its own data store - Cosmos DB) called "Visit Reports", that allows us to add visit reports to existing contacts. We will have a _1-to-many_ relation between _Contacts_ and _Visit Reports_. And, to have the Visit Reports service being able to work on its own, it will also store some data coming from the _Contacts_ service. So there will be some kind of duplication of data, which - in a microservice approach - is not an unusual thing.
 
@@ -243,7 +243,7 @@ Configuration / Application Settings:
 
 > You can delete the **QueueName** app settings!
 
-![portal_bo_adjust_imgmanipulation](./img/portal_bo_adjust_imgmanipulation.png "portal_bo_adjust_imgmanipulation")
+![Adjust Configuration Settings](./img/portal_bo_adjust_imgmanipulation.png "Adjust Configuration Settings")
 
 <hr>
 <br>
@@ -433,8 +433,8 @@ When everything is set up correctly and the services work as expected, you shoul
 
 Add and edit a few new contacts (search for them via the top navigation bar) and create some visit reports for them.
 
-![scm_day3](./img/scm_day3.png "scm_day3")
-![scm_day3_vr](./img/scm_day3_vr.png "scm_day3_vr")
+![SCM Contacts List](./img/scm_day3.png "SCM Contacts List")
+![Visit Report Detail](./img/scm_day3_vr.png "Visit Report Detail")
 
 # Wrap-Up
 
