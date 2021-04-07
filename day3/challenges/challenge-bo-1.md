@@ -79,7 +79,7 @@ Account Properties:
 - Capacity mode (**OPTIONAL**): if you want to, you can choose _Serverless_
 
 :::tip
-📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the delpoyment option here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
+📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the deployment option here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
 :::
 
 Leave all other settings as proposed by Azure.
@@ -307,8 +307,9 @@ So please re-deploy the Web Apps/Functions for:
 
 ![Projects That Need To Be Re-Deployed](./img/bo1_redeploy.png "Projects That Need To Be Re-Deployed")
 
-:::warning Warning
+:::warning
 ⚠️ Please make sure you use the versions from the "Day3 - Breakout 1 Workspace"! Double-check that you use the correct VS Code workspace. The services have also been adjusted on the code level.
+:::
 
 ## Deploy the Contacts Search Service
 
@@ -410,7 +411,9 @@ When the Web App has been created, go to the Configuration section and add the f
 Now, from an infrastructure point of view, we are ready to deploy the NodeJS app. Right-click on the folder `Visit Reports API`, select the correct Azure AppService and confirm the deployment to it.
 
 :::tip
-📝 While deploying to the AppService, Azure will run `npm install` for you, so you don't need to do this upfront. This will keep the amount of data sent to Azure quite small and reduces the deployment duration significantly! The technology working behind the scenes is called `Oryx`. If you want to know more about it and how to configure builds during deployment, this is the way to the GitHub repository: <https://github.com/microsoft/Oryx> (Oryx configuration: <https://github.com/microsoft/Oryx/blob/master/doc/configuration.md#oryx-configuration>)
+📝 While deploying to the AppService, Azure will run `npm install` for you, so you don't need to do this upfront. This will keep the amount of data sent to Azure quite small and reduces the deployment duration significantly! The technology working behind the scenes is called `Oryx`. If you want to know more about it and how to configure builds during deployment, this is the way to the GitHub repository: <https://github.com/microsoft/Oryx>
+  
+Oryx configuration: <https://github.com/microsoft/Oryx/blob/master/doc/configuration.md#oryx-configuration>
 :::
 
 In the output window, watch how the NodeJS app is copied to the Web App and is being started by Azure.
@@ -420,7 +423,7 @@ You can check, if it's running correctly by opening a browser window and point i
 <https://YOUR_WEB_APP_NAME.azurewebsites.net/docs>
 
 ::: warning
-⚠️ You will see the Swagger UI of the service (in the **Explore** textbox, replace _json_ with _yaml_ to view all operations).
+⚠️ You will see the Swagger UI of the visit reports service - in the **Explore** textbox, replace **json** with **yaml** to view all operations.
 :::
 
 ![Visit Reports API Swagger Definition](./img/day3_bo_tux_vr_swagger.png "Visit Reports API Swagger Definition")
@@ -453,7 +456,7 @@ var uisettings = {
 }
 ```
 
-After you have adjusted the settings, open an integrated terminal for folder _Frontend_ and run...
+After you have adjusted the settings, open an **integrated terminal** in VS Code for folder _Frontend_ and run...
 
 ```shell
 npm install && npm run build
