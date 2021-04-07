@@ -1,6 +1,24 @@
-# Break Out #2: Add Congitive Services
+# 💎 Breakout 2: Add Congitive Services 💎
 
-Now it's time to finish our sample application from a services perspective. We'll now add Azure Cognitive Services to enhance our application with Artificial Intelligence.
+## Here is what you will learn 🎯
+
+Now that we have seen how Azure Congitive Services can easily enhance applications with out-of-the-box AI functionality, let's add one of those services from the text analytics space to our application.
+
+In this challenge you will:
+
+- use Azure Cognitive Services / Text Analytics to analyze the sentiment of visit report results
+
+## Table Of Contents
+
+1. [Introduction](#introduction)
+2. [Create a Cognitive Services Account](#create-a-cognitive-services-account)
+3. [Create an Azure Function to Analyze Visit Report Results](#create-an-azure-function-to-analyze-visit-report-results)
+4. [Adjust the Frontend](#adjust-the-frontend)
+5. [Wrap-Up](#wrap-up)
+
+## Introduction
+
+It's time to finish our sample application from a services perspective. We'll now add Azure Cognitive Services to enhance our application with Artificial Intelligence.
 
 Whenever a visit report will be saved - **and the visit report _results_ field is filled with text** - we will be calling the Text Analysis services of Azure Cognitive Services to analyze the sentiment of the text. With that analysis, we can determine, if the visit was a "negative" or "positive" experience on a scala from "0" to "100". When the text has been analyzed, the Cosmos DB is updated to reflect the findings of our analysis.
 
@@ -22,7 +40,7 @@ Go to the Portal and create the new resource (search for _Cognitive Services_). 
 
 ## Create an Azure Function to Analyze Visit Report Results
 
-As described in the introduction section, we will be using an Azure Function to call the Text Analyisis services - this time the function will be hosted on a Linux OS. It will be triggered by an Azure Service Bus Topic (**scmvrtopic**) we created in the Break Out session earlier this day.
+As described in the introduction section, we will be using an Azure Function to call the Text Analyisis services - this time the function will be hosted on a Linux OS. It will be triggered by an Azure Service Bus Topic (**scmvrtopic**) we created in the Break Out 1 session earlier this day.
 
 ### Add Service Bus Topic Subscription
 
@@ -49,7 +67,7 @@ Create the Azure Function App with the following parameters.
 | Operating System | _Linux_                                                                                               |
 | Plan Type        | _Consumption_                                                                                         |
 
-Create it and when the Function App has been deployed, go to the Configuration section and add the following App configuration/settings.
+Create it and when the Function App has been deployed, go to the **Configuration** section and add the following App configuration/settings.
 
 | Name                       | Value / Hint                                                                                                                                                                                                                                                                      |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -77,7 +95,7 @@ You will see one additional project added to the workspace compared to `Breakout
 
 ## Adjust the Frontend
 
-There is one last step to do, until we can see the new functionality in action. We need to adjust the frontend and enable the feature flag "enableStats". Please set this flag to **_true_**. You can either do this on you local machine and redeploy the frontend (again, see [Breakout Session 1](./challenge-bo-1.md#deploy-new-frontend)) or you simply open the Azure Storage Explorer **in the Portal** and edit the file directly.
+There is one last step to do, until we can see the new functionality in action. We need to adjust the frontend and enable the feature flag "enableStats". Please set this flag to **_true_**. You can either do this on you local machine and redeploy the frontend (again, see [Breakout Session 1](./challenge-bo-1.md#deploy-new-frontend)) or you simply open the **Azure Storage Explorer in the Portal** and edit the file directly.
 
 The settings file should look similar to that one now:
 
@@ -100,10 +118,21 @@ Also, the contacts detail view will show results of visit reports, if they are a
 
 ![Contact Detail - Sentiment Analysis](./img/browser_bo2_stats_contact.png "Contact Detail - Sentiment Analysis")
 
+:::tip
+📝 To kick-off the sentiment analysis process, create a `Visit Report`, open the detail view for it and enter a `Visit Result` text. Then wait a few seconds and open the `Statistics` view.
+:::
+
 ## Wrap-Up
 
 Congratulations! It was a hard and tough way to get to where you are now standing! You have created a basic, microservice oriented application with multiple backend services (contacts, resources, visit reports, search backend), that work independently, have their own storage, communicate via a Service Bus, can be granularly scaled etc. Ready to run globally!
 
-From a services perspective, we have a full working, modern cloud application! Hold on for a while to reflect what we have done so far - and celebrate!!
+From a services perspective, we have a full working, modern cloud application! Hold on for a while to reflect what we have done so far - and celebrate!
 
-Tomorrow, we will show you how to deploy the application including the Azure infrastructure within minutes! Trust us and be prepared for some DevOps magic :)
+Tomorrow, we will show you how to deploy the application including the Azure infrastructure within minutes!
+
+In this Breakout Challenge, you made use of:
+
+- [Azure Cognitive Services / Text Analytics](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/)
+- [Azure Functions on Linux](https://docs.microsoft.com/en-us/azure/azure-functions/create-function-app-linux-app-service-plan)
+
+[◀ Previous challenge](./challenge-4.md) | [🔼 Day 3](../README.md)

@@ -479,6 +479,5 @@ In this Breakout Challenge, you made use of:
 - [Azure Service Bus](https://docs.microsoft.com/de-de/azure/service-bus-messaging/)
 - [Azure Cognitive Search](https://docs.microsoft.com/de-de/azure/search/)
 - [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
-- [Azure Functions on Linux](https://docs.microsoft.com/en-us/azure/azure-functions/create-function-app-linux-app-service-plan)
 
 [◀ Previous challenge](./challenge-3.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-4.md)
