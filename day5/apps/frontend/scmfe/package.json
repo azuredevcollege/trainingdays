@@ -8,10 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "core-js": "^3.6.2",
     "echarts": "^4.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "vee-validate": "^2.2.15",
     "vue": "^2.6.11",
     "vue-application-insights": "^1.0.6",

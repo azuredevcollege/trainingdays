@@ -25,15 +25,15 @@ Go to the Azure Portal and click on **"Create a resource"**, in the next view ch
 
 Follow the wizard to create the storage account:
 
-| Parameter | Value |
-| --- | --- |
-| _Resource group_ | new, serverless-rg |
-| Name | Give your account a _globally unique_ name|
-| _Location_ | West Europe |
-| _Performance Tier_ | Standard |
-| _Account Kind_ | Storage V2 (General Purpose) |
-| _Replication_ | Locally-redundant storage (LRS) |
-| _Access Tier_ | Hot |
+| Parameter          | Value                                      |
+| ------------------ | ------------------------------------------ |
+| _Resource group_   | new, serverless-rg                         |
+| Name               | Give your account a _globally unique_ name |
+| _Location_         | West Europe                                |
+| _Performance Tier_ | Standard                                   |
+| _Account Kind_     | Storage V2 (General Purpose)               |
+| _Replication_      | Locally-redundant storage (LRS)            |
+| _Access Tier_      | Hot                                        |
 
 Leave all other options to their defaults. In the summary view, it should look like that:
 
@@ -102,9 +102,9 @@ Drag and drop a file to the container or upload one via the menu. After a few se
 
 ### Adjusting the Sample
 
-We can now receive events when a file is added to blob storage. Let's add a more meaningful sample. 
+We can now receive events when a file is added to blob storage. Let's add a more meaningful sample.
 
-We want to receive images that we will resize/manipulate in our function and write the result to the **processed** container. Therefore, we need to add a dependency to our project that enables us to do image manipulation in dotnet core. We will use [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp). 
+We want to receive images that we will resize/manipulate in our function and write the result to the **processed** container. Therefore, we need to add a dependency to our project that enables us to do image manipulation in dotnet core. We will use [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp).
 
 Open a terminal and go to your projects folder. Add the library via:
 
@@ -169,19 +169,19 @@ Go to the Azure Tools Extension and click on the **"Deploy to Azure..."** button
 
 Choose the following options, when asked:
 
-|Parameter|Value|
-|---|---|
-| _Runtime_ |NET Core 3.1 |
-| _OS_ | Windows |
-| _Hosting Plan_ | Consumption |
-| _Resource Group_ | serverless-rg |
-| _Storage Account_ | The same as you used in the local sample |
-| _Application Insights_ | Skip for now |
+| Parameter              | Value                                    |
+| ---------------------- | ---------------------------------------- |
+| _Runtime_              | NET Core 3.1                             |
+| _OS_                   | Windows                                  |
+| _Hosting Plan_         | Consumption                              |
+| _Resource Group_       | serverless-rg                            |
+| _Storage Account_      | The same as you used in the local sample |
+| _Application Insights_ | Skip for now                             |
 
 We still have to configure our Functions App, to be able to listen to blob changes in the Storage Account (_BlobTrigger information_). Therefore
 
 - Go to the Portal and open the Functions App you previously created.
-- Open the Application settings under **Configuration** 
+- Open the Application settings under **Configuration**
 - Add a new application setting (you can check your `local.settings.json` file for the correct values):
   | Parameter                      | Value                                                                                                       |
   | ------------------------------ | ----------------------------------------------------------------------------------------------------------- |
@@ -195,7 +195,7 @@ Finally, your application settings should look like that:
 
 ![azure_function_settings](./images/azure_function_settings.png "azure_function_settings")
 
-Test again (upload images) and check, if the Function App is running correctly in Azure 
+Test again (upload images) and check, if the Function App is running correctly in Azure
 
 :::tip
 📝 It might be necessary to restart your function app.

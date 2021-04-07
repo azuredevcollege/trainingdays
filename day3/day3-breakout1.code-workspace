@@ -1,0 +1,48 @@
+{
+	"folders": [
+		{
+			"name": "Contacts API",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Api"
+		},
+		{
+			"name": "Contacts Domain Objects",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.DomainObjects"
+		},
+		{
+			"name": "Contacts Data EF Core",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Repository.EntityFrameworkCore"
+		},
+		{
+			"name": "Contacts Interfaces",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Repository.Interfaces"
+		},
+		{
+			"name": "Resources API",
+			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api"
+		},
+		{
+			"name": "Image Resizer Function",
+			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
+		},
+		{
+			"name": "Frontend",
+			"path": "apps/frontend/scmfe"
+		},
+		{
+			"name": "Search API",
+			"path": "apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
+		},
+		{
+			"name": "Search Indexer Function",
+			"path": "apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"
+		},
+		{
+			"name": "Visit Reports API",
+			"path": "apps/nodejs/visitreport"
+		},
+	],
+	// "remoteAuthority": "wsl+Ubuntu-20.04",
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	},
+}

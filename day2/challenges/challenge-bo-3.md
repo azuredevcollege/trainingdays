@@ -1,4 +1,4 @@
-# :small_orange_diamond: Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates :small_orange_diamond:
+# 💎 Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates 💎
 
 ## Here is what you will learn 🎯
 
@@ -46,7 +46,7 @@ As a reminder, here is the architecture, we want to create:
       - StorageAccountConnectionString: <CONNECTIONSTRING_OF_STORAGEACCOUNT>
       - QueueName: _thumbnails_
       - FUNCTIONS*WORKER_RUNTIME: \_dotnet*
-      - FUNCTIONS*EXTENSION_VERSION: *~2\_
+      - FUNCTIONS*EXTENSION_VERSION:*~2\_
       - ImageProcessorOptions\_\_StorageAccountConnectionString: <CONNECTIONSTRING_OF_STORAGEACCOUNT>
       - ImageProcessorOptions\_\_ImageWidth: _100_
 - **Frontend / Single Page Application**
@@ -75,6 +75,6 @@ Create one ARM template (plus parameters file) that contains all resources we ne
 
 You have just automated the deployment of an Azure infrastructure. The next step would be to also automatically deploy the Web Apps / SPA to your infrastructure. We will learn about that on [Day 4](../../day4/README.md), when we are talking about _Continuous Integration and Continuous Deployment (CI/CD)_.
 
-On [Day 3](../../day3/README.md), we will learn about some additional Azure services that we can add to our application, to be able to store data, search for it and to show you how to do service-to-service communication with a _microsoervice approach_.
+On [Day 3](../../day3/README.md), we will learn about some additional Azure services that we can add to our application, to be able to store data, search for it and to show you how to do service-to-service communication with a _microservice approach_.
 
 [◀ Previous challenge](./challenge-bo-2.md) | [🔼 Day 2](../README.md)

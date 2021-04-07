@@ -18,7 +18,7 @@ To be able to follow all the challenges provided in this workshop, you need a fe
 
 ## .NET SDK
 
-Download and install .NET Core SDK from <https://dotnet.microsoft.com/download>. 
+Download and install .NET Core SDK from <https://dotnet.microsoft.com/download>.
 
 :::tip
 📝 Choose the LTS version (currently .NET Core 3.1).
@@ -180,7 +180,6 @@ Search and install the following extensions:
 
 - Azure Tools <https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack>
 - C# <https://marketplace.visualstudio.com/items?itemName=ms-vscode.csharp>
-- Debugger for Chrome <https://marketplace.visualstudio.com/items?itemName=msjsdiag.debugger-for-chrome>
 - Azure Functions <https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurefunctions>
 
 :::tip

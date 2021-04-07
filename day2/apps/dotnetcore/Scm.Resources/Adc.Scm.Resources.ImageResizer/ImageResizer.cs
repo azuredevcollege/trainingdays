@@ -24,7 +24,7 @@ namespace Adc.Scm.Resources.ImageResizer
             get { return _serviceProvider.Value; }
         }
 
-        [FunctionName("Function1")]
+        [FunctionName("ImageResizerFunction")]
         public static void Run([QueueTrigger("thumbnails", Connection = "StorageAccountConnectionString")]ResizeMessage msg, 
             ILogger log, ExecutionContext context)
         {

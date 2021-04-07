@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "./"
+		}
+	],
+	"settings": {
+		"markdown.extension.toc.updateOnSave": false,
+		"files.insertFinalNewline": true,
+		"files.trimFinalNewlines": true
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
+	}
+}

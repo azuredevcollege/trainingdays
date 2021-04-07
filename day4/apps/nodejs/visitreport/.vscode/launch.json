@@ -7,15 +7,17 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch visitreports / Day3",
+            "name": "Day4 - Launch SCM Visit Reports API",
+            "program": "${workspaceFolder}/server.js",
+            "cwd": "${workspaceFolder}/",
+            "preLaunchTask": "npm: install",
+            "outputCapture": "std",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "outputCapture": "std",
-            "program": "${workspaceFolder}/server.js",
             "env": {
                 "SCM_ENV": "development"
             }
-        }
+        },
     ]
 }

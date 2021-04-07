@@ -1,0 +1,9 @@
+{
+    "appService.deploySubpath": ".",
+    "appService.zipIgnorePattern": [
+        ".vscode{,/**}",
+        "node_modules{,/**}",
+        "Dockerfile"
+    ],
+    "appService.defaultWebAppToDeploy": "None",
+}

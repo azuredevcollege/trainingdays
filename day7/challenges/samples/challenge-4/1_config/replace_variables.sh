@@ -11,8 +11,11 @@ while read p; do
     # echo $kv
     key=$(echo $kv | cut -f1 -d=)
     value=$(echo $kv | cut -f2 -d=)
+ 
+    # remove first and last quote (") from variable value
+    value="${value%\"}"  &&  value="${value#\"}"
     token="#{$key}#"
-    echo "Using token: $token"
+    echo "Using token: $token value: $value "
     os=$(uname -s)
     [[ "$os" == "Darwin" ]] && sed -i "" "s/$token/$value/g" ./local-secrets.yaml || sed -i "s/$token/$value/g" ./local-secrets.yaml
     [[ "$os" == "Darwin" ]] && sed -i "" "s/$token/$value/g" ./local-configmap.yaml || sed -i "s/$token/$value/g" ./local-configmap.yaml

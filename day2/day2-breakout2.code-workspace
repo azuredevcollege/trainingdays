@@ -1,0 +1,36 @@
+{
+	"folders": [
+		{
+			"name": "Contacts API",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Api"
+		},
+		{
+			"name": "Contacts Domain Objects",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.DomainObjects"
+		},
+		{
+			"name": "Contacts Data EF Core",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Repository.EntityFrameworkCore"
+		},
+		{
+			"name": "Contacts Interfaces",
+			"path": "apps/dotnetcore/Scm/Adc.Scm.Repository.Interfaces"
+		},
+		{
+			"name": "Frontend",
+			"path": "apps/frontend/scmfe"
+		},
+		{
+			"name": "Resources API",
+			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api"
+		},
+		{
+			"name": "Image Resizer Function",
+			"path": "apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
+		},
+	],
+	// "remoteAuthority": "wsl+Ubuntu-20.04",
+	"settings": {
+		"debug.internalConsoleOptions": "neverOpen"
+	},
+}
