@@ -1,6 +1,35 @@
-# Break Out #1: Add data storage services to our sample application
+# 💎 Breakout 1: Add data storage services to our sample application 💎
 
-Now that we have made experience with Azure SQL DB, Azure CosmosDB and Azure (Cognitive) Search, it is time to add these services to our sample application. At the end of the day, the architecture will have progressed to this:
+## Here is what you will learn 🎯
+
+Now that we have made experience with Azure SQL DB, Azure CosmosDB and Azure (Cognitive) Search, it is time to add these services to our sample application.
+
+In this challenge you will:
+
+- use Azure SQL DB and ComsoDB to store objects from the application
+- add an Azure Cognitive Search Instance
+- make use of Azure Service Bus for messaging between the application services
+- add additional application services
+
+:::tip
+📝 If you could not finish the breakout challenges of "Day 2", the is a [baseline deployment script](challenge-0.md) that will automatically deploy all necessary Azure services for you and put you in the position to start right away with this challenge.
+:::
+
+## Table Of Contents
+
+1. [Introduction](#introduction)
+2. [Setup Data Storage Services](#setup-data-storage-services)
+3. [Setup Messaging Services](#setup-messaging-services)
+4. [Quality Check](#quality-check)
+5. [Re-deploy Contacts/Resources Service and Image Resizer Function](#re-deploy-contactsresources-service-and-image-resizer-function)
+6. [Deploy the Contacts Search Service](#deploy-the-contacts-search-service)
+7. [Deploy the Visit Reports Service](#deploy-the-visit-reports-service)
+8. [Deploy the Frontend](#deploy-the-frontend)
+9. [Wrap-Up](#wrap-up)
+
+## Introduction
+
+At the end of the day, the architecture will look like this:
 
 ![Architecture Day 3 - Breakout 1](./img/architecture_day3breakout.png "Architecture Day 3 - Breakout 1")
 
@@ -47,7 +76,11 @@ Account Properties:
 - use your existing resource group: **scm-breakout-rg**
 - API: _Core SQL_
 - Location: _West Europe_
-- Capacity mode (**OPTIONAL**): if you want to, you can choose _Serverless_ which is your "goto"-tier for development environments (find out more here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>)
+- Capacity mode (**OPTIONAL**): if you want to, you can choose _Serverless_
+
+:::tip
+📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the pricing tier here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
+:::
 
 Leave all other settings as proposed by Azure.
 
@@ -128,6 +161,10 @@ Subscription for Search Service / indexing of contacts:
 - Max delivery count: 10
 - **Enable Sessions**: _true_ (in this sample, we will be using Service Bus sessions!)
 
+:::tip
+📝 `Sessions` enable the first-in, first out (FIFO) pattern within Azure Service Bus. If you want to know more it, have a look at the official docs: <https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions>
+:::
+
 Subscription for Visit Reports Service
 
 - Name: _scmcontactvisitreport_
@@ -179,15 +216,21 @@ You should have created the following Azure Services by now:
 
 If you missed to create one of these services, please go back to the corresponding section.
 
-## Deploy new Contacts/Resources Service and Image Resizer Function
+## Re-deploy Contacts/Resources Service and Image Resizer Function
 
-Because we refactored the **Contacts** and **Resources APIs** to use **Azure Service Bus** for inter-service communication, we need to deploy new versions of these services and change some of the App Configuration/Settings we added on **Day 2**.
+Because we refactored the **Contacts** and **Resources APIs** to use **Azure Service Bus** for inter-service communication, we need to deploy new versions of these application services and change some of the App Configuration/Settings we added on **Day 2**.
+
+:::tip
+📝 We will be re-using the Azure service instances from **Day 2**!
+:::
 
 ### Alter App Configuration/Settings
 
 We will **reuse the Web Apps for Contacts and Resources** as well as the Azure Function for image manipulation we created yesterday. So, first we will adjust the App Configuration for each of the services.
 
-> Use a second window/tab to be able to switch back and forth.
+:::tip
+📝 Use a second browser window/tab to be able to switch back and forth while adding the configuration settings.
+:::
 
 Azure Web App for **Contacts Service**:
 
@@ -197,17 +240,11 @@ Application Configuration/Settings:
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | EventServiceOptions\_\_ServiceBusConnectionString | use the Connection String from the Shared Access Policy (**Topic scmtopic**) for sending messages - **scmtopicsend** |
 
-<hr>
-<br>
-
 Connection Strings:
 
 | Name                    | Value / Hint                                                                                                                                                                            | Type       |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
 | DefaultConnectionString | go to the Azure SQL DB you created and use the ADO.NET connection string (under "**Settings**" / "**Connection strings**"). Don't forget to add your password to the connection string! | _SQLAzure_ |
-
-<hr>
-<br>
 
 ![Contacts API Configuration Settings](./img/portal_bo_adjust_contactsapi.png "Contacts API Configuration Settings")
 
@@ -224,10 +261,9 @@ Application Settings:
 | ServiceBusQueueOptions\_\_ThumbnailContainer             | _thumbnails_                                                                                                            |
 | ServiceBusQueueOptions\_\_ThumbnailQueueConnectionString | use the Connection String from the Shared Access Policy (**Queue**) for sending messages - **thumbnailssend**           |
 
-> You can delete all **StorageQueueOptions\_\_** app settings!
-
-<hr>
-<br>
+:::tip
+📝 You can delete all **StorageQueueOptions\_\_** app settings!
+:::
 
 ![Resources API Configuration Settings](./img/portal_bo_adjust_resapi.png "Resources API Configuration Settings")
 
@@ -241,12 +277,11 @@ Configuration / Application Settings:
 | ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                   |
 | ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
 
-> You can delete the **QueueName** app settings!
+:::tip
+📝 You can delete the **QueueName** app settings!
+:::
 
 ![Adjust Configuration Settings](./img/portal_bo_adjust_imgmanipulation.png "Adjust Configuration Settings")
-
-<hr>
-<br>
 
 ### Redeploy your services for Contacts, Resources and Image Manipulation
 
@@ -272,7 +307,7 @@ So please re-deploy the Web Apps/Functions for (**make sure** you use the versio
 
 ![Projects That Need To Be Re-Deployed](./img/bo1_redeploy.png "Projects That Need To Be Re-Deployed")
 
-### Deploy the Contacts Search Service
+## Deploy the Contacts Search Service
 
 To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **S1**.
 
@@ -283,9 +318,6 @@ When finished, apply these settings to the Web App Configuration settings:
 | ContactSearchOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                               |
 | ContactSearchOptions\_\_IndexName   | _scmcontacts_                                                                                                                                         |
 | ContactSearchOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**) |
-
-<hr>
-<br>
 
 ![Search API Configuration Settings](./img/portal_bo_add_search.png "Search API Configuration Settings")
 
@@ -315,16 +347,12 @@ When finished, apply these settings to the App Configuration settings:
 | ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                                                           |
 | ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                                                   |
 | ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **scmtopic**) for listening for messages - **scmtopiclisten**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
-| FUNCTIONS_EXTENSION_VERSION          | ~3                                                                                                                                                                                                                                                                                                      |
-
-<hr>
-<br>
 
 ![Search Indexer Function Configuration Settings](./img/portal_bo_add_searchindexer.png "Search Indexer Function Configuration Settings")
 
 **Last but not least**, deploy the Contacts Search indexer function (folder _Search Indexer Function_) service from VS Code to the previously created Function App.
 
-## Let's press "Pause" for a moment - What have we done so far?
+## ⏸️ Let's press "Pause" for a moment - What have we done so far?
 
 The was a lot of manual typing so far, so let's hold on for a moment. We have just migrated our initial services (Contacts and Resources, Image Resizer) to Azure Service Bus Queues and Topics. We redeployed new versions of these services to make use of Azure Service Bus. We also added Storage Services to our application. The Contacts Service now uses Azure SQL DB.
 
@@ -334,17 +362,19 @@ Regarding our architecture, we are at this stage:
 
 ![Architecture Breakout 1](./img/architecture_day3breakout1.png "Architecture Breakout 1")
 
-Now, let's add the Visit Report API. Trust us, we're on the home stretch :)
+Now, let's add the Visit Reports API.
 
-## Deploy new Visit Reports Service
+## Deploy the Visit Reports Service
 
 To deploy the Visit Reports API, we - as usual - need another Web App. As this service runs on NodeJS and we want to leverage **Azure Web Apps on Linux** this time, let's create one that is backed by a Linux OS.
 
-> **Important**: Currently, you can't mix Windows and Linux Web Apps in the same resource group, so we create another resource group to host the NodeJS Linux WebApp.
+::: warning
+⚠️ Currently, you can't mix Windows and Linux Web Apps in the same resource group, so we create another resource group to host the NodeJS Linux WebApp.
+:::
 
 **Azure WebApp Properties**
 
-Create the Linux Web App in West Europe with the following parameters.
+Create the Linux Web App with the following parameters.
 
 | Name             | Value / Hint                                              |
 | ---------------- | --------------------------------------------------------- |
@@ -372,15 +402,12 @@ When the Web App has been created, go to the Configuration section and add the f
 | SBCONTACTSTOPIC_CONNSTR | Primary Connection String of the Service Bus **Contacts** Topic (**scmtopic** / _scmtopiclisten_)        | _Custom_ |
 | SBVRTOPIC_CONNSTR       | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopicsend_) | _Custom_ |
 
-<hr>
-<br>
-
 ![Visit Reports API Configuration Settings](./img/portal_bo_add_vr.png "Visit Reports API Configuration Settings")
 
 Now, from an infrastructure point of view, we are ready to deploy the NodeJS app. Right-click on the folder `Visit Reports API`, select the correct Azure AppService and confirm the deployment to it.
 
 :::tip
-While deploying to the AppService, Azure will run `npm install` for you, so you don't need to do this upfront. This will keep the amount of data sent to Azure quite small and reduces the deployment duration significantly! The technology working behind the scenes is called `Oryx`. If you want to know more about it and how to configure builds during deployment, this is the way to the GitHub repository: <https://github.com/microsoft/Oryx> (Oryx configuration: <https://github.com/microsoft/Oryx/blob/master/doc/configuration.md#oryx-configuration>)
+📝 While deploying to the AppService, Azure will run `npm install` for you, so you don't need to do this upfront. This will keep the amount of data sent to Azure quite small and reduces the deployment duration significantly! The technology working behind the scenes is called `Oryx`. If you want to know more about it and how to configure builds during deployment, this is the way to the GitHub repository: <https://github.com/microsoft/Oryx> (Oryx configuration: <https://github.com/microsoft/Oryx/blob/master/doc/configuration.md#oryx-configuration>)
 :::
 
 In the output window, watch how the NodeJS app is copied to the Web App and is being started by Azure.
@@ -389,11 +416,13 @@ You can check, if it's running correctly by opening a browser window and point i
 
 <https://YOUR_WEB_APP_NAME.azurewebsites.net/docs>
 
-You will see the Swagger UI of the service (in the **Explore** textbox, replace _json_ with _yaml_ to view all operations).
+::: warning
+⚠️ You will see the Swagger UI of the service (in the **Explore** textbox, replace _json_ with _yaml_ to view all operations).
+:::
 
 ![Visit Reports API Swagger Definition](./img/day3_bo_tux_vr_swagger.png "Visit Reports API Swagger Definition")
 
-## Deploy new Frontend
+## Deploy the Frontend
 
 Now that we have introduced a few new services, we also need to redeploy the VueJS frontend. Of course, we also added a few changes in the UI itself (please see the intro section). So we definetly want that new version running now in Azure.
 
@@ -439,6 +468,17 @@ Add and edit a few new contacts (search for them via the top navigation bar) and
 # Wrap-Up
 
 So, we know, this was a lot of manual work to do, to add a simple microservice-oriented application to Azure. There are a lot of moving parts in that kind of applications and you will want to avoid deploying such applications manually. That's why we will be introducing Azure DevOps on Day 4, so that you can build and deploy the infrastructure as well as the services automatically.
-But hey, we wanted to show you how it's done "the hard way" to bring you relief the day after :) Azure DevOps, FTW!
+Anyway, we wanted to show you how it's done "the hard way" to bring you relief the day after.
 
 We now have one more challenge to complete (Cognitive Services), until the application is finished from a services perspective.
+
+In this Breakout Challenge, you made use of:
+
+- [Azure SQL DB](https://docs.microsoft.com/de-de/azure/azure-sql/)
+- [Azure CosmosDB](https://docs.microsoft.com/de-de/azure/cosmos-db/)
+- [Azure Service Bus](https://docs.microsoft.com/de-de/azure/service-bus-messaging/)
+- [Azure Cognitive Search](https://docs.microsoft.com/de-de/azure/search/)
+- [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
+- [Azure Functions on Linux](https://docs.microsoft.com/en-us/azure/azure-functions/create-function-app-linux-app-service-plan)
+
+[◀ Previous challenge](./challenge-3.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-4.md)
