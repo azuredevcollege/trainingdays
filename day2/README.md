@@ -13,11 +13,11 @@ This day is about getting your hands dirty with application development in Azure
 
 - [Challenge 0:  Setup your system](challenges/challenge-0.md)
 - [Challenge 1: Azure Web Applications](challenges/challenge-1.md)
-- :small_orange_diamond: *[Breakout 1: Deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
+- 💎 *[Breakout 1: Deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* 💎
 - [Challenge 2: Serverless](challenges/challenge-2.md)
 - [Challenge 3 (optional): Messaging](challenges/challenge-3.md)
-- :small_orange_diamond: *[Breakout 2: Add a serverless microservice to our sample app and include messaging](challenges/challenge-bo-2.md)* :small_orange_diamond:
-- :small_orange_diamond: *[Breakout 3 (optional): Create an Azure Web App and Storage Account with ARM templates](challenges/challenge-bo-3.md)* :small_orange_diamond:
+- 💎 *[Breakout 2: Add a serverless microservice to our sample app and include messaging](challenges/challenge-bo-2.md)* 💎
+- 💎 *[Breakout 3 (optional): Create an Azure Web App and Storage Account with ARM templates](challenges/challenge-bo-3.md)* 💎
 
 ## Day 2 - Goal
 
@@ -48,7 +48,7 @@ At the end of the day, you will have the following architecture up and running i
 
 ### Remarks
 
-The challenges marked with the ":small_orange_diamond:" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before to the SCM app. They results of the  ":small_orange_diamond:" challenges will be reused in the next days.
+The challenges marked with the "💎" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before to the SCM app. They results of the  "💎" challenges will be reused in the next days.
 
 But *do not panic* in case you cannot finish them in time today: we got you covered tomorrow by a baseline deployment of today's results.
 

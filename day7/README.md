@@ -5,7 +5,7 @@
 - [Challenge 2 - Basic Kubernetes Concepts](./challenges/challenge-2.md)
 - [Challenge 3 - Configuration](./challenges/challenge-3.md)
 - [Challenge 4 - Deploy a microservice-oriented sample application](./challenges/challenge-4.md)
-- :small_orange_diamond: [Bonus! - Secure Endpoints with SSL Certificates (optional)](./challenges/bonus-1.md) :small_orange_diamond:
+- 💎 [Bonus! - Secure Endpoints with SSL Certificates (optional)](./challenges/bonus-1.md) 💎
 
 ## Goal
 

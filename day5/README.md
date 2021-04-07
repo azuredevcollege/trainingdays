@@ -4,7 +4,7 @@
 - [Challenge 1 - Receive an ID Token in a Fragment URL](./challenges/challenge-1.md)
 - [Challenge 2 - OAuth2 Implicit Flow](./challenges/challenge-2.md)
 - [Challenge 3 - Integrate Azure AD into the SCM Contacts API](./challenges/challenge-3.md)
-- :small_orange_diamond: *[Breakout! - Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* :small_orange_diamond:
+- 💎 *[Breakout! - Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* 💎
 
 > Please take a look at the restore checkpoint, if you were unable to complete day4.
 >
@@ -38,16 +38,16 @@ Authorization is the act of granting an authenticated security principal permiss
 
 On Day5 you will learn how you can protect your APIs (microservices) with Azure AD. In addition you will learn how OAuth2 permissions are used to grant access to API's client applications and how a signed-in user can grant access. The sample application defines the following OAuth2 permissions
 
-  |OAuth2 permission|Description|
-  |-----------------|-----------|
-  |Contacts.Create|Allows the client app to create contacts for the signed-in user|
-  |Contacts.Read|Allows the client app to read contacts of the signed-in user|
-  |Contacts.Update|Allows the client app to update contacts of the signed-in user|
-  |Contacts.Delete|Allows the client app to delete contacts of the signed-in user|
-  |VisitReports.Create|Allows the client app to create VisitReports for the signed-in user|
-  |VisitReports.Read|Allows the client app to read VisitReports of the signed-in user|
-  |VisitReports.Update|Allows the client app to update VisitReports of the signed-in user|
-  |VisitReports.Delete|Allows the client app to delete VisitReports of the signed-in user|
+  | OAuth2 permission   | Description                                                         |
+  | ------------------- | ------------------------------------------------------------------- |
+  | Contacts.Create     | Allows the client app to create contacts for the signed-in user     |
+  | Contacts.Read       | Allows the client app to read contacts of the signed-in user        |
+  | Contacts.Update     | Allows the client app to update contacts of the signed-in user      |
+  | Contacts.Delete     | Allows the client app to delete contacts of the signed-in user      |
+  | VisitReports.Create | Allows the client app to create VisitReports for the signed-in user |
+  | VisitReports.Read   | Allows the client app to read VisitReports of the signed-in user    |
+  | VisitReports.Update | Allows the client app to update VisitReports of the signed-in user  |
+  | VisitReports.Delete | Allows the client app to delete VisitReports of the signed-in user  |
 
 
 ## Sign in users

@@ -1,4 +1,4 @@
-# :small_orange_diamond: Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates :small_orange_diamond
+# 💎 Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates 💎
 
 ## Here is what you will learn 🎯
 
