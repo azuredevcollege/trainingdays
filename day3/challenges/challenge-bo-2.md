@@ -51,17 +51,13 @@ Create the Azure Function App with the following parameters.
 
 Create it and when the Function App has been deployed, go to the Configuration section and add the following App configuration/settings.
 
-| Name                        | Value / Hint                                                                                                                                                                                                                                                                      |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString  | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
-| COSMOSDB                    | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                                                            |
-| COSMOSKEY                   | Primary Key of your Cosmos DB                                                                                                                                                                                                                                                     |
-| TA_SUBSCRIPTION_KEY         | the Azure Cognitive Services **subscription key**. Obtain it from the _Keys and Endpoint_ view under _Resource Management_ of your Cognitive Services account                                                                                                                     |
-| TA_SUBSCRIPTIONENDPOINT     | the Azure Cognitive Services **endpoint URL**. Obtain it from the _Keys and Endpoint_view under_Resource Management_ of your Cognitive Services account                                                                                                                           |
-| FUNCTIONS_EXTENSION_VERSION | ~3                                                                                                                                                                                                                                                                                |
-
-<hr>
-<br>
+| Name                       | Value / Hint                                                                                                                                                                                                                                                                      |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| COSMOSDB                   | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                                                            |
+| COSMOSKEY                  | Primary Key of your Cosmos DB                                                                                                                                                                                                                                                     |
+| TA_SUBSCRIPTION_KEY        | the Azure Cognitive Services **subscription key**. Obtain it from the _Keys and Endpoint_ view under _Resource Management_ of your Cognitive Services account                                                                                                                     |
+| TA_SUBSCRIPTIONENDPOINT    | the Azure Cognitive Services **endpoint URL**. Obtain it from the _Keys and Endpoint_view under_Resource Management_ of your Cognitive Services account                                                                                                                           |
 
 Save the settings. We can now start deploying the code that will call the Azure Cognitive services.
 
