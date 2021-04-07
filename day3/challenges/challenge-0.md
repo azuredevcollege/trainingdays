@@ -61,3 +61,5 @@ export BASE_API_WEBAPP_NAME=<NameOfTheContactsApiWebApp>
 export BASE_RES_WEBAPP_NAME=<NameOfTheResourcesApiWebApp>
 export BASE_RES_FUNCAPP_NAME=<NameOfTheFunctionsApp>
 ```
+
+[🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-1.md)

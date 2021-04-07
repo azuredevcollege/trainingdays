@@ -12,7 +12,7 @@ In this challenge you will:
 - add additional application services
 
 :::tip
-📝 If you could not finish the breakout challenges of "Day 2", the is a [baseline deployment script](challenge-0.md) that will automatically deploy all necessary Azure services for you and put you in the position to start right away with this challenge.
+📝 If you could not finish the breakout challenges of "Day 2", there is a [baseline deployment script](challenge-0.md) that will automatically deploy all necessary Azure services for you and put you in the position to start right away with this challenge.
 :::
 
 ## Table Of Contents
@@ -79,7 +79,7 @@ Account Properties:
 - Capacity mode (**OPTIONAL**): if you want to, you can choose _Serverless_
 
 :::tip
-📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the pricing tier here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
+📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the delpoyment option here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
 :::
 
 Leave all other settings as proposed by Azure.
@@ -153,7 +153,7 @@ Contacts Topic Properties:
 
 - Name: _scmtopic_
 
-Leave all other settings as is and click **Create**. When finished, open the topic and add two subscriptions.
+Leave all other settings as suggested and click **Create**. When finished, open the topic and add two subscriptions.
 
 Subscription for Search Service / indexing of contacts:
 
@@ -162,7 +162,7 @@ Subscription for Search Service / indexing of contacts:
 - **Enable Sessions**: _true_ (in this sample, we will be using Service Bus sessions!)
 
 :::tip
-📝 `Sessions` enable the first-in, first out (FIFO) pattern within Azure Service Bus. If you want to know more it, have a look at the official docs: <https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions>
+📝 `Sessions` enable the first-in, first out (FIFO) pattern within Azure Service Bus. If you want to know more about it, have a look at the official docs: <https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions>
 :::
 
 Subscription for Visit Reports Service
@@ -186,7 +186,7 @@ Visit Reports Topic Properties:
 
 - Name: _scmvrtopic_
 
-Leave all other settings as is and click **Create**.
+Leave all other settings as suggested and click **Create**.
 
 When successfully added, go back to **Shared Access Policies** of the Service Bus Topic **scmvrtopic** and add two policies:
 
@@ -199,22 +199,22 @@ We don't add a subscription for the _visit report_ topic at the moment. The topi
 
 ## Quality Check
 
-You should have created the following Azure Services by now:
+You should have created the following Azure services by now:
 
-- Azure SQL DB
-- Azure Cosmos DB (database + container)
-- Azure Search
-- Azure Service Bus
-  - Queue for thumbnail generation
+- [Azure SQL DB](#sql-db)
+- [Azure Cosmos DB (database + container)](#cosmos-db--sql-api)
+- [Azure Cognitive Search](#azure-cognitive-search)
+- [Azure Service Bus](#setup-messaging-services)
+  - [Queue for thumbnail generation](#service-bus-queue)
     - Shared Access Policies for _listen_ and _send_
-  - Topic for Contacts
+  - [Topic for Contacts](#service-bus-topic-for-contacts)
     - Shared Access Policies for _listen_ and _send_
     - subscription for visit reports
     - subscription for search service
-  - Topic for Visit Reports
+  - [Topic for Visit Reports](#service-bus-topic-for-visit-reports)
     - Shared Access Policies for _listen_ and _send_
 
-If you missed to create one of these services, please go back to the corresponding section.
+If you missed to create one of these services, please click on the corresponding link and go back the specific section.
 
 ## Re-deploy Contacts/Resources Service and Image Resizer Function
 
@@ -283,7 +283,7 @@ Configuration / Application Settings:
 
 ![Adjust Configuration Settings](./img/portal_bo_adjust_imgmanipulation.png "Adjust Configuration Settings")
 
-### Redeploy your services for Contacts, Resources and Image Manipulation
+### Redeploy the services for Contacts, Resources and Image Manipulation
 
 First of all: as seen in the Break Out session yesterday, everything is pre-created for you...this time, you need to open VS Code with the prepared workspace for **Day 3 / Breakout 1** (`day3/day3-breakout1.code-workspace`).
 
@@ -299,7 +299,7 @@ You will see additional projects added to the workspace compared to `Breakout 2`
 
 For now, we don't need to deal with the added projects. We simply redeploy the existing ones. You have deployed web apps and functions several times yesterday, so you should be familiar with the process.
 
-So please re-deploy the Web Apps/Functions for (**make sure** you use the versions from the "Day3 - Breakout 1 Workspace"!):
+So please re-deploy the Web Apps/Functions for:
 
 - Contacts API
 - Resources API
@@ -307,9 +307,12 @@ So please re-deploy the Web Apps/Functions for (**make sure** you use the versio
 
 ![Projects That Need To Be Re-Deployed](./img/bo1_redeploy.png "Projects That Need To Be Re-Deployed")
 
+:::warning Warning
+⚠️ Please make sure you use the versions from the "Day3 - Breakout 1 Workspace"! Double-check that you use the correct VS Code workspace. The services have also been adjusted on the code level.
+
 ## Deploy the Contacts Search Service
 
-To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use Azure CLI) and create a basic Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **S1**.
+To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use the Azure CLI) and create an Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **S1**.
 
 When finished, apply these settings to the Web App Configuration settings:
 
