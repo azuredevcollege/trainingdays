@@ -1,12 +1,12 @@
 # Day 4 Azure DevOps
 
-- [Challenge 0 - Create an Azure DevOps Organisation](challenges/challenge-0.md)
-- [Challenge 1 - Plan your first Project Iteration](challenges/challenge-1.md)
-- [Challenge 2 - Working with Azure Repo](challenges/challenge-2.md)
-- [Challenge 3 - Working with Azure Pipelines](challenges/challenge-3.md)
-- [Challenge 4 - Build and deploy the SCM Contacts API](challenges/challenge-4.md)
-- [Challenge 5 - Build and deploy the SCM Frontend](challenges/challenge-5.md)
-- 💎 *[Breakout! - Create CI/CD pipelines to deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* 💎
+- [Challenge 0: Create an Azure DevOps Organisation](challenges/challenge-0.md)
+- [Challenge 1: Plan your first Project Iteration](challenges/challenge-1.md)
+- [Challenge 2: Working with Azure Repo](challenges/challenge-2.md)
+- [Challenge 3: Working with Azure Pipelines](challenges/challenge-3.md)
+- [Challenge 4: Build and deploy the SCM Contacts API](challenges/challenge-4.md)
+- [Challenge 5: Build and deploy the SCM Frontend](challenges/challenge-5.md)
+- 💎 *[Breakout: Create CI/CD pipelines to deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* 💎
 
 # Day4 - Goal
 
@@ -45,5 +45,3 @@ To give you a short overview of all Microservices that are part of the sample ap
 | SCM Visitreports API | NodeJs       |
 | SCm Textanalytics    | NodeJs       |
 | SCM Frontend         | NodeJs       |
-
-
