@@ -74,4 +74,4 @@ In this Breakout Challenge, you made use of:
 - [Azure Cognitive Search](https://docs.microsoft.com/de-de/azure/search/)
 - [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
 
-[◀ Previous challenge](./challenge-n.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-n+1.md)
+[◀ Previous challenge](./challenge-n.md) | [🔼 Day x](../README.md) | [Next challenge ▶](./challenge-n+1.md)
