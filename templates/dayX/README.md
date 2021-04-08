@@ -11,8 +11,8 @@ This day is about getting your hands dirty with **ABC** in Azure. We will dig in
 
 ## Challenges
 
-- [Challenge n: Name or Brief Description](challenges/challenge-n.md)
-- 💎 *[Breakout n: Name or Brief Description](challenges/challenge-bo-n.md)* 💎
+- [Challenge n: Name or Brief Description](challenges/NN-challenge.md)
+- 💎 _[Breakout n: Name or Brief Description](challenges/NN-challenge-bo.md)_ 💎
 
 ## Day n - Goal
 
@@ -26,7 +26,7 @@ _Describe the application or overall topic the participants will work on. Add so
 
 _Describe the architecture and show a diagram that describes the components._
 
-![Architecture of Day n](./images/placeholder.png "Architecture")
+![Architecture of Day n](./images/placeholder.png 'Architecture')
 
 ### Remarks
 
