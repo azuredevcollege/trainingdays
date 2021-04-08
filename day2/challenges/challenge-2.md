@@ -11,7 +11,8 @@
 
 1. [Create an Azure Function locally](#create-an-azure-function-locally)
 2. [Deploy the Azure Function App to Azure](#deploy-the-azure-function-app-to-azure)
-3. [Cleanup](#cleanup)
+3. [Azure Samples](#azure-samples)
+4. [Cleanup](#cleanup)
 
 ## Create an Azure Function locally
 
@@ -200,6 +201,12 @@ Test again (upload images) and check, if the Function App is running correctly i
 :::tip
 📝 It might be necessary to restart your function app.
 :::
+
+## Azure Samples
+
+Azure Functions code samples:
+
+- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-functions>
 
 ## Cleanup
 

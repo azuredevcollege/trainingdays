@@ -15,7 +15,8 @@ In this challenge you will learn how to:
 2. [Create a Sample Application](#create-a-sample-application)
 3. [Deploy the Sample App to Azure](#deploy-the-sample-app-to-azure)
 4. [Working with Deployment Slots (optional - but recommended)](#working-with-deployment-slots-optional-but-recommended)
-5. [Cleanup](#cleanup)
+5. [Azure Samples](#azure-samples)
+6. [Cleanup](#cleanup)
 
 ## Create an Azure Web App
 
@@ -394,6 +395,12 @@ Now check, that the production slot serves the new version of the website.
 :::tip
 📝 Split traffic 50:50 to staging and production a see what happens when you reload your page in the browser pointing to the _production_ slot. What do you think, why does this happen?
 :::
+
+## Azure Samples
+
+Azure AppService code samples:
+
+- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
 
 ## Cleanup
 

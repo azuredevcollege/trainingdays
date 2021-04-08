@@ -9,7 +9,7 @@ So, this is our last Break-Out session for today. You will now have the challeng
 1. [Services](#services)
 2. [ToDo for You](#todo-for-you)
 3. [References / Links](#references-links)
-4. [Warp-Up](#wrap-up)
+4. [Wrap-Up](#wrap-up)
 
 ## Services
 
@@ -69,7 +69,7 @@ Create one ARM template (plus parameters file) that contains all resources we ne
   - Basic Web App: <https://github.com/Azure/azure-quickstart-templates/tree/master/101-webapp-basic-windows>
   - Storage Account: <https://github.com/Azure/azure-quickstart-templates/tree/master/101-storage-account-create>
 
-# Wrap-Up
+## Wrap-Up
 
 🎉 **_Congratulations_** 🎉
 

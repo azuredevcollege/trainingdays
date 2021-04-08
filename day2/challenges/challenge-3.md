@@ -13,7 +13,8 @@ In detail, we will use:
 
 1. [Azure Service Bus Publish / Subscriber Pattern](#azure-service-bus-publish-subscriber-pattern)
 2. [Play Time](#play-time)
-3. [Cleanup](#cleanup)
+3. [Azure Samples](#azure-samples)
+4. [Cleanup](#cleanup)
 
 ## Azure Service Bus Publish / Subscriber Pattern
 
@@ -176,6 +177,16 @@ Also check the Storage Explorer and have a look at the files that have been writ
 You have seen how many connectors Azure Logic Apps has "under the hood". Take the same scenario and adjust the messages to your needs (e.g. send JSON) and connect to another service, maybe one outside of Azure? (Gmail, Outlook, O365, SAP, Twitter...?!)
 
 🥳 **Happy Hacking** 🥳
+
+## Azure Samples
+
+Azure LogicApps code samples:
+
+- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-logic-apps>
+
+Azure Service Bus code samples:
+
+- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&filter-products=service%20b&products=azure-service-bus>
 
 ## Cleanup
 
