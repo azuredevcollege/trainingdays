@@ -48,7 +48,7 @@ At the end of the day, you will have the following architecture up and running i
 
 ### Remarks
 
-The challenges marked with the "💎" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before to the SCM app. They results of the  "💎" challenges will be reused in the next days.
+The challenges marked with the "💎" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before. They results of the "💎" challenges will be reused in the upcoming days.
 
 But *do not panic* in case you cannot finish them in time today: we got you covered tomorrow by a baseline deployment of today's results.
 
