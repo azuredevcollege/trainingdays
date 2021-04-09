@@ -20,7 +20,7 @@ https://docs.microsoft.com/en-us/learn/modules/run-docker-with-azure-container-i
 
 **Prepare an application for Azure Kubernetes Service (AKS):** https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-app
 
-**Container Devops with Microsoft Azure:** https://azure.microsoft.com/de-de/resources/videos/ignite-2018-container-devops-with-microsoft-azure/
+**Container Devops with Microsoft Azure:** https://azure.microsoft.com/en-us/resources/videos/ignite-2018-container-devops-with-microsoft-azure/
 
 **Build and push to Azure Container Registry:** https://docs.microsoft.com/en-us/azure/devops/pipelines/ecosystems/containers/acr-template?view=azure-devops
 

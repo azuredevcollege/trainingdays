@@ -206,12 +206,12 @@ When the deployment to Azure has finished, VS Code will show a popup where you c
 
 You have just created your first modern, multi-service Azure-backed application. You made use of:
 
-- [Azure AppServices](https://docs.microsoft.com/de-de/azure/app-service/)
+- [Azure AppServices](https://docs.microsoft.com/en-us/azure/app-service/)
 - [Storage Accounts](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
-- [Messaging (Azure Storage Queues)](https://docs.microsoft.com/de-de/azure/storage/queues/)
-- [Serverless aka Azure Function Apps](https://docs.microsoft.com/de-de/azure/azure-functions/)
+- [Messaging (Azure Storage Queues)](https://docs.microsoft.com/en-us/azure/storage/queues/)
+- [Serverless aka Azure Function Apps](https://docs.microsoft.com/en-us/azure/azure-functions/)
 - [Static website hosting](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal)
 
 All in combination with a modern Vue.JS frontend that is also working on mobile devices!
 
-[◀ Previous challenge](./challenge-3.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-bo-3.md)
+[◀ Previous challenge](./04-challenge-messaging.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./06-challenge-bo-3.md)

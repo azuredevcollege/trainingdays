@@ -113,7 +113,7 @@ If you want to, you can also test the mobile experience of the app by opening th
 
 We have now been able to run the application locally. Of course, we want to have it in Azure. In this first Break Out, we only deploy the _Contacts_ API to Azure and run the SPA on our local machine.
 
-So, first of all, let's deploy the backend to Azure. You already know how to do it ([Challenge 1 - Azure Web Applications](./challenge-1.md) is your "cheat sheet"), so here is just an overview:
+So, first of all, let's deploy the backend to Azure. You already know how to do it ([Challenge 1 - Azure Web Applications](./01-challenge-appservice.md) is your "cheat sheet"), so here is just an overview:
 
 1. Basic Setup via Portal or Azure CLI
 
@@ -152,7 +152,7 @@ Try adding slots to your app and deploy the service to the slot. Afterwards swap
 
 You have now set up your local development environment. You cloned the repository, installed the dependencies of the Single Page Application, ran both services locally and deployed the contacts API to Azure. You made use of:
 
-- [Azure AppServices](https://docs.microsoft.com/de-de/azure/app-service/)
+- [Azure AppServices](https://docs.microsoft.com/en-us/azure/app-service/)
 - [Vue.JS](https://vuejs.org/)
 
-[◀ Previous challenge](./challenge-1.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-2.md)
+[◀ Previous challenge](./01-challenge-appservice.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./03-challenge-serverless.md)

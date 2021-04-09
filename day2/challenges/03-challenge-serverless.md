@@ -216,4 +216,4 @@ Remove the sample resource group via
 az group delete -n serverless-rg
 ```
 
-[◀ Previous challenge](./challenge-bo-1.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-3.md)
+[◀ Previous challenge](./02-challenge-bo-1.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./04-challenge-messaging.md)

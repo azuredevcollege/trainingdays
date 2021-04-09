@@ -62,16 +62,16 @@ Aliquam vestibulum morbi blandit cursus risus at ultrices mi tempus imperdiet nu
 
 ...
 
-# Wrap-Up
+## Wrap-Up
 
 _Describe what has been done so far and also give an outlook on what's next. Furthermore, add links to the topics that have been covered in that breakout, e.g.:_
 
 In this Breakout Challenge, you made use of:
 
-- [Azure SQL DB](https://docs.microsoft.com/de-de/azure/azure-sql/)
-- [Azure CosmosDB](https://docs.microsoft.com/de-de/azure/cosmos-db/)
-- [Azure Service Bus](https://docs.microsoft.com/de-de/azure/service-bus-messaging/)
-- [Azure Cognitive Search](https://docs.microsoft.com/de-de/azure/search/)
+- [Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/)
+- [Azure CosmosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
+- [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
+- [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
 - [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
 
 [◀ Previous challenge](./challenge-n.md) | [🔼 Day x](../README.md) | [Next challenge ▶](./challenge-n+1.md)
