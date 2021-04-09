@@ -196,4 +196,4 @@ Remove the sample resource group via:
 az group delete -n messaging-rg
 ```
 
-[◀ Previous challenge](./challenge-2.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-bo-2.md)
+[◀ Previous challenge](./03-challenge-serverless.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./05-challenge-bo-2.md)

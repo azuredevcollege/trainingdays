@@ -480,10 +480,10 @@ We now have one more challenge to complete (Cognitive Services), until the appli
 
 In this Breakout Challenge, you made use of:
 
-- [Azure SQL DB](https://docs.microsoft.com/de-de/azure/azure-sql/)
-- [Azure CosmosDB](https://docs.microsoft.com/de-de/azure/cosmos-db/)
-- [Azure Service Bus](https://docs.microsoft.com/de-de/azure/service-bus-messaging/)
-- [Azure Cognitive Search](https://docs.microsoft.com/de-de/azure/search/)
+- [Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/)
+- [Azure CosmosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
+- [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
+- [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
 - [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
 
 [◀ Previous challenge](./challenge-3.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-4.md)

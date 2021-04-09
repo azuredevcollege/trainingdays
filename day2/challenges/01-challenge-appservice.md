@@ -410,4 +410,4 @@ Remove the sample resource group via:
 az group delete -n myFirstWebApps-rg
 ```
 
-[◀ Previous challenge](./challenge-0.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-bo-1.md)
+[◀ Previous challenge](./00-challenge-setup.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./02-challenge-bo-1.md)

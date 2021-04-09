@@ -214,4 +214,4 @@ The repository is located at [GitHub](https://github.com/), so - obviously - we 
 
 ![git](./images/logo@2x.png)
 
-[🔼 Day 2](../README.md) | [Next challenge ▶](./challenge-1.md)
+[🔼 Day 2](../README.md) | [Next challenge ▶](./01-challenge-appservice.md)

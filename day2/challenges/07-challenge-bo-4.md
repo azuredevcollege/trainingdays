@@ -1,4 +1,4 @@
-# 💎 Breakout 3 (optional): Create the infrastructure for our sample app with ARM templates 💎
+# 💎 Breakout 4 (optional): Create the infrastructure for our sample app with ARM templates 💎
 
 ## Here is what you will learn 🎯
 
@@ -77,4 +77,4 @@ You have just automated the deployment of an Azure infrastructure. The next step
 
 On [Day 3](../../day3/README.md), we will learn about some additional Azure services that we can add to our application, to be able to store data, search for it and to show you how to do service-to-service communication with a _microservice approach_.
 
-[◀ Previous challenge](./challenge-bo-2.md) | [🔼 Day 2](../README.md)
+[◀ Previous challenge](./06-challenge-bo-3.md) | [🔼 Day 2](../README.md)
