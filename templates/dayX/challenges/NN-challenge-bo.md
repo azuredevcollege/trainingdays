@@ -1,5 +1,7 @@
 # 💎 Breakout n: Name or Brief Description 💎
 
+⏲️ *Est. time to complete: xx min.*
+
 ## Here is what you will learn 🎯
 
 Now that we have made experience with **ABC**, it is time to add these services to our sample application.

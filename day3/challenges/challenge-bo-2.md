@@ -1,5 +1,7 @@
 # 💎 Breakout 2: Add Congitive Services 💎
 
+⏲️ *Est. time to complete: 30 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 Now that we have seen how Azure Congitive Services can easily enhance applications with out-of-the-box AI functionality, let's add one of those services from the text analytics space to our application.

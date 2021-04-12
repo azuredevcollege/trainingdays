@@ -1,5 +1,7 @@
 # Challenge 1: Azure Web Apps
 
+⏲️ *Est. time to complete: 45 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 In this challenge you will learn how to:

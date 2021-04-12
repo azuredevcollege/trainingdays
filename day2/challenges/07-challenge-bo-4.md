@@ -1,5 +1,7 @@
 # 💎 Breakout 4 (optional): Create the infrastructure for our sample app with ARM templates 💎
 
+⏲️ *Est. time to complete: 60 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 So, this is our last Break-Out session for today. You will now have the challenge to create the _ARM template_ for our SCM Contacts application and deploy it to Azure.

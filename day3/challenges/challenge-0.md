@@ -1,5 +1,7 @@
 # Baseline Deployment
 
+⏲️ *Est. time to complete: 15 min.* ⏲️
+
 If you could not finish the challenges and/or breakout parts of *Day 2*, here is a script that will put you back on track and give you the opportunity to start right off with the content of *Day 3*.
 
 ## Pre-Requisites

@@ -1,5 +1,7 @@
 # 💎 Breakout 2: Add a serverless microservice to our sample app and include messaging 💎
 
+⏲️ *Est. time to complete: 45 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 Time for our second "Break-Out" session!

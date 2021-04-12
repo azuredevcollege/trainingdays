@@ -1,5 +1,7 @@
 # 💎 Breakout 1: Deploy the Azure Dev College sample application to Azure 💎
 
+⏲️ *Est. time to complete: 30 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 Now it's time to get familiar with our sample application. In this challenge you will:

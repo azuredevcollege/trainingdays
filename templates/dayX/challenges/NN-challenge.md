@@ -1,5 +1,7 @@
 # Challenge n: Name or Brief Description
 
+⏲️ *Est. time to complete: xx min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 In this challenge you will learn how to:

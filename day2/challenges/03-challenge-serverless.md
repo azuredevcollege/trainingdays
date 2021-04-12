@@ -1,5 +1,7 @@
 # Challenge 2: Serverless
 
+⏲️ *Est. time to complete: 45 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 - Create an Azure Function on your local machine

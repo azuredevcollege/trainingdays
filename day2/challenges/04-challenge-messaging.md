@@ -1,5 +1,7 @@
 # Challenge 3 (optional): Messaging
 
+⏲️ *Est. time to complete: 45 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 In this _optional_ challenge, you will get to know Azure messaging offerings to loosely connect services with each other. You will use _Azure Service Bus Topics_ as an example. _Azure Storage Queues_ will be used in the next [Break Out session](./challenge-bo-2.md).

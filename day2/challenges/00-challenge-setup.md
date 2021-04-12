@@ -1,5 +1,7 @@
 # Challenge 0: Setup your System
 
+⏲️ *Est. time to complete: 45 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 To be able to follow all the challenges provided in this workshop, you need a few prerequisites on your machine. This challenge is for setting up your system.

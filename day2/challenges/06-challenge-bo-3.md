@@ -1,5 +1,7 @@
 # 💎 Breakout 3 (optional): User a Content Delivery Network for the SPA 💎
 
+⏲️ *Est. time to complete: 30 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 Now that we have set up our application in Azure and the Single Page Application is running on an Azure Storage account, it is time show you how you _should_ host the static web app in **a production environment**.
