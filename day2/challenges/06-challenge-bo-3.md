@@ -40,15 +40,15 @@ To create a Content Delivery Network, go to the Azure markeplace, search for "CD
 
 In the "**Endpoint settings**" section, select "Create a new CDN endpoint" and use the following parameters:
 
-| Name              | Value                                       |
-| ----------------- | ------------------------------------------- |
-| CDN endpoint name | Give the endpoint a global unique name      |
-| Origin type       | Select _Storage static website_             |
-| Origin hostname   | Select the endpoint of your static seb site |
+| Name              | Value                                      |
+| ----------------- | ------------------------------------------ |
+| CDN endpoint name | Give the endpoint a global unique name     |
+| Origin type       | Select _Storage static website_            |
+| Origin hostname   | Select the endpoint of your static website |
 
 ![Create a CDN and endpoint](./images/cdn_create.png "Create a CDN and endpoint")
 
-When the CDN and the corresponding endpoint for your application has been created, you have to wait a few minutes until it is ready. You can check by opening a browser and load the website at the newly created location. Here in this example, it is <https://azcollege.azureedge.net/>.
+When the CDN and the corresponding endpoint for your application have been created, you need to wait a few minutes until it is ready. You can check by opening a browser and load the website at the newly created location. Here in this example, it is <https://azcollege.azureedge.net/>.
 
 You now get the following benefits:
 
