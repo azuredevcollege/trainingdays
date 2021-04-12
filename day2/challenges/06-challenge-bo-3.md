@@ -17,7 +17,7 @@ In this challenge you will:
 ## Table Of Contents
 
 1. [Introduction](#introduction)
-2. [Create a Content Deliver Network / CDN Endpoint](#create-a-content-deliver-network--cdn-endpoint)
+2. [Create a Content Deliver Network / CDN Endpoint](#create-a-content-deliver-network-and-endpoint)
 3. [Wrap-Up](#wrap-up)
 
 ## Introduction
@@ -28,7 +28,7 @@ So for the application, you will provision a CDN and put it in front of the VueJ
 
 ![Architecture Day 2 - Breakout 3](./images/bo3_architecture.png "Architecture Day n - Breakout 3")
 
-## Create a Content Deliver Network / CDN Endpoint
+## Create a Content Deliver Network and Endpoint
 
 To create a Content Delivery Network, go to the Azure markeplace, search for "CDN" and hit the "Create" button. You will be guided by a wizard to setup the CDN. Please use the following parameters:
 
