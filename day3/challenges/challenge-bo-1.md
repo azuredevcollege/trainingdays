@@ -1,5 +1,7 @@
 # 💎 Breakout 1: Add data storage services to our sample application 💎
 
+⏲️ *Est. time to complete: 90 min.* ⏲️
+
 ## Here is what you will learn 🎯
 
 Now that we have made experience with Azure SQL DB, Azure CosmosDB and Azure (Cognitive) Search, it is time to add these services to our sample application.

@@ -1,6 +1,6 @@
 # 💎 Breakout n: Name or Brief Description 💎
 
-⏲️ *Est. time to complete: xx min.*
+⏲️ *Est. time to complete: xx min.* ⏲️
 
 ## Here is what you will learn 🎯
 

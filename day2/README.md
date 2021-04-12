@@ -11,14 +11,14 @@ This day is about getting your hands dirty with application development in Azure
 
 ## Challenges
 
-- [Challenge 0:  Setup your system](challenges/00-challenge-setup.md)
-- [Challenge 1: Azure Web Applications](challenges/01-challenge-appservice.md)
-- 💎 *[Breakout 1: Deploy the Azure Dev College sample application to Azure](challenges/02-challenge-bo-1.md)* 💎
-- [Challenge 2: Serverless](challenges/03-challenge-serverless.md)
-- [Challenge 3 (optional): Messaging](challenges/04-challenge-messaging.md)
-- 💎 *[Breakout 2: Add a serverless microservice to our sample app and include messaging](challenges/05-challenge-bo-2.md)* 💎
-- 💎 *[Breakout 3 (optional): Use a Content Delivery Network for the SPA](challenges/06-challenge-bo-3.md)* 💎
-- 💎 *[Breakout 4 (optional): Create an Azure Web App and Storage Account with ARM templates](challenges/07-challenge-bo-4.md)* 💎
+- [Challenge 0:  Setup your system](challenges/00-challenge-setup.md) *(45 min.)*
+- [Challenge 1: Azure Web Applications](challenges/01-challenge-appservice.md) *(45 min.)*
+- 💎 *[Breakout 1: Deploy the Azure Dev College sample application to Azure](challenges/02-challenge-bo-1.md)* 💎 *(30 min.)*
+- [Challenge 2: Serverless](challenges/03-challenge-serverless.md) *(45 min.)*
+- [Challenge 3 (optional): Messaging](challenges/04-challenge-messaging.md) *(45 min.)*
+- 💎 *[Breakout 2: Add a serverless microservice to our sample app and include messaging](challenges/05-challenge-bo-2.md)* 💎 *(45 min.)*
+- 💎 *[Breakout 3 (optional): Use a Content Delivery Network for the SPA](challenges/06-challenge-bo-3.md)* 💎 *(30 min.)*
+- 💎 *[Breakout 4 (optional): Create an Azure Web App and Storage Account with ARM templates](challenges/07-challenge-bo-4.md)* 💎 *(60 min.)*
 
 ## Day 2 - Goal
 
