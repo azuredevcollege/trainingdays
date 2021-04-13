@@ -36,6 +36,8 @@ spec:
               cpu: '500m'
           image: <ACR_NAME>.azurecr.io/adc-resources-func:2.0
           env:
+            - name: WEBSITE_SITE_NAME
+              value: func-image-resizer
             - name: AzureWebJobsDashboard
               valueFrom:
                 secretKeyRef:
