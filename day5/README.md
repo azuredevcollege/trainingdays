@@ -1,10 +1,10 @@
 # Day 5 Identity and Architecture
 
-- [Challenge 0 - Request an ID Token from Azure AD](./challenges/challenge-0.md)
-- [Challenge 1 - Receive an ID Token in a Fragment URL](./challenges/challenge-1.md)
-- [Challenge 2 - OAuth2 Implicit Flow](./challenges/challenge-2.md)
-- [Challenge 3 - Integrate Azure AD into the SCM Contacts API](./challenges/challenge-3.md)
-- :small_orange_diamond: *[Breakout! - Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* :small_orange_diamond:
+- [Challenge 0: Request an ID Token from Azure AD](./challenges/challenge-0.md)
+- [Challenge 1: Receive an ID Token in a Fragment URL](./challenges/challenge-1.md)
+- [Challenge 2: OAuth2 Implicit Flow](./challenges/challenge-2.md)
+- [Challenge 3: Integrate Azure AD into the SCM Contacts API](./challenges/challenge-3.md)
+- 💎 *[Breakout: Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* 💎
 
 > Please take a look at the restore checkpoint, if you were unable to complete day4.
 >
@@ -14,9 +14,10 @@
 
 You already have deployed the Azure Developer College's sample application to your Azure subscription. Although the application is up and running we can not use different user accounts to create Contacts and VisitReports per user. The current deployed application does not support any user authentication.
 
-Today we we want to integrate Azure Active Directory as an Identity Provider in your application to authenticate and to authorize an Azure AD user to access the sample application. 
+Today we we want to integrate Azure Active Directory as an Identity Provider in your application to authenticate and to authorize an Azure AD user to access the sample application.
 
 Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in:
+
 - External resources, such as Microsoft Office 365, the Azure portal, and thousands of other SaaS applications.
 - Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization.
 
@@ -38,17 +39,16 @@ Authorization is the act of granting an authenticated security principal permiss
 
 On Day5 you will learn how you can protect your APIs (microservices) with Azure AD. In addition you will learn how OAuth2 permissions are used to grant access to API's client applications and how a signed-in user can grant access. The sample application defines the following OAuth2 permissions
 
-  |OAuth2 permission|Description|
-  |-----------------|-----------|
-  |Contacts.Create|Allows the client app to create contacts for the signed-in user|
-  |Contacts.Read|Allows the client app to read contacts of the signed-in user|
-  |Contacts.Update|Allows the client app to update contacts of the signed-in user|
-  |Contacts.Delete|Allows the client app to delete contacts of the signed-in user|
-  |VisitReports.Create|Allows the client app to create VisitReports for the signed-in user|
-  |VisitReports.Read|Allows the client app to read VisitReports of the signed-in user|
-  |VisitReports.Update|Allows the client app to update VisitReports of the signed-in user|
-  |VisitReports.Delete|Allows the client app to delete VisitReports of the signed-in user|
-
+  | OAuth2 permission   | Description                                                         |
+  | ------------------- | ------------------------------------------------------------------- |
+  | Contacts.Create     | Allows the client app to create contacts for the signed-in user     |
+  | Contacts.Read       | Allows the client app to read contacts of the signed-in user        |
+  | Contacts.Update     | Allows the client app to update contacts of the signed-in user      |
+  | Contacts.Delete     | Allows the client app to delete contacts of the signed-in user      |
+  | VisitReports.Create | Allows the client app to create VisitReports for the signed-in user |
+  | VisitReports.Read   | Allows the client app to read VisitReports of the signed-in user    |
+  | VisitReports.Update | Allows the client app to update VisitReports of the signed-in user  |
+  | VisitReports.Delete | Allows the client app to delete VisitReports of the signed-in user  |
 
 ## Sign in users
 
@@ -56,12 +56,10 @@ You will see how the sample application's Single Page Application (SPA) uses MSA
 
 ## Microsoft Authentication Library
 
-[Microsoft Authentication Library (MSAL)](https://docs.microsoft.com/azure/active-directory/develop/msal-overview) enables developers to acquire tokens from the Microsoft identity platform endpoint in order to access secured Web APIs. These Web APIs can be the Microsoft Graph, other Microsoft APIS, third-party Web APIs, or your own Web API. MSAL is available for .NET, JavaScript, Android, and iOS, which support many different application architectures and platforms. 
+[Microsoft Authentication Library (MSAL)](https://docs.microsoft.com/azure/active-directory/develop/msal-overview) enables developers to acquire tokens from the Microsoft identity platform endpoint in order to access secured Web APIs. These Web APIs can be the Microsoft Graph, other Microsoft APIS, third-party Web APIs, or your own Web API. MSAL is available for .NET, JavaScript, Android, and iOS, which support many different application architectures and platforms.
 
 ## Architecure
 
 At the end of the day we will have integrated the sample application into Azure AD:
 
 ![Architecture Overview](./images/../challenges/images/architecture-overview.png)
-
-   

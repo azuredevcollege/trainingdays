@@ -14,3 +14,9 @@ day7/terraform/terraform.tfstate**
 day7/challenges/samples/challenge-4/0_tf/azure_output.txt
 day7/challenges/samples/challenge-4/1_config/local-configmap.yaml
 day7/challenges/samples/challenge-4/1_config/local-secrets.yaml
+day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/publish/**
+day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/publish/**
+day3/apps/dotnetcore/Scm/Adc.Scm.Api/publish/**
+day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/publish/**
+day4/apps/dotnetcore/Scm/build/
+**/node_modules/**

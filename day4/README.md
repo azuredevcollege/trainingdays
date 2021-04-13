@@ -1,12 +1,12 @@
 # Day 4 Azure DevOps
 
-- [Challenge 0 - Create an Azure DevOps Organisation](challenges/challenge-0.md)
-- [Challenge 1 - Plan your first Project Iteration](challenges/challenge-1.md)
-- [Challenge 2 - Working with Azure Repo](challenges/challenge-2.md)
-- [Challenge 3 - Working with Azure Pipelines](challenges/challenge-3.md)
-- [Challenge 4 - Build and deploy the SCM Contacts API](challenges/challenge-4.md)
-- [Challenge 5 - Build and deploy the SCM Frontend](challenges/challenge-5.md)
-- :small_orange_diamond: *[Breakout! - Create CI/CD pipelines to deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
+- [Challenge 0: Create an Azure DevOps Organisation](challenges/challenge-0.md)
+- [Challenge 1: Plan your first Project Iteration](challenges/challenge-1.md)
+- [Challenge 2: Working with Azure Repo](challenges/challenge-2.md)
+- [Challenge 3: Working with Azure Pipelines](challenges/challenge-3.md)
+- [Challenge 4: Build and deploy the SCM Contacts API](challenges/challenge-4.md)
+- [Challenge 5: Build and deploy the SCM Frontend](challenges/challenge-5.md)
+- 💎 *[Breakout: Create CI/CD pipelines to deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* 💎
 
 # Day4 - Goal
 
@@ -37,13 +37,11 @@ At the end of the day you will know how to create a CI/CD Pipeline for all Micro
 
 To give you a short overview of all Microservices that are part of the sample application the following table shows you all services and the runtime that is used to implement the service.
 
-|Service| Tech|
-|-------|-----|
-|SCM Contacts API|ASP.NET Core|
-|SCM Resource API|ASP.NET Core|
-|SCM Search|ASP.NET Core|
-|SCM Visitreports API|NodeJs|
-|SCm Textanalytics|NodeJs|
-|SCM Frontend|NodeJs|
-
-
+| Service              | Tech         |
+| -------------------- | ------------ |
+| SCM Contacts API     | ASP.NET Core |
+| SCM Resource API     | ASP.NET Core |
+| SCM Search           | ASP.NET Core |
+| SCM Visitreports API | NodeJs       |
+| SCm Textanalytics    | NodeJs       |
+| SCM Frontend         | NodeJs       |

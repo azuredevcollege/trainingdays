@@ -6,12 +6,12 @@
 - How to register an Azure AD application and expose an API with OAuth2 permissions
 - How to authenticate an user and start an OAuth2 implicit flow to acquire an access token for the API
 
-*Important Note:*
-The Implicit Grant Flow is less secure than the Code Grant Flow. This is because the generation of the `access_token` for accessing the user's data on a resource server (e.g., the Graph API), is completely happening on the front channel. However, as the flow completely happens in the browser, it is suited for applications that do not have a server backend (e.g., 100% JS-based SPA). 
+_Important Note:_
+The Implicit Grant Flow is less secure than the Code Grant Flow. This is because the generation of the `access_token` for accessing the user's data on a resource server (e.g., the Graph API), is completely happening on the front channel. However, as the flow completely happens in the browser, it is suited for applications that do not have a server backend (e.g., 100% JS-based SPA).
 
 ## Create an Azure AD application and enable Implicit Grant Flow
 
-Before you can authenticate an user and acquire an access token for the API you have to register an application in your Azure AD tenant. 
+Before you can authenticate an user and acquire an access token for the API you have to register an application in your Azure AD tenant.
 By default the Implicit Grant Flow for issuing access tokens is disabled.
 
 ### Azure CLI
@@ -25,12 +25,13 @@ az ad app create --display-name challengeimplicitgrant --reply-urls http://local
 As before, note down the `appId`. Next, retrieve and note the ID of your current Azure AD tenant via:
 
 ```shell
-az account show 
+az account show
 ```
 
 ## Create an Azure AD application and expose an API with OAuth2 permissions
 
 In this sample we create an API that exposes four OAuth2 permissions:
+
 1. Contacts.Read
 2. Contacts.Create
 3. Contacts.Update
@@ -39,12 +40,17 @@ In this sample we create an API that exposes four OAuth2 permissions:
 ### Azure CLI
 
 Firstly, create a new Azure AD application and write the output to a variable:
-```Shell
+
+```shell
 API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
-``` 
+```
+
+> _*Note:*_ The example here describes how to execute the commands in a bash. If you don't have a bash on your system, you can use the Azure Cloud
+> Shell
 
 After that we have created an Azure AD application that contains one default OAuth2 permission which was created by Azure AD.
 To make your own OAuth2 permission, the default permission must be disabled first:
+
 ```shell
 # get the app id
 API_APP_ID=$(echo $API_APP | jq -r '.appId')
@@ -52,17 +58,20 @@ API_APP_ID=$(echo $API_APP | jq -r '.appId')
 DEFAULT_SCOPE=$(az ad app show --id $API_APP_ID | jq '.oauth2Permissions[0].isEnabled = false' | jq -r '.oauth2Permissions')
 az ad app update --id $API_APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
 ```
+
 Now your own OAuth2 permissions can be added:
+
 ```shell
-# set needed scopes from file 'oath2-permissions'
+# set needed scopes from file 'ouath2-permissions (day5/challenges/oauth2-permissions)'
 az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.json
 ```
+
 To keep it simple, the needed OAuth2 permissions are defined in a [.json](oauth2-permissions.json) file.
 
 In Azure AD an Application is something like a template with all necessary settings like ReplyUrl, required permissions, OAuth2 Permissions etc.
-When a user logs in for the first time and grants consent, an instance of the application is created. The instance is called a __Service Principal__.
-All created Service principals can be found in your Azure AD under __Enterprise Applications__.
-As no user ever logs on to an API we must create the __Service Principal__ for the API.
+When a user logs in for the first time and grants consent, an instance of the application is created. The instance is called a **Service Principal**.
+All created Service principals can be found in your Azure AD under **Enterprise Applications**.
+As no user ever logs on to an API we must create the **Service Principal** for the API.
 
 ```shell
 az ad sp create --id $API_APP_ID

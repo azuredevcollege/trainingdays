@@ -1,5 +1,5 @@
 var uisettings = {
-    "endpoint": "http://localhost:5050/",
+    "endpoint": "",
     "resourcesEndpoint": "",
     "aiKey": ""
 }

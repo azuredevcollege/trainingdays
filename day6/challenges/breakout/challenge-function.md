@@ -1,11 +1,11 @@
 # Create an Azure Function on Linux using a custom container
 
 ## Here is what you will learn
+
 - Create an Azure Function that uses a BlobTrigger
 - Build a custom image using Docker
 - Run the container on your local development machine
 - Run the container in Azure Container Instances
-
 
 In this challenge you will learn how to use the Azure function runtime in a custom docker image. To get familiar with running the Azure function runtime in a custom docker image a sample Azure function is already created for you. The sample function listens for files in a StorageAccount (Blob). Each time a file is uploaded to a predefined container, the sample fumction is triggered and it receives the uploaded Blob. The blob is resized and stored to another location.
 The sample Azure Function can be found [here in day6/apps/dotnetcore/BlobTriggerFunction](../apps/dotnetcore/BlobTriggerFunction).
@@ -16,19 +16,19 @@ The sample Azure Function can be found [here in day6/apps/dotnetcore/BlobTrigger
 
 Open a shell and log in to your Azure subscription using Azure CLI.
 
-```Shell
+```shell
 az login
 ```
 
 After you have logged in create a resource group where you want to add an Azure Storage Account
 
-```Shell
+```shell
 az group create -n <resource group name> -l <Azure region>
 ```
 
 Now you can create the storage account and add two private containers. One container is used to store the raw images named 'originals' and the other container is used to store the processed images named 'processed'.
 
-```Shell
+```shell
 az storage account create --name <account name> --location eastus2 --resource-group <resource group name> --kind StorageV2 --access-tier Hot --sku Standard_LRS
 az storage container create --name originals --account-name <storage account name>
 az storage container create --name processed --account-name <storage account name>
@@ -36,7 +36,7 @@ az storage container create --name processed --account-name <storage account nam
 
 Query the connection string and note it down.
 
-```Shell
+```shell
 az storage account show-connection-string --name <storage account name> --resource-group <resource group name>
 ```
 
@@ -44,26 +44,26 @@ az storage account show-connection-string --name <storage account name> --resour
 
 To build the docker image open a shell and navigate to the application folder 'day6/apps/dotnetcore/BlobTriggerFunction' and run the following docker command to build the image.
 
-```Shell
+```shell
 docker build -t blobtriggerfunction:0.1 .
 ```
 
 ### Run the image
 
-```Shell
+```shell
 docker run -it -e StorageAccountConnectionString='<your storage connectionstring>' -e AzureWebJobsStorage='<your storage connectionstring>' blobtriggerfunction:0.1
 ```
 
 ### See it in action
 
-Open the 'Azure Storage Explorer' and navigate to your Storage Account. Expand the Storage Account and you should see three containers under 'Blob Containers'. The '$logs' container is for diagnostic logs of the Storage Account. Go the the 'originals' container and upload an image. After the image was uploaded you should see a new output in your shell window where you started the docker container. Now navigate to the 'processed' container and you should see a new blob withe the prefix 'proc_'.
+Open the 'Azure Storage Explorer' and navigate to your Storage Account. Expand the Storage Account and you should see three containers under 'Blob Containers'. The '$logs' container is for diagnostic logs of the Storage Account. Go the the 'originals' container and upload an image. After the image was uploaded you should see a new output in your shell window where you started the docker container. Now navigate to the 'processed' container and you should see a new blob withe the prefix 'proc\_'.
 
 ### Housekeeping
 
 Quit the running container by pressing Ctrl+C.
 List all containers on your local machine
 
-```Shell
+```shell
 docker ps -a
 ```
 
@@ -83,13 +83,13 @@ If you already have created an Azure container registry you can skip this step.
 
 Before you can create a Azure container registry, you need a resource group to deploy it to.
 
-```Shell
+```shell
 az group create --name <resource group name> --location westeurope
 ```
 
 Once you have created the resource group, create an Azure container registry. The container registry name must be unique within Azure.
 
-```Shell
+```shell
 az acr create --resource-group <resource group name> --name <acr name> --sku Basic
 ```
 
@@ -106,13 +106,13 @@ az acr login --name <acr name>
 To push a container image to a private registry like Azure Container Registry, you must first tag the image with the full name of the registry's login server.
 First get the full login server name for your Azure Container Registry.
 
-```Shell
+```shell
 az acr show --name <acr name> --query loginServer --output table
 ```
 
 Now you can tag your image that must be pushed the Azure Container registry as follows:
 
-```Shell
+```shell
 docker tag blobtriggerfunction:0.1 <acrLoginServer>/blobtriggerfunction:0.1
 ```
 
@@ -124,9 +124,9 @@ docker images
 
 ### Push the image to Azure Container Registry
 
-Now you have tagged the *blobtriggerfunction:0.1* image with the full login server name of your Azure Container registry and you can push it to the registry.
+Now you have tagged the _blobtriggerfunction:0.1_ image with the full login server name of your Azure Container registry and you can push it to the registry.
 
-```Shell
+```shell
 docker push <acrLoginServer>/blobtriggerfunction:0.1
 ```
 
@@ -134,13 +134,13 @@ docker push <acrLoginServer>/blobtriggerfunction:0.1
 
 To verify that the image was pushed to your Azure Container registry you can either validate it by browsing to the Azure portal or you can list the images in your Azure Container registry with Azure CLI:
 
-```Shell
+```shell
 az acr repository list --name <acr name> --output table
 ```
 
 If you want to see the tags for the image, do the following:
 
-```Shell
+```shell
 az acr repository show-tags --name <acr name> --repository blobtriggerfunction --output table
 ```
 
@@ -159,27 +159,27 @@ If you want to get into using a service principal for accessing your Azure Conta
 
 If you want to use Azure Container Registry's admin credential enable the admin user first:
 
-```Shell
+```shell
 az acr update --name <acr name> --admin-enabled true
 ```
 
 After that you can query the admin credential:
 
-```Shell
+```shell
 az acr credential show --name <acr name>
 ```
 
 ### Deploy to Azure Container Instances
 
-Now use the command *az container create* to deploy the container. Use either the service principal id and password or the admin user name and password to access your Azure Container Registry. 
+Now use the command _az container create_ to deploy the container. Use either the service principal id and password or the admin user name and password to access your Azure Container Registry.
 
-```Shell
+```shell
 az container create --resource-group <resource group name> --name blobtriggerfunction --image <acrLoginServer>/blobtriggerfunction:0.1 --cpu 1 --memory 1 --registry-login-server <acrLoginServer> --registry-username <sp id or admin> --registry-password <sp or admin password> --environment-variables StorageAccountConnectionString='<your storage connectionstring>' AzureWebJobsStorage='<your storage connectionstring>'
 ```
 
 Within a few seconds you should receive an initial response from Azure. To view the state of the deployment, do the following:
 
-```Shell
+```shell
 az container show --resource-group <resource group name> --name blobtriggerfunction --query instanceView.state
 ```
 
@@ -187,7 +187,7 @@ az container show --resource-group <resource group name> --name blobtriggerfunct
 
 Once the container is up and running view the log output of the container:
 
-```Shell
+```shell
 az container logs --resource-group TEST-FUNC-RG --name blobtriggerfunction
 ```
 
@@ -196,4 +196,3 @@ az container logs --resource-group TEST-FUNC-RG --name blobtriggerfunction
 Now open Azure Storage Explorer again and upload some images to see the Azure function running in Azure Container Instances in action.
 
 ## Housekeeping
-

@@ -33,7 +33,7 @@ containers:
 ```
 
 This is definitely not a good approach. With this approach it is not possible to use the same definition in another hosting environment without setting a new password (Unless you always use the same password, which of course is a no go).
-Data such as a password are sensitive data and should be treated with special care. Sensitive data should be stored in a Secret Store to which only a certain group of users has access. With a Secret Store, developers do not have to store sensitive data in source code. The definition of a Kubernet deployment is definitely part of the source code.
+Data such as a password are sensitive data and should be treated with special care. Sensitive data should be stored in a Secret Store to which only a certain group of users has access. With a Secret Store, developers do not have to store sensitive data in source code. The definition of a Kubernetes deployment is definitely part of the source code.
 
 In challenge 2 we created a deployment for the Contacts API. The API loads the connection string to the hosted SQL Server from an environment variable **ConnectionStrings**DefaultConnectionString\_\_ . The connection string's value is hard coded, too.
 
@@ -56,11 +56,11 @@ var uisettings = {
 }
 ```
 
-With Secrets and ConfigMapa, Kubernetes provides two objects that help us to configure applications or services at deployment time. In the next sections we will get to know these objects better.
+With Secrets and ConfigMap, Kubernetes provides two objects that help us to configure applications or services at deployment time. In the next sections we will get to know these objects better.
 
 ## ConfigMaps
 
-A ConfigMap is a Kuberenetes API object used to store non confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables or as configuration files in volume mounts. A ConfigMap allows you to decouple environment specific settings from your deployments and pod definitions or containers.
+A ConfigMap is a Kubernetes API object used to store non confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables or as configuration files in volume mounts. A ConfigMap allows you to decouple environment specific settings from your deployments and pod definitions or containers.
 
 You can use `kubectl create configmap` command to create ConfigMaps from directories, files and literal values.
 
@@ -106,7 +106,7 @@ is created:
 $ kubectl describe configmap myfirstmap
 ```
 
-Now create a file fith name `myfirstconfigmapdemo.yaml`and add the following
+Now create a file named `myfirstconfigmapdemo.yaml`and add the following
 content:
 
 ```yaml
@@ -367,7 +367,7 @@ $ more /config/demosettings.json
 ## Secrets
 
 ConfigMaps are used to creating configuration settings for applications as
-plain text. The Kuberenetes' Secret object is similar to a ConfigMap except
+plain text. The Kubernetes' Secret object is similar to a ConfigMap except
 that the value of a key value pair is base64 encoded. It is therefore
 suitable for storing sensitive data like passwords or connection strings. A
 pure base64 encoding of course does not offer the best possible protection
@@ -600,7 +600,7 @@ $ more /config/demosecrets.json
 ## Configure the demo application with ConfigMap and Secrets
 
 Now it's time to configure the application which we have deployed in
-Challange 2 with ConfigMaps and Secrets.
+Challenge 2 with ConfigMaps and Secrets.
 
 A SQL Server, the Contacts API and the front-end are still running in the
 cluster. We will create a ConfigMap to configure the front-end correctly to

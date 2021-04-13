@@ -205,7 +205,8 @@
             "apiVersion": "2018-10-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
-                "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('PIPName'),variables('vmNames')[copyIndex()]))]"
+                "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('PIPName'),variables('vmNames')[copyIndex()]))]",
+                "[resourceId('Microsoft.Network/virtualNetworks',variables('vnetNames')[copyIndex()])]"
             ],
             "properties": {
                 "ipConfigurations": [

@@ -9,7 +9,7 @@ We have been working with the Contacts API now for some time, let's deploy the "
 ![app_contacts_details](./img/app_contact_details.png)
 ![app_stats](./img/app_stats.png)
 
-The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org). It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possiblity to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc. We also followed a "microservice" approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.). Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers!
+The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org). It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possibility to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc. We also followed a "microservice" approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.). Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers!
 
 That said, we are also following the best practice to push all possible state of the application out of your cluster. That means, we won't host any database within the cluster. Stateless clusters are much easier to manage!
 
@@ -24,11 +24,11 @@ To create the Azure infrastructure, we are using [Terraform](https://www.terrafo
 If you have successfully installed Terrraform CLI, let's create the Azure service, we need. Go to folder `day7/challenges/samples/challenge-4/0_tf` and open the file `variables.tf`. You need to adjust a few settings:
 
 - default vaule of `location` - choose the same location as your AKS cluster to create all services in the same location
-- default value of `prefix` - we use a prefix to have consitent naming of services. Please choose one that fits for you, but be careful to NOT use more than 6 characters for it.
+- default value of `prefix` - we use a prefix to have consistent naming of services. Please choose one that fits for you, but be careful to NOT use more than 6 characters for it.
 
 You can leave all other variables with their default values. The file should then look similar to that:
 
-```tf
+```hcl
 variable "location" {
   type    = string
   default = "westeurope"
@@ -71,7 +71,7 @@ variable "sqldbpassword" {
 
 After adjusting the file, you can execute the following commands (in folder `day7/challenges/samples/challenge-4/0_tf`):
 
-```zsh
+```shell
 $ terraform init
 $ terraform apply
 # Answer with 'yes' when asked, that the changes will be applied.
@@ -81,7 +81,7 @@ $ terraform apply
 
 **This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
-```zsh
+```shell
 $ terraform output > azure_output.txt
 ```
 
@@ -89,7 +89,7 @@ $ terraform output > azure_output.txt
 
 We will put our application into a namespace called `contactsapp`. Let's create it:
 
-```zsh
+```shell
 $ kubectl create ns contactsapp
 
 namespace/contactsapp created
@@ -97,7 +97,7 @@ namespace/contactsapp created
 
 We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands.
 
-```zsh
+```shell
 $ kubectl config set-context --current --namespace=contactsapp
 
 Context "adc-cluster" modified.
@@ -158,11 +158,11 @@ data:
     }
 ```
 
-The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
+The variable `YOUR_HOST_NAME` should be the `nip.io` address for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
 
 Please apply both files to your cluster:
 
-```zsh
+```shell
 $ kubectl apply -f configmap.yaml
 configmap/uisettings created
 
@@ -172,56 +172,63 @@ secret/scmsecrets created
 
 ## Build all required Docker images
 
-Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for conveniance reasons, we build all images in the container registry!
+Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for convenience reasons, we build all images in the container registry!
 
-Now, build all the required images one by one...of course, replace `<ACR_NAME>` with the name of your container registry.
+Now, build all the required images one by one...
 
-1. Contacts API: Folder `day7/apps/dotnetcore/Scm`:
-
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-contacts-api:2.0 -f ./Adc.Scm.Api/Dockerfile .
+Therefore first create a shell variable `ACR_NAME` with the name of your container registry like this:
+```shell
+ACR_NAME=yourRegistryNameHere
 ```
 
-2. Resources API: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api`:
+This variable is used for all the following Docker builds in ACR. Go to the root directory of the repository `trainingdays` and fire all docker builds one after another:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-api:2.0 .
+1. Contacts API:
+
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-contacts-api:2.0 ./day7/apps/dotnetcore/Scm/Adc.Scm.Api
 ```
 
-3. Image Resizer Function: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer`:
+2. Resources API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-func:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-api:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
 ```
 
-4. Search API: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api`:
+3. Image Resizer Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-api:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-func:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
 ```
 
-5. Search Indexer Function: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer`:
+4. Search API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-func:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-api:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
 ```
 
-6. Visit Reports API: Folder `day7/apps/nodejs/visitreport`:
+5. Search Indexer Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-visitreports-api:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-func:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
 ```
 
-7. Text Analytics Function: Folder `day7/apps/nodejs/textanalytics`:
+6. Visit Reports API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-textanalytics-func:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-visitreports-api:2.0 ./day7/apps/nodejs/visitreport
 ```
 
-8. Frontend / UI: Folder `day7/apps/frontend/scmfe`:
+7. Text Analytics Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0 .
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-textanalytics-func:2.0 ./day7/apps/nodejs/textanalytics
+```
+
+8. Frontend / UI:
+
+```shell
+$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-frontend-ui:2.0 ./day7/apps/frontend/scmfe
 ```
 
 Now, all images are present in your container registry. You can check the repositories in the portal, if you want:
@@ -234,7 +241,7 @@ We are now all set to deploy the services to the Kubernetes cluster.
 
 **But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
-```zsh
+```shell
 $ kubectl delete ingress ing-frontend -n default
 $ kubectl delete ingress ing-contacts -n default
 ```
@@ -258,7 +265,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_contactsapi
 
 deployment.apps/ca-deploy created
@@ -281,7 +288,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 2_resourcesapi
 
 deployment.apps/resources-deploy created
@@ -304,7 +311,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 3_searchapi
 
 deployment.apps/search-deploy created
@@ -327,7 +334,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 4_visitreports
 
 deployment.apps/visitreports-deploy created
@@ -355,7 +362,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_resourcesfunc
 
 deployment.apps/resources-function-deploy created
@@ -375,7 +382,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 2_searchfunc
 
 deployment.apps/search-function-deploy created
@@ -395,7 +402,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 3_textanalyticsfunc
 
 deployment.apps/textanalytics-function-deploy created
@@ -405,7 +412,7 @@ deployment.apps/textanalytics-function-deploy created
 
 Last, but not least, we also need to deploy the VueJS Single Page Application.
 
-Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below: 
+Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below:
 
 Settings to adjust:
 
@@ -418,7 +425,7 @@ Settings to adjust:
 
 Now apply the definitions in the mentioned path.
 
-```zsh
+```shell
 $ kubectl apply -f 1_ui
 
 deployment.apps/frontend-deploy created
@@ -430,7 +437,7 @@ service/frontend created
 
 That was a lot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
 
-```zsh
+```shell
 $ kubectl get deployment,pods,service,endpoints,ingress
 NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/ca-deploy                       2/2     2            2           23h
