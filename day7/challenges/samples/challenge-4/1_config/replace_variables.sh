@@ -8,9 +8,8 @@ cp ./configmap.yaml ./local-configmap.yaml
 
 while read p; do
     kv=$(echo ${p//[[:blank:]]/})
-    # echo $kv
-    key=$(echo $kv | cut -f1 -d=)
-    value=$(echo $kv | cut -f2 -d=)
+    echo $kv
+    IFS=' = ' read -r key value <<< "$kv"
  
     # remove first and last quote (") from variable value
     value="${value%\"}"  &&  value="${value#\"}"

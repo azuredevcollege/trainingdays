@@ -82,7 +82,7 @@ $ terraform apply
 **This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
 ```shell
-$ terraform output > azure_output.txt
+terraform output > azure_output.txt
 ```
 
 ## Create a new Kubernetes Namespace
@@ -110,6 +110,8 @@ Context "adc-cluster" modified.
 Now we have to create two configuration objects that we use to read the Azure configuration within the Kubernetes cluster: a `Secret` and a `ConfigMap`.
 
 Go to `day7/challenges/samples/challenge-4/1_config` and replace the placeholders `#{var_name}#` in the file `secrets.yaml` with the corresponding value from the `azure_output.txt` file.
+
+> **Tip**: There is a bash script called `replace_variables.sh` in the same directory that you can use to automatically create the `ConfigMap` and `Secret` file for you. Just run it and it will produce two files called `local-configmap.yaml` and `local-secrets.yaml` (the script will keep the original files untouched). Use the `local` versions for deployment.
 
 ```yaml
 apiVersion: v1
@@ -149,18 +151,18 @@ metadata:
 data:
   settings.js: |-
     var uisettings = {
-      endpoint: 'http://#{YOUR_HOST_NAME}#/api/contacts/',
-      resourcesEndpoint: 'http://#{YOUR_HOST_NAME}#/api/resources/',
-      searchEndpoint: 'http://#{YOUR_HOST_NAME}#/api/search/',
-      reportsEndpoint: 'http://#{YOUR_HOST_NAME}#/api/visitreports/',
+      endpoint: '/api/contacts/',
+      resourcesEndpoint: '/api/resources/',
+      searchEndpoint: '/api/search/',
+      reportsEndpoint: '/api/visitreports/',
       enableStats: true,
       aiKey: '#{appinsights}#',
     }
 ```
 
-The variable `YOUR_HOST_NAME` should be the `nip.io` address for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
+**Be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
 
-Please apply both files to your cluster:
+Please apply both files to your cluster (**If you ran the `replace_variables.sh` script**, the files are `local-configmap.yaml` and `local-secrets.yaml`.):
 
 ```shell
 $ kubectl apply -f configmap.yaml
@@ -177,6 +179,7 @@ Now we need to build all Docker images for our application. In total, we will ha
 Now, build all the required images one by one...
 
 Therefore first create a shell variable `ACR_NAME` with the name of your container registry like this:
+
 ```shell
 ACR_NAME=yourRegistryNameHere
 ```
@@ -186,49 +189,49 @@ This variable is used for all the following Docker builds in ACR. Go to the root
 1. Contacts API:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-contacts-api:2.0 ./day7/apps/dotnetcore/Scm/Adc.Scm.Api
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-contacts-api:2.0 -f ./day7/apps/dotnetcore/Scm/Adc.Scm.Api/Dockerfile ./day7/apps/dotnetcore/Scm
 ```
 
 2. Resources API:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-api:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-api:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
 ```
 
 3. Image Resizer Function:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-func:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-func:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
 ```
 
 4. Search API:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-api:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-api:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
 ```
 
 5. Search Indexer Function:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-func:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-func:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
 ```
 
 6. Visit Reports API:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-visitreports-api:2.0 ./day7/apps/nodejs/visitreport
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-visitreports-api:2.0 ./day7/apps/nodejs/visitreport
 ```
 
 7. Text Analytics Function:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-textanalytics-func:2.0 ./day7/apps/nodejs/textanalytics
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-textanalytics-func:2.0 ./day7/apps/nodejs/textanalytics
 ```
 
 8. Frontend / UI:
 
 ```shell
-$ az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-frontend-ui:2.0 ./day7/apps/frontend/scmfe
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-frontend-ui:2.0 ./day7/apps/frontend/scmfe
 ```
 
 Now, all images are present in your container registry. You can check the repositories in the portal, if you want:
@@ -242,8 +245,8 @@ We are now all set to deploy the services to the Kubernetes cluster.
 **But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
 
 ```shell
-$ kubectl delete ingress ing-frontend -n default
-$ kubectl delete ingress ing-contacts -n default
+kubectl delete ingress ing-frontend -n default
+kubectl delete ingress ing-contacts -n default
 ```
 
 We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. For each of these services, that includes a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.

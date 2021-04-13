@@ -213,31 +213,6 @@ You also need to adjust (and apply) **all other ingress definitions**, for:
 - Visit Reports Service
 - Resources Service
 
-## Note about settings/settings.js
-
-It is also necessary to update the `settings/settings.js` file for the frontend deployment. One elegant way to make sure the corresponding protocol is being used, is just to set the path to the API as absolute on the same host.
-
-```js
-var uisettings = {
-  endpoint: '/api/contacts/',
-  resourcesEndpoint: '/api/resources/',
-  searchEndpoint: '/api/search/',
-  reportsEndpoint: '/api/visitreports/',
-  enableStats: true,
-  aiKey: '<YOUR_CURRENT_AI_KEY>',
-}
-```
-
-To apply these changes, adjust the `ConfigMap` called `uisettings` (remember, you already did that in [Challenge 4](./challenge-4.md#deploy-configuration-secrets)). After the changes to the `ConfigMap` have been applied, , "re-rollout" the frontend deployment via:
-
-```shell
-$ kubectl rollout restart deployment frontend-deploy
-
-deployment.apps/frontend-deploy restarted
-```
-
-Kubernetes will now recreate the frontend pods and apply the new configuration!
-
 ## Check
 
 Now let's check if everything connects as expected.
@@ -248,4 +223,4 @@ the contacts API use secure HTTPS endpoints.
 
 ![A display of the browsers developer tools](./img/https-inspector.png)
 
-If both requests are being served over https were good to got!
+If both requests are being served over https were good to go!

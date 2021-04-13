@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~> 2.6.0"
+  version = "=2.46.0"
   features {
   }
 }
@@ -102,7 +102,7 @@ resource "azurerm_cognitive_account" "textanalytics" {
   resource_group_name = var.resource_group_name
   kind                = "TextAnalytics"
 
-  sku_name = "S0"
+  sku_name = "S"
 
   tags = {
     environment = var.env
@@ -147,4 +147,3 @@ output "textanalytics_endpoint" {
 output "textanalytics_key" {
   value = azurerm_cognitive_account.textanalytics.primary_access_key
 }
-

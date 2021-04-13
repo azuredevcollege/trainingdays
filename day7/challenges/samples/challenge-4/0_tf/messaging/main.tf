@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~> 2.6.0"
+  version = "=2.46.0"
   features {
   }
 }
@@ -162,4 +162,3 @@ output "visitreports_listen_connectionstring_old" {
 output "visitreports_listen_connectionstring" {
   value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_key}"
 }
-
