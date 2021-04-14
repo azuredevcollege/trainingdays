@@ -29,11 +29,11 @@ spec:
         - name: application
           resources:
             requests:
-              memory: '64Mi'
-              cpu: '100m'
+              memory: "64Mi"
+              cpu: "100m"
             limits:
-              memory: '256Mi'
-              cpu: '500m'
+              memory: "256Mi"
+              cpu: "500m"
           image: <ACR_NAME>.azurecr.io/adc-visitreports-api:2.0
           env:
             - name: COSMOSDB
@@ -61,6 +61,8 @@ spec:
                 secretKeyRef:
                   name: scmsecrets
                   key: APPINSIGHTSKEY
+            - name: APPINSIGHTS_ROLENAME
+              value: "SCM VisitReports Api"
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3000
