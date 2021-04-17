@@ -1,18 +1,30 @@
-# Cognitive Services #
+# Cognitive Services
 
-## Here is what you will learn ##
+## Here is what you will learn 🎯
 
-- Create and use the Text Analysis Cognitive Service
-- Create and use the Translate Cognitive Service
-- Create and use the  Computer Vision Service and integrate it into an Node.js App
-- Create and use the Face Cognitive Service
+In this challenge you will:
 
-# What are Azure Cognitive Services?
+- create and use the Text Analysis Cognitive Service
+- create and use the Translate Cognitive Service
+- create and use the  Computer Vision Service and integrate it into an Node.js App
+- create and use the Face Cognitive Service
 
-Azure Cognitive Services: 
-- are APIs, SDKs and services available to help developers build intelligent applications without having direct Artificial Intelligence (AI), data science skills or knowledge. 
-- enable developers to easily add cognitive features into their applications. 
-- The goal of Azure Cognitive Services is to help developers create applications that can see, hear, speak, understand and even begin to reason. 
+## Table Of Contents
+
+1. [What are Azure Cognitive Services?](#what-are-azure-cognitive-services)
+2. [Create and use a Text Analysis Cognitive Service](#create-and-use-a-text-analysis-cognitive-service)
+3. [Create and use the Translate Cognitive Service](#create-and-use-the-translate-cognitive-service)
+4. [Create and use the Computer Vision Service using Node.js App](#create-and-use-the-computer-vision-service-using-node-js-app)
+5. [Create and run the Face Cognitive Services using Node.js](#create-and-run-the-face-cognitive-services-using-node-js)
+6. [Cleanup](#cleanup)
+
+## What are Azure Cognitive Services?
+
+Azure Cognitive Services:
+
+- are APIs, SDKs and services available to help developers build intelligent applications without having direct Artificial Intelligence (AI), data science skills or knowledge.
+- enable developers to easily add cognitive features into their applications.
+- The goal of Azure Cognitive Services is to help developers create applications that can see, hear, speak, understand and even begin to reason.
 - The catalog of services within Azure Cognitive Services can be categorized into five main pillars - *Vision*, *Speech*, *Language*, *Web Search*, and *Decision*.
 
 In this challenge we will focus on the following Cognitive Services:
@@ -24,27 +36,25 @@ In this challenge we will focus on the following Cognitive Services:
 [Computer Vision](https://docs.microsoft.com/azure/cognitive-services/computer-vision/ "Computer Vision")|The Computer Vision service provides you with access to advanced algorithms for processing images and returning information.|
 |[Face](https://docs.microsoft.com/azure/cognitive-services/face/ "Face")| The Face service provides access to advanced face algorithms, enabling face attribute detection and recognition.|
 
-# Create and use a Text Analysis Cognitive Service 
+## Create and use a Text Analysis Cognitive Service
 
-You can solve these tasks in a programming language of your choice. For the sake of convenience, we are providing hints in `Node.js`. SDK support for `C#` or `.NET Core` is also available. 
+You can solve these tasks in a programming language of your choice. For the sake of convenience, we are providing hints in `Node.js`. SDK support for `C#` or `.NET Core` is also available.
 
 |Azure Cognitive Services|Information|
 |---|---|
-|[Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)|https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs |
+|[Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)|<https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
 
+We will now leverage the _Text Analytics API_ for extracting language, sentiment, key phrases, and entities from text. Please use a new resource group, e.g. **adc-cognitive-rg**. As a **Pricing Tier**, select the smallest possible in the chosen region.
 
-:triangular_flag_on_post: **Goal:** Leverage Text Analytics API for extracting language, sentiment, key phrases, and entities from text. Please use a new resource group, e.g. **adc-cognitive-rg**. As a **Pricing Tier**, select the smallest possible in the chosen region.
+Go to the Azure Portal, create a Text Analytics Service (in the `West Europe` region):
 
-1. Go to the Azure Portal, create a Text Analytics Service (in the `West Europe` region):
+![Create Text Analytics Service](./images/CreateTA.png)
 
-![Create Text Analytics Service](./img/CreateTA.png)
+![Details of Creating the Text Analytics Service](./images/detailscreateta.png)
 
-![Details of Creating the Text Analytics Service](./img/detailscreateta.png)
+### Extract sentiment, key phrases and entities from unstructured text
 
-
-## Extract sentiment, key phrases and entities from unstructured text ##
-
-### Detect language ###
+#### Detect language
 
 The Language Detection API detects the language of a text document, using the [Detect Language method](https://westcentralus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-v2-1/operations/56f30ceeeda5650db055a3c7).
 
@@ -52,7 +62,7 @@ So, let's create a sample application:
 
 - Create a new folder **adc-cognitive** on you machine and start a new Node.JS project.
   - run ```npm init``` on the command line and accept all options the wizard proposes
-- open Visual Studio Code by typing ```code .```
+- Open Visual Studio Code by typing ```code .```
 - Add the code provided below to a new `detect.js` file.
 
 ```javascript
@@ -111,7 +121,7 @@ get_language(documents);
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node detect.js`.
 
-After a few seconds, a successful response is returned in JSON, as shown in the following example: 
+After a few seconds, a successful response is returned in JSON, as shown in the following example:
 
 ```json
 {
@@ -153,7 +163,7 @@ After a few seconds, a successful response is returned in JSON, as shown in the 
 }
 ```
 
-## Analyze sentiment ##
+#### Analyze sentiment
 
 The Sentiment Analysis API detects the sentiment of a set of text records, using the [Sentiment method](https://westcentralus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-v2-1/operations/56f30ceeeda5650db055a3c9). Sentiment analysis can be used to find out what customers think of your brand or topic by analyzing raw text for clues about positive or negative sentiment. The following example provides scores for two documents, one in English and another one in Spanish.
 
@@ -212,7 +222,7 @@ let documents = {
 get_sentiments(documents);
 ```
 
-- Copy your Cognitive Services Account key and endpoint into the code - as done before. 
+- Copy your Cognitive Services Account key and endpoint into the code - as done before.
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node sentiment.js`.
 
@@ -235,9 +245,9 @@ A successful response is returned in JSON, as shown in the following example:
 }
 ```
 
-## Identify linked entities ##
+#### Identify linked entities
 
-The[ Entities API](https://docs.microsoft.com/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking) identifies well-known entities in a text document, using the [Entities method](https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-V2-1/operations/5ac4251d5b4ccd1554da7634). It extracts words from text, like "United States", then give you the type and/or Wikipedia link for this word(s). The type for "United States" would be `location`, while the link to Wikipedia is `https://en.wikipedia.org/wiki/United_States`. The following example identifies entities for English documents.
+The [Entities API](https://docs.microsoft.com/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking) identifies well-known entities in a text document, using the [Entities method](https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-V2-1/operations/5ac4251d5b4ccd1554da7634). It extracts words from text, like "United States", then give you the type and/or Wikipedia link for this word(s). The type for "United States" would be `location`, while the link to Wikipedia is `https://en.wikipedia.org/wiki/United_States`. The following example identifies entities for English documents.
 
 - Go back to Visual Studio Code.
 - Add the code provided below to a new `entities.js` file.
@@ -293,7 +303,7 @@ let documents = {
 get_entities(documents);
 ```
 
-- Copy your Cognitive Services Account key and endpoint into the code - as done before. 
+- Copy your Cognitive Services Account key and endpoint into the code - as done before.
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node entities.js`.
 
@@ -344,70 +354,74 @@ A successful response is returned in JSON, as shown in the following example:
 }
 ```
 
-## Create and use the Translate Cognitive Service ##
+## Create and use the Translate Cognitive Service
 
 There is also a Congitive Service that let's you translate text "on-the-fly" with just a simple request - same as for the Text Analysis service used before.
 
-To use the Translation Service, you need to create a "Translator Text" resource in Azure. please go back to the Portal, click on "Create a resource" and search for "Text Translator". Create such a service, giving it a globally unique name and choosing the lowest "Pricing Tier" available.
+- To use the Translation Service, you need to create a "Translator Text" resource in Azure. please go back to the Portal, click on "Create a resource" and search for "Text Translator". Create such a service, giving it a globally unique name and choosing the lowest "Pricing Tier" available.
 
-![Translator Text API Details](./img/TTCreateDetails.png)
+  ![Translator Text API Details](./images/TTCreateDetails.png)
 
-Now, back in Visual Studio Code, add a new JavaScript file called ```translate-text.js```.
+- Now, back in Visual Studio Code, add a new JavaScript file called ```translate-text.js```.
 
-Add the code provided below:
+  - Add the code provided below:
+  
+  ```javascript
+  'use strict';
+  
+  let https = require('https');
+  
+  let subscription_key = "<paste-your-text-translator-key-here>";
+  let endpoint = "https://api.cognitive.microsofttranslator.com";
+  let region = "<paste-your-text-translator-service-region here>";
+  let path = '/translate?api-version=3.0&to=es&to=it';
+  
+  let response_handler = function (response) {
+      let body = '';
+      response.on('data', function (d) {
+          body += d;
+      });
+      response.on('end', function () {
+          let body_ = JSON.parse(body);
+          let body__ = JSON.stringify(body_, null, '  ');
+          console.log(body__);
+      });
+      response.on('error', function (e) {
+          console.log('Error: ' + e.message);
+      });
+  };
+  
+  let translate_text = function (documents) {
+      let body = JSON.stringify(documents);
+  
+      let request_params = {
+          method: 'POST',
+          hostname: (new URL(endpoint)).hostname,
+          path: path,
+          headers: {
+              'Ocp-Apim-Subscription-Key': subscription_key,
+              'Ocp-Apim-Subscription-Region': region,
+              'Content-type': 'application/json'
+          }
+      };
+  
+      let req = https.request(request_params, response_handler);
+      req.write(body);
+      req.end();
+  }
+  
+  let documents = [{
+      'text': 'Hello World! We hope you enjoy your day here at the Microsoft office in Munich!'
+  }];
+  
+  translate_text(documents);
+  ```
+  
+- Copy your Text Translator Account **key** into the code - as done before.
 
-```javascript
-'use strict';
-
-let https = require('https');
-
-let subscription_key = "<paste-your-text-translator-key-here>";
-let endpoint = "https://api.cognitive.microsofttranslator.com";
-let region = "<paste-your-text-translator-service-region here>";
-let path = '/translate?api-version=3.0&to=es&to=it';
-
-let response_handler = function (response) {
-    let body = '';
-    response.on('data', function (d) {
-        body += d;
-    });
-    response.on('end', function () {
-        let body_ = JSON.parse(body);
-        let body__ = JSON.stringify(body_, null, '  ');
-        console.log(body__);
-    });
-    response.on('error', function (e) {
-        console.log('Error: ' + e.message);
-    });
-};
-
-let translate_text = function (documents) {
-    let body = JSON.stringify(documents);
-
-    let request_params = {
-        method: 'POST',
-        hostname: (new URL(endpoint)).hostname,
-        path: path,
-        headers: {
-            'Ocp-Apim-Subscription-Key': subscription_key,
-            'Ocp-Apim-Subscription-Region': region,
-            'Content-type': 'application/json'
-        }
-    };
-
-    let req = https.request(request_params, response_handler);
-    req.write(body);
-    req.end();
-}
-
-let documents = [{
-    'text': 'Hello World! We hope you enjoy your day here at the Microsoft office in Munich!'
-}];
-
-translate_text(documents);
-```
-
-Copy your Text Translator Account **key** into the code - as done before. *Endpoint is already predefined. ***No*** need to change it.*
+  :::tip
+  📝 The endpoint is already predefined. ***No*** need to change it.*
+  :::
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node translate-text.js`.
 
@@ -434,69 +448,68 @@ A successful response is returned in JSON, as shown in the following example:
 ]
 ```
 
-## Create and use the Computer Vision Service using Node.js App ##
+## Create and use the Computer Vision Service using Node.js App
 
 There is also a Cognitive Service that let's you analyze images with just a simple request to an API - same as for the Text Translator service used previously.
 
-To use that service, you need to create a "Computer Vision" resource in Azure. Please go back to the Portal, click on "Create a resource" and search for "Computer Vision". Create such a service in the ```West Europe``` region, giving it a globally unique name and by choosing the lowest "Pricing Tier" available.
+- To use that service, you need to create a _"Computer Vision"_ resource in Azure. Please go back to the Portal, click on "Create a resource" and search for "Computer Vision". Create such a service in the ```West Europe``` region, giving it a globally unique name and by choosing the lowest "Pricing Tier" available.
 
+- Now, back in Visual Studio Code, add a new JavaScript file called ```analyze-image.js```.
 
-Now, back in Visual Studio Code, add a new JavaScript file called ```analyze-image.js```.
+- Add the code provided below:
 
-Add the code provided below:
+  ```javascript
+  'use strict';
+  
+  let https = require('https');
+  
+  let subscription_key = "<paste-your-computer-vision-key-here>";
+  let endpoint = "<paste-your-computer-vision-endpoint-here>";
+  let path = '/vision/v2.1/analyze';
+  
+  let response_handler = function (response) {
+      let body = '';
+      response.on('data', function (d) {
+          body += d;
+      });
+      response.on('end', function () {
+          let body_ = JSON.parse(body);
+          let body__ = JSON.stringify(body_, null, '  ');
+          console.log(body__);
+      });
+      response.on('error', function (e) {
+          console.log('Error: ' + e.message);
+      });
+  };
+  
+  let analyze_image = function (image) {
+      let body = JSON.stringify(image);
+      let request_params = {
+          method: 'POST',
+          hostname: (new URL(endpoint)).hostname,
+          path: path,
+          headers: {
+              'Ocp-Apim-Subscription-Key': subscription_key,
+              'Content-type': 'application/json'
+          }
+      };
+  
+      let req = https.request(request_params, response_handler);
+      req.write(body);
+      req.end();
+  }
+  
+  let imageUrl =
+      'https://upload.wikimedia.org/wikipedia/commons/3/3c/Shaki_waterfall.jpg';
+  
+  let image = {
+      'url': imageUrl
+  };
+  
+  analyze_image(image);
+  ```
 
-```javascript
-'use strict';
-
-let https = require('https');
-
-let subscription_key = "<paste-your-computer-vision-key-here>";
-let endpoint = "<paste-your-computer-vision-endpoint-here>";
-let path = '/vision/v2.1/analyze';
-
-let response_handler = function (response) {
-    let body = '';
-    response.on('data', function (d) {
-        body += d;
-    });
-    response.on('end', function () {
-        let body_ = JSON.parse(body);
-        let body__ = JSON.stringify(body_, null, '  ');
-        console.log(body__);
-    });
-    response.on('error', function (e) {
-        console.log('Error: ' + e.message);
-    });
-};
-
-let analyze_image = function (image) {
-    let body = JSON.stringify(image);
-    let request_params = {
-        method: 'POST',
-        hostname: (new URL(endpoint)).hostname,
-        path: path,
-        headers: {
-            'Ocp-Apim-Subscription-Key': subscription_key,
-            'Content-type': 'application/json'
-        }
-    };
-
-    let req = https.request(request_params, response_handler);
-    req.write(body);
-    req.end();
-}
-
-let imageUrl =
-    'https://upload.wikimedia.org/wikipedia/commons/3/3c/Shaki_waterfall.jpg';
-
-let image = {
-    'url': imageUrl
-};
-
-analyze_image(image);
-```
-
-Copy your Computer Vision Account key and the endpoint into the code - as done before. 
+- Copy your Computer Vision Account key and the endpoint into the code - as done before.
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node analyze-image.js`.
 
@@ -519,70 +532,69 @@ A successful response is returned in JSON, as shown in the following example:
 }
 ```
 
-## Create and run the Face Cognitive Services using Node.js ##
+## Create and run the Face Cognitive Services using Node.js
 
 There is also a Cognitive Service that let's you detect and analyze face with just a simple request to an API - same as for the Computer Vision service used previously.
 
-To use that service, you need to create a "Face" service in Azure. Please go back to the Portal, click on "Create a resource" and search for "Face". Create such a service in the ```West Europe``` region, giving it a globally unique name and by choosing the lowest "Pricing Tier" available.
+- To use that service, you need to create a "Face" service in Azure. Please go back to the Portal, click on "Create a resource" and search for "Face". Create such a service in the ```West Europe``` region, giving it a globally unique name and by choosing the lowest "Pricing Tier" available.
 
+- Now, back in Visual Studio Code, add a new JavaScript file called ```detect-face.js```.
 
-Now, back in Visual Studio Code, add a new JavaScript file called ```detect-face.js```.
-
-Add the code provided below:
-
-```javascript
-'use strict';
-
-let https = require('https');
-
-let subscription_key = "<paste-your-face-key-here>";
-let endpoint = "<paste-your-face-endpoint-here>";
-// please see the query params!
-let path = '/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise';
-
-let response_handler = function (response) {
-    let body = '';
-    response.on('data', function (d) {
-        body += d;
-    });
-    response.on('end', function () {
-        let body_ = JSON.parse(body);
-        let body__ = JSON.stringify(body_, null, '  ');
-        console.log(body__);
-    });
-    response.on('error', function (e) {
-        console.log('Error: ' + e.message);
-    });
-};
-
-let detect_face = function (image) {
-    let body = JSON.stringify(image);
-    let request_params = {
-        method: 'POST',
-        hostname: (new URL(endpoint)).hostname,
-        path: path,
-        headers: {
-            'Ocp-Apim-Subscription-Key': subscription_key,
-            'Content-type': 'application/json'
-        }
-    };
-
-    let req = https.request(request_params, response_handler);
-    req.write(body);
-    req.end();
-}
-
-let imageUrl =
-    'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg';
-
-let image = {
-    'url': imageUrl
-};
-
-detect_face(image);
-```
-
-Copy your Face Account key and the endpoint into the code - as done before. 
+- Add the code provided below:
+  
+  ```javascript
+  'use strict';
+  
+  let https = require('https');
+  
+  let subscription_key = "<paste-your-face-key-here>";
+  let endpoint = "<paste-your-face-endpoint-here>";
+  // please see the query params!
+  let path = '/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise';
+  
+  let response_handler = function (response) {
+      let body = '';
+      response.on('data', function (d) {
+          body += d;
+      });
+      response.on('end', function () {
+          let body_ = JSON.parse(body);
+          let body__ = JSON.stringify(body_, null, '  ');
+          console.log(body__);
+      });
+      response.on('error', function (e) {
+          console.log('Error: ' + e.message);
+      });
+  };
+  
+  let detect_face = function (image) {
+      let body = JSON.stringify(image);
+      let request_params = {
+          method: 'POST',
+          hostname: (new URL(endpoint)).hostname,
+          path: path,
+          headers: {
+              'Ocp-Apim-Subscription-Key': subscription_key,
+              'Content-type': 'application/json'
+          }
+      };
+  
+      let req = https.request(request_params, response_handler);
+      req.write(body);
+      req.end();
+  }
+  
+  let imageUrl =
+      'https://upload.wikimedia.org/wikipedia/commons/3/37/Dagestani_man_and_woman.jpg';
+  
+  let image = {
+      'url': imageUrl
+  };
+  
+  detect_face(image);
+  ```
+  
+- Copy your Face Account key and the endpoint into the code - as done before.
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node detect-face.js`.
 
@@ -767,9 +779,12 @@ A successful response is returned in JSON, as shown in the following example:
 ]
 ```
 
-# House Keeping: Lab Cleanup #
+## Cleanup
+
 Remove the sample resource group.
 
 ```shell
-$ az group delete -n adc-cognitive-rg
+az group delete -n adc-cognitive-rg
 ```
+
+[◀ Previous challenge](./challenge-bo-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-bo-2.md)

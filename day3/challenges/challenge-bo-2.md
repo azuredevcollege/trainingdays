@@ -30,7 +30,7 @@ This is a very common technique to add functionality to your application without
 
 Here is the resulting architecture:
 
-![Architecture Day 3 - Breakout 2](./img/architecture_day3.png "Architecture Day 3 - Breakout 2")
+![Architecture Day 3 - Breakout 2](../images/architecture_day3.png "Architecture Day 3 - Breakout 2")
 
 ## Create a Cognitive Services Account
 
@@ -38,7 +38,7 @@ To be able to use the text analysis services, we need to add an Azure Cognitive 
 
 Go to the Portal and create the new resource (search for _Cognitive Services_). Choose the **scm-breakout-rg** resource group, location "West Europe" and the lowest pricing tier available (probably **S0**).
 
-![Azure Congitive Services Account](./img/portal_day4_bo_cgnsvc1.png "Azure Congitive Services Account")
+![Azure Congitive Services Account](./images/portal_day4_bo_cgnsvc1.png "Azure Congitive Services Account")
 
 ## Create an Azure Function to Analyze Visit Report Results
 
@@ -58,7 +58,7 @@ So please open the "Create a Resource" wizard and start creating an Azure Functi
 
 Create the Azure Function App with the following parameters.
 
-| Name             | Value / Hint                                                                                          |
+| Parameter        | Value / Hint                                                                                          |
 | ---------------- | ----------------------------------------------------------------------------------------------------- |
 | Resource Group   | Create a new resource group, e.g. **scm-breakout-tuxfunc-rg**                                         |
 | Publish          | _Code_                                                                                                |
@@ -71,7 +71,7 @@ Create the Azure Function App with the following parameters.
 
 Create it and when the Function App has been deployed, go to the **Configuration** section and add the following App configuration/settings.
 
-| Name                       | Value / Hint                                                                                                                                                                                                                                                                      |
+| Parameter                  | Value / Hint                                                                                                                                                                                                                                                                      |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ServiceBusConnectionString | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
 | COSMOSDB                   | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                                                            |
@@ -87,7 +87,7 @@ This is the last part that we add to our application. The code for the Azure Fun
 
 The folder structure is now as follows:
 
-![VS Code Day 3 - Breakout 2](./img/bo2_code.png "VS Code Day 3 - Breakout 2")
+![VS Code Day 3 - Breakout 2](./images/bo2_code.png "VS Code Day 3 - Breakout 2")
 
 You will see one additional project added to the workspace compared to `Breakout 1`:
 
@@ -114,11 +114,11 @@ var uisettings = {
 
 Now open a browser and reload the frontend. You will see, that a new menu item is available.
 
-![Sentiment Statistics](./img/browser_bo2_stats.png "Sentiment Statistics")
+![Sentiment Statistics](./images/browser_bo2_stats.png "Sentiment Statistics")
 
 Also, the contacts detail view will show results of visit reports, if they are available for the current contact.
 
-![Contact Detail - Sentiment Analysis](./img/browser_bo2_stats_contact.png "Contact Detail - Sentiment Analysis")
+![Contact Detail - Sentiment Analysis](./images/browser_bo2_stats_contact.png "Contact Detail - Sentiment Analysis")
 
 :::tip
 📝 To kick-off the sentiment analysis process, create a `Visit Report`, open the detail view for it and enter a `Visit Result` text. Then wait a few seconds and open the `Statistics` view.
