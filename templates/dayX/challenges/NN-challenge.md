@@ -132,7 +132,7 @@ namespace AzDevCollege.Function
 {
     public static class BlobTriggerCSharp
     {
-        [FunctionName("BlobTriggerCSharp")]
+        [FunctionName(nameof(BlobTriggerCSharp))]
         public static void Run(
             [BlobTrigger("originals/{name}", Connection = "<REPLACE_WITH_NAME_OF_STORAGE_ACCOUNT>_STORAGE")]Stream myBlob, string name,
             [Blob("processed/proc_{name}", FileAccess.Write, Connection = "<REPLACE_WITH_NAME_OF_STORAGE_ACCOUNT>_STORAGE")] Stream outStream, ILogger log)
