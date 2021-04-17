@@ -11,13 +11,13 @@ This day is about getting your hands dirty with data and AI in Azure. We will di
 
 ## Challenges
 
-- [Challenge 0 (optional):  Baseline Deployment for Day 3](challenges/challenge-0.md)
+- [Challenge 0 (optional):  Baseline Deployment for Day 3](challenges/challenge-0.md) *(~15 min.)*
 - [Challenge 1: Azure Cosmos DB](challenges/challenge-1.md)
 - [Challenge 2: Azure SQL DB](challenges/challenge-2.md)
 - [Challenge 3: Azure Search](challenges/challenge-3.md)
-- 💎 *[Breakout 1: Add data storage services to our sample application](challenges/challenge-bo-1.md)* 💎 *(90 min.)*
+- 💎 *[Breakout 1: Add data storage services to our sample application](challenges/challenge-bo-1.md)* 💎 *(~90 min.)*
 - [Challenge 4: Cognitive Services](challenges/challenge-4.md)
-- 💎 *[Breakout 2: Add Cognitive Services](challenges/challenge-bo-2.md)* 💎
+- 💎 *[Breakout 2: Add Cognitive Services](challenges/challenge-bo-2.md)* 💎 *(~30 min.)*
 
 ## Day 3 - Goal
 
