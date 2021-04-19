@@ -12,9 +12,6 @@ const msalConfig = {
 };
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
-const loginRequest = {
-    scopes: ["openid", "profile", "User.Read"]
-};
 
 const tokenRequest = {
     scopes: [
@@ -27,6 +24,10 @@ const tokenRequest = {
         `${window.uisettings.audience}/VisitReports.Update`,
         `${window.uisettings.audience}/VisitReports.Create`
     ]
+};
+
+const loginRequest = {
+    scopes: ["openid", "profile", "User.Read"].concat(tokenRequest.scopes)
 };
 
 export function handleCallbackResponse() {

@@ -113,6 +113,12 @@ Now that you have deployed the SCM Contacts API to your environment on Azure it'
 That is what we expected! Your SCM Contacts API now requires a valid access token.
 To acquire a valid acces token we can create a simple request as we already did in [challenge-2](./challenge-2.md).
 
+::: warning
+
+We have enabled the _Implicit Flow_ for the front end application in Azure AD. The flow can sometimes be useful to get a token without writing source code. This should be avoided in productive environments.
+
+:::
+
 We use the `Token Echo Server` again to request an access token from Azure AD for the SCM Contacts API. The tool is listening on port 5001 on your local machine. Tokens are accepted on the route `http://localhost:5001/api/tokenechofragment`. Before we can start the token request we have to add the url `http://localhost:5001/api/tokenechofragment` as a valid reply url to the client Azure AD application. Go to your Azure AD in the Azure portal, open the client application `scmfe-dev`that you created for the `Development` stage and add the url. You can add the reply url under _Authentication --> Web --> Redirect URIs --> Add URI_.
 
 ![TokenEchoServer Reply Url](./images/tokenechoserver-redirecturl.png)

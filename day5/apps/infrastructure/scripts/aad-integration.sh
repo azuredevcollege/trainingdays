@@ -20,7 +20,7 @@ az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.js
 az ad sp create --id $API_APP_ID
 
 # create the UI App
-UI_APP=$(az ad app create --display-name $UI_APP_NAME --oauth2-allow-implicit-flow false)
+UI_APP=$(az ad app create --display-name $UI_APP_NAME --oauth2-allow-implicit-flow true)
 UI_APP_ID=$(echo $UI_APP | jq -r '.appId')
 UI_APP_OBJECTID=$(echo $UI_APP | jq -r '.objectId')
 
