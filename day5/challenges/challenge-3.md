@@ -26,7 +26,7 @@ The script creates the server application first and then the client application 
 
 ### Run the script
 
-Open a shell, use Azure CLI to connect to the Azure AD Tenant where you want to create the applications (you can also use the Azure Cloud Shell):. If you have created a new Azure AD that is not linked to an Azure subscription, add the additional option _--allow-no-subscription_:
+Open a shell, use Azure CLI to connect to the Azure AD Tenant where you want to create the applications (you can also use the Azure Cloud Shell). If you have created a new Azure AD that is not linked to an Azure subscription, add the additional option _--allow-no-subscription_:
 
 ```shell
 az login --allow-no-subscription
@@ -34,7 +34,7 @@ az login --allow-no-subscription
 
 You must run the script twice:
 
-- Once for creating the applications for the `Development` stage
+- once for creating the applications for the `Development` stage
 - once for creating the applications for the `Testing` stage
 
 Use the following parameters to run the script for the `Development` stage:
@@ -53,12 +53,17 @@ Use the following parameter for the `Testing` stage:
 | _API-APP-NAME_     | scmapi-test                                                                                                                                          |
 | _API-APP-URI_      | <http://scmapi-test>                                                                                                                                 |
 | _UI-APP-NAME_      | scmfe-test                                                                                                                                           |
-| _UI-APP-REPLY-URL_ | the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`)) |
+| _UI-APP-REPLY-URL_ | the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`)  |
 
-Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and the `oauth2-permissions.json` configuration file. Run the script twice, once for the `Development`and once for the `Testing`stage.
+Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and the `oauth2-permissions.json` configuration file.
+
+Run the script twice:
+
+- once for the `Development`
+- once for the `Testing`stage.
 
 :::tip
-📝 Please note down the `UI AppId` and `API AppId` from the output after each run!
+📝 Note down the `UI AppId` and `API AppId` from the output after each run!
 :::
 
 ```shell
@@ -128,7 +133,7 @@ Now that you have deployed the SCM Contacts API to your environment on Azure it'
 
 ![401 Swagger](./images/401-swagger-contacts.png)
 
-That is what we expected! Your SCM Contacts API now requires a valid access token.
+That is what we expected! Your SCM Contacts API now requires a valid access token. To acquire a valid access token we can create a simple request as we already did in [challenge-2](./challenge-2.md).
 
 ::: warning
 
