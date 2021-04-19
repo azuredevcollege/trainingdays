@@ -61,9 +61,9 @@
         @keyup.enter="search()"
       />
       <v-spacer />
-      <v-icon>mdi-account</v-icon>
-      {{msal.user.name}}
-      <v-btn class="ml-7" v-if="$msal.isAuthenticated()" icon large @click="$msal.signOut()">
+      <v-icon v-if="account">mdi-account</v-icon>
+      <span v-if="account">{{account.name}}</span>
+      <v-btn class="ml-7" v-if="account" icon large @click="logout()">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
@@ -76,11 +76,16 @@
 
 <script>
 import NotificationSnackbar from "./components/notifications/NotificationSnackbar";
-import { msalMixin } from "vue-msal";
+import {logout, getAccount} from "./components/auth/auth"
+import { mapGetters } from "vuex";
 
 export default {
-  mixins: [msalMixin],
   name: "App",
+  computed: {
+    ...mapGetters({
+      account: "auth/account"
+    })
+  },
   created() {
     if (
       this.$uisettings.reportsEndpoint &&
@@ -100,11 +105,19 @@ export default {
         route: "/stats"
       });
     }
+
+    this.account = getAccount();
   },
   components: {
     NotificationSnackbar
   },
   methods: {
+    isAuthenticated(){
+      return this.account != null && this.account.localAccountId != undefined;
+    },
+    logout(){
+      logout();
+    },
     search() {
       if (this.searchphrase != "") {
         var search = this.searchphrase;

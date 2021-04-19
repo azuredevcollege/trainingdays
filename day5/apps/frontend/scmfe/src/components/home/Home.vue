@@ -12,7 +12,7 @@
         <v-flex xs12 my-4>
           <h1
             class="display-2 font-weight-bold mb-3"
-          >Welcome, {{msal.user.name}}, to SCM Contacts App</h1>
+          >Welcome, {{account.name}}, to SCM Contacts App</h1>
         </v-flex>
         <v-flex xs12 my-4>
           <v-icon :size="120">mdi-contacts</v-icon>
@@ -46,9 +46,13 @@
 </template>
 
 <script>
-import { msalMixin } from "vue-msal";
+import { mapGetters } from "vuex";
 export default {
-  mixins: [msalMixin],
+  computed: {
+    ...mapGetters({
+      account: "auth/account"
+    })
+  },
   data() {
     return {
       items: [

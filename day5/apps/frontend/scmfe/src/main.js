@@ -14,7 +14,7 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import "echarts/lib/component/title";
 import "echarts/lib/component/dataset";
-import msal from 'vue-msal';
+import { login, handleCallbackResponse, isAuthenticated } from "./components/auth/auth"
 
 Vue.config.productionTip = false
 Vue.use(VueWait);
@@ -22,29 +22,6 @@ Vue.use(VeeValidate);
 Vue.use(VueAppInsights, {
   id: window.uisettings.aiKey,
   router
-});
-
-Vue.use(msal, {
-  auth: {
-    clientId: window.uisettings.clientId,
-    tenantId: window.uisettings.tenantId,
-    requireAuthOnInitialize: true,
-    onToken: (ctx, error, response) => {
-      store.commit('auth/setAccessToken', response.accessToken);
-    }
-  },
-  request: {
-    scopes: [
-      `${window.uisettings.audience}/Contacts.Read`,
-      `${window.uisettings.audience}/Contacts.Create`,
-      `${window.uisettings.audience}/Contacts.Update`,
-      `${window.uisettings.audience}/Contacts.Delete`,
-      `${window.uisettings.audience}/VisitReports.Read`,
-      `${window.uisettings.audience}/VisitReports.Create`,
-      `${window.uisettings.audience}/VisitReports.Update`,
-      `${window.uisettings.audience}/VisitReports.Create`
-    ]
-  }
 });
 
 Vue.prototype.$uisettings = window.uisettings;
@@ -65,4 +42,10 @@ const myapp = new Vue({
   render: h => h(App)
 });
 
-myapp.$mount('#app');
+if (isAuthenticated()) {
+  myapp.$mount('#app');
+} else {
+  login();
+  handleCallbackResponse().then(() => myapp.$mount('#app'));
+}
+

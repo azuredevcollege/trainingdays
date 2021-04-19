@@ -17,9 +17,9 @@ const getters = {
 
 // actions
 const actions = {
-    statsByContact({ commit, dispatch, rootGetters }, id) {
+    statsByContact({ commit, dispatch }, id) {
         dispatch("wait/start", "apicall", { root: true });
-        var client = getReportsHttpClient(rootGetters["auth/accessToken"]);
+        var client = getReportsHttpClient();
         commit("clearStatsByContact");
         return client.get(`${BASE_PATH}/${id}`).then(response => {
             commit("setStatsByContact", response.data);
@@ -37,9 +37,9 @@ const actions = {
             dispatch("wait/end", "apicall", { root: true });
         });
     },
-    statsOverall({ commit, dispatch, rootGetters }) {
+    statsOverall({ commit, dispatch }) {
         dispatch("wait/start", "apicall", { root: true });
-        var client = getReportsHttpClient(rootGetters["auth/accessToken"]);
+        var client = getReportsHttpClient();
         return client.get(`${BASE_PATH}`).then(response => {
             commit("setStats", response.data);
             dispatch("wait/end", "apicall", { root: true });
@@ -56,9 +56,9 @@ const actions = {
             dispatch("wait/end", "apicall", { root: true });
         });
     },
-    statsTimeline({ commit, dispatch, rootGetters }) {
+    statsTimeline({ commit, dispatch }) {
         dispatch("wait/start", "apicall", { root: true });
-        var client = getReportsHttpClient(rootGetters["auth/accessToken"]);
+        var client = getReportsHttpClient();
         return client.get(`${BASE_PATH}/timeline`).then(response => {
             commit("setStatsTimeline", response.data);
             dispatch("wait/end", "apicall", { root: true });
