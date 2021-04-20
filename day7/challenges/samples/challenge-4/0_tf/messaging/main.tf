@@ -132,33 +132,41 @@ resource "azurerm_servicebus_subscription" "visitreports_textanalytics" {
 # Outputs
 
 output "thumbnail_listen_connectionstring" {
-  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.name};SharedAccessKey=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.primary_key}"
+  value     = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.name};SharedAccessKey=${azurerm_servicebus_queue_authorization_rule.queue_thumbnails_listen.primary_key}"
+  sensitive = true
 }
 
 output "thumbnail_send_connectionstring" {
-  value = azurerm_servicebus_queue_authorization_rule.queue_thumbnails_send.primary_connection_string
+  value     = azurerm_servicebus_queue_authorization_rule.queue_thumbnails_send.primary_connection_string
+  sensitive = true
 }
 
 output "contacts_send_connectionstring" {
-  value = azurerm_servicebus_topic_authorization_rule.topic_contacts_send.primary_connection_string
+  value     = azurerm_servicebus_topic_authorization_rule.topic_contacts_send.primary_connection_string
+  sensitive = true
 }
 
 output "contacts_listen_with_entity_connectionstring" {
-  value = azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_connection_string
+  value     = azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_connection_string
+  sensitive = true
 }
 
 output "contacts_listen_connectionstring" {
-  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_key}"
+  value     = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_contacts_listen.primary_key}"
+  sensitive = true
 }
 
 output "visitreports_send_connectionstring" {
-  value = azurerm_servicebus_topic_authorization_rule.topic_visitreports_send.primary_connection_string
+  value     = azurerm_servicebus_topic_authorization_rule.topic_visitreports_send.primary_connection_string
+  sensitive = true
 }
 
 output "visitreports_listen_connectionstring_old" {
-  value = azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_connection_string
+  value     = azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_connection_string
+  sensitive = true
 }
 
 output "visitreports_listen_connectionstring" {
-  value = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_key}"
+  value     = "Endpoint=sb://${azurerm_servicebus_namespace.sbn.name}.servicebus.windows.net/;SharedAccessKeyName=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.name};SharedAccessKey=${azurerm_servicebus_topic_authorization_rule.topic_visitreports_listen.primary_key}"
+  sensitive = true
 }

@@ -113,37 +113,45 @@ resource "azurerm_cognitive_account" "textanalytics" {
 output "cosmos_endpoint" {
   value       = azurerm_cosmosdb_account.cda.endpoint
   description = "Cosmo DB Endpoint"
+  sensitive   = true
 }
 
 output "cosmos_primary_master_key" {
   value       = azurerm_cosmosdb_account.cda.primary_master_key
   description = "Cosmo DB Primary Master key"
+  sensitive   = true
 }
 
 output "cosmos_secondary_master_key" {
   value       = azurerm_cosmosdb_account.cda.secondary_master_key
   description = "Cosmo DB Primary Master key"
+  sensitive   = true
 }
 
 output "sqldb_connectionstring" {
   value       = "Server=tcp:${azurerm_sql_server.sqlsrv.fully_qualified_domain_name},1433;Initial Catalog=${azurerm_sql_database.sqldb.name};Persist Security Info=False;User ID=${azurerm_sql_server.sqlsrv.administrator_login};Password=${azurerm_sql_server.sqlsrv.administrator_login_password};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
   description = "SQL DB Connection String"
+  sensitive   = true
 }
 
 output "search_primary_key" {
   value       = azurerm_search_service.search.primary_key
   description = "Search Primary Key"
+  sensitive   = true
 }
 
 output "search_name" {
   value       = azurerm_search_service.search.name
   description = "Search Name"
+  sensitive   = true
 }
 
 output "textanalytics_endpoint" {
-  value = azurerm_cognitive_account.textanalytics.endpoint
+  value     = azurerm_cognitive_account.textanalytics.endpoint
+  sensitive = true
 }
 
 output "textanalytics_key" {
-  value = azurerm_cognitive_account.textanalytics.primary_access_key
+  value     = azurerm_cognitive_account.textanalytics.primary_access_key
+  sensitive = true
 }

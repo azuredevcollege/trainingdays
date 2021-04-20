@@ -25,4 +25,5 @@ resource "azurerm_application_insights" "appinsights" {
 output "ai_instrumentation_key" {
   value       = azurerm_application_insights.appinsights.instrumentation_key
   description = "Application Insights Instrumentation Key"
+  sensitive   = true
 }

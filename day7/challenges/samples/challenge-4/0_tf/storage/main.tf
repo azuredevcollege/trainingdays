@@ -33,9 +33,11 @@ resource "azurerm_storage_account" "functions" {
 output "resources_primary_connection_string" {
   value       = azurerm_storage_account.resources.primary_connection_string
   description = "Resources Storage Connection"
+  sensitive   = true
 }
 
 output "funcs_primary_connection_string" {
   value       = azurerm_storage_account.functions.primary_connection_string
   description = "Functions Storage Connection"
+  sensitive   = true
 }

@@ -82,7 +82,7 @@ $ terraform apply
 **This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
 
 ```shell
-terraform output > azure_output.txt
+terraform output -json | jq '. | keys[] as $k | "\($k) = \(.[$k] | .value)"' | tr -d '"' > azure_output.txt
 ```
 
 ## Create a new Kubernetes Namespace
