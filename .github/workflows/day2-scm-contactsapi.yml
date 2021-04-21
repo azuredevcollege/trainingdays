@@ -101,6 +101,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmcontactsapi
+          path: ./scmcontactsapi
 
       - name: Deploy SCm Contacts API
         uses: azure/webapps-deploy@v2
