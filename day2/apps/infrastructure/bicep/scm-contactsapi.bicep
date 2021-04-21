@@ -76,3 +76,4 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
 }
 
 output contactsApiEndpoint string = '${webAppName}.azurewebsites.net'
+output contactsApiWebAppName string = webAppName
