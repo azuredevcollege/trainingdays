@@ -54,3 +54,68 @@ jobs:
           name: scmfe
           path: ./day2/apps/frontend/scmfe/dist/
           retention-days: 30
+
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    environment: day2-scm-dev
+    needs: build
+    # if: github.event_name == 'push'
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd2
+
+    steps:
+      - name: Download bicep artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: bicep
+      
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./scm-contactsapi.json
+          parameters: env=${{ env.ENV_NAME }}
+
+      - name: Download SCm frontend artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: scmfe
+          path: ./scmfe
+
+      - name: Enable static website hosting 
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az storage blob service-properties update --account-name ${{ steps.infrastructure.outputs.storageAccountName }} --static-website  --index-document index.html --404-document index.html
+
+      - name: Patch SCM Frontend settings
+        run: |
+          echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
+
+      - name: Deploy SCM Frontend
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe

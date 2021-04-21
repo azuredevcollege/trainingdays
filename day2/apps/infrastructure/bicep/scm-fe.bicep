@@ -32,3 +32,5 @@ resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
 output applicationInsightsKey string = appi.properties.InstrumentationKey
 output contactsApiEndpoint string = 'https://${contactsApiName}.azurewebsites.net'
 output resourcesApiEndpoint string = 'https://${resourcesApiName}.azurewebsites.net'
+output storageAccountName string = storageAccountName
+output storageAccountWebEndpoint string = stg.properties.primaryEndpoints.web
