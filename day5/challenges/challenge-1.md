@@ -1,14 +1,22 @@
-# Receive an ID Token in a Fragment URL
+# Challenge 1: Receive an ID Token in a Fragment URL
 
-## Here is what you'll learn
+## Here is what you'll learn 🎯
 
-- How to register an Azure AD application
+- How to register an application in Azure AD
 - How to create an Open ID Connect request to authenticate an user
 - How to receive an ID token in a [Fragment URL](https://en.wikipedia.org/wiki/Fragment_identifier) for receiving information about the authenticated user
 
-This is very similar to [challenge 0](challenge-0.md), except that this time we will receive the `id_token` through a fragment URL instead of it being in the body.
+This is very similar to [Challenge 0](challenge-0.md), except that this time we will receive the `id_token` through a fragment URL instead of it being in the body.
 
-## Create an AAD application
+## Table Of Contents
+
+1. [Create an AAD Application](#create-an-aad-application)
+2. [Run the Token Echo Server](#run-the-token-echo-server)
+3. [Create an Authentication Request](#create-an-authentication-request)
+4. [Wrap-Up](#wrap-up)
+5. [Cleanup](#cleanup)
+
+## Create an AAD Application
 
 Before you can authenticate an user you have to register an application in your AAD tenant.
 
@@ -32,11 +40,11 @@ Open another shell and run the Token Echo Server from [`day5/apps/token-echo-ser
 dotnet run
 ```
 
-## Create an authentication request
+## Create an Authentication Request
 
 Replace `TENANT_ID` with your TenantId and `APPLICATION_ID` with your ApplicationId. Open a browser and paste the modified request.
 
-```
+```http
 https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize?
 client_id=APPLICATION_ID
 &response_type=id_token
@@ -48,16 +56,20 @@ client_id=APPLICATION_ID
 
 Copy the `id_token` value from your browser's address bar, go to [https://jwt.ms](https://jwt.ms) and paste the token. Take a minute and have a look at the decoded token.
 
-If you need further information about the issued claims take a look [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens#header-claims).
+:::tip
+📝 If you need further information about the issued claims take a look [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens#header-claims).
+:::
 
-## Cleanup resources
+## Wrap-Up
 
-### Azure CLI
+This challenge showed how to create a new application in Azure AD and how an user can be authenticated using the Open ID Connect protocol. The full process is described [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc).
+
+## Cleanup
+
+Remove the created resources via the Azure CLI:
 
 ```shell
 az ad app delete --id <applicationid>
 ```
 
-## Summary
-
-This challenge showed how to create a new application in Azure AD and how an user can be authenticated using the Open ID Connect protocol. The full process is described [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc).
+[◀ Previous challenge](./challenge-0.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./challenge-2.md)
