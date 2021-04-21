@@ -30,7 +30,7 @@ jobs:
 
       - name: Archive ARM Templates artifacts
         uses: actions/upload-artifact@v2
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           name: bicep
           path: ./day2/apps/infrastructure/bicep/scm-fe.json
@@ -49,7 +49,7 @@ jobs:
 
       - name: Archive SCM Frontend
         uses: actions/upload-artifact@v2
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           name: scmfe
           path: ./day2/apps/frontend/scmfe/dist/
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    # if: github.event_name == 'push'
+    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
