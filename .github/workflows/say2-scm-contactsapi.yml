@@ -47,7 +47,7 @@ jobs:
           dotnet-version: 3.1.x
       
       - name: Build and publish SCM ContactsAPI
-        working-directory: day2/apps/dotnetcore/scm/Adc.Scm.Api
+        working-directory: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api
         run: |
           dotnet restore
           dotnet build --configuration Release
@@ -58,5 +58,5 @@ jobs:
         #if: github.event_name == 'push'
         with:
           name: drop
-          path: ./day2/apps/dotnetcore/scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
+          path: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
           retention-days: 30
