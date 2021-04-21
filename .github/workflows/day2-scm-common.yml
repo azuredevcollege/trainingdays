@@ -1,4 +1,4 @@
-name: scm-common
+name: day2-scm-common
 
 on:
   push:
