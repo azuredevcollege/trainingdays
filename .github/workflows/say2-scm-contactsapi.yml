@@ -58,5 +58,5 @@ jobs:
         #if: github.event_name == 'push'
         with:
           name: scmcontactsapi
-          path: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}'
+          path: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/*'
           retention-days: 30
