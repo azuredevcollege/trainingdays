@@ -96,7 +96,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'ImageStoreOptions__ThumbnailContainer'
-          value: 'Thumbnails'
+          value: 'thumbnails'
         }
         {
           name: 'StorageQueueOptions__StorageAccountConnectionString'
