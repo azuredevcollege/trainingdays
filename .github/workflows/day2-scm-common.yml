@@ -30,7 +30,7 @@ jobs:
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        # if: github.event_name == 'push'
         with:
           name: drop
           path: ./day2/apps/infrastructure/bicep/scm-common.json
@@ -39,7 +39,7 @@ jobs:
   deploy-to-dev:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push'
+    # if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
