@@ -25,17 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Bicep
-        uses: anthony-c-martin/setup-bicep@v0.1
-        with:
-          version: v0.3.255
-
       - name: Transpile bicep files
         run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
       
-      - name: Transpile bicep files
-        run: bicep build ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
-
       - name: Archive ARM Template artifacts
         uses: actions/upload-artifact@v2
         #if: github.event_name == 'push'
