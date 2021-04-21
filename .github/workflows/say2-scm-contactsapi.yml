@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-      DOTNETCORE_PACKAGE_PATH: 'publish'
+      DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
 
 
     steps:
@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v2
         #if: github.event_name == 'push'
         with:
-          name: drop
+          name: bicep
           path: ./day2/apps/infrastructure/bicep/scm-contactsapi.json
           retention-days: 30
 
@@ -51,12 +51,12 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}/scmcontactsapi'
+          dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}'
 
       - name: Archive dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         #if: github.event_name == 'push'
         with:
-          name: drop
-          path: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
+          name: scmcontactsapi
+          path: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}'
           retention-days: 30
