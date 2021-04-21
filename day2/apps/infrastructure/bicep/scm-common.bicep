@@ -19,6 +19,6 @@ resource appi 'Microsoft.Insights/components@2015-05-01' = {
   }
 }
 
-output appikey string = appi.properties.InstrumentationKey
+output applicationInsightsKey string = appi.properties.InstrumentationKey
 
 

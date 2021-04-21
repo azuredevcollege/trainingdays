@@ -32,6 +32,9 @@ var webAppName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var appPlanName = 'plan-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var location = resourceGroup().location
+var resourceTag = {
+  Environment: env
+}
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName
@@ -40,6 +43,7 @@ resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
 resource appplan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: appPlanName
   location: location
+  tags: resourceTag
   sku: {
     name: sku
   }
@@ -48,6 +52,7 @@ resource appplan 'Microsoft.Web/serverfarms@2020-12-01' = {
 resource webapp 'Microsoft.Web/sites@2020-12-01' = {
   name: webAppName
   location: location
+  tags: resourceTag
   properties: {
     serverFarmId: appplan.id
     httpsOnly: true
@@ -69,3 +74,5 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
     }
   }
 }
+
+output contactsApiEndpoint string = '${webAppName}.azurewebsites.net'
