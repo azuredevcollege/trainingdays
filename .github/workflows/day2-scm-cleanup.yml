@@ -1,4 +1,4 @@
-name: day2-delete-rgs
+name: day2-scm-cleanup
 
 on:
   workflow_dispatch:
