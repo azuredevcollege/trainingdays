@@ -119,7 +119,7 @@ jobs:
           name: scmresourcesapi
           path: ./scmresourcesapi
 
-      - name: Deploy SCM Contacts API
+      - name: Deploy SCM Resources API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
@@ -131,8 +131,8 @@ jobs:
           name: imageresizer
           path: ./imageresizer
 
-      - name: Deploy SCM Contacts API
-        uses: azure/webapps-deploy@v2
+      - name: Deploy ImageResizer Function
+        uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
           package: ./imageresizer
