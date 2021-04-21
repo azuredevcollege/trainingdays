@@ -31,7 +31,7 @@ jobs:
 
       - name: Archive ARM Templates artifacts
         uses: actions/upload-artifact@v2
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           name: bicep
           path: ./day2/apps/infrastructure/bicep/scm-resourcesapi.json
@@ -51,7 +51,7 @@ jobs:
 
       - name: Archive api dotnetcore package artifacts
         uses: actions/upload-artifact@v2
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           name: scmresourcesapi
           path: './day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}/'
@@ -66,7 +66,7 @@ jobs:
 
       - name: Archive ImageResizer dotnetcore package artifacts
         uses: actions/upload-artifact@v2
-        #if: github.event_name == 'push'
+        if: github.event_name == 'push'
         with:
           name: imageresizer
           path: './day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}/'
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    #if: github.event_name == 'push'
+    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
@@ -141,7 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
-    #if: github.event_name == 'push'
+    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
