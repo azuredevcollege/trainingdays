@@ -69,7 +69,7 @@ jobs:
             fi
 
       - name: Deploy to dev environment
-        uses: actions/arm-deploy@v1
+        uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./scm-common.json
