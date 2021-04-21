@@ -1,4 +1,4 @@
-name: day2-destroy
+name: day2-delete-rgs
 
 on:
   workflow_dispatch:
