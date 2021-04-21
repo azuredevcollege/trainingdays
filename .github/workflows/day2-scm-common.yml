@@ -38,6 +38,7 @@ jobs:
 
   deploy-to-dev:
     runs-on: ubuntu-latest
+    environment: day2-scm-dev
     needs: build
     # if: github.event_name == 'push'
     env:
