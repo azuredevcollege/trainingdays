@@ -31,7 +31,7 @@ jobs:
           version: v0.3.255
 
       - name: Transpile bicep files
-        run: az bicep build ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
+        run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
       
       - name: Transpile bicep files
         run: bicep build ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
