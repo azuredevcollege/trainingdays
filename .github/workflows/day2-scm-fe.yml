@@ -93,10 +93,10 @@ jobs:
         id: infrastructure
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./scm-contactsapi.json
+          template: ./scm-fe.json
           parameters: env=${{ env.ENV_NAME }}
 
-      - name: Download SCm frontend artifacts
+      - name: Download SCM Frontend artifacts
         uses: actions/download-artifact@v2
         with:
           name: scmfe
