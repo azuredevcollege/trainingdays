@@ -1,0 +1,110 @@
+name: day2-scm-contactsapi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-contactsapi.bicep'
+      - 'day2/apps/dotnetcore/scm/**'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-contactsapi.bicep'
+      - 'day2/apps/dotnetcore/scm/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env: 
+      DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-contactsapi.bicep
+      
+      - name: Archive ARM Template artifacts
+        uses: actions/upload-artifact@v2
+        #if: github.event_name == 'push'
+        with:
+          name: bicep
+          path: ./day2/apps/infrastructure/bicep/scm-contactsapi.json
+          retention-days: 30
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      
+      - name: Build and publish SCM ContactsAPI
+        working-directory: ./day2/apps/dotnetcore/Scm/Adc.Scm.Api
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}'
+
+      - name: Archive dotnetcore package artifacts
+        uses: actions/upload-artifact@v2
+        #if: github.event_name == 'push'
+        with:
+          name: scmcontactsapi
+          path: './day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
+          retention-days: 30
+
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    environment: day2-scm-dev
+    needs: build
+    #if: github.event_name == 'push'
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd2
+
+    steps:
+      - name: Download bicep artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: bicep
+      
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./scm-contactsapi.json
+          parameters: env=${{ env.ENV_NAME }} sku=B1
+
+      - name: Download scmcontactsapi artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: scmcontactsapi
+
+      - name: Deploy SCm Contacts API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.contactsApiWebAppName }}
+          package: ./scmcontactsapi
+
