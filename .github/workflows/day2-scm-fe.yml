@@ -1,0 +1,56 @@
+name: day2-scm-fe
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
+      - 'day2/apps/frontend/scmfe/**'
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
+      - 'day2/apps/frontend/scmfe/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: '14.x'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-fe.bicep
+
+      - name: Archive ARM Templates artifacts
+        uses: actions/upload-artifact@v2
+        #if: github.event_name == 'push'
+        with:
+          name: bicep
+          path: ./day2/apps/infrastructure/bicep/scm-fe.json
+          retention-days: 30
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }} 
+
+      - name: npm install and build
+        working-directory: ./day2/apps/frontend/scmfe
+        run: |
+          npm install
+          npm run build 
+
+      - name: Archive SCM Frontend
+        uses: actions/upload-artifact@v2
+        #if: github.event_name == 'push'
+        with:
+          name: scmfe
+          path: ./day2/apps/frontend/scmfe/dist/
+          retention-days: 30
