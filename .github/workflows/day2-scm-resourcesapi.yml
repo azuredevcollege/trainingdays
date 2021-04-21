@@ -136,3 +136,68 @@ jobs:
         with:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
           package: ./imageresizer
+
+  deploy-to-test:
+    runs-on: ubuntu-latest
+    environment: day2-scm-test
+    needs: deploy-to-dev
+    #if: github.event_name == 'push'
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-testday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd2
+    
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Download bicep artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: bicep
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./scm-resourcesapi.json
+          parameters: env=${{ env.ENV_NAME }} sku=B1
+
+      - name: Download scmresourcesapi artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: scmresourcesapi
+          path: ./scmresourcesapi
+
+      - name: Deploy SCM Resources API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
+          package: ./scmresourcesapi
+
+      - name: Download imageresizer artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: imageresizer
+          path: ./imageresizer
+
+      - name: Deploy ImageResizer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
+          package: ./imageresizer
