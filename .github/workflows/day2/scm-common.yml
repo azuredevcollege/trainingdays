@@ -1,0 +1,82 @@
+name: scm-common
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Bicep
+        uses: anthony-c-martin/setup-bicep@v0.1
+        with:
+          version: v0.3.255
+      
+      - name: Transpile bicep files
+        run: bicep build ./day2/apps/infrastructure/bicep/scm-common.bicep
+
+  publish-artifacts:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ github.event_name == 'push' }} || ${{ github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: ./day2/apps/infrastructure/bicep/scm-common.json
+          retention-days: 30
+
+  deploy-to-dev:
+    runs-on: ubuntu-latest
+    needs: publish-artifacts
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd2
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+      
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Deploy to dev environment
+        uses: actions/arm-deploy@v1
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./scm-common.json
+          parameters: env=${{ env.ENV_NAME }}
