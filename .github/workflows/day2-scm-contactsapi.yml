@@ -105,6 +105,6 @@ jobs:
       - name: Deploy SCm Contacts API
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.infrastructure.contactsApiWebAppName }}
+          app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
           package: ./scmcontactsapi
 
