@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-      DOTNETCORE_PACKAGE_PATH: './publish'
+      DOTNETCORE_PACKAGE_PATH: 'publish'
 
 
     steps:
@@ -51,7 +51,7 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release -o '${{ env.DOTNETCORE_PACKAGE_PATH }}/scmcontactsapi'
+          dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}/scmcontactsapi'
 
       - name: Archive dotnetcore package artifacts
         uses: actions/upload-artifact@v2
