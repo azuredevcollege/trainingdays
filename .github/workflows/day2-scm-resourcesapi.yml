@@ -68,6 +68,6 @@ jobs:
         uses: actions/upload-artifact@v2
         #if: github.event_name == 'push'
         with:
-          name: scmresourcesapi
+          name: imageresizer
           path: './day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}/'
           retention-days: 30
