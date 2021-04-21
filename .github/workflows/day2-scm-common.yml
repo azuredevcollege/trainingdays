@@ -79,7 +79,7 @@ jobs:
   deploy-to-test:
     runs-on: ubuntu-latest
     environment: day2-scm-test
-    needs: deploy-to-test
+    needs: deploy-to-dev
     # if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
