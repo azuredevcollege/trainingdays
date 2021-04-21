@@ -1,12 +1,12 @@
-# Azure (Cognitive) Search - Optional Content #
+# Azure (Cognitive) Search - Optional Content
 
-## Want to get to know Python in combination with Azure Cognitive Search? ##
+## Here is what you will learn 🎯
 
-Here you go :)
+Want to get to know Python in combination with Azure Cognitive Search - Here you go :-)
 
-## Create an Azure Cognitive Search index in Python using Jupyter notebooks ##
+## Create an Azure Cognitive Search index in Python using Jupyter notebooks
 
-## Get a key and URL ##
+### Get a key and URL
 
 REST calls require the service URL and an access key on every request. A search service is created with both, so if you added Azure Cognitive Search to your subscription, follow these steps to get the necessary information:
 
@@ -16,23 +16,23 @@ REST calls require the service URL and an access key on every request. A search 
 
 All requests require an api-key on every request sent to your service. Having a valid key establishes trust, on a per request basis, between the application sending the request and the service that handles it.
 
-## Connect to Azure Cognitive Search
+### Connect to Azure Cognitive Search
 
 In this task, start a Jupyter notebook and verify that you can connect to Azure Cognitive Search. You'll do this by requesting a list of indexes from your service. On Windows with Anaconda3, you can use Anaconda Navigator to launch a notebook.
 
-0. Register here [Azure Notebooks](https://notebooks.azure.com)
-1. Create a project 
-    ![NewProject](./img/NewProject.png)
+1. Register here [Azure Notebooks](https://notebooks.azure.com)
+2. Create a project
+    ![NewProject](./images/NewProject.png)
 
-    ![CreateNewProject](./img/CreateNewProject.png)
+    ![CreateNewProject](./images/CreateNewProject.png)
 
-2. Create a notebook
-   ![Notebooks](./img/Notebooks.png)
+3. Create a notebook
+   ![Notebooks](./images/Notebooks.png)
 
-3. Create a new Python3.6 notebook.
-   ![CreateNewNotebook](./img/CreateNewNotebook.png)
+4. Create a new Python3.6 notebook.
+   ![CreateNewNotebook](./images/CreateNewNotebook.png)
 
-4. In the first cell, load the libraries used for working with JSON and formulating HTTP requests.
+5. In the first cell, load the libraries used for working with JSON and formulating HTTP requests.
 
    ```python
    import json
@@ -40,7 +40,7 @@ In this task, start a Jupyter notebook and verify that you can connect to Azure 
    from pprint import pprint
    ```
 
-5. In the second cell, input the request elements that will be constants on every request. Replace the search service name (YOUR-SEARCH-SERVICE-NAME) and admin API key (YOUR-ADMIN-API-KEY) with valid values. 
+6. In the second cell, input the request elements that will be constants on every request. Replace the search service name (YOUR-SEARCH-SERVICE-NAME) and admin API key (YOUR-ADMIN-API-KEY) with valid values.
 
    ```python
    endpoint = 'https://<YOUR-SEARCH-SERVICE-NAME>.search.windows.net/'
@@ -51,7 +51,7 @@ In this task, start a Jupyter notebook and verify that you can connect to Azure 
 
    If you get ConnectionError `"Failed to establish a new connection"`, verify that the api-key is a primary or secondary admin key, and that all leading and trailing characters (`?` and `/`) are in place.
 
-6. In the third cell, formulate the request. This GET request targets the indexes collection of your search service and selects the name property of existing indexes.
+7. In the third cell, formulate the request. This GET request targets the indexes collection of your search service and selects the name property of existing indexes.
 
    ```python
    url = endpoint + "indexes" + api_version + "&$select=name"
@@ -60,11 +60,11 @@ In this task, start a Jupyter notebook and verify that you can connect to Azure 
    pprint(index_list)
    ```
 
-7. Run each step. If indexes exist, the response contains a list of index names. In the screenshot below, the service already has an azureblob-index and a realestate-us-sample index.
+8. Run each step. If indexes exist, the response contains a list of index names. In the screenshot below, the service already has an azureblob-index and a realestate-us-sample index.
 
    In contrast, an empty index collection returns this response: `{'@odata.context': 'https://mydemo.search.windows.net/$metadata#indexes(name)', 'value': []}`
 
-## 1 - Create an index
+### Create an index
 
 Unless you are using the portal, an index must exist on the service before you can load data. This step uses the [Create Index REST API](https://docs.microsoft.com/rest/api/searchservice/create-index) to push an index schema to the service.
 
@@ -72,7 +72,7 @@ Required elements of an index include a name, a fields collection, and a key. Th
 
 This index is named "hotels-quickstart" and has the field definitions you see below. It's a subset of a larger [Hotels index](https://github.com/Azure-Samples/azure-search-sample-data/blob/master/hotels/Hotels_IndexDefinition.JSON) used in other walkthroughs. We trimmed it in this quickstart for brevity.
 
-1. In the next cell, paste the following example into a cell to provide the schema. 
+1. In the next cell, paste the following example into a cell to provide the schema.
 
     ```python
     index_schema = {
@@ -111,13 +111,13 @@ This index is named "hotels-quickstart" and has the field definitions you see be
 
 3. Run each step.
 
-   The response includes the JSON representation of the schema. 
+   The response includes the JSON representation of the schema.
 
 - Another way to verify index creation is to check the Indexes list in the portal.
 
 <a name="load-documents"></a>
 
-## 2 - Load documents
+### Load documents
 
 To push documents, use an HTTP POST request to your index's URL endpoint. The REST API is [Add, Update, or Delete Documents](https://docs.microsoft.com/rest/api/searchservice/addupdate-or-delete-documents). Documents originate from [HotelsData](https://github.com/Azure-Samples/azure-search-sample-data/blob/master/hotels/HotelsData_toAzureSearch.JSON) on GitHub.
 
@@ -204,7 +204,7 @@ To push documents, use an HTTP POST request to your index's URL endpoint. The RE
         }
     ]
     }
-    ```   
+    ```
 
 2. In another cell, formulate the request. This POST request targets the docs collection of the hotels-quickstart index and pushes the documents provided in the previous step.
 
@@ -215,11 +215,11 @@ To push documents, use an HTTP POST request to your index's URL endpoint. The RE
    pprint(index_content)
    ```
 
-3. Run each step to push the documents to an index in your search service. Results should look similar to the following example. 
+3. Run each step to push the documents to an index in your search service. Results should look similar to the following example.
 
-    ![Send documents to an index](./img/indexcontent.png)
+    ![Send documents to an index](./images/indexcontent.png)
 
-## 3 - Search an index
+### Search an index
 
 This step shows you how to query an index using the [Search Documents REST API](https://docs.microsoft.com/rest/api/searchservice/search-documents).
 
@@ -244,13 +244,13 @@ This step shows you how to query an index using the [Search Documents REST API](
    pprint(query)
    ```
 
-4. Run each step. Results should look similar to the following output. 
+4. Run each step. Results should look similar to the following output.
 
-    ![Search an Index](./img/SearchString.png)
+    ![Search an Index](./images/SearchString.png)
 
-5. Try a few other query examples to get a feel for the syntax. You can replace the `searchstring` with the following examples and then rerun the search request. 
+5. Try a few other query examples to get a feel for the syntax. You can replace the `searchstring` with the following examples and then rerun the search request.
 
-   Apply a filter: 
+   Apply a filter:
 
    ```python
    searchstring = '&search=*&$filter=Rating gt 4&$select=HotelId,HotelName,Description,Rating'
@@ -268,9 +268,9 @@ This step shows you how to query an index using the [Search Documents REST API](
    searchstring = '&search=pool&$orderby=Address/City&$select=HotelId, HotelName, Address/City, Address/StateProvince, Tags'
    ```
 
+## Optional: Play around a bit with Azure Search
 
+- <https://azjobsdemo.azurewebsites.net/>
+- <https://docs.microsoft.com/en-us/samples/azure-samples/search-dotnet-asp-net-mvc-jobs/search-dotnet-asp-net-mvc-jobs/>
 
-# Optional: Play around a bit with Azure Search 
-
-- https://azjobsdemo.azurewebsites.net/
-- https://docs.microsoft.com/en-us/samples/azure-samples/search-dotnet-asp-net-mvc-jobs/search-dotnet-asp-net-mvc-jobs/
+ |[🔼 Day 3](../README.md)|

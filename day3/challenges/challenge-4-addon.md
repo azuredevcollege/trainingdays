@@ -1,32 +1,36 @@
-# Cognitive Services - Optional Content #
+# Cognitive Services - Optional Content
 
-## Optional: Play around with the: Intelligent Kiosk 
+## Here is what you will learn 🎯
+
+In this challenge you will learn how to:
+
+- Leverage Text Analytics API for extracting language, sentiment, key phrases, and entities from text
+- Leverage OCR to make a hand-written or printed text document in images machine-readable
+
+## Optional: Play around with the: Intelligent Kiosk
 
 Find the Sample on Github here: [Intelligent Kiosk](https://github.com/microsoft/Cognitive-Samples-IntelligentKiosk)
 
-## Optional: For those who want to get to know Python 
+## Optional: For those who want to get to know Python
 
 You can solve these tasks in a programming language of your choice. For sake of convenience, we are providing hints in `Python`, which you can easily (and for free) run in [Azure Notebooks](https://notebooks.azure.com). SDK Support for `C#` or `.NET Core` is available for most challenges. Especially Azure Search features an easy-to-use `.NET SDK`. You can find code examples in the Azure documentation for the associated services.
 
 |Azure Cognitive Services|Information|
 |---|---|
-|[Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)|https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/python|
-
-
-:triangular_flag_on_post: **Goal:** Leverage Text Analytics API for extracting language, sentiment, key phrases, and entities from text
+|[Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)|<https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/python>|
 
 In the language of your choice (Python solution is provided), write a small scripts that
 [Text Analytics Service with Other Programming Languages](https://docs.microsoft.com/en-us/azure/cognitive-services/Text-Analytics/quickstarts/nodejs)
 
 Sign into [Azure Notebooks](https://notebooks.azure.com/) and create a new Project in:
 
-![Create a Cognitive Services Project](./img/CreateProjectTextAnalytics.png)
+![Create a Cognitive Services Project](./images/CreateProjectTextAnalytics.png)
 
 Create a new `Python 3.6 Notebook` in [Azure Notebooks](https://notebooks.azure.com/).
 
-![Create Notebook Cognitive Services Challenge](./img/CreateNotebookTextAnalytics.png)
+![Create Notebook Cognitive Services Challenge](./images/CreateNotebookTextAnalytics.png)
 
-![Use the following Details](./img/CreateNotebookTextAnalyticsDetails.png)
+![Use the following Details](./images/CreateNotebookTextAnalyticsDetails.png)
 
 Let's start with connecting to your Text Analytics Service. Get the Key and the URL from the Azure portal :
 
@@ -38,9 +42,10 @@ subscription_key = "xxx" # Paste your API key here
 text_analytics_base_url = "xxx" # Paste your URL in here
 headers = {"Ocp-Apim-Subscription-Key": subscription_key}
 ```
-![Azure Portal: Key and URL](./img/keyendpointta.png)
 
-## Detect Language
+![Azure Portal: Key and URL](./images/keyendpointta.png)
+
+### Detect Language
 
 Firstly, we can extract the language from text. Run this in your Azure Notebook:
 
@@ -57,11 +62,12 @@ response  = requests.post(language_api_url, headers=headers, json=documents)
 languages = response.json()
 pprint(languages)
 ```
-Your result should look like this: 
 
-![Detect Language](./img/TAlanguages.png)
+Your result should look like this:
 
-## Detect Sentiment
+![Detect Language](./images/TAlanguages.png)
+
+### Detect Sentiment
 
 Secondly, we can detect the sentiment of a given phrase:
 
@@ -79,11 +85,12 @@ response  = requests.post(sentiment_url, headers=headers, json=documents)
 sentiments = response.json()
 pprint(sentiments)
 ```
-Example Result: 
 
-![Detect Sentiment](./img/TAsentiment.png)
+Example Result:
 
-## Detect Key Phrases
+![Detect Sentiment](./images/TAsentiment.png)
+
+### Detect Key Phrases
 
 Thirdly, we can easily detect key phrases from text:
 
@@ -101,11 +108,12 @@ response  = requests.post(keyphrase_url, headers=headers, json=documents)
 key_phrases = response.json()
 pprint(key_phrases)
 ```
-Example Result: 
 
-![Detect Key Phrases](./img/TAkeyphrase.png)
+Example Result:
 
-## Detect Entities
+![Detect Key Phrases](./images/TAkeyphrase.png)
+
+### Detect Entities
 
 And last but not least, we can detect the entities in text:
 
@@ -120,23 +128,24 @@ response  = requests.post(entities_url, headers=headers, json=documents)
 entities = response.json()
 pprint(entities)
 ```
-Example Result: 
 
-![Detect Entities](./img/TAentities.png)
+Example Result:
+
+![Detect Entities](./images/TAentities.png)
 
 If you want to directly create a dashboard within Power BI from the derived results, have a look at [this tutorial](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/tutorials/tutorial-power-bi-key-phrases).
 
-## Translate Text
+### Translate Text
 
 First, create a `Translator Text` API Key in the Azure Portal:
 
-![Translator Text API](./img/TTCreate.png)
+![Translator Text API](./images/TTCreate.png)
 
-![Translator Text API Details](./img/TTCreateDetails.png)
+![Translator Text API Details](./images/TTCreateDetails.png)
 
 The Translator API  allows to directly access the service by specifying the API key:
 
-![Translator Text API Key and URL](./img/TTKeyUrl.png)
+![Translator Text API Key and URL](./images/TTKeyUrl.png)
 
 Use the same Notebook as before and copy the following code in a cell below the earlier code in the Notebook.
 
@@ -156,19 +165,20 @@ body = [{'text' : 'I want to order 4 pizza Magarita and 8 beer!'},
 response = requests.post(url, headers=headers, params=params, json=body)
 print(json.dumps(response.json(), indent=2))
 ```
-Example Result: 
 
-![Translator Text API Result](./img/TTResult.png)
+Example Result:
+
+![Translator Text API Result](./images/TTResult.png)
 
 As we can see, we can translate multiple sentences within one API call. The service also automatically detects the input language. If desired, we can even directly translate the input to several output languages concurrently.
 
-## Create and run the sample
+### Create and run the sample
 
 0. Deploy a Face Api Service in the Portal
 
-![Deploy Face API](./img/deployface.png)
+![Deploy Face API](./images/deployface.png)
 
-![Details of Deploy Face API](./img/deployfacedetails.png)
+![Details of Deploy Face API](./images/deployfacedetails.png)
 
 1. Copy the following code into Visual Studio Code.
 2. Make the following changes in code where needed:
@@ -179,7 +189,7 @@ As we can see, we can translate multiple sentences within one API call. The serv
 4. Open a command Terminal window (at the top of Visual Studio Code).
 5. In the Terminal, change into the correct directory, use the `python` command to run the sample. For example, `python detect-face.py`.
 
-![Keys and Url of Face API](./img/KeyUrlFace.png)
+![Keys and Url of Face API](./images/KeyUrlFace.png)
 
 ```python
 import requests
@@ -207,7 +217,7 @@ response = requests.post(face_api_url, params=params,
 print(json.dumps(response.json()))
 ```
 
-## Examine the response
+### Examine the response
 
 A successful response is returned in JSON.
 
@@ -390,22 +400,19 @@ A successful response is returned in JSON.
 ]
 ```
 
-## Create and use Computer Vision Service and Custom Vision ##
+## Create and use Computer Vision Service and Custom Vision
 
 |Azure Cognitive Services|Information|
 |---|---|
-|[Computer Vision API](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision)|https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home
-|[Custom Vision Service](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/)|https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/home
-
-
-:triangular_flag_on_post: **Goal:** Leverage OCR to make a hand-written or printed text document in images machine-readable
+|[Computer Vision API](https://azure.microsoft.com/en-us/services/cognitive-services/computer-vision)|<https://docs.microsoft.com/en-us/azure/cognitive-services/computer-vision/home>
+|[Custom Vision Service](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/)|<https://docs.microsoft.com/en-us/azure/cognitive-services/custom-vision-service/home>
 
 In the language of your choice (Python solution is provided), write two small scripts that
 
 1. Convert hand-written text from an image into text - Test data: [1](https://bootcamps.blob.core.windows.net/ml-test-images/ocr_handwritten_1.jpg), [2](https://bootcamps.blob.core.windows.net/ml-test-images/ocr_handwritten_2.jpg)
 1. Convert printed text from an image into text - Test data: [1](https://bootcamps.blob.core.windows.net/ml-test-images/ocr_printed_1.jpg), [2](https://bootcamps.blob.core.windows.net/ml-test-images/ocr_printed_2.jpg)
 
-:question: **Questions:** 
+:question: **Questions:**
 
 1. How well does the OCR service work with German text? How well with English?
 1. What happens when the image is not oriented correctly?
@@ -414,23 +421,22 @@ In the language of your choice (Python solution is provided), write two small sc
 
 1. Use [Custom Vision](https://customvision.ai) to detect beer glasses in images - [Image Dataset for training and testing](https://bootcamps.blob.core.windows.net/ml-test-images/beer_glasses.zip)
 
-:question: **Questions:** 
+:question: **Questions:**
 
 1. What could we do to increase the detection performance?
 1. What happens if the beer glasses are really small in the image?
 
 Create a new `Python 3.6 Notebook` in [Azure Notebooks](https://notebooks.azure.com/).
 
-## Optical Character Recognition - Images to Text - Handwritten content
+### Optical Character Recognition - Images to Text - Handwritten content
 
 First, create a `Computer Vision` API Key in the Azure Portal
 
-![Create Computer Vision](./img/ComputerVisionCreate.png)
+![Create Computer Vision](./images/ComputerVisionCreate.png)
 
-![Create Computer Vision Details](./img/ComputerVisionCreateDetails.png)
+![Create Computer Vision Details](./images/ComputerVisionCreateDetails.png)
 
-![Receive Computer Vision URL and Key](./img/CVKeyURL.png)
-
+![Receive Computer Vision URL and Key](./images/CVKeyURL.png)
 
 As we're dealing with images, we need a few Python packages to help with this:
 
@@ -478,11 +484,12 @@ while (poll):
 
 print(json.dumps(recogntion, indent=2))
 ```
-Example Notebook and Result: 
 
-![Python Code in Azure Notebook](./img/CVCode1.png)
+Example Notebook and Result:
 
-![Result](./img/CVPartResult.png)
+![Python Code in Azure Notebook](./images/CVCode1.png)
+
+![Result](./images/CVPartResult.png)
 
 Ok, looks like it recognized something. Let's visualize it:
 
@@ -508,9 +515,9 @@ for polygon in polygons:
 _ = plt.axis("off")
 ```
 
-Example Result: 
+Example Result:
 
-![Result](./img/CVPartResult2.png)
+![Result](./images/CVPartResult2.png)
 
 Here are two more images we can test with:
 
@@ -519,7 +526,7 @@ https://bootcamps.blob.core.windows.net/ml-test-images/ocr_handwritten_1.jpg
 https://bootcamps.blob.core.windows.net/ml-test-images/ocr_handwritten_2.jpg
 ```
 
-## Optical Character Recognition - Images to Text - Printed content
+### Optical Character Recognition - Images to Text - Printed content
 
 Extracting text from printed text in images is very similar - except that is a synchronous call, hence we directly get back the recognition result:
 
@@ -548,7 +555,7 @@ word_infos
 
 Example Notebook:
 
-![Azure Notebook](./img/OcrCode.png)
+![Azure Notebook](./images/OcrCode.png)
 
 ```python
 # Display the image and overlay it with the extracted text
@@ -567,7 +574,7 @@ plt.axis("off")
 
 Example Result:
 
-![Result](./img/OCRResult.png)
+![Result](./images/OCRResult.png)
 
 Here are two more images we can test with:
 
@@ -576,7 +583,7 @@ https://bootcamps.blob.core.windows.net/ml-test-images/ocr_printed_1.jpg
 https://bootcamps.blob.core.windows.net/ml-test-images/ocr_printed_2.jpg
 ```
 
-## Detecting Objects in Images
+### Detecting Objects in Images
 
 First, log in to [Custom Vision](https://www.customvision.ai/) with your Azure credentials.
 
@@ -587,13 +594,15 @@ Once we've tagged all 15 images (that's the minimum), we can hit the `Train` but
 Let's briefly look at the results and make sure we understand them:
 
 Sliders - they set the results given certain thresholds
-* Probability Threshold: 82% - this means we only count detections with over 82% probability as beer glasses
-* Overlap Threshold: 51% - this means we want our detection results overlap at least 51% with the ground truth in the training set
+
+- Probability Threshold: 82% - this means we only count detections with over 82% probability as beer glasses
+- Overlap Threshold: 51% - this means we want our detection results overlap at least 51% with the ground truth in the training set
 
 Results:
-* Precision: 30% - given a detection, it is 30% correct on average (meaning the algorithm will also detect other objects as glasses)
-* Recall: 100% - a recall of 100% means, it will detect all beer glasses (but maybe mistake some other objects as beer glasses too)
-* mAP: 83.3% - mean average precision - the average how well our detection algorithm works 
+
+- Precision: 30% - given a detection, it is 30% correct on average (meaning the algorithm will also detect other objects as glasses)
+- Recall: 100% - a recall of 100% means, it will detect all beer glasses (but maybe mistake some other objects as beer glasses too)
+- mAP: 83.3% - mean average precision - the average how well our detection algorithm works
 
 Under `Quick Test`, we can briefly upload our testing images and see what the service will detect. As we only added 15 training images with a lot of variance, the results are not great yet. By adding more images, we could most likely improve the detection performance significantly.
 
@@ -607,14 +616,14 @@ Head to [`eu.luis.ai`](https://eu.luis.ai) and create a new LUIS app. As a base 
 
 Quick explanation on how LUIS works:
 
-* Under Intents, we'll define the "actions" we can to detect
-* Under Entities, we'll define the "things" we want to extract from the intents
-* Utterances are just examples that we'll use to train LUIS
+- Under Intents, we'll define the "actions" we can to detect
+- Under Entities, we'll define the "things" we want to extract from the intents
+- Utterances are just examples that we'll use to train LUIS
 
 Create two new intents:
 
-* `CreateOrder`
-* `DeleteOrder`
+- `CreateOrder`
+- `DeleteOrder`
 
 Then, add the utterances (our training examples) from the main page of this repository to the three intents.
 
@@ -624,11 +633,9 @@ Once we hit `Test`, we can test if the systems is able to recognize the intent o
 
 Next, we can try to detect `Entities` in our text inputs. For that, goto Entities and add a `Prebuilt Entity` with the type `Number`. This will automatically detect all numbers (e.g. the order number or amount of pizzas) in our text. Secondly, add a normal Entity `Pizza Type` with entity type `Simple` (ideally we could also use an entity and specify all possible Pizzas we sell). Lastly, add an entity of type `Composite` with the name `PizzaOrder` and add `Number` and `Pizza Type` as children.
 
-
 As we can see, LUIS supports a range of entity types, like regex, lists, etc.
 
 Finally, we can annotate our training examples. Numbers will automatically be detected (as it is a prebuilt type), but we need to tell LUIS, what `PizzaOrder` is. This is a bit tricky, first click the beginning of the composite entity (= the detected number) and select `Wrap as Composite Entity`, then directly click the last part of the entity (= the pizza type) and then select `PizzaOrder`. Then tag all pizza types inside the `PizzaOrder` as `Pizza Type`. The final tagging should look something like this (make sure the green line covers the whole phrase):
-
 
 Hit `Train` again to give it a final training. Lastly, hit `Publish` and publish it to `Production`. Review the endpoints and copy the endpoint URL (can be found under `Manage` --> `Keys and Endpoints`). It should look something like this:
 
@@ -705,8 +712,7 @@ The output should look something like this:
 
 Excellent - Now we know what the user wants to order, and the associated quantities. :pizza: :pizza: :pizza:
 
-
-## House Keeping: Lab Cleanup
+## Cleanup
 
 ### Use Azure CLI to Delete Resource Group
 
@@ -725,3 +731,5 @@ Excellent - Now we know what the user wants to order, and the associated quantit
 3. Close the **Cloud Shell** prompt at the bottom of the portal.
 
 4. Close your browser application.
+
+|[🔼 Day 3](../README.md)|
