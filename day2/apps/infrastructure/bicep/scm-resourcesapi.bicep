@@ -193,3 +193,5 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
 }
 
 output resourcesApiEndpoint string = '${webAppName}.azurewebsites.net'
+output resourceApiWebAppName string = webAppName
+output imageResizerFunctionName string = functionName
