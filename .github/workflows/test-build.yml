@@ -1,0 +1,16 @@
+name: test-build
+
+
+on:
+  pull_request:
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: hello
+        run: echo "Hello"
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
