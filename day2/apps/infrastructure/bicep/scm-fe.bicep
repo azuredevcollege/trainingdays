@@ -5,9 +5,13 @@ param env string = 'devd2'
 
 var storageAccountName = 'stfe${env}${take(uniqueString(resourceGroup().id), 11)}'
 var location = resourceGroup().location
+
 var resourceTag = {
   Environment: env
+  Application: 'SCM'
+  Component: 'SCM Frontend'
 }
+
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var contactsApiName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var resourcesApiName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'

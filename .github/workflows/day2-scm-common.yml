@@ -12,6 +12,8 @@ on:
     paths:
       - 'day2/apps/infrastructure/bicep/scm-common.bicep'
 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

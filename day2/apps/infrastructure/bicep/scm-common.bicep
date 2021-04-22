@@ -7,6 +7,8 @@ var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var location = resourceGroup().location
 var resourceTag = {
   Environment: env
+  Application: 'SCM'
+  Component: 'Common'
 }
 
 resource appi 'Microsoft.Insights/components@2015-05-01' = {
