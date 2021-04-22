@@ -16,12 +16,14 @@ on:
 
   workflow_dispatch:
 
+env:
+  NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
     env: 
       DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
-
 
     steps:
       - name: Checkout
@@ -32,7 +34,7 @@ jobs:
       
       - name: Archive ARM Template artifacts
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        if: env.NEED_DEPLOY == 'true'
         with:
           name: bicep
           path: ./day2/apps/infrastructure/bicep/scm-contactsapi.json
@@ -52,7 +54,7 @@ jobs:
 
       - name: Archive dotnetcore package artifacts
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        if: env.NEED_DEPLOY == 'true'
         with:
           name: scmcontactsapi
           path: './day2/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
@@ -62,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    if: github.event_name == 'push'
+    if: env.NEED_DEPLOY == 'true'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
@@ -115,7 +117,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
-    if: github.event_name == 'push'
+    if: env.NEED_DEPLOY == 'true'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
