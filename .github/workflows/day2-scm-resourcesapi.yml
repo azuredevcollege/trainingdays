@@ -15,6 +15,8 @@ on:
       - 'day2/apps/infrastructure/bicep/scm-resourcesapi.bicep'
       - 'day2/apps/dotnetcore/Scm.Resources/**'
 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -14,6 +14,8 @@ on:
       - 'day2/apps/infrastructure/bicep/scm-contactsapi.bicep'
       - 'day2/apps/dotnetcore/scm/**'
 
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest

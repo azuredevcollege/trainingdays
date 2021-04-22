@@ -38,6 +38,8 @@ var location = resourceGroup().location
 
 var resourceTag = {
   Environment: env
+  Application: 'SCM'
+  Component: 'SCM Resources'
 }
 
 var stgConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${stg.name};AccountKey=${listKeys(stg.id, stg.apiVersion).keys[0].value}'
