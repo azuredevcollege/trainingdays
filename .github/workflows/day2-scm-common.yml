@@ -5,12 +5,14 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+      - day2/apps/infrastructure/bicep/scm-common.bicep
+      - .github/workflows/day2-scm-common.yml
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+      - day2/apps/infrastructure/bicep/scm-common.bicep
+      - .github/workflows/day2-scm-common.yml
 
   workflow_dispatch:
 

@@ -5,15 +5,17 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-resourcesapi.bicep'
-      - 'day2/apps/dotnetcore/Scm.Resources/**'
+      - day2/apps/infrastructure/bicep/scm-resourcesapi.bicep
+      - day2/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day2-scm-resourcesapi.yml
 
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-resourcesapi.bicep'
-      - 'day2/apps/dotnetcore/Scm.Resources/**'
+      - day2/apps/infrastructure/bicep/scm-resourcesapi.bicep
+      - day2/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day2-scm-resourcesapi.yml
 
   workflow_dispatch:
 

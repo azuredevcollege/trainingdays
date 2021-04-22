@@ -5,14 +5,16 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-contactsapi.bicep'
-      - 'day2/apps/dotnetcore/scm/**'
+      - day2/apps/infrastructure/bicep/scm-contactsapi.bicep
+      - day2/apps/dotnetcore/scm/**
+      - .github/workflows/day2-scm-contactsapi.yml
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-contactsapi.bicep'
-      - 'day2/apps/dotnetcore/scm/**'
+      - day2/apps/infrastructure/bicep/scm-contactsapi.bicep
+      - day2/apps/dotnetcore/scm/**
+      - .github/workflows/day2-scm-contactsapi.yml
 
   workflow_dispatch:
 

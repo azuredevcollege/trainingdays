@@ -5,15 +5,17 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
-      - 'day2/apps/frontend/scmfe/**'
+      - day2/apps/infrastructure/bicep/scm-fe.bicep
+      - day2/apps/frontend/scmfe/**
+      - .github/workflows/day2-scm-fe.yml
 
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
-      - 'day2/apps/frontend/scmfe/**'
+      - day2/apps/infrastructure/bicep/scm-fe.bicep
+      - day2/apps/frontend/scmfe/**
+      - .github/workflows/day2-scm-fe.yml
   
   workflow_dispatch:
 
