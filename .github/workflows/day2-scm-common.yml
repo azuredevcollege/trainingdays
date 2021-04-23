@@ -20,7 +20,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+      NEED_DEPLOY: 'true'
   
     steps:
       - name: Checkout
@@ -115,7 +116,7 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
-      - name: Set deployment status in_progress
+      - name: Set deployment status failure
         uses: octokit/request-action@v2.x
         if: failure()
         with:
