@@ -42,11 +42,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    if: env.NEED_DEPLOY == 'true'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd2
+    if: env.NEED_DEPLOY == 'true'
 
     steps:
       - name: Download artifacts
