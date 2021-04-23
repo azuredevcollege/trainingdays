@@ -20,7 +20,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+      NEED_DEPLOY: 'true'
   
     steps:
       - name: Checkout
@@ -65,7 +66,7 @@ jobs:
         with:
           route: POST /repos/{repository}/deployments/{deployment_id}/statuses
           repository: ${{ github.repository }}
-          deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
+          deployment_id: ${{ fromJson(steps.create_deployment.outputs.data).id }}
           environment: ${{ env.ENV_NAME }}
           state: in_progress
         env:
