@@ -52,8 +52,7 @@ jobs:
         id: create_deployment
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/{owner}/{repository}/deployments
-          owner: ${{ github.repository_owner }}
+          route: POST /repos/{repository}/deployments
           repository: ${{ github.repository }}
           ref: ${{ github.ref }}
           environment: ${{ env.ENV_NAME }}
@@ -64,8 +63,7 @@ jobs:
       - name: Set deployment status in_progress
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
-          owner: ${{ github.repository_owner }}
+          route: POST /repos/{repository}/deployments/{deployment_id}/statuses
           repository: ${{ github.repository }}
           deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
           environment: ${{ env.ENV_NAME }}
@@ -105,8 +103,7 @@ jobs:
       - name: Set deployment status succcess
         uses: octokit/request-action@v2.x
         with:
-          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
-          owner: ${{ github.repository_owner }}
+          route: POST /repos/{repository}/deployments/{deployment_id}/statuses
           repository: ${{ github.repository }}
           deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
           environment: ${{ env.ENV_NAME }}
@@ -118,8 +115,7 @@ jobs:
         uses: octokit/request-action@v2.x
         if: failure()
         with:
-          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
-          owner: ${{ github.repository_owner }}
+          route: POST /repos/{repository}/deployments/{deployment_id}/statuses
           repository: ${{ github.repository }}
           deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
           environment: ${{ env.ENV_NAME }}
