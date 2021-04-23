@@ -19,14 +19,12 @@ on:
   
   workflow_dispatch:
 
-env:
-  NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: '14.x'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -63,10 +61,10 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    if: env.NEED_DEPLOY == 'true'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
@@ -128,10 +126,10 @@ jobs:
             az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe
 
   deploy-to-test:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
-    if: env.NEED_DEPLOY == 'true'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
