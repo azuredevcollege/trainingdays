@@ -58,6 +58,7 @@ jobs:
           ref: ${{ github.ref }}
           environment: ${{ env.ENV_NAME }}
           auto_merge: false
+          description: 'SCM Common used components deployment'
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
