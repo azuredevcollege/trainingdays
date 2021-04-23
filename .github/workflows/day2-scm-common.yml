@@ -38,7 +38,7 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
+    #if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
@@ -48,6 +48,31 @@ jobs:
       ENV_NAME: devd2
 
     steps:
+      - name: Create Deployment
+        id: create_deployment
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repository}/deployments
+          owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+          environment: ${{ env.ENV_NAME }}
+          auto_merge: false
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Set deployment status in_progress
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
+          owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
+          environment: ${{ env.ENV_NAME }}
+          state: in_progress
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
@@ -76,6 +101,31 @@ jobs:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./scm-common.json
           parameters: env=${{ env.ENV_NAME }}
+
+      - name: Set deployment status succcess
+        uses: octokit/request-action@v2.x
+        with:
+          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
+          owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
+          environment: ${{ env.ENV_NAME }}
+          state: success
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Set deployment status in_progress
+        uses: octokit/request-action@v2.x
+        if: failure()
+        with:
+          route: POST /repos/{owner}/{repository}/deployments/{deployment_id}/statuses
+          owner: ${{ github.repository_owner }}
+          repository: ${{ github.repository }}
+          deployment_id: ${{ fromJson(steps.create_deployment.output.data).id }}
+          environment: ${{ env.ENV_NAME }}
+          state: failure
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
   deploy-to-test:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
