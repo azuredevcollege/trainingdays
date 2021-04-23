@@ -20,8 +20,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-      NEED_DEPLOY: 'true'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
   
     steps:
       - name: Checkout
