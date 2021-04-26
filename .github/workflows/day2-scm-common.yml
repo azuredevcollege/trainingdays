@@ -5,18 +5,22 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+      - day2/apps/infrastructure/bicep/scm-common.bicep
+      - .github/workflows/day2-scm-common.yml
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-common.bicep'
+      - day2/apps/infrastructure/bicep/scm-common.bicep
+      - .github/workflows/day2-scm-common.yml
 
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
   
     steps:
       - name: Checkout
@@ -27,17 +31,17 @@ jobs:
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
           path: ./day2/apps/infrastructure/bicep/scm-common.json
           retention-days: 30
 
   deploy-to-dev:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
@@ -74,10 +78,10 @@ jobs:
           parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
-    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope

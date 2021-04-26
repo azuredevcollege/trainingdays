@@ -5,15 +5,17 @@ on:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
-      - 'day2/apps/frontend/scmfe/**'
+      - day2/apps/infrastructure/bicep/scm-fe.bicep
+      - day2/apps/frontend/scmfe/**
+      - .github/workflows/day2-scm-fe.yml
 
   pull_request:
     branches:
       - master
     paths:
-      - 'day2/apps/infrastructure/bicep/scm-fe.bicep'
-      - 'day2/apps/frontend/scmfe/**'
+      - day2/apps/infrastructure/bicep/scm-fe.bicep
+      - day2/apps/frontend/scmfe/**
+      - .github/workflows/day2-scm-fe.yml
   
   workflow_dispatch:
 
@@ -22,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: '14.x'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -32,7 +35,7 @@ jobs:
 
       - name: Archive ARM Templates artifacts
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        if: env.NEED_DEPLOY == 'true'
         with:
           name: bicep
           path: ./day2/apps/infrastructure/bicep/scm-fe.json
@@ -51,17 +54,17 @@ jobs:
 
       - name: Archive SCM Frontend
         uses: actions/upload-artifact@v2
-        if: github.event_name == 'push'
+        if: env.NEED_DEPLOY == 'true'
         with:
           name: scmfe
           path: ./day2/apps/frontend/scmfe/dist/
           retention-days: 30
 
   deploy-to-dev:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
-    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
@@ -123,10 +126,10 @@ jobs:
             az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe
 
   deploy-to-test:
+    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
-    if: github.event_name == 'push'
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
