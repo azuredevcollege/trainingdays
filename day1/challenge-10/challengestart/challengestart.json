@@ -44,6 +44,7 @@
         "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]",
         "PIPName": "[concat('pip-',variables('vmNamePrefix'))]",
+        "pipFQDN": "[concat('mylb',substring(uniqueString(resourceGroup().id),0,4))]",
         "availabilitySetName": "[concat('av-',variables('vmNamePrefix'))]"
     },
     "resources": [
@@ -175,6 +176,9 @@
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Dynamic",
                 "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "[variables('pipFQDN')]"
+                },
                 "ipTags": [
                 ]
             }
