@@ -16,7 +16,7 @@ function internalInit() {
     return new Promise((resolve, reject) => {
         try {
             logger.info('Create new subscription client.');
-            const client = mb.serviceBus.createSubscriptionClient('scmtopic', 'scmcontactvisitreport');
+            const client = mb.serviceBus.createSubscriptionClient('sbt-contacts', 'visitreports');
             logger.info('Create new receiver.');
             const receiver = client.createReceiver(ReceiveMode.peekLock);
             logger.info('Listening for new messages...');
