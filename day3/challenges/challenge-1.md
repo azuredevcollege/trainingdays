@@ -578,7 +578,7 @@ OFFSET 10 LIMIT 10
 
 ![Food Query](./images/FoodQuery4.png)
 
-> When OFFSET LIMIT is used in conjunction with an ORDER BY clause, the result set is produced by doing skip and take on the ordered values. If no ORDER BY clause is used, it will result in a deterministic order of values.
+> When OFFSET LIMIT is used in conjunction with an ORDER BY clause, the result set is produced by doing skip and take on the ordered values. If no ORDER BY clause is used, it will result in a non-deterministic order of values.
 
 With the features shown here, it's quite simple to implement **Paging and Sorting** in your applications.
 
