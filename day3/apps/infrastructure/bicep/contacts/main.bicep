@@ -23,3 +23,13 @@ module webapp 'webapp.bicep' = {
     resourceTag: resourceTag
   }
 }
+
+module database 'databases.bicep' = {
+  name: 'deployDatabase'
+  params: {
+    env: env
+    resourceTag: resourceTag
+    sqlUserName: sqlUserName
+    sqlUserPwd: sqlUserPwd
+  }
+}
