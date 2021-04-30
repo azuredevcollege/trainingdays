@@ -40,7 +40,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: bicep
-          path: ./day3/apps/infrastructure/bicep/search/searcsmain.json
+          path: ./day3/apps/infrastructure/bicep/search/searchmain.json
           retention-days: 30
       
       - name: Setup .NET Core
