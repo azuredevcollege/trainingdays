@@ -117,7 +117,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./resourcesmain.json
-          parameters: env=${{ env.ENV_NAME }} sku=B1
+          parameters: env=${{ env.ENV_NAME }}
 
       - name: Download scmresourcesapi artifacts
         uses: actions/download-artifact@v2
