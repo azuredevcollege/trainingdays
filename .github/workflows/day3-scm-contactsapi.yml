@@ -100,7 +100,10 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./main.json
-          parameters: env=${{ env.ENV_NAME }} sku=B1
+          parameters: |
+            env=${{ env.ENV_NAME }} 
+            sqlUserName=${{ secrets.SQL_USERNAME }}
+            sqlUserPwd=${{ secrets.SQL_PWD }}
 
       - name: Download scmcontactsapi artifacts
         uses: actions/download-artifact@v2
@@ -153,7 +156,10 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./main.json
-          parameters: env=${{ env.ENV_NAME }} sku=B1
+          parameters: |
+            env=${{ env.ENV_NAME }} 
+            sqlUserName=${{ secrets.SQL_USERNAME }}
+            sqlUserPwd=${{ secrets.SQL_PWD }}
 
       - name: Download scmcontactsapi artifacts
         uses: actions/download-artifact@v2
