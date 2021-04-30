@@ -33,3 +33,5 @@ module database 'databases.bicep' = {
     sqlUserPwd: sqlUserPwd
   }
 }
+
+output contactsApiWebAppName string = webapp.outputs.contactsApiWebAppName
