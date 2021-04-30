@@ -103,3 +103,5 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
     }
   }
 }
+
+output functionName string = functionName

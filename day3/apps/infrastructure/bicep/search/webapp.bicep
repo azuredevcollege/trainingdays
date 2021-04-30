@@ -65,3 +65,5 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
     }
   }
 }
+
+output webappName string = webAppName

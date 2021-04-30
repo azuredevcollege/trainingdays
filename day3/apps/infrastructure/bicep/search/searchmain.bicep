@@ -36,3 +36,6 @@ module function 'function.bicep' = {
     searchServiceAdminKey: search.outputs.adminkey
   }
 }
+
+output searchApiWebAppName string = webapp.outputs.webappName
+output indexerFunctionName string = function.outputs.functionName
