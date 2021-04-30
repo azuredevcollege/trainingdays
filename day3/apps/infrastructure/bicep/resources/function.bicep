@@ -76,7 +76,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'QueueName'
-          value: 'thumbnails'
+          value: sbqThumbnailsName
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
