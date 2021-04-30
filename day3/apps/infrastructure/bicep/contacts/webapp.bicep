@@ -6,6 +6,8 @@ param env string = 'devd3'
 @description('Resource tags object to use')
 param resourceTag object
 
+param sqlConnectionString string
+
 // ContactsAPI WebApp
 var webAppName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 // AppService Plan Windows
@@ -62,6 +64,13 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'EventServiceOptions__ServiceBusConnectionString'
           value: listKeys(sbtContactsSendRule.id, sbtContactsSendRule.apiVersion).primaryConnectionString
+        }
+      ]
+      connectionStrings:[
+        {
+          name: 'DefaultConnectionString'
+          connectionString: sqlConnectionString
+          type: 'SQLAzure'
         }
       ]
     }

@@ -46,3 +46,5 @@ resource sqlServer 'Microsoft.Sql/servers@2015-05-01-preview' = {
     }
   }
 }
+
+output connectionString string = 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;InitialCatalog=${sqlDbName};Persist Security Info=False;User ID=${sqlServer.properties.administratorLogin};Password=${sqlServer.properties.administratorLoginPassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'

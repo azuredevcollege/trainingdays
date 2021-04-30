@@ -16,14 +16,6 @@ var resourceTag = {
   Component: 'SCM-Contacts'
 }
 
-module webapp 'webapp.bicep' = {
-  name: 'deployWebAppContacts'
-  params: {
-    env: env
-    resourceTag: resourceTag
-  }
-}
-
 module database 'databases.bicep' = {
   name: 'deployDatabaseContacts'
   params: {
@@ -31,6 +23,15 @@ module database 'databases.bicep' = {
     resourceTag: resourceTag
     sqlUserName: sqlUserName
     sqlUserPwd: sqlUserPwd
+  }
+}
+
+module webapp 'webapp.bicep' = {
+  name: 'deployWebAppContacts'
+  params: {
+    env: env
+    resourceTag: resourceTag
+    sqlConnectionString: database.outputs.connectionString
   }
 }
 
