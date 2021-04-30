@@ -100,7 +100,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./main.json
-          parameters: |
+          parameters: >
             env=${{ env.ENV_NAME }} 
             sqlUserName=${{ secrets.SQL_USERNAME }}
             sqlUserPwd=${{ secrets.SQL_PWD }}
@@ -156,7 +156,7 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./main.json
-          parameters: |
+          parameters: >
             env=${{ env.ENV_NAME }} 
             sqlUserName=${{ secrets.SQL_USERNAME }}
             sqlUserPwd=${{ secrets.SQL_PWD }}
