@@ -95,3 +95,14 @@ module search 'search/searchmain.bicep' = {
     common
   ]
 }
+
+module frontend 'frontend/frontendmain.bicep' = {
+  name: 'deployFrontend'
+  params: {
+    env: env
+  }
+
+  dependsOn:[
+    common
+  ]
+}
