@@ -42,3 +42,5 @@ module function 'function.bicep' = {
     textAnalyticsKey: textanalytics.outputs.key
   }
 }
+
+output visitreportsWebAppName string = webapp.outputs.webAppName
