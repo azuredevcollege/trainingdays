@@ -53,7 +53,7 @@ module common 'common/main.bicep' = {
   }
 }
 
-module contacts 'contacts/main.bicep' = {
+module contacts 'contacts/contactsmain.bicep' = {
   name: 'deployContacts'
   params: {
     env: env
