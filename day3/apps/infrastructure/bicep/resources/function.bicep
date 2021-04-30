@@ -72,7 +72,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'ServiceBusConnectionString'
-          value: replace(listKeys(sbqThumbnailsListenRule.id, sbqThumbnailsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbqThumbnails}', '')
+          value: replace(listKeys(sbqThumbnailsListenRule.id, sbqThumbnailsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbqThumbnailsName}', '')
         }
         {
           name: 'QueueName'
