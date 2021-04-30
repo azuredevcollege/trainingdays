@@ -44,7 +44,7 @@ param sqlUserName string
 @description('Sql server\'s admin password')
 param sqlUserPwd string
 
-module common 'common/main.bicep' = {
+module common 'common/commonmain.bicep' = {
   name: 'deployCommon'
   params: {
     env: env
@@ -65,7 +65,7 @@ module contacts 'contacts/contactsmain.bicep' = {
   ]
 }
 
-module resources 'resources/main.bicep' = {
+module resources 'resources/resourcesmain.bicep' = {
   name: 'deployResources'
   params: {
     env: env
@@ -75,7 +75,7 @@ module resources 'resources/main.bicep' = {
   ]
 }
 
-module visitreports 'visitreports/main.bicep' = {
+module visitreports 'visitreports/visitreportsmain.bicep' = {
   name: 'deployVisitReports'
   params: {
     env: env
@@ -85,7 +85,7 @@ module visitreports 'visitreports/main.bicep' = {
   ]
 }
 
-module search 'search/main.bicep' = {
+module search 'search/searchmain.bicep' = {
   name: 'deploySearch'
   params: {
     env: env

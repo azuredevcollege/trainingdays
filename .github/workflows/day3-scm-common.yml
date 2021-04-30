@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Transpile bicep files
-        run: az bicep build -f ./day3/apps/infrastructure/bicep/common/main.bicep
+        run: az bicep build -f ./day3/apps/infrastructure/bicep/common/commonmain.bicep
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
@@ -76,7 +76,7 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./main.json
+          template: ./commonmain.json
           parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
@@ -116,5 +116,5 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./main.json
+          template: ./commonmain.json
           parameters: env=${{ env.ENV_NAME }}
