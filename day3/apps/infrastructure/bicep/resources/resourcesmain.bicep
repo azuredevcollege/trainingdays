@@ -34,3 +34,6 @@ module function 'function.bicep' = {
     storageConnectionString: storage.outputs.storageConnectionString
   }
 }
+
+output resourceApiWebAppName string = webapp.outputs.webappName
+output imageResizerFunctionName string = function.outputs.functionName
