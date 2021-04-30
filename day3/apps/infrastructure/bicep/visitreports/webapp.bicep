@@ -93,6 +93,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'SBCONTACTSTOPIC_CONNSTR'
           connectionString: listKeys(sbtContactsListenRule.id, sbtContactsListenRule.apiVersion).primaryConnectionString
+          type: 'Custom'
         }
       ]
     }
