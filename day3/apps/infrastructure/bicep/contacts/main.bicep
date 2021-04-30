@@ -17,7 +17,7 @@ var resourceTag = {
 }
 
 module webapp 'webapp.bicep' = {
-  name: 'deployWebApp'
+  name: 'deployWebAppContacts'
   params: {
     env: env
     resourceTag: resourceTag
@@ -25,7 +25,7 @@ module webapp 'webapp.bicep' = {
 }
 
 module database 'databases.bicep' = {
-  name: 'deployDatabase'
+  name: 'deployDatabaseContacts'
   params: {
     env: env
     resourceTag: resourceTag

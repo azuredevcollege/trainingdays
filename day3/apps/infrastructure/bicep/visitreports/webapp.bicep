@@ -71,6 +71,10 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
           value: appi.properties.InstrumentationKey
         }
         {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appi.properties.InstrumentationKey
+        }
+        {
           name: 'COSMOSDB'
           value: cosmos.properties.documentEndpoint
         }

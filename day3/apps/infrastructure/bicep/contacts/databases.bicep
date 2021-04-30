@@ -22,6 +22,7 @@ var location = resourceGroup().location
 resource sqlServer 'Microsoft.Sql/servers@2015-05-01-preview' = {
   name: sqlServerName
   location: location
+  tags: resourceTag
   properties: {
     administratorLogin: sqlUserName
     administratorLoginPassword: sqlUserPwd
@@ -30,6 +31,7 @@ resource sqlServer 'Microsoft.Sql/servers@2015-05-01-preview' = {
   resource contactsDb 'databases@2017-03-01-preview' = {
     name: sqlDbName
     location: location
+    tags: resourceTag
     sku: {
       name: 'Basic'
       tier: 'Basic'

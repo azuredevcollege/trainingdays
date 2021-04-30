@@ -18,9 +18,27 @@ module cosmos 'cosmosdb.bicep' = {
 }
 
 module webapp 'webapp.bicep' = {
-  name: 'deployWebApp'
+  name: 'deployWebAppReports'
   params:{
     env: env
     resourceTag: resourceTag
+  }
+}
+
+module textanalytics 'textanalytics.bicep' = {
+  name: 'deployTextAnalytics'
+  params: {
+    env: env
+    resourceTag: resourceTag
+  }
+}
+
+module function 'function.bicep' = {
+  name: 'deployFunctionTextAnalytics'
+  params: {
+    env: env
+    resourceTag: resourceTag
+    textAnalyticsEndpoint: textanalytics.outputs.endpoint
+    textAnalyticsKey: textanalytics.outputs.key
   }
 }

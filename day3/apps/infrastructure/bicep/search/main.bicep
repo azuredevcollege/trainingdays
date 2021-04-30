@@ -6,11 +6,11 @@ param env string = 'devd3'
 var resourceTag = {
   Environment: env
   Application: 'SCM'
-  Component: 'SCM-Resources'
+  Component: 'SCM-Search'
 }
 
-module storage 'storage.bicep' = {
-  name: 'deployStorageResources'
+module search 'search.bicep' = {
+  name: 'deployCognitiveSearch'
   params: {
     env: env
     resourceTag: resourceTag
@@ -18,19 +18,21 @@ module storage 'storage.bicep' = {
 }
 
 module webapp 'webapp.bicep' = {
-  name: 'deployWebAppResources'
+  name: 'deployeWebAppSearch'
   params: {
     env: env
     resourceTag: resourceTag
-    storageConnectionString: storage.outputs.storageConnectionString
+    searchServiceName: search.outputs.name
+    searchServiceAdminKey: search.outputs.adminkey
   }
 }
 
 module function 'function.bicep' = {
-  name: 'deployFunctionResources'
-  params: {
+  name: 'deployFunctionSearchIndexer'
+  params:{
     env: env
     resourceTag: resourceTag
-    storageConnectionString: storage.outputs.storageConnectionString
+    searchServiceName: search.outputs.name
+    searchServiceAdminKey: search.outputs.adminkey
   }
 }

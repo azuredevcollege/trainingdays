@@ -84,3 +84,14 @@ module visitreports 'visitreports/main.bicep' = {
     common
   ]
 }
+
+module search 'search/main.bicep' = {
+  name: 'deploySearch'
+  params: {
+    env: env
+  }
+
+  dependsOn: [
+    common
+  ]
+}

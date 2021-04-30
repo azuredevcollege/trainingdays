@@ -17,8 +17,6 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' existing = {
 
 resource cosmosDb 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2021-03-15' = {
   name: '${cosmos.name}/${cosmosDbName}'
-  location: location
-  tags: resourceTag
   properties:{
     resource: {
       id: cosmosDbName
