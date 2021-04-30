@@ -20,5 +20,6 @@ module storage 'storage.bicep' = {
 output applicationInsightsKey string = storage.outputs.applicationInsightsKey
 output contactsApiEndpoint string = storage.outputs.contactsApiEndpoint
 output resourcesApiEndpoint string = storage.outputs.resourcesApiEndpoint
+output searchApiEndpoint string = storage.outputs.searchApiEndpoint
 output storageAccountName string = storage.outputs.storageAccountName
 output storageAccountWebEndpoint string = storage.outputs.storageAccountWebEndpoint

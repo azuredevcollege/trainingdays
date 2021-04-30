@@ -116,8 +116,15 @@ jobs:
             az storage blob service-properties update --account-name ${{ steps.infrastructure.outputs.storageAccountName }} --static-website  --index-document index.html --404-document index.html
 
       - name: Patch SCM Frontend settings
-        run: |
-          echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
+        run: >
+          echo "var uisettings = 
+          { 
+          \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
+          \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
+          \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\"
+          \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
+          };" 
+          > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
         uses: Azure/CLI@v1
@@ -181,8 +188,15 @@ jobs:
             az storage blob service-properties update --account-name ${{ steps.infrastructure.outputs.storageAccountName }} --static-website  --index-document index.html --404-document index.html
 
       - name: Patch SCM Frontend settings
-        run: |
-          echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
+        run: >
+          echo "var uisettings = 
+          { 
+          \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
+          \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
+          \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\"
+          \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
+          };" 
+          > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
         uses: Azure/CLI@v1
