@@ -129,7 +129,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
-          package: ./scmresourcesapi
+          package: ./scmsearchapi
 
       - name: Download SearchIndexer artifacts
         uses: actions/download-artifact@v2
@@ -194,7 +194,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
-          package: ./scmresourcesapi
+          package: ./scmsearchapi
 
       - name: Download SearchIndexer artifacts
         uses: actions/download-artifact@v2
