@@ -1,0 +1,70 @@
+name: day3-scm-vistreportsapi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day3/apps/infrastructure/bicep/visitreports/**
+      - day3/apps/nodejs/visitreport/**
+      - day3/apps/nodejs/textanalytics/**
+      - .github/workflows/day3-scm-visitreportsapi.yml
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day3/apps/infrastructure/bicep/visitreports/**
+      - day3/apps/nodejs/visitreport/**
+      - day3/apps/nodejs/textanalytics/**
+      - .github/workflows/day3-scm-visitreportsapi.yml
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: '12.x'
+      API_PACKAGE_NAME: 'scmvisitreportsapi.zip'
+      TA_PACKAGE_NAME: 'textanalytics.zip'
+      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+      NEED_DEPLOY: 'true'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ./day3/apps/infrastructure/bicep/visitreports/visitreportsmain.bicep
+
+      - name: Archive ARM Templates artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: bicep
+          path: ./day3/apps/infrastructure/bicep/visitreports/visitreportsmain.json
+          retention-days: 30
+          
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }} 
+
+      - name: npm install VisitReport
+        working-directory: ./day3/apps/nodejs/visitreport
+        run: |
+          npm install
+
+      - name: zip VisitReport
+        working-directory: ./day3/apps/nodejs/visitreport
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
+      - name: Archive VisitReports
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: scmvisitrepportsapi
+          path: './day3/apps/nodejs/visitreport/${{ env.API_PACKAGE_NAME }}'
+          retention-days: 30
