@@ -14,7 +14,7 @@ var planDynamicWindowsName = 'plan-scm-win-dyn-${env}-${uniqueString(resourceGro
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var stForFunctiontName = 'stfn${env}${take(uniqueString(resourceGroup().id), 11)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
-var sbtContactsName = 'sbq-scm-thumbnails'
+var sbtContactsName = 'sbt-contacts'
 var location = resourceGroup().location
 var indexerName = 'scmcontacts'
 
