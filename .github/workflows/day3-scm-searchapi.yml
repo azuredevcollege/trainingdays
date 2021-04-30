@@ -64,7 +64,7 @@ jobs:
           retention-days: 30
 
       - name: Build and publish SCM SearchIndexer
-        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Search.Indexer
+        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
         run: |
           dotnet restore
           dotnet build --configuration Release
