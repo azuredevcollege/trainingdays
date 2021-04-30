@@ -36,7 +36,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: ./day3/apps/infrastructure/bicep/common/main.bicep
+          path: ./day3/apps/infrastructure/bicep/common/main.json
           retention-days: 30
 
   deploy-to-dev:
