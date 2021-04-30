@@ -140,3 +140,14 @@ jobs:
         with:
           app-name: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
+
+      - name: Download textAnalytics artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: textanalytics
+
+      - name: Deploy Textanalytics
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+          package: ./${{ env.TA_PACKAGE_NAME }}

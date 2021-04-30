@@ -44,3 +44,4 @@ module function 'function.bicep' = {
 }
 
 output visitreportsWebAppName string = webapp.outputs.webAppName
+output textanalyticsFunctionName string = function.outputs.functionName
