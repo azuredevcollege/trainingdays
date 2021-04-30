@@ -85,7 +85,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'ServiceBusConnectionString'
-          value: listKeys(sbtContactsListenRule.id, sbtContactsListenRule.apiVersion).primaryConnectionString
+          value: replace(listKeys(sbtContactsListenRule.id, sbtContactsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbtContactsName}', '')
         }
         {
           name: 'ContactIndexerOptions__IndexName'
