@@ -12,7 +12,7 @@ var location = resourceGroup().location
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var contactsApiName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var resourcesApiName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
-var searchApiName = 'app-searchapiapi-${env}-${uniqueString(resourceGroup().id)}'
+var searchApiName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName
