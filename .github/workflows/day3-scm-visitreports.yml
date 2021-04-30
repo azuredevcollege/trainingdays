@@ -45,7 +45,7 @@ jobs:
           name: bicep
           path: ./day3/apps/infrastructure/bicep/visitreports/visitreportsmain.json
           retention-days: 30
-          
+
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
@@ -67,4 +67,22 @@ jobs:
         with:
           name: scmvisitrepportsapi
           path: './day3/apps/nodejs/visitreport/${{ env.API_PACKAGE_NAME }}'
+          retention-days: 30
+
+      - name: npm install TextAnalytics
+        working-directory: ./day3/apps/nodejs/visitreport
+        run: |
+          npm install
+
+      - name: zip VisitReport
+        working-directory: ./day3/apps/nodejs/textanalytics
+        run: |
+          zip -r ${{ env.TA_PACKAGE_NAME }} ./*
+
+      - name: Archive TextAnalytics
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: textanalytics
+          path: './day3/apps/nodejs/textanalytics/${{ env.TA_PACKAGE_NAME }}'
           retention-days: 30
