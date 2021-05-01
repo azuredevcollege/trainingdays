@@ -123,6 +123,7 @@ jobs:
           \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
           \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
           \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
+          \"enableStats:\": true,
           \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
           };" 
           > ./scmfe/settings/settings.js
@@ -196,6 +197,7 @@ jobs:
           \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
           \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
           \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
+          \"enableStats:\": true,
           \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
           };" 
           > ./scmfe/settings/settings.js
