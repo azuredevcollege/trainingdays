@@ -13,6 +13,7 @@ var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var contactsApiName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var resourcesApiName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var searchApiName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
+var visitReportsApiName = 'app-visitreportsapi-${env}-${uniqueString(resourceGroup().id)}'
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName
@@ -35,5 +36,6 @@ output applicationInsightsKey string = appi.properties.InstrumentationKey
 output contactsApiEndpoint string = 'https://${contactsApiName}.azurewebsites.net'
 output resourcesApiEndpoint string = 'https://${resourcesApiName}.azurewebsites.net'
 output searchApiEndpoint string = 'https://${searchApiName}.azurewebsites.net'
+output visitReportsApiEndpoint string = 'https://${visitReportsApiName}.azurewebsites.net'
 output storageAccountName string = storageAccountName
 output storageAccountWebEndpoint string = stg.properties.primaryEndpoints.web
