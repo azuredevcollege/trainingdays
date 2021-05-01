@@ -24,7 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_PACKAGE_PATH: 'publish/scmresourcesapi'
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
       RESIZER_PACKAGE_PATH: 'publish/resizer'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
       #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
       NEED_DEPLOY: 'true'
 
@@ -55,12 +57,17 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
 
+      - name: Zip SCM ResourcesAPI
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
       - name: Archive api dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: scmresourcesapi
-          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}/'
+          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}'
           retention-days: 30
 
       - name: Build and publish SCM ImageResizer
@@ -70,12 +77,17 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
 
+      - name: Zip Image Resizer
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.RESIZER_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.RESIZER_PACKAGE_NAME }} ./*
+
       - name: Archive ImageResizer dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: imageresizer
-          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}/'
+          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}'
           retention-days: 30
 
   deploy-to-dev:
@@ -84,6 +96,8 @@ jobs:
     environment: day3-scm-dev
     needs: build
     env:
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd3
@@ -123,25 +137,23 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmresourcesapi
-          path: ./scmresourcesapi
 
       - name: Deploy SCM Resources API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
-          package: ./scmresourcesapi
+          package: ./${{ env.API_PACKAGE_NAME }}
 
       - name: Download imageresizer artifacts
         uses: actions/download-artifact@v2
         with:
           name: imageresizer
-          path: ./imageresizer
 
       - name: Deploy ImageResizer Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
-          package: ./imageresizer
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}
 
   deploy-to-test:
     #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -149,6 +161,8 @@ jobs:
     environment: day3-scm-test
     needs: deploy-to-dev
     env:
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd3
@@ -188,22 +202,20 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmresourcesapi
-          path: ./scmresourcesapi
 
       - name: Deploy SCM Resources API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
-          package: ./scmresourcesapi
+          package: ./${{ env.API_PACKAGE_NAME }}
 
       - name: Download imageresizer artifacts
         uses: actions/download-artifact@v2
         with:
           name: imageresizer
-          path: ./imageresizer
 
       - name: Deploy ImageResizer Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
-          package: ./imageresizer
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}

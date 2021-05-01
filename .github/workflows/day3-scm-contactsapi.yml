@@ -177,4 +177,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
-          package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
+          package: ./${{ env.DOTNETCORE_PACKAGE_NAME  }}
