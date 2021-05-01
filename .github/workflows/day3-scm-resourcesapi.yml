@@ -78,7 +78,7 @@ jobs:
           dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
 
       - name: Zip Image Resizer
-        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.RESIZER_PACKAGE_PATH }}
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}
         run: |
           zip -r ${{ env.RESIZER_PACKAGE_NAME }} ./*
 
