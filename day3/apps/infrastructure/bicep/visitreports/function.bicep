@@ -93,7 +93,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'ServiceBusConnectionString'
-          value: listKeys(sbtVisitReportsListenRule.id, sbtVisitReportsListenRule.apiVersion).primaryConnectionString
+          value: replace(listKeys(sbtVisitReportsListenRule.id, sbtVisitReportsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbtVisitReportsName}', '')
         }
         {
           name: 'COSMOSDB'
