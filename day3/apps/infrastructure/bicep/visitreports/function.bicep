@@ -60,6 +60,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
     siteConfig: {
       alwaysOn: true
       linuxFxVersion: 'NODE|12-lts'
+      nodeVersion: '12-lts'
       appSettings: [
         {
           name: 'AzureWebJobsStorage'

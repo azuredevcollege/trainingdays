@@ -61,6 +61,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
       alwaysOn: true
       use32BitWorkerProcess: false
       linuxFxVersion: 'NODE|12-lts'
+      nodeVersion: '12-lts'
       cors: {
         allowedOrigins: [
           '*'
