@@ -23,6 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
+      DOTNETCORE_PACKAGE_NAME: 'scmcontactsapi.zip'
       #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
       NEED_DEPLOY: 'true'
 
@@ -53,12 +54,17 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}'
 
+      - name: Zip SCM ContactsAPI
+        working-directory: ./day3/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.DOTNETCORE_PACKAGE_NAME }} ./*
+
       - name: Archive dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: scmcontactsapi
-          path: './day3/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/'
+          path: './day3/apps/dotnetcore/Scm/Adc.Scm.Api/${{ env.DOTNETCORE_PACKAGE_PATH }}/${{ env.DOTNETCORE_PACKAGE_NAME }}'
           retention-days: 30
 
   deploy-to-dev:
@@ -70,6 +76,7 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd3
+      DOTNETCORE_PACKAGE_NAME: 'scmcontactsapi.zip'
 
     steps:
       - name: Download bicep artifacts
@@ -109,13 +116,12 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmcontactsapi
-          path: ./scmcontactsapi
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
-          package: ./scmcontactsapi
+          package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
 
   deploy-to-test:
     #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -126,6 +132,7 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd3
+      DOTNETCORE_PACKAGE_NAME: 'scmcontactsapi.zip'
 
     steps:
       - name: Download bicep artifacts
@@ -165,10 +172,9 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmcontactsapi
-          path: ./scmcontactsapi
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
-          package: ./scmcontactsapi
+          package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
