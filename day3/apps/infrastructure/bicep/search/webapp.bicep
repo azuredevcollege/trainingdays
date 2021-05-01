@@ -10,7 +10,7 @@ param searchServiceName string
 param searchServiceAdminKey string
 
 // ContactsAPI WebApp
-var webAppName = 'app-searchsapi-${env}-${uniqueString(resourceGroup().id)}'
+var webAppName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
 // AppService Plan Windows
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 // ApplicationInsights name
