@@ -58,6 +58,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
     httpsOnly: true
     clientAffinityEnabled: false
     siteConfig: {
+      alwaysOn: true
       appSettings: [
         {
           name: 'AzureWebJobsStorage'

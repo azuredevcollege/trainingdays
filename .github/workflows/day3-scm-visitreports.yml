@@ -70,7 +70,7 @@ jobs:
           retention-days: 30
 
       - name: npm install TextAnalytics
-        working-directory: ./day3/apps/nodejs/visitreport
+        working-directory: ./day3/apps/nodejs/textanalytics
         run: |
           npm install
 
