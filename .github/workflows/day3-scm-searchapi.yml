@@ -19,12 +19,16 @@ on:
 
   workflow_dispatch:
 
+env:
+  API_PACKAGE_NAME: 'scmsearchapi.zip'
+  INDEXER_PACKAGE_NAME: 'indexer.zip'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       API_PACKAGE_PATH: 'publish/scmsearchapi'
-      RESIZER_PACKAGE_PATH: 'publish/indexer'
+      INDEXER_PACKAGE_PATH: 'publish/indexer'
       #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
       NEED_DEPLOY: 'true'
 
@@ -55,12 +59,17 @@ jobs:
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
 
+      - name: Zip SCM Search API
+        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
       - name: Archive api dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: scmsearchapi
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}/'
+          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}'
           retention-days: 30
 
       - name: Build and publish SCM SearchIndexer
@@ -68,14 +77,19 @@ jobs:
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
+          dotnet publish -c Release -o './${{ env.INDEXER_PACKAGE_PATH }}'
+
+      - name: Zip SCM SearchIndexer
+        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.INDEXER_PACKAGE_NAME }} ./*
 
       - name: Archive SearchIndexer dotnetcore package artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: indexer
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.RESIZER_PACKAGE_PATH }}/'
+          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}/${{ env.INDEXER_PACKAGE_NAME }}'
           retention-days: 30
 
   deploy-to-dev:
@@ -123,25 +137,23 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmsearchapi
-          path: ./scmsearchapi
 
       - name: Deploy SCM Search API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
-          package: ./scmsearchapi
+          package: ./${{ env.API_PACKAGE_NAME }}
 
       - name: Download SearchIndexer artifacts
         uses: actions/download-artifact@v2
         with:
           name: indexer
-          path: ./indexer
 
       - name: Deploy ImageResizer Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
-          package: ./indexer
+          package: ./${{ env.INDEXER_PACKAGE_NAME }}
 
   deploy-to-test:
     #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -188,22 +200,20 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: scmsearchapi
-          path: ./scmsearchapi
 
       - name: Deploy SCM Search API
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
-          package: ./scmsearchapi
+          package: ./${{ env.API_PACKAGE_NAME }}
 
       - name: Download SearchIndexer artifacts
         uses: actions/download-artifact@v2
         with:
           name: indexer
-          path: ./indexer
 
       - name: Deploy ImageResizer Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
-          package: ./indexer
+          package: ./${{ env.INDEXER_PACKAGE_NAME }}
