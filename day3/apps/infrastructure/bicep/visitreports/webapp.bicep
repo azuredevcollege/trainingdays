@@ -52,6 +52,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
   name: webAppName
   location: location
   tags: resourceTag
+  kind: 'app,linux'
   properties: {
     serverFarmId: planLinux.id
     httpsOnly: true

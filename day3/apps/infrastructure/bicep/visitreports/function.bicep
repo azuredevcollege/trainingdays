@@ -52,29 +52,18 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
   name: functionName
   location: location
   tags: resourceTag
-  kind: 'functionapp'
+  kind: 'functionapp,linux'
   properties: {
     serverFarmId: planLinux.id
     httpsOnly: true
     clientAffinityEnabled: false
     siteConfig: {
       alwaysOn: true
+      linuxFxVersion: 'NODE|12-lts'
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
           value: stgForFunctionConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: stgForFunctionConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: functionName
-        }
-        {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '1'
         }
         {
           name: 'FUNCTIONS_WORKER_RUNTIME'
