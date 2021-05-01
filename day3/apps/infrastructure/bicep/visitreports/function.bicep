@@ -70,10 +70,6 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
           value: 'node'
         }
         {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~10'
-        }
-        {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~3'
         }
