@@ -21,7 +21,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env: 
+    env:
       DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
       DOTNETCORE_PACKAGE_NAME: 'scmcontactsapi.zip'
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
@@ -32,7 +32,7 @@ jobs:
 
       - name: Transpile bicep files
         run: az bicep build -f ./day3/apps/infrastructure/bicep/contacts/contactsmain.bicep
-      
+
       - name: Archive ARM Template artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
@@ -45,7 +45,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.x
-      
+
       - name: Build and publish SCM ContactsAPI
         working-directory: ./day3/apps/dotnetcore/Scm/Adc.Scm.Api
         run: |
@@ -82,7 +82,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: bicep
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -138,7 +138,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: bicep
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:

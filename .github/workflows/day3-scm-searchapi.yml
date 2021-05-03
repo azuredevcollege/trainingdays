@@ -45,12 +45,12 @@ jobs:
           name: bicep
           path: ./day3/apps/infrastructure/bicep/search/searchmain.json
           retention-days: 30
-      
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.x
-      
+
       - name: Build and publish SCM Search API
         working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
         run: |
@@ -100,7 +100,7 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd3
-    
+
     steps:
       - name: Login via Azure CLI
         uses: azure/login@v1
@@ -163,7 +163,7 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd3
-    
+
     steps:
       - name: Login via Azure CLI
         uses: azure/login@v1

@@ -16,7 +16,7 @@ on:
       - day3/apps/infrastructure/bicep/frontend/**
       - day3/apps/frontend/scmfe/**
       - .github/workflows/day3-scm-frontend.yml
-  
+
   workflow_dispatch:
 
 jobs:
@@ -44,13 +44,13 @@ jobs:
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ env.NODE_VERSION }} 
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: npm install and build
         working-directory: ./day3/apps/frontend/scmfe
         run: |
           npm install
-          npm run build 
+          npm run build
 
       - name: Archive SCM Frontend
         uses: actions/upload-artifact@v2
@@ -75,7 +75,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: bicep
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -107,7 +107,7 @@ jobs:
           name: scmfe
           path: ./scmfe
 
-      - name: Enable static website hosting 
+      - name: Enable static website hosting
         uses: Azure/CLI@v1
         with:
           inlineScript: |
@@ -149,7 +149,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: bicep
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -181,7 +181,7 @@ jobs:
           name: scmfe
           path: ./scmfe
 
-      - name: Enable static website hosting 
+      - name: Enable static website hosting
         uses: Azure/CLI@v1
         with:
           inlineScript: |
