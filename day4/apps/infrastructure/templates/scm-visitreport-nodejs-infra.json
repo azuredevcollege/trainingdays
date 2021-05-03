@@ -37,7 +37,7 @@
         }
     },
     "variables": {
-        "appServicePlanName": "linux-function-plan",
+        "appServicePlanName": "[concat(parameters('webAppName'), '-plan')]",
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmVisitReportTopicSendAuthRule": "scmvrtopicsend",

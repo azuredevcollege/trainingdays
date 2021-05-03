@@ -1,37 +1,46 @@
-name: Frontend
+name: Day4 - Frontend
 
 on:
   push:
-    branches: [features/github-actions]
+    branches: [ master ]
     paths:
-      - .github/workflows/frontend.yaml
-      - day4/apps/infrastructure/templates/scm-fe.json
+      - .github/workflows/day4-scm-frontend.yaml
       - day4/apps/frontend/scm-fe/**
+      - day4/apps/infrastructure/bicep/**
+  pull_request:
+    branches: [ master ]
+    paths:
+      - .github/workflows/day4-scm-frontend.yaml
+      - day4/apps/frontend/scm-fe/**
+      - day4/apps/infrastructure/bicep/**
 
 env:
-  NODE_VERSION: '12'
-  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
-  STORAGE_ACCOUNT_NAME: scmcontactswebsite
-  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
-  CONTACTS_ENDPOINT: https://scm-contacts-api-github.azurewebsites.net
-  RESOURCES_ENDPOINT: https://scm-resources-api-github.azurewebsites.net
-  SEARCH_ENDPOINT: https://scm-search-api-github.azurewebsites.net
-  VISITREPORTS_ENDPOINT: https://scm-visitreport-api-github.azurewebsites.net
+  RESOURCE_GROUP_NAME_PREFIX: SCM-DEVD4
+  TEMPLATE_NAME: frontendmain
+  ENVIRONMENT_NAME: dev
+  NODE_VERSION: 14
 
 jobs:
   extract-arm-template:
+    if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
+    env:
+      TEMPLATE_PATH: day4/apps/infrastructure/bicep/frontend
     steps:
       - uses: actions/checkout@v2
-      - name: Upload the ARM Template as build artifact
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.TEMPLATE_NAME }}.bicep
+        working-directory: ${{ env.TEMPLATE_PATH }}
+      - name: Upload build artifact
         uses: actions/upload-artifact@v2
         with:
           name: template
-          path: day4/apps/infrastructure/templates/scm-fe.json
+          path: ${{ env.TEMPLATE_PATH }}/${{env.TEMPLATE_NAME }}.json
           if-no-files-found: error
           retention-days: 90
 
   build:
+    if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     name: Build Vue.js static website
     runs-on: ubuntu-latest
     steps:
@@ -62,10 +71,20 @@ jobs:
           retention-days: 90
 
   deploy-arm-template:
+    if: ${{ github.ref == 'refs/heads/master' && github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
     needs: extract-arm-template
-    environment: development
+    environment: day4-scm-dev
+    outputs:
+      applicationInsightsKey: ${{ steps.arm.outputs.applicationInsightsKey }}
+      contactsApiEndpoint: ${{ steps.arm.outputs.contactsApiEndpoint }}
+      resourcesApiEndpoint: ${{ steps.arm.outputs.resourcesApiEndpoint }}
+      searchApiEndpoint: ${{ steps.arm.outputs.searchApiEndpoint }}
+      visitReportsEndpoint: ${{ steps.arm.outputs.visitReportsEndpoint }}
+      storageAccountName: ${{ steps.arm.outputs.storageAccountName }}
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
       - name: Download the arm template
         uses: actions/download-artifact@v2
         with:
@@ -74,27 +93,29 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy Azure Resource Manager (ARM) Template
+        id: arm
         uses: Azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-fe.json
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME_PREFIX }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}
+          template: ${{env.TEMPLATE_NAME }}.json
           deploymentMode: Incremental
-          parameters: storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
+          parameters: > # Lines are joined with spaces
+            env=${{ env.ENVIRONMENT_NAME }}
       - name: Enable static website hosting
         run: > # The following lines are joined by a space ( ) character
           az storage blob service-properties update
-          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
+          --account-name ${{ steps.arm.outputs.storageAccountName }}
           --static-website
           --index-document index.html
           --404-document index.html
 
   deploy-static-website:
+    if: ${{ github.ref == 'refs/heads/master' && github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
     needs:
       - build
       - deploy-arm-template
-    environment: development
+    environment: day4-scm-dev
     steps:
       - name: Download the static website
         uses: actions/download-artifact@v2
@@ -115,11 +136,11 @@ jobs:
           FILE_CONTENT: | # Lines joined with newline (\n)
             var uisettings = {
               "enableStats": true,
-              "endpoint": "${{ env.CONTACTS_ENDPOINT }}", 
-              "resourcesEndpoint": "${{ env.RESOURCES_ENDPOINT }}",
-              "searchEndpoint": "${{env.SEARCH_ENDPOINT }}",
-              "reportsEndpoint": "${{ env.VISITREPORTS_ENDPOINT }}",
-              "aiKey": "${{ env.APPLICATION_INSIGHTS_KEY }}"
+              "endpoint": "${{ needs.deploy-arm-template.outputs.contactsApiEndpoint }}", 
+              "resourcesEndpoint": "${{ needs.deploy-arm-template.outputs.resourcesApiEndpoint }}",
+              "searchEndpoint": "${{ needs.deploy-arm-template.outputs.searchApiEndpoint }}",
+              "reportsEndpoint": "${{ needs.deploy-arm-template.outputs.visitReportsEndpoint }}",
+              "aiKey": "${{ needs.deploy-arm-template.outputs.applicationInsightsKey }}"
             }
 
       - name: Enable static website hosting
@@ -127,4 +148,4 @@ jobs:
           az storage blob upload-batch
           -s ./
           -d '$web'
-          --account-name ${{ env.STORAGE_ACCOUNT_NAME }}
+          --account-name ${{ needs.deploy-arm-template.outputs.storageAccountName }}

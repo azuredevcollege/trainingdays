@@ -6,34 +6,22 @@ param env string = 'devd4'
 @description('Resource tags object to use')
 param resourceTag object
 
-param sqlConnectionString string
+param searchServiceName string
+param searchServiceAdminKey string
 
 // ContactsAPI WebApp
-var webAppName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
+var webAppName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
 // AppService Plan Windows
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 // ApplicationInsights name
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-// ServiceBus names
-var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
-var sbtContactsName = 'sbt-contacts'
-
+// RG
 var location = resourceGroup().location
+// Search
+var indexerName = 'scmcontacts'
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName
-}
-
-resource sb 'Microsoft.ServiceBus/namespaces@2017-04-01' existing = {
-  name: sbName
-}
-
-resource sbtContacts 'Microsoft.ServiceBus/namespaces/topics@2017-04-01' existing = {
-  name: '${sb.name}/${sbtContactsName}'
-}
-
-resource sbtContactsSendRule 'Microsoft.ServiceBus/namespaces/topics/authorizationRules@2017-04-01' existing = {
-  name: '${sbtContacts.name}/send'
 }
 
 resource appplan 'Microsoft.Web/serverfarms@2020-12-01' existing = {
@@ -66,19 +54,20 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
           value: appi.properties.InstrumentationKey
         }
         {
-          name: 'EventServiceOptions__ServiceBusConnectionString'
-          value: listKeys(sbtContactsSendRule.id, sbtContactsSendRule.apiVersion).primaryConnectionString
+          name: 'ContactSearchOptions__IndexName'
+          value: indexerName
         }
-      ]
-      connectionStrings: [
         {
-          name: 'DefaultConnectionString'
-          connectionString: sqlConnectionString
-          type: 'SQLAzure'
+          name: 'ContactSearchOptions__ServiceName'
+          value: searchServiceName
+        }
+        {
+          name: 'ContactSearchOptions__AdminApiKey'
+          value: searchServiceAdminKey
         }
       ]
     }
   }
 }
 
-output contactsApiWebAppName string = webAppName
+output webappName string = webAppName

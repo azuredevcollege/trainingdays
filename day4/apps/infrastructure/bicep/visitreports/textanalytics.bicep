@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -22,3 +22,5 @@ resource textAnalytics 'Microsoft.CognitiveServices/accounts@2017-04-18' = {
   }
 }
 
+output endpoint string = textAnalytics.properties.endpoint
+output key string = listKeys(textAnalytics.id, textAnalytics.apiVersion).key1

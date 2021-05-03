@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -55,6 +55,10 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
       }
       appSettings: [
         {
+          name: 'WEBSITE_RUN_FROM_PACKAGE'
+          value: '1'
+        }
+        {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appi.properties.InstrumentationKey
         }
@@ -90,3 +94,5 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
     }
   }
 }
+
+output webappName string = webAppName

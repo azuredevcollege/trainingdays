@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -34,3 +34,6 @@ module function 'function.bicep' = {
     storageConnectionString: storage.outputs.storageConnectionString
   }
 }
+
+output resourceApiWebAppName string = webapp.outputs.webappName
+output imageResizerFunctionName string = function.outputs.functionName

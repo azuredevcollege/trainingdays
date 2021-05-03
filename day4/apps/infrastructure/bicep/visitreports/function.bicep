@@ -1,10 +1,13 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
 
 @description('Resource tags object to use')
 param resourceTag object
+
+param textAnalyticsEndpoint string
+param textAnalyticsKey string
 
 var functionName = 'func-textanalytics-${env}-${uniqueString(resourceGroup().id)}'
 var planLinuxName = 'plan-scm-linux-${env}-${uniqueString(resourceGroup().id)}'
@@ -16,12 +19,6 @@ var location = resourceGroup().location
 var cosmosAccount = 'cosmos-scm-${env}-${uniqueString(resourceGroup().id)}'
 
 var stgForFunctionConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${stgForFunction.name};AccountKey=${listKeys(stgForFunction.id, stgForFunction.apiVersion).keys[0].value}'
-
-var textAnalyticsName = 'cog-textanalytics-${env}-${uniqueString(resourceGroup().id)}'
-
-resource textAnalytics 'Microsoft.CognitiveServices/accounts@2017-04-18' existing = {
-  name: textAnalyticsName
-}
 
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' existing = {
   name: cosmosAccount
@@ -55,36 +52,23 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
   name: functionName
   location: location
   tags: resourceTag
-  kind: 'functionapp'
+  kind: 'functionapp,linux'
   properties: {
     serverFarmId: planLinux.id
     httpsOnly: true
     clientAffinityEnabled: false
     siteConfig: {
+      alwaysOn: true
+      linuxFxVersion: 'NODE|12-lts'
+      nodeVersion: '12-lts'
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
           value: stgForFunctionConnectionString
         }
         {
-          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
-          value: stgForFunctionConnectionString
-        }
-        {
-          name: 'WEBSITE_CONTENTSHARE'
-          value: functionName
-        }
-        {
-          name: 'WEBSITE_RUN_FROM_PACKAGE'
-          value: '1'
-        }
-        {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'node'
-        }
-        {
-          name: 'WEBSITE_NODE_DEFAULT_VERSION'
-          value: '~10'
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
@@ -96,7 +80,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'ServiceBusConnectionString'
-          value: listKeys(sbtVisitReportsListenRule.id, sbtVisitReportsListenRule.apiVersion).primaryConnectionString
+          value: replace(listKeys(sbtVisitReportsListenRule.id, sbtVisitReportsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbtVisitReportsName}', '')
         }
         {
           name: 'COSMOSDB'
@@ -108,13 +92,15 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'TA_SUBSCRIPTIONENDPOINT'
-          value: textAnalytics.properties.endpoint
+          value: textAnalyticsEndpoint
         }
         {
           name: 'TA_SUBSCRIPTION_KEY'
-          value: listKeys(textAnalytics.id, textAnalytics.apiVersion).key1
+          value: textAnalyticsKey
         }
       ]
     }
   }
 }
+
+output functionName string = functionName

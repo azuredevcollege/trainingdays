@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -19,24 +19,26 @@ var sqlDbName = 'sqldb-scm-contacts-${env}-${uniqueString(resourceGroup().id)}'
 // location and tags
 var location = resourceGroup().location
 
-resource sqlServer 'Microsoft.Sql/servers@2015-05-01-preview' = {
+resource sqlServer 'Microsoft.Sql/servers@2020-11-01-preview' = {
   name: sqlServerName
   location: location
+  tags: resourceTag
   properties: {
     administratorLogin: sqlUserName
     administratorLoginPassword: sqlUserPwd
     version: '12.0'
   }
-  resource contactsDb 'databases@2017-03-01-preview' = {
+  resource contactsDb 'databases@2020-11-01-preview' = {
     name: sqlDbName
     location: location
+    tags: resourceTag
     sku: {
       name: 'Basic'
       tier: 'Basic'
       capacity: 5
     }
   }
-  resource fwRule 'firewallRules@2015-05-01-preview' = {
+  resource fwRule 'firewallRules@2020-11-01-preview' = {
     name: 'AllowWindowsAzureIps'
     properties: {
       startIpAddress: '0.0.0.0'
@@ -44,3 +46,5 @@ resource sqlServer 'Microsoft.Sql/servers@2015-05-01-preview' = {
     }
   }
 }
+
+output connectionString string = 'Server=tcp:${sqlServer.properties.fullyQualifiedDomainName},1433;Initial Catalog=${sqlDbName};Persist Security Info=False;User ID=${sqlServer.properties.administratorLogin};Password=${sqlUserPwd};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'

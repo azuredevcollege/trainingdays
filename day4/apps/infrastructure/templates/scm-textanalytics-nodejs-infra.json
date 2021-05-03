@@ -29,30 +29,12 @@
         },
         "taname": {
             "type": "string"
-        },
-        "tatier": {
-            "type": "string",
-            "defaultValue": "F0"
-        },
-        "sku": {
-            "type": "string",
-            "defaultValue": "Standard",
-            "metadata": {
-                "description": "The SKU of App Service Plan, default is Standard"
-            }
-        },
-        "skuCode": {
-            "type": "string",
-            "defaultValue": "S1",
-            "metadata": {
-                "description": "The SKU of App Service Plan, default is S1"
-            }
         }
     },
     "variables": {
         "taFunctionName": "[parameters('functionAppName')]",
         "taEndpoint": "[concat('https://', parameters('taname'), '.cognitiveservices.azure.com')]",
-        "consumpltionPlanName": "linux-function-plan",
+        "consumpltionPlanName": "[concat(parameters('functionAppName'), '-plan')]",
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmVisitReportTopicListenAuthRule": "scmvrtopiclisten",
@@ -66,13 +48,14 @@
             "name": "[variables('consumpltionPlanName')]",
             "location": "[variables('location')]",
             "kind": "linux",
+            "sku": {
+                "name": "Y1",
+                "tier": "Dynamic"
+            },
             "properties": {
                 "name": "[variables('consumpltionPlanName')]",
+                "computeMode": "Dynamic",
                 "reserved": true
-            },
-            "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
             }
         },
         {
@@ -130,31 +113,6 @@
                         }
                     ]
                 }
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts",
-            "name": "[parameters('storageAccountName')]",
-            "location": "[variables('location')]",
-            "apiVersion": "2019-04-01",
-            "sku": {
-                "name": "Standard_LRS"
-            },
-            "kind": "StorageV2",
-            "properties": {
-            }
-        },
-        {
-            "type": "Microsoft.CognitiveServices/accounts",
-            "apiVersion": "2017-04-18",
-            "name": "[parameters('taname')]",
-            "location": "[variables('location')]",
-            "sku": {
-                "name": "[parameters('tatier')]"
-            },
-            "kind": "TextAnalytics",
-            "properties": {
-                "customSubDomainName": "[parameters('taname')]"
             }
         }
     ],

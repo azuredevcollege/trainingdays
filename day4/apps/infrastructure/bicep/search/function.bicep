@@ -6,16 +6,17 @@ param env string = 'devd4'
 @description('Resource tags object to use')
 param resourceTag object
 
-@description('Connection string to resource storage')
-param storageConnectionString string
+param searchServiceName string
+param searchServiceAdminKey string
 
-var functionName = 'func-imageresizer-${env}-${uniqueString(resourceGroup().id)}'
+var functionName = 'func-searchindexer-${env}-${uniqueString(resourceGroup().id)}'
 var planDynamicWindowsName = 'plan-scm-win-dyn-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var stForFunctiontName = 'stfn${env}${take(uniqueString(resourceGroup().id), 11)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
-var sbqThumbnailsName = 'sbq-scm-thumbnails'
+var sbtContactsName = 'sbt-contacts'
 var location = resourceGroup().location
+var indexerName = 'scmcontacts'
 
 var stgForFunctionConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${stgForFunction.name};AccountKey=${listKeys(stgForFunction.id, stgForFunction.apiVersion).keys[0].value}'
 
@@ -35,12 +36,12 @@ resource sb 'Microsoft.ServiceBus/namespaces@2017-04-01' existing = {
   name: sbName
 }
 
-resource sbqThumbnails 'Microsoft.ServiceBus/namespaces/queues@2017-04-01' existing = {
-  name: '${sb.name}/${sbqThumbnailsName}'
+resource sbtContacts 'Microsoft.ServiceBus/namespaces/topics@2017-04-01' existing = {
+  name: '${sbName}/${sbtContactsName}'
 }
 
-resource sbqThumbnailsListenRule 'Microsoft.ServiceBus/namespaces/queues/authorizationRules@2017-04-01' existing = {
-  name: '${sbqThumbnails.name}/listen'
+resource sbtContactsListenRule 'Microsoft.ServiceBus/namespaces/topics/authorizationRules@2017-04-01' existing = {
+  name: '${sbtContacts.name}/listen'
 }
 
 resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
@@ -71,14 +72,6 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
           value: '1'
         }
         {
-          name: 'ServiceBusConnectionString'
-          value: replace(listKeys(sbqThumbnailsListenRule.id, sbqThumbnailsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbqThumbnailsName}', '')
-        }
-        {
-          name: 'QueueName'
-          value: sbqThumbnailsName
-        }
-        {
           name: 'FUNCTIONS_WORKER_RUNTIME'
           value: 'dotnet'
         }
@@ -87,16 +80,24 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
           value: '~3'
         }
         {
-          name: 'ImageProcessorOptions__StorageAccountConnectionString'
-          value: storageConnectionString
-        }
-        {
-          name: 'ImageProcessorOptions__ImageWidth'
-          value: '100'
-        }
-        {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appi.properties.InstrumentationKey
+        }
+        {
+          name: 'ServiceBusConnectionString'
+          value: replace(listKeys(sbtContactsListenRule.id, sbtContactsListenRule.apiVersion).primaryConnectionString, 'EntityPath=${sbtContactsName}', '')
+        }
+        {
+          name: 'ContactIndexerOptions__IndexName'
+          value: indexerName
+        }
+        {
+          name: 'ContactIndexerOptions__ServiceName'
+          value: searchServiceName
+        }
+        {
+          name: 'ContactIndexerOptions__AdminApiKey'
+          value: searchServiceAdminKey
         }
       ]
     }

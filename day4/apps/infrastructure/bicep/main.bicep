@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -37,14 +37,11 @@ param planWindowsSku string = 'B1'
 ])
 param planLinuxSku string = 'B1'
 
-@description('Sql server\'s admin login name')
-param sqlUserName string
-
 @secure()
 @description('Sql server\'s admin password')
 param sqlUserPwd string
 
-module common 'common/main.bicep' = {
+module common 'common/commonmain.bicep' = {
   name: 'deployCommon'
   params: {
     env: env
@@ -53,11 +50,10 @@ module common 'common/main.bicep' = {
   }
 }
 
-module contacts 'contacts/main.bicep' = {
+module contacts 'contacts/contactsmain.bicep' = {
   name: 'deployContacts'
   params: {
     env: env
-    sqlUserName: sqlUserName
     sqlUserPwd: sqlUserPwd
   }
   dependsOn: [
@@ -65,7 +61,9 @@ module contacts 'contacts/main.bicep' = {
   ]
 }
 
-module resources 'resources/main.bicep' = {
+output sqlUserName string = contacts.outputs.sqlUserName
+
+module resources 'resources/resourcesmain.bicep' = {
   name: 'deployResources'
   params: {
     env: env
@@ -75,11 +73,33 @@ module resources 'resources/main.bicep' = {
   ]
 }
 
-module visitreports 'visitreports/main.bicep' = {
+module visitreports 'visitreports/visitreportsmain.bicep' = {
   name: 'deployVisitReports'
   params: {
     env: env
   }
+  dependsOn: [
+    common
+  ]
+}
+
+module search 'search/searchmain.bicep' = {
+  name: 'deploySearch'
+  params: {
+    env: env
+  }
+
+  dependsOn: [
+    common
+  ]
+}
+
+module frontend 'frontend/frontendmain.bicep' = {
+  name: 'deployFrontend'
+  params: {
+    env: env
+  }
+
   dependsOn: [
     common
   ]

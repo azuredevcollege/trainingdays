@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -10,7 +10,7 @@ var resourceTag = {
 }
 
 module cosmos 'cosmosdb.bicep' = {
-  name: 'deployCosmosvr'
+  name: 'deployCosmos'
   params: {
     env: env
     resourceTag: resourceTag
@@ -18,7 +18,7 @@ module cosmos 'cosmosdb.bicep' = {
 }
 
 module webapp 'webapp.bicep' = {
-  name: 'deployWebAppvr'
+  name: 'deployWebAppReports'
   params: {
     env: env
     resourceTag: resourceTag
@@ -32,3 +32,16 @@ module textanalytics 'textanalytics.bicep' = {
     resourceTag: resourceTag
   }
 }
+
+module function 'function.bicep' = {
+  name: 'deployFunctionTextAnalytics'
+  params: {
+    env: env
+    resourceTag: resourceTag
+    textAnalyticsEndpoint: textanalytics.outputs.endpoint
+    textAnalyticsKey: textanalytics.outputs.key
+  }
+}
+
+output visitreportsWebAppName string = webapp.outputs.webAppName
+output textanalyticsFunctionName string = function.outputs.functionName

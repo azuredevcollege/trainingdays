@@ -1,4 +1,4 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
@@ -52,6 +52,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
   name: webAppName
   location: location
   tags: resourceTag
+  kind: 'app,linux'
   properties: {
     serverFarmId: planLinux.id
     httpsOnly: true
@@ -60,6 +61,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
       alwaysOn: true
       use32BitWorkerProcess: false
       linuxFxVersion: 'NODE|12-lts'
+      nodeVersion: '12-lts'
       cors: {
         allowedOrigins: [
           '*'
@@ -68,6 +70,10 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
       appSettings: [
         {
           name: 'APPINSIGHTS_KEY'
+          value: appi.properties.InstrumentationKey
+        }
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appi.properties.InstrumentationKey
         }
         {
@@ -89,8 +95,11 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
         {
           name: 'SBCONTACTSTOPIC_CONNSTR'
           connectionString: listKeys(sbtContactsListenRule.id, sbtContactsListenRule.apiVersion).primaryConnectionString
+          type: 'Custom'
         }
       ]
     }
   }
 }
+
+output webAppName string = webAppName

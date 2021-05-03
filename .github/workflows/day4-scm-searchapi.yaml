@@ -1,39 +1,54 @@
-name: Search API
+name: Day4 - Search API
 
 on:
   push:
-    branches: [features/github-actions]
+    branches: [ master ]
     paths:
-      - .github/workflows/search.yaml
-      - day4/apps/dotnetcore/Scm.Search/*
-      - day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+      - .github/workflows/day4-scm-searchapi.yaml
+      - day4/apps/dotnetcore/Scm.Search/**
+      - day4/apps/infrastructure/bicep/**
+  pull_request:
+    branches: [ master ]
+    paths:
+      - .github/workflows/day4-scm-searchapi.yaml
+      - day4/apps/dotnetcore/Scm.Search/**
+      - day4/apps/infrastructure/bicep/**
 
 env:
-  RESOURCE_GROUP_NAME: SCM-GITHUB-ACTION-COMMON-RG
-  APPLICATION_INSIGHTS_NAME: scm-contacts-insights
-  SERVICE_BUS_NAMESPACE: scm-shared-service-bus
-  SEARCH_APP_NAME: scm-search-api-github
-  FUNCTION_APP_NAME: scm-search-function-github
-  STORAGE_ACCOUNT_NAME: scmsearchstorage
-  SEARCH_SERVICE_NAME: scm-contacts-search
+  RESOURCE_GROUP_NAME_PREFIX: SCM-DEVD4
+  TEMPLATE_NAME: searchmain
+  ENVIRONMENT_NAME: dev
 
 jobs:
   extract-arm-template:
+    if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
+    env:
+      TEMPLATE_PATH: day4/apps/infrastructure/bicep/search
     steps:
       - uses: actions/checkout@v2
-      - name: Upload the ARM Template as build artifact
+      - name: Transpile bicep files
+        run: az bicep build -f ${{env.TEMPLATE_NAME }}.bicep
+        working-directory: ${{ env.TEMPLATE_PATH }}
+      - name: Upload build artifact
         uses: actions/upload-artifact@v2
         with:
           name: template
-          path: day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+          path: ${{ env.TEMPLATE_PATH }}/${{env.TEMPLATE_NAME }}.json
           if-no-files-found: error
           retention-days: 90
 
-  deploy-template:
+  deploy-arm-template:
+    if: ${{ github.ref == 'refs/heads/master' && github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
     needs: extract-arm-template
+    environment: development
+    outputs:
+      searchApiWebAppName: ${{ steps.arm.outputs.searchApiWebAppName }}
+      indexerFunctionName: ${{ steps.arm.outputs.indexerFunctionName }}
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
       - name: Download the arm template
         uses: actions/download-artifact@v2
         with:
@@ -42,21 +57,17 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy Azure Resource Manager (ARM) Template
+        id: arm
         uses: Azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: scm-search-api-dotnetcore.json
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME_PREFIX }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}
+          template: ${{env.TEMPLATE_NAME }}.json
           deploymentMode: Incremental
-          parameters: >
-            webAppName=${{ env.SEARCH_APP_NAME }}
-            storageAccountName=${{ env.STORAGE_ACCOUNT_NAME }}
-            functionAppName=${{ env.FUNCTION_APP_NAME }} 
-            applicationInsightsName=${{ env.APPLICATION_INSIGHTS_NAME }} 
-            serviceBusNamespaceName=${{ env.SERVICE_BUS_NAMESPACE }}
-            azureSearchServiceName=${{ env.SEARCH_SERVICE_NAME }}
+          parameters: > # Lines are joined with spaces
+            env=${{ env.ENVIRONMENT_NAME }}
 
   build-api:
+    if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -80,6 +91,7 @@ jobs:
 
   build-indexer:
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-dotnet@v1
@@ -101,10 +113,12 @@ jobs:
           retention-days: 90
 
   deploy-api:
+    if: ${{ github.ref == 'refs/heads/master' && github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
+    environment: day4-scm-dev
     needs:
       - build-api
-      - deploy-template
+      - deploy-arm-template
     steps:
       - name: Download the build artifact
         uses: actions/download-artifact@v2
@@ -116,13 +130,15 @@ jobs:
       - name: Azure WebApp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ env.SEARCH_APP_NAME }}
+          app-name: ${{ needs.deploy-arm-template.outputs.searchApiWebAppName }}
 
   deploy-indexer:
+    if: ${{ github.ref == 'refs/heads/master' && github.repository == 'azuredevcollege/trainingdays' }}
     runs-on: ubuntu-latest
+    environment: day4-scm-dev
     needs:
       - build-indexer
-      - deploy-template
+      - deploy-arm-template
     steps:
       - name: Download the build artifact
         uses: actions/download-artifact@v2
@@ -134,4 +150,4 @@ jobs:
       - name: Azure WebApp
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ env.FUNCTION_APP_NAME }}
+          app-name: ${{ needs.deploy-arm-template.outputs.indexerFunctionName }}
