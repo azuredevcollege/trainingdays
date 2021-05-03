@@ -1,0 +1,25 @@
+name: day2-scm-cleanup
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    env: 
+      RG_DEV: rg-scm-devday3
+      RG_TEST: rg-scm-testday3
+    
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Destroy resource groups
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az group delete -n ${{ env.RG_DEV }} -y
+            az group delete -n ${{ env.RG_TEST }} -y
