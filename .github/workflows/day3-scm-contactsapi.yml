@@ -24,8 +24,7 @@ jobs:
     env: 
       DOTNETCORE_PACKAGE_PATH: 'publish/scmcontactsapi'
       DOTNETCORE_PACKAGE_NAME: 'scmcontactsapi.zip'
-      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-      NEED_DEPLOY: 'true'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -68,7 +67,7 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
     needs: build
@@ -124,7 +123,7 @@ jobs:
           package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
 
   deploy-to-test:
-    #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: deploy-to-dev

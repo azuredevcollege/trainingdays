@@ -24,8 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_VERSION: '14.x'
-      #NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-      NEED_DEPLOY: 'true'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -62,7 +61,7 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
     needs: build
@@ -136,7 +135,7 @@ jobs:
             az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe
 
   deploy-to-test:
-    #if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: deploy-to-dev
