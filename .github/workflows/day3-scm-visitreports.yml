@@ -155,7 +155,7 @@ jobs:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
-    needs: build
+    needs: deploy-to-test
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
