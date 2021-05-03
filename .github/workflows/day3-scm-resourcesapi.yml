@@ -1,0 +1,220 @@
+name: day3-scm-resourcesapi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day3/apps/infrastructure/bicep/resources/**
+      - day3/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day3-scm-resourcesapi.yml
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day3/apps/infrastructure/bicep/resources/**
+      - day3/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day3-scm-resourcesapi.yml
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      API_PACKAGE_PATH: 'publish/scmresourcesapi'
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
+      RESIZER_PACKAGE_PATH: 'publish/resizer'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ./day3/apps/infrastructure/bicep/resources/resourcesmain.bicep
+
+      - name: Archive ARM Templates artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: bicep
+          path: ./day3/apps/infrastructure/bicep/resources/resourcesmain.json
+          retention-days: 30
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Build and publish SCM Resources API
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
+
+      - name: Zip SCM ResourcesAPI
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
+      - name: Archive api dotnetcore package artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: scmresourcesapi
+          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}'
+          retention-days: 30
+
+      - name: Build and publish SCM ImageResizer
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
+
+      - name: Zip Image Resizer
+        working-directory: ./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.RESIZER_PACKAGE_NAME }} ./*
+
+      - name: Archive ImageResizer dotnetcore package artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: imageresizer
+          path: './day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}'
+          retention-days: 30
+
+  deploy-to-dev:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day3-scm-dev
+    needs: build
+    env:
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
+      RESOURCE_GROUP_NAME: rg-scm-devday3
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd3
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Download bicep artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: bicep
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./resourcesmain.json
+          parameters: env=${{ env.ENV_NAME }}
+
+      - name: Download scmresourcesapi artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: scmresourcesapi
+
+      - name: Deploy SCM Resources API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+      - name: Download imageresizer artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: imageresizer
+
+      - name: Deploy ImageResizer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}
+
+  deploy-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day3-scm-test
+    needs: deploy-to-dev
+    env:
+      API_PACKAGE_NAME: 'scmresourceapi.zip'
+      RESIZER_PACKAGE_NAME: 'resizer.zip'
+      RESOURCE_GROUP_NAME: rg-scm-testday3
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd3
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup if it does not exist
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
+              echo "Azure resource group already exists, skipping creation..."
+            else
+              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
+              echo "Azure resource group created"
+            fi
+
+      - name: Download bicep artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: bicep
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./resourcesmain.json
+          parameters: env=${{ env.ENV_NAME }}
+
+      - name: Download scmresourcesapi artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: scmresourcesapi
+
+      - name: Deploy SCM Resources API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+      - name: Download imageresizer artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: imageresizer
+
+      - name: Deploy ImageResizer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}
