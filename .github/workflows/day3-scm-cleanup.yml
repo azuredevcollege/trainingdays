@@ -2,14 +2,14 @@ name: day2-scm-cleanup
 
 on:
   workflow_dispatch:
-    
+
 jobs:
   destroy:
     runs-on: ubuntu-latest
-    env: 
+    env:
       RG_DEV: rg-scm-devday3
       RG_TEST: rg-scm-testday3
-    
+
     steps:
       - name: Login via Azure CLI
         uses: azure/login@v1
