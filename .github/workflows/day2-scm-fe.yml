@@ -82,7 +82,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -108,7 +108,7 @@ jobs:
           path: ./scmfe
 
       - name: Enable static website hosting 
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -119,7 +119,7 @@ jobs:
           echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -147,7 +147,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -173,7 +173,7 @@ jobs:
           path: ./scmfe
 
       - name: Enable static website hosting 
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -184,7 +184,7 @@ jobs:
           echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash

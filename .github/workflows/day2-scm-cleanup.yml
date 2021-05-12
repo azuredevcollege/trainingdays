@@ -17,7 +17,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Destroy resource groups
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash

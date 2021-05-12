@@ -108,7 +108,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
@@ -173,7 +173,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
+        uses: Azure/CLI@1.0.4
         with:
           inlineScript: |
             #!/bin/bash
