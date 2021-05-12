@@ -55,7 +55,7 @@ jobs:
           name: drop
 
       - name: Login via Azure CLI
-        uses: azure/login@v1
+        uses: azure/login@v1.3.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -95,7 +95,7 @@ jobs:
           name: drop
 
       - name: Login via Azure CLI
-        uses: azure/login@v1
+        uses: azure/login@v1.3.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 

@@ -89,7 +89,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: template
-      - uses: azure/login@v1
+      - uses: azure/login@v1.3.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Deploy Azure Resource Manager (ARM) Template
@@ -121,7 +121,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: build
-      - uses: azure/login@v1
+      - uses: azure/login@v1.3.0
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Get Application Insights Key
