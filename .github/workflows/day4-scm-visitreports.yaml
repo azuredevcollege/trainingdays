@@ -73,7 +73,7 @@ jobs:
       - deploy-arm-template
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.5
         name: Cache npm dependencies to speed up deployment
         with:
           path: ~/.npm
@@ -106,7 +106,7 @@ jobs:
       - deploy-arm-template
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.5
         name: Cache npm dependencies to speed up deployment
         with:
           path: ~/.npm
