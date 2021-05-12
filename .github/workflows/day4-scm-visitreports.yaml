@@ -93,7 +93,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Azure WebApp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           package: day4/apps/nodejs/visitreport
           app-name: ${{ needs.deploy-arm-template.outputs.visitreportsWebAppName }}

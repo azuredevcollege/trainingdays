@@ -108,7 +108,7 @@ jobs:
           path: ./scmcontactsapi
 
       - name: Deploy SCM Contacts API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
           package: ./scmcontactsapi
@@ -161,7 +161,7 @@ jobs:
           path: ./scmcontactsapi
 
       - name: Deploy SCM Contacts API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
           package: ./scmcontactsapi

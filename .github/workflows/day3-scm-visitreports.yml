@@ -135,7 +135,7 @@ jobs:
           name: scmvisitrepportsapi
 
       - name: Deploy SCM Visitreports API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
@@ -200,7 +200,7 @@ jobs:
           name: scmvisitrepportsapi
 
       - name: Deploy SCM Visitreports API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}

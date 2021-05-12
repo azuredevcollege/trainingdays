@@ -125,7 +125,7 @@ jobs:
           path: ./scmresourcesapi
 
       - name: Deploy SCM Resources API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
           package: ./scmresourcesapi
@@ -190,7 +190,7 @@ jobs:
           path: ./scmresourcesapi
 
       - name: Deploy SCM Resources API
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v2.1.6
         with:
           app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
           package: ./scmresourcesapi
