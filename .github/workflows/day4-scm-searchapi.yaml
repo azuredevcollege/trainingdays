@@ -71,7 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1.8.0
         with:
           # SDK Version to use; x will use the latest version of the 3.1 channel
           dotnet-version: '3.1.x'
@@ -94,7 +94,7 @@ jobs:
     if: ${{ github.repository == 'azuredevcollege/trainingdays' }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1.8.0
         with:
           # SDK Version to use; x will use the latest version of the 3.1 channel
           dotnet-version: '3.1.x'
