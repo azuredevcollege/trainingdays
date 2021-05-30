@@ -1,16 +1,16 @@
 # Image Pull Secret
 
-In case you could not connect your Azure Container Registry to your AKS cluster, you can also use an image pull secret to give your cluster the permission to pull images from your private registry. Therefor, follow the steps below.
+In case you could not connect your Azure Container Registry to your AKS cluster, you can also use an _image pull secret_ to give your cluster the permission to pull images from your private registry.
 
 ## Create a Kubernetes Secret
 
-```zsh
+```shell
 ACR_PWD=(az acr credential show -n <ACR_NAME> --query passwords[0].value -o tsv)
 
 kubectl create secret docker-registry regcred --docker-server=<ACR_NAME>.azurecr.io --docker-username=<ACR_NAME> --docker-password=$ACR_PWD --docker-email=<YOUR_EMAIL_ADDRESS>
 ```
 
-## Use the Secret to pull images
+## Use the Secret to pull Images
 
 In order to use the image pull secret during deployments, add the following section to your YAML manifest(s):
 
@@ -19,7 +19,7 @@ imagePullSecrets:
 - name: regcred
 ```
 
-E.g. for a pod manifest:
+For a pod manifest:
 
 ```yaml
 apiVersion: v1
@@ -38,7 +38,7 @@ spec:
   - name: regcred
 ```
 
-Or for a deployment manifest:
+For a deployment manifest:
 
 ```yaml
 apiVersion: apps/v1
@@ -70,3 +70,5 @@ spec:
       imagePullSecrets:
       - name: regcred
 ```
+
+[◀ Previous challenge](./challenge-2.md#run-your-custom-image) | [🔼 Day 7](../README.md)
