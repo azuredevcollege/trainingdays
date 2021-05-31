@@ -6,7 +6,7 @@ In this challenge you will learn how to:
 
 - create an Azure SQL DB (Single Database)
 - add Data to the Azure SQL DB
-- setup Dynamic Data Masking
+- Set up Backup and retention policies
 
 ## Table Of Contents
 
@@ -15,12 +15,13 @@ In this challenge you will learn how to:
 3. [Purchasing models](#purchasing-models)
 4. [Create a single SQL Database](#create-a-single-sql-database)
 5. [Add Data to SQL DB](#add-data-to-sql-db)
-6. [Add Data to SQL DB using the Azure Data Studio](#add-data-to-sql-db-using-the-azure-data-studio)
-7. [Setup Dynamic Data Masking](#setup-dynamic-data-masking)
-8. [Access Management for Azure SQL DB](#access-management-for-azure-sql-db)
-9. [SQL Database backup and retention policies (optional)](#sql-database-backup-and-retention-policies-optional)
-10. [Connect the Azure SQL DB to a Web Application (optional)](#connect-the-azure-sql-db-to-a-web-application-optional)
-11. [Cleanup](#cleanup)
+6. [SQL Database backup and retention policies (optional)](#sql-database-backup-and-retention-policies-optional)
+7. [Add Data to SQL DB using the Azure Data Studio](#add-data-to-sql-db-using-the-azure-data-studio)
+8. [Setup Dynamic Data Masking](#setup-dynamic-data-masking)
+9. [Access Management for Azure SQL DB](#access-management-for-azure-sql-db)
+10. [SQL Database backup and retention policies (optional)](#sql-database-backup-and-retention-policies-optional)
+11. [Connect the Azure SQL DB to a Web Application (optional)](#connect-the-azure-sql-db-to-a-web-application-optional)
+12. [Cleanup](#cleanup)
 
 ## Basics
 
@@ -160,109 +161,7 @@ After running this you should see a `1>`. Now you can run SQL Queries. If you ar
 
 5. Add the other CEOs Microsoft has had to the list as well (the ID is fictional). To exit the sqlcmd utility program enter `exit`.
 
-## Add Data to SQL DB using the Azure Data Studio
-
-Another, more simple approach is using the Azure Data Studio. Azure Data Studio is a cross-platform database tool for data professionals using the Microsoft family of on-premises and cloud data platforms on Windows, MacOS, and Linux.
-
-Azure Data Studio offers a modern editor experience with IntelliSense, code snippets, source control integration, and an integrated terminal. It's engineered with the data platform user in mind, with built-in charting of query result sets and customizable dashboards.
-
-1. Open the `Azure Data Studio` and connect to your server:
-
-  ![Azure Data Studio](./images/azure-data-studio-connect.png)
-
-2. After you have connected to your server, `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
-Next we want to create our first table in the MSFTEmployee. Navigate to the MSFTEmployee, open the context menu and select `New Query`.
-
-  :::tip
-  📝 If your server is not detected under your account you might need to renew the firewall-rule again.
-  
-  ```shell
-  az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip>
-  ```
-  
-  :::
-
-  ![New Query](./images/azure-data-studio-new-query.png)
-
-2. Add and run the following query, creating a new Table:
-
-  ```sql
-  CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
-  ```
-
-3. Create a new query and insert additional contacts :
-
-  ```sql
-  INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
-  ```
-
-4. View the data returned by a query
-
-  ```sql
-  SELECT * FROM PrtnrEmployees;
-  ```
-  
-  ```sql
-  SELECT * FROM CEOs;
-  ```
-
-## Setup Dynamic Data Masking
-
-Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
-
-![Dynamic Data Masking](./images/dynamic-data-masking.png)
-
-To see Dynamic Data Masking in action we first add a column to the CEOs table with a Data Masking Rule.
-Back in Azure Data Studio create a new query and run a command as follows:
-
-```sql
-ALTER TABLE [dbo].[CEOs]
-ADD Email varchar(256) MASKED WITH (FUNCTION = 'EMAIL()');
-```
-
-Run another query to add another row:
-
-```sql
-INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (43, 'Nadella', 'Satya', 52, 2014, 'snad@microsoft.com');
-```
-
-When we select the top 1000 rows of the Contacts table we still see the email's actual value.
-
-![Not Masked](./images/not-masked-result.png)
-
-The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on CEOs. Create a new query in the Azure Data Studio and run the commands as follows:
-
-```sql
-CREATE USER TestUser WITHOUT LOGIN;
-GRANT SELECT ON CEOs TO TestUser;
-
-EXECUTE AS USER = 'TestUser';
-SELECT * FROM CEOs;
-```
-
-## Access Management for Azure SQL DB
-
-Under Access Management we are taking a look at authentication and authorization. _Authentication_ is the process of proving the users are who they claim to be. _Authorization_ refers to the permissions assigned to a user within an Azure SQL Database, and determines what the user is allowed to do.
-
-Azure SQL Database supports two types of authentication: SQL authentication, as we have used before in creating the TestUser. And Azure Active Directory authentication.
-
-Let's have a look at the SQL authentication. As server admin you can create additional SQL users - which enables other users to connect to the SQL Database. Create a new query.
-
-```sql
-CREATE USER Marvin WITH PASSWORD = '42_as_ANSWER!';
-```
-
-Now you can sign up as this user.
-
-Before we did grant the `TestUser` select access to the Table CEOs. Similarly you can create a custom role. There is also a set of fixed roles. They can be assigned as followes:
-
-```sql
-ALTER ROLE  db_backupoperator ADD MEMBER Marvin;
-```
-
-![Fixed Rules](./images/permissions-of-database-roles.png)
-
-## SQL Database backup and retention policies (optional)
+## SQL Database backup and retention policies
 
 You make the choice between configuring your server for either locally redundant backups or geographically redundant backups at server creation.
 After a server is created, the kind of redundancy it has, geographically redundant vs locally redundant, can't be switched.
@@ -308,6 +207,108 @@ When you are using auto-failover groups with automatic failover policy, any outa
   ```shell
   az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your server>
   ```
+
+## Add Data to SQL DB using the Azure Data Studio (optional)
+
+Another, more simple approach is using the Azure Data Studio. Azure Data Studio is a cross-platform database tool for data professionals using the Microsoft family of on-premises and cloud data platforms on Windows, MacOS, and Linux.
+
+Azure Data Studio offers a modern editor experience with IntelliSense, code snippets, source control integration, and an integrated terminal. It's engineered with the data platform user in mind, with built-in charting of query result sets and customizable dashboards.
+
+1. Open the `Azure Data Studio` and connect to your server:
+
+  ![Azure Data Studio](./images/azure-data-studio-connect.png)
+
+2. After you have connected to your server, `Azure Data Studio` wants you to add your Azure account. Follow the instructions and add your account.
+Next we want to create our first table in the MSFTEmployee. Navigate to the MSFTEmployee, open the context menu and select `New Query`.
+
+  :::tip
+  📝 If your server is not detected under your account you might need to renew the firewall-rule again.
+  
+  ```shell
+  az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip>
+  ```
+  
+  :::
+
+  ![New Query](./images/azure-data-studio-new-query.png)
+
+2. Add and run the following query, creating a new Table:
+
+  ```sql
+  CREATE TABLE PrtnrEmployees (EmployerID int, LastName varchar(255), FirstName varchar(255), PartnerCompany varchar(255), StartYear int);
+  ```
+
+3. Create a new query and insert additional contacts :
+
+  ```sql
+  INSERT INTO PrtnrEmployees (EmployerID, LastName, FirstName, PartnerCompany, StartYear) VALUES ( ... ), ( ... ), ( ... );
+  ```
+
+4. View the data returned by a query
+
+  ```sql
+  SELECT * FROM PrtnrEmployees;
+  ```
+  
+  ```sql
+  SELECT * FROM CEOs;
+  ```
+
+## Setup Dynamic Data Masking (optional)
+
+Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
+
+![Dynamic Data Masking](./images/dynamic-data-masking.png)
+
+To see Dynamic Data Masking in action we first add a column to the CEOs table with a Data Masking Rule.
+Back in Azure Data Studio create a new query and run a command as follows:
+
+```sql
+ALTER TABLE [dbo].[CEOs]
+ADD Email varchar(256) MASKED WITH (FUNCTION = 'EMAIL()');
+```
+
+Run another query to add another row:
+
+```sql
+INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (43, 'Nadella', 'Satya', 52, 2014, 'snad@microsoft.com');
+```
+
+When we select the top 1000 rows of the Contacts table we still see the email's actual value.
+
+![Not Masked](./images/not-masked-result.png)
+
+The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on CEOs. Create a new query in the Azure Data Studio and run the commands as follows:
+
+```sql
+CREATE USER TestUser WITHOUT LOGIN;
+GRANT SELECT ON CEOs TO TestUser;
+
+EXECUTE AS USER = 'TestUser';
+SELECT * FROM CEOs;
+```
+
+## Access Management for Azure SQL DB (optional)
+
+Under Access Management we are taking a look at authentication and authorization. _Authentication_ is the process of proving the users are who they claim to be. _Authorization_ refers to the permissions assigned to a user within an Azure SQL Database, and determines what the user is allowed to do.
+
+Azure SQL Database supports two types of authentication: SQL authentication, as we have used before in creating the TestUser. And Azure Active Directory authentication.
+
+Let's have a look at the SQL authentication. As server admin you can create additional SQL users - which enables other users to connect to the SQL Database. Create a new query.
+
+```sql
+CREATE USER Marvin WITH PASSWORD = '42_as_ANSWER!';
+```
+
+Now you can sign up as this user.
+
+Before we did grant the `TestUser` select access to the Table CEOs. Similarly you can create a custom role. There is also a set of fixed roles. They can be assigned as followes:
+
+```sql
+ALTER ROLE  db_backupoperator ADD MEMBER Marvin;
+```
+
+![Fixed Rules](./images/permissions-of-database-roles.png)
 
 ## Connect the Azure SQL DB to a Web Application (optional)
 
