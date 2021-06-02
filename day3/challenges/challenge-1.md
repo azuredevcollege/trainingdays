@@ -44,19 +44,20 @@ First of all, create a resource group called "**adc-cosmos-db-rg**" and use loca
 
 Now add a Cosmos DB account:
 
-| Parameter | Value |
-|---|---|
-| _Account Name_             | choose a unique value
-| _API_                      | Core SQL
-| _Notebooks_                | Off
-| _Location_                 | westeurope
-| _Capacity mode_            | Provisioned throughput
-| _Apply Free Tier Account:_ | Do Not Apply
-| _Account Type_             | Non-Production
-| _Geo-Redundancy_           | Disable
-| _Multi-region Writes_      | Enable
-| _Availability Zones_       | Disable
-| _Hit "Create"
+| Parameter                  | Value                  |
+| -------------------------- | ---------------------- |
+| _Account Name_             | choose a unique value  |
+| _API_                      | Core SQL               |
+| _Notebooks_                | Off                    |
+| _Location_                 | westeurope             |
+| _Capacity mode_            | Provisioned throughput |
+| _Apply Free Tier Account:_ | Do Not Apply           |
+| _Account Type_             | Non-Production         |
+| _Geo-Redundancy_           | Disable                |
+| _Multi-region Writes_      | Enable                 |
+| _Availability Zones_       | Disable                |
+
+| \_Hit "Create"
 
 ![Cosmos DB Create](./images/CosmosCreate.png)
 
@@ -70,12 +71,12 @@ Open the CosmosDB in the Portal and select _Data Explorer_ from the left navigat
 
 In the _Add container pane_, enter the settings for the new container:
 
-| Parameter | Value |
-|---|---|
-| _Database ID (Create new)_ | name
-| _Throughput (Manual)_ | 400
-| _Container ID_ | Items
-| _Partition key_ | /id
+| Parameter                  | Value |
+| -------------------------- | ----- |
+| _Database ID (Create new)_ | name  |
+| _Throughput (Manual)_      | 400   |
+| _Container ID_             | Items |
+| _Partition key_            | /id   |
 
 Hit "Ok" and wait until it has been created.
 
@@ -190,7 +191,7 @@ We now want to show you, how to integrate Azure Cosmos DB with a NodeJS applicat
 There is already a predefined sample you can clone to your machine. So, please open a command line window and in a _new folder_, run the following command to clone the sample:
 
 ```shell
-git clone https://github.com/CodeUnicornMartha/azure-cosmos-db-sql-api-nodejs-getting-started.git
+git clone https://github.com/azuredevcollege/azure-cosmos-db-sql-api-nodejs-getting-started.git
 ```
 
 Open the folder the repo has been cloned to in Visual Studio Code.
@@ -200,28 +201,36 @@ Open the folder the repo has been cloned to in Visual Studio Code.
 Before you run the sample, here are some hints what's happening in the app:
 
 - In **app.js**:
+
   - The CosmosClient object is initialized.
 
   ```javascript
-      const client = new CosmosClient({ endpoint, key });
+  const client = new CosmosClient({ endpoint, key })
   ```
 
   - A new Azure Cosmos database is created.
 
   ```javascript
-      const { database } = await client.databases.createIfNotExists({ id: databaseId });
+  const { database } = await client.databases.createIfNotExists({
+    id: databaseId,
+  })
   ```
 
   - A new container (collection) is created within the database.
 
   ```javascript
-      const { container } = await client.database(databaseId).containers.createIfNotExists({ id: containerId });
+  const { container } = await client
+    .database(databaseId)
+    .containers.createIfNotExists({ id: containerId })
   ```
 
   - An item (document) is created
 
   ```javascript
-      const { item } = await client.database(databaseId).container(containerId).items.create(itemBody);
+  const { item } = await client
+    .database(databaseId)
+    .container(containerId)
+    .items.create(itemBody)
   ```
 
 These are the basic commands to interact with Azure Cosmos DB.
