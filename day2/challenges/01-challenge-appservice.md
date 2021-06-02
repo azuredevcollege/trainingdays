@@ -302,7 +302,11 @@ code .
 📝 Get familiar with the environment and have a look at the controller `HomeController`.
 :::
 
-Set a breakpoint (**F9**) on method `public IActionResult Index()` in `Controllers/HomeController.cs` and press **F5**. If VS Code asks you about the environment, choose _.NET Core_.
+Set a breakpoint (**F9**) on method `public IActionResult Index()` in `Controllers/HomeController.cs`.
+
+Switch to the Run and Debug Tab, select *create a launch.json file* and press **F5** afterwards. If VS Code asks you about the environment, choose _.NET Core_.
+
+![vscode](./images/vscode_debugger.png "vscode")
 
 The project will now be built and after that, your browser will point to [https:/localhost:5001](https:/localhost:5001).
 
