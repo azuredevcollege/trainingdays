@@ -145,9 +145,7 @@ Within the VM:
 
 The goal of this action is to learn how to avoid the portal, i.e. so that the CSE can be attached to a VM during deployment time e.g. using an ARM template. With the whole setup Azure + VM Settings can be done in a '_0 touch way_'.
 
-1. In the next CSE we want to install Internet Information Services (IIS) in the VM. Take a look at the code file first ("[
-
-](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-04/scripts/CSE_Install-IIS.ps1)"). The relevant parts starts at _#region install IIS features_.
+1. In the next CSE we want to install Internet Information Services (IIS) in the VM. Take a look at the code file first ("[CSE_Install-IIS.ps1](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-04/scripts/CSE_Install-IIS.ps1)"). The relevant parts starts at _#region install IIS features_.
 
 2. When automating CSE e.g. through ARM deployment - the CSE needs a valid download location for the code file (`CSE_Install-IIS.ps1`). This could be e.g. a public github repo or another https-reachable location. In this lab we use a storage account for this. Upload ("[CSE_Install-IIS.ps1](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-04/scripts/CSE_Install-IIS.ps1)") file to a storage account.
 
