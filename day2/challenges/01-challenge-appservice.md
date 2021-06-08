@@ -45,7 +45,7 @@ When you reached the **"Create Web App"** wizard, follow the steps below:
 | *Runtime*          | .NET Core 3.1 (LTS)                                                    |
 | *Operation System* | Windows                                                                |
 | *Region*           | West Europe                                                            |
-| *App Service Plan* | Create a new plan and choose S! for `SKU and Size`                     |
+| *App Service Plan* | Create a new plan and choose S1 for `SKU and Size`                     |
 
 :::tip
 📝 To get familiar with other sizes, click **"Change size"** in the App Service Plan section.
