@@ -46,7 +46,7 @@ jobs:
           retention-days: 30
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ env.NODE_VERSION }}
 
