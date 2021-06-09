@@ -69,11 +69,15 @@ Database Properties:
 
 Leave all other settings as proposed by Azure.
 
+:::tip
+📝 You can proceed with the next step while the Azure SQL DB is being created.
+:::
+
 ![Azure SQL Database](./images/bo_data_sql.png "Azure SQL Database")
 
 ### Cosmos DB / SQL API
 
-Create a new Azure Cosmos Account either via the Azure Portal or Azure CLI. BTW: You can do this while Azure SQL DB is created.
+Create a new Azure Cosmos Account either via the Azure Portal or Azure CLI.
 
 Account Properties:
 
