@@ -5,7 +5,7 @@
       "type": "serviceBusTrigger",
       "direction": "in",
       "topicName": "scmvrtopic",
-      "subscriptionName": "textanalytics",
+      "subscriptionName": "scmvisitreporttextanalytics",
       "connection": "ServiceBusConnectionString"
     }
   ]
