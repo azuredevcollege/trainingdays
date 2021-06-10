@@ -27,7 +27,7 @@ Go to Azure Boards and set the User Story S4 and S5 to _active_. We create a new
 - Publish the artifacts
 
 1. Create a feature branch _"features/scmcontactscicd"_ and check it out
-2. Add a file named `_scm-contacts-ci.yaml_` in the directory `_day4/apps/pipelines_`
+2. Add a file named `scm-contacts-ci.yaml` in the directory `day4/apps/pipelines`
 3. Add the following yaml snippet that defines the build Trigger:
 
 ```yaml
@@ -99,7 +99,7 @@ jobs:
 In [Challenge 2](./challenge-2.md) we configured the master branch's policies to require a _Pull Request_ before changes are merged into the master.
 With Azure Pipelines you can define a build that is executed whenever a Pull Request is created in order to validate a merge into the master branch.
 
-1. Add a file named `scm-contacts-pr.yaml` in the directory `_day4/apps/pipelines_`
+1. Add a file named `scm-contacts-pr.yaml` in the directory `day4/apps/pipelines`
 2. Add the following yaml snippet:
 
 ```yaml
