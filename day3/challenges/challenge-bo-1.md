@@ -291,7 +291,7 @@ Configuration / Application Settings:
 
 | Parameter                                               | Value / Hint                                                                                                            |
 | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**   |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string!  |
 | ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                   |
 | ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
 
