@@ -14,6 +14,9 @@ To Setup you environment you will need to:
 
 Let's get started.
 
+:::tip 📝 Please use the Azure Cloud Shell with Bash! :::
+
+
 ### Clone the training days repository 🐑🐑
 
 To clone the official training days repository into you workspace, open a
