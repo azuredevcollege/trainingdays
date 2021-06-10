@@ -119,7 +119,7 @@
   -> Containers 
   -> 'secured' 
   -> Access policy 
-  -> 'Storage access policy' 
+  -> 'Stored access policy' 
   -> '+' Add policy
   ```
 
@@ -153,7 +153,7 @@
   -> Containers 
   -> 'secured' 
   -> Access policy 
-  -> Under 'Storage access policy' 
+  -> Under 'Stored access policy' 
   -> 'securedap' 
   -> '...' 
   -> Edit 
