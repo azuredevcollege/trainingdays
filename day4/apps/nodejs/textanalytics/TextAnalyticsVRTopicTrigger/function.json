@@ -4,8 +4,8 @@
       "name": "mySbMsg",
       "type": "serviceBusTrigger",
       "direction": "in",
-      "topicName": "sbt-visitreports",
-      "subscriptionName": "textanalytics",
+      "topicName": "scmvrtopic",
+      "subscriptionName": "scmvisitreporttextanalytics",
       "connection": "ServiceBusConnectionString"
     }
   ]

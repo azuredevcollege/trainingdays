@@ -508,7 +508,7 @@ CD Build agent runs on: **Latest Ubuntu version**
 | ResourceGroupNameFunc   | ADC-DAY4-SCM-FUNC-DEV                                       | Development |
 | Location                | westeurope                                                  | Development |
 | TextAnalyticsName       | **{prefix}**-day4cognitive-dev                              | Development |
-| TextAnalyticsTier       | S0                                                          | Development |
+| TextAnalyticsTier       | S                                                           | Development |
 | StorageAccountName      | **{prefix}** day4tadev (no spaces)                          | Development |
 | FunctionAppName         | **{prefix}**-day4tafunc-dev                                 | Development |
 | ApplicationInsightsName | your ApplicationInsights instance name of stage Development | Development |
@@ -523,7 +523,7 @@ CD Build agent runs on: **Latest Ubuntu version**
 | ResourceGroupNameFunc   | ADC-DAY4-SCM-FUNC-TEST                                  | Testing |
 | Location                | westeurope                                              | Testing |
 | TextAnalyticsName       | **{prefix}**-day4cognitive-test                         | Testing |
-| TextAnalyticsTier       | S0                                                      | Testing |
+| TextAnalyticsTier       | S                                                       | Testing |
 | StorageAccountName      | **{prefix}** day4tatest (no spaces)                     | Testing |
 | FunctionAppName         | **{prefix}**-day4tafunc-test                            | Testing |
 | ApplicationInsightsName | your ApplicationInsights instance name of stage Testing | Testing |

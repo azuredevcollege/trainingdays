@@ -10,7 +10,7 @@ variables:
   - name: taname
     value: adccognitive-restore
   - name: tatier
-    value: S0
+    value: S
   - name: storageAccountName
     value: adccogarestore
   - name: functionAppName
