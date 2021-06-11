@@ -196,6 +196,11 @@ permission to all pipelines_ is ticked.
 
 ![](./img/grant_permissions.png)
 
+::: danger
+This screenshot is wrong. You can only click on save for the Azure Service Connection, not the one for the Azure Container Registry.
+For the ACR you will have to manually approve access on the first run.
+:::
+
 Start the _SCM Common_ pipeline first and wait for it to complete. The common
 pipeline creates the Azure Resource Group and some share resources that the
 other project pipelines depend upon. This will take about 13 minutes to deploy. So let's take a short break, we are almost done.
