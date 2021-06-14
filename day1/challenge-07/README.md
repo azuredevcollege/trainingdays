@@ -32,9 +32,9 @@ If you have established Continuous Integration / Deployment in your development 
     - [Let's deploy the template](#lets-deploy-the-template)
   - [ARM with Parameter File](#arm-with-parameter-file)
   - [Create your first ARM Template](#create-your-first-arm-template)
-    - [1. Open Visual Studio Code and create an empty ARM template file (e.g. ***pip.json***). Use the following code snippet](#1-open-visual-studio-code-and-create-an-empty-arm-template-file-eg-pipjson-use-the-following-code-snippet)
-    - [2. Add a resource to it. Put the json code snippet that defines a public IP address into the resources section of the template](#2-add-a-resource-to-it-put-the-json-code-snippet-that-defines-a-public-ip-address-into-the-resources-section-of-the-template)
-    - [3. Use an ARM function. Concentrate on](#3-use-an-arm-function-concentrate-on)
+    - [1. Open Visual Studio Code](#1-open-visual-studio-code)
+    - [2. Add a resource to it](#2-add-a-resource-to-it)
+    - [3. Use an ARM function](#3-use-an-arm-function)
     - [4. Create a parameter](#4-create-a-parameter)
     - [5. Create a parameter file](#5-create-a-parameter-file)
   - [Cleanup](#cleanup)
@@ -297,7 +297,9 @@ You will:
 - Generate a parameter file
 - Deploy it using Azure CLI
 
-### 1. Open Visual Studio Code and create an empty ARM template file (e.g. ***pip.json***). Use the following code snippet
+### 1. Open Visual Studio Code  
+
+and create an empty ARM template file (e.g. ***pip.json***). Use the following code snippet
 
   ```json
   {
@@ -307,7 +309,9 @@ You will:
   }
   ```
 
-### 2. Add a resource to it. Put the json code snippet that defines a public IP address into the resources section of the template
+### 2. Add a resource to it
+
+Put the json code snippet that defines a public IP address into the resources section of the template
 
   ```json
   {
@@ -333,7 +337,9 @@ You will:
 - [Microsoft.Network publicIPAddresses](https://docs.microsoft.com/en-us/azure/templates/microsoft.network/publicipaddresses#template-format)
 - All Azure resources are listed in the [ARM Templates Reference](https://docs.microsoft.com/en-us/azure/templates/). e.g. Public IP is in the network resource provider.
 
-### 3. Use an ARM function. Concentrate on  
+### 3. Use an ARM function
+
+Concentrate on  
   
   ```json
     "location": "string",
