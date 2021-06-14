@@ -16,17 +16,28 @@ Before we can get into Azure Resource Manager and the related templates, we need
 - **Resource Provider** – an Azure service for creating a resource through the Azure Resource Manager. For example, “Microsoft.Web” to create a web app, “Microsoft.Storage” to create a storage account etc.
 - **Azure Resource Manager (ARM) Templates** – a JSON file that describes one or more resources that are deployed into a Resource Group. The template can be used to consistently and repeatedly provision the resources.
 
-One great advantage when using ARM templates, is the _traceability_ of changes to your infrastructure. Templates can be stored together with the _source code_ of your application in the code repository (_Infratructure as Code_). 
+One great advantage when using ARM templates, is the _traceability_ of changes to your infrastructure. Templates can be stored together with the _source code_ of your application in the code repository (_Infratructure as Code_).
 
 If you have established Continuous Integration / Deployment in your development process (which we will do on [Day 4](../day4/README.md)), you can execute the deployment of the infrastructure from Jenkins, TeamCity or Azure DevOps. No one has to worry about an update of the environment – web apps, databases, caches etc. will be created and configured automatically – no manual steps are necessary (which can be error-prone, as we all know).
 
 ## Table of Contents
 
-1. [Azure Resource Manager and Resource Providers](#azure-resource-manager-and-resource-providers)
-2. [ARM Templates](#arm-templates)
-3. [ARM with Parameter File](#arm-with-parameter-file)
-4. [Create your first ARM Template](#create-your-first-arm-template)
-5. [Cleanup](#cleanup)
+- [Challenge 7: ARM - Azure Resource Manager (ARM) Templates](#challenge-7-arm---azure-resource-manager-arm-templates)
+  - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
+  - [Just to be on the same page](#just-to-be-on-the-same-page)
+  - [Table of Contents](#table-of-contents)
+  - [Azure Resource Manager and Resource Providers](#azure-resource-manager-and-resource-providers)
+  - [ARM Templates](#arm-templates)
+    - [A Basic Template](#a-basic-template)
+    - [Let's deploy the template](#lets-deploy-the-template)
+  - [ARM with Parameter File](#arm-with-parameter-file)
+  - [Create your first ARM Template](#create-your-first-arm-template)
+    - [1. Open Visual Studio Code and create an empty ARM template file (e.g. ***pip.json***). Use the following code snippet](#1-open-visual-studio-code-and-create-an-empty-arm-template-file-eg-pipjson-use-the-following-code-snippet)
+    - [2. Add a resource to it. Put the json code snippet that defines a public IP address into the resources section of the template](#2-add-a-resource-to-it-put-the-json-code-snippet-that-defines-a-public-ip-address-into-the-resources-section-of-the-template)
+    - [3. Use an ARM function. Concentrate on](#3-use-an-arm-function-concentrate-on)
+    - [4. Create a parameter](#4-create-a-parameter)
+    - [5. Create a parameter file](#5-create-a-parameter-file)
+  - [Cleanup](#cleanup)
 
 ## Azure Resource Manager and Resource Providers
 
@@ -175,6 +186,7 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
 :::tip
 📝 As you can see, we are able to use functions to do dynamic stuff within a template, e.g. reading keys (`listKeys()`) or using parameter (`parameters()`). There are, of course, other functions e.g. for string manipulation (_concatenate_, _padLeft_, _split_...), numeric functions, comparison functions, conditionals etc. You can find all available template functions and their documentation here: [ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions). Please make yourself familiar with the list!
 :::
+
 ### Let's deploy the template
 
 There are several ways to kick off an ARM template deployment:
@@ -219,6 +231,7 @@ We will try each of these to learn its haptic.
   :::tip
   📝 Think of it that way: You can define the outputs of a deployment in the template for later use e.g. if you want to upload something in the next step of your deployment and need the access key for this.  
   :::
+
 ## ARM with Parameter File
 
 You have noticed that you have been asked to enter a value for the parameter  `storageAccountName`. In a fully automated deployment, this is not really acceptable.  
@@ -231,13 +244,13 @@ az deployment group create -g basicarm-rg -n firsttemplate --template-file=./azu
 Doing so you can set up parameter files for different environments, e.g.:
 
 - azuredeploy.params.**DEV**.json
-- azuredeploy.params.**TEST**.json 
-- azuredeploy.params.**PROD**.json 
+- azuredeploy.params.**TEST**.json
+- azuredeploy.params.**PROD**.json
 - ...
 
 :::tip
   📝 One template + multiple parameter files. That's **how most people do** it.
-::: 
+:::
 
 Example for our storage account parameter:
 
@@ -258,6 +271,7 @@ Example for our storage account parameter:
 ```  
 
 The corresponding parameter file would look like this.  
+
 ```json
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
@@ -283,7 +297,8 @@ You will:
 - Generate a parameter file
 - Deploy it using Azure CLI
 
-1. Open Visual Studio Code and create an empty ARM template file.Use the following code snippet.
+### 1. Open Visual Studio Code and create an empty ARM template file (e.g. ***pip.json***). Use the following code snippet
+
   ```json
   {
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
@@ -292,7 +307,8 @@ You will:
   }
   ```
 
-2. Add a resource to it. Put the json code snippet that defines a public IP address into the resources section of the template:
+### 2. Add a resource to it. Put the json code snippet that defines a public IP address into the resources section of the template
+
   ```json
   {
     "name": "string",
@@ -309,12 +325,15 @@ You will:
   }
   ```
 
+  >**Tip:**  
+  >Try a **Shift-ALT-F to format the code after inserting**. (requires ARM extension to be installed)  
+
   You need to replace the _"usefulstring"_ with meaningful data. See the following links as reference:  
   
 - [Microsoft.Network publicIPAddresses](https://docs.microsoft.com/en-us/azure/templates/microsoft.network/publicipaddresses#template-format)
 - All Azure resources are listed in the [ARM Templates Reference](https://docs.microsoft.com/en-us/azure/templates/). e.g. Public IP is in the network resource provider.
 
-3. Use an ARM functio. Concentrate on:  
+### 3. Use an ARM function. Concentrate on  
   
   ```json
     "location": "string",
@@ -323,29 +342,33 @@ You will:
   Azure resources go into a resource group. A resource group is located in an azure region. So you may want to use the same region for your public IP Address as it's hosting resource group.  
   Lucky us. There is a function available - that we can use. Replace _"string"_ with "`[resourceGroup().location]`"  
 
-  As example you can compare your ARM Template with the following code snippet:
+### 4. Create a parameter  
+
+Create a parameter so that a user can enter the name of the IP Address artefact.  
+Therefore add a parameter section to the template. Checkout [Make template reusable](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-add-parameters?tabs=azure-powershell#make-template-reusable) to see how it is done.  
+
+As example you can compare your ARM Template with the following code snippet:
 
   ```json
-  {
+{
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "IPAddress": {
+        "IPName": {
             "type": "string",
             "metadata": {
-                "description": "description"
+                "description": "The name of the Azure IP adress artefact"
              }
         }
      },
     "resources": [
         {
-          "name": "myFirstIpAddressviaARM",
+          "name": "[parameters('IPName')]",
           "type": "Microsoft.Network/publicIPAddresses",
           "apiVersion": "2020-06-01",
           "location": "[resourceGroup().location]",
           "sku": {
-              "name": "Basic",
-              "tier": "Regional"
+              "name": "Basic"
           },
           "properties": {
               "publicIPAllocationMethod": "Static",
@@ -356,24 +379,24 @@ You will:
   }
   ```
 
-4. Create a parameter. Add the parameter section to the template - use out [Basic Template](##A-Basic-Template) as reference.
+### 5. Create a parameter file  
 
-5. Create a parameter file. Use VS Code to generate a parameter file for you and enter a value:  
+Use VS Code to generate a parameter file for you and enter a value:  
   
   ![VS Code can generate parameter file](./images/vscodegeneratedparams.png)
 
   As example you can compare your parameters file with the following code snippet:
 
   ```json
-  {
-      "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-      "contentVersion": "1.0.0.0",
-      "parameters": {
-          "IPAddress": {
-              "value": "40.85.113.39"
-          }
-      }
-  }
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "IPName": {
+            "value": "my-PIP" 
+        }
+    }
+}
   ```
 
 6. Kick off the deployment using Azure CLI. To Do this you can upload the template and parameter file to your Azure Cloud Shell:  
@@ -396,8 +419,8 @@ Result:
 
 ![My First ARM Template result](./images/MyARMResult.png)
 
-:::warning
-There exist two modes t deploy an ARM template:
+:::***Important***:
+There exist two modes how to deploy an ARM template:
 
 - **Complete** – resources that are not present in the template, but do exist in the resource group, are deleted.
 - **Incremental** (default)– resources that are not present in the template, but exist in the resource group, remain unchanged.
