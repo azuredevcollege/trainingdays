@@ -6,12 +6,16 @@
 - Use **Cloud Shell** to automate Azure resource creation and configuration.  
 
 ## Table Of Contents
-1. [Benefits of the Azure Cloud Shell](#benefits-of-the-azure-cloud-shell)
-2. [Create an Azure Cloud Shell (if you don't have one.)](#create-an-azure-cloud-shell)
-3. [Playing with the Cloud Shell](#playing-with-the-cloud-shell)
-4. [PowerShell Az Modules for Azure](#powershell-az-modules-for-azure)
-5. [ Create a VM with PowerShell (optional)](#create-a-vm-with-powershell-optional)
-6. [Cleanup](#cleanup)
+
+- [Challenge 5: Cloud Shell - Coding Your Azure Resources](#challenge-5-cloud-shell---coding-your-azure-resources)
+  - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
+  - [Table Of Contents](#table-of-contents)
+  - [Benefits of the Azure Cloud Shell](#benefits-of-the-azure-cloud-shell)
+  - [Create an Azure Cloud Shell](#create-an-azure-cloud-shell)
+  - [Playing with the Cloud Shell](#playing-with-the-cloud-shell)
+  - [PowerShell Az Modules for Azure](#powershell-az-modules-for-azure)
+  - [Create a VM with PowerShell (optional)](#create-a-vm-with-powershell-optional)
+  - [Cleanup](#cleanup)
 
 ## Benefits of the Azure Cloud Shell
 
@@ -36,7 +40,7 @@ Using the Cloud Shell saves you time as:
 
 - The Azure Cloud Shell is an in-browser-accessible shell for managing Azure resources.
 - It already has the required SDKs and tools installed to interact with Azure.
-- The Azure Cloud Shell comes in 2 flavors: PowerShell or Bash. When being asked choose PowerShell this time.    
+- The Azure Cloud Shell comes in 2 flavors: PowerShell or Bash. When being asked choose PowerShell this time.
   ![Bash or PowerShell](./images/2variations.png)  
 
 - The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)  
@@ -47,13 +51,13 @@ Using the Cloud Shell saves you time as:
 
   ![Cloud Shell Storage Account Setup](./images/CloudShell1.png)  
 
-| Name | Value |
-|---|---|
-| _Subscription_        |  %your subscription% |
-| _Cloud Shell Region_  |  e.g. West Europe |
-| _Resource Group_      |  e.g. rg-cloudshell |
-| _Storage Account_     |  %some unique value% |
-| _File Share_          |  cloudshell|
+| Name                 | Value               |
+| -------------------- | ------------------- |
+| _Subscription_       | %your subscription% |
+| _Cloud Shell Region_ | e.g. West Europe    |
+| _Resource Group_     | e.g. rg-cloudshell  |
+| _Storage Account_    | %some unique value% |
+| _File Share_         | cloudshell          |
 
 ```
 [Azure Portal] -> Create storage
@@ -227,7 +231,7 @@ Hence, when you copy and pasted non PowerShell Core scripts, they may need some 
 
   ```PowerShell
   $VMName = 'MyVM'    # variable for easy reuse
-  New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe' -Size 'Standard_B2s'
+  New-AzVM -Name $VMName -Credential (Get-Credential) -Location 'North Europe'
   ```
 
   Enter a user name (**not** 'admin' **nor** 'administrator') and a **complex password** when asked.
@@ -237,6 +241,53 @@ Hence, when you copy and pasted non PowerShell Core scripts, they may need some 
   After a successful run you should have a VM in your subscription:
 
   ![MyVM in Azure Portal](./images/newvm2.png)  
+  
+> **Note**:  
+> **Creating a vm is not that easy**. We did not specify a network, vm size, operating system,...  
+> So **a lot of defaults are assumed**. If you want to script this the code gets much longer.  
+> Take a look at some examples by executing:  
+
+  ```PowerShell
+  help new-azvm -examples  
+  ```  
+
+  the output will be something like:  
+
+  ```PowerShell
+.
+.
+.
+    Example 3: Create a VM from a marketplace image without a Public IP
+
+    $VMLocalAdminUser = "LocalAdminUser"
+    $VMLocalAdminSecurePassword = ConvertTo-SecureString <password> -AsPlainText -Force
+    $LocationName = "westus"
+    $ResourceGroupName = "MyResourceGroup"
+    $ComputerName = "MyVM"
+    $VMName = "MyVM"
+    $VMSize = "Standard_DS3"
+
+    $NetworkName = "MyNet"
+    $NICName = "MyNIC"
+    $SubnetName = "MySubnet"
+    $SubnetAddressPrefix = "10.0.0.0/24"
+    $VnetAddressPrefix = "10.0.0.0/16"
+
+    $SingleSubnet = New-AzVirtualNetworkSubnetConfig -Name $SubnetName -AddressPrefix $SubnetAddressPrefix
+    $Vnet = New-AzVirtualNetwork -Name $NetworkName -ResourceGroupName $ResourceGroupName -Location $LocationName -AddressPrefix $VnetAddressPrefix -Subnet $SingleSubnet
+    $NIC = New-AzNetworkInterface -Name $NICName -ResourceGroupName $ResourceGroupName -Location $LocationName -SubnetId $Vnet.Subnets[0].Id
+
+    $Credential = New-Object System.Management.Automation.PSCredential ($VMLocalAdminUser, $VMLocalAdminSecurePassword);
+
+    $VirtualMachine = New-AzVMConfig -VMName $VMName -VMSize $VMSize
+    $VirtualMachine = Set-AzVMOperatingSystem -VM $VirtualMachine -Windows -ComputerName $ComputerName -Credential $Credential -ProvisionVMAgent -EnableAutoUpdate
+    $VirtualMachine = Add-AzVMNetworkInterface -VM $VirtualMachine -Id $NIC.Id
+    $VirtualMachine = Set-AzVMSourceImage -VM $VirtualMachine -PublisherName 'MicrosoftWindowsServer' -Offer 'WindowsServer' -Skus '2012-R2-Datacenter' -Version latest
+
+    New-AzVM -ResourceGroupName $ResourceGroupName -Location $LocationName -VM $VirtualMachine -Verbose
+  ```  
+
+  As you can see this is much more code - even more if you enrich it with error handling.
 
 ## Cleanup
 
