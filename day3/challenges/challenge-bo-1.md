@@ -152,13 +152,13 @@ When the deployment of the new Service Bus has finished, we need to add a Servic
 
 Service Bus Queue Properties:
 
-- Name: _thumbnails_
+- Name: _sbq-scm-thumbnails_
 
 When successfully added, go to **Shared Access Policies** of the **Service Bus Queue (!)** and add two policies:
 
-- Name: _thumbnailslisten_ (enable checkbox **Listen**)
+- Name: _listen_ (enable checkbox **Listen**)
   - will be used by clients that only need to listen to the Service Bus Queue
-- Name: _thumbnailssend_ (enable checkbox **Send**)
+- Name: _send_ (enable checkbox **Send**)
   - will be used by clients that also need to be able to send messages to the Service Bus Queue
 
 Our producers/consumers will use these Access Policies to be able to send and listen to/on that specific queue.
@@ -169,7 +169,7 @@ We also nee a topic for handling _Contacts_ changes (create, update etc.) with c
 
 Contacts Topic Properties:
 
-- Name: _scmtopic_
+- Name: _sbt-contacts_
 
 Leave all other settings as suggested and click **Create**. When finished, open the topic and add two subscriptions.
 
@@ -195,9 +195,9 @@ Subscription for Visit Reports Service
 
 When you have successfully added the two subscriptions, go back to **Shared Access Policies** of the Service Bus Topic **sbt-contacts** and add two policies:
 
-- Name: _scmtopiclisten_ (enable checkbox **Listen**)
+- Name: _listen_ (enable checkbox **Listen**)
   - will be used by clients that only need to listen to the Service Bus Topic
-- Name: _scmtopicsend_ (enable checkbox **Send**)
+- Name: _send_ (enable checkbox **Send**)
   - will be used by clients that also need to be able to send messages to the Service Bus Topic
 
 ### Service Bus Topic for Visit Reports
@@ -206,15 +206,15 @@ We also need a topic for handling _Visit Report_ changes (create, update etc.). 
 
 Visit Reports Topic Properties:
 
-- Name: _scmvrtopic_
+- Name: _sbt-visitreports_
 
 Leave all other settings as suggested and click **Create**.
 
 When successfully added, go back to **Shared Access Policies** of the Service Bus Topic **sbt-visitreports** and add two policies:
 
-- Name: _scmvrtopiclisten_ (enable checkbox **Listen**)
+- Name: _listen_ (enable checkbox **Listen**)
   - will be used by clients that only need to listen to the Service Bus Topic
-- Name: _scmvrtopicsend_ (enable checkbox **Send**)
+- Name: _send_ (enable checkbox **Send**)
   - will be used by clients that also need to be able to send messages to the Service Bus Topic
 
 We don't add a subscription for the _visit report_ topic at the moment. The topic will be used later when we integrate further services like Azure Congitive Services.
@@ -258,9 +258,9 @@ Azure Web App for **Contacts Service**:
 
 Application Configuration/Settings:
 
-| Parameter                                         | Value / Hint                                                                                                             |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| EventServiceOptions\_\_ServiceBusConnectionString | use the Connection String from the Shared Access Policy (**Topic sbt-contacts**) for sending messages - **scmtopicsend** |
+| Parameter                                         | Value / Hint                                                                                                     |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| EventServiceOptions\_\_ServiceBusConnectionString | use the Connection String from the Shared Access Policy (**Topic sbt-contacts**) for sending messages - **send** |
 
 Connection Strings:
 
@@ -281,7 +281,7 @@ Application Settings:
 | ImageStoreOptions\_\_StorageAccountConnectionString      | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
 | ServiceBusQueueOptions\_\_ImageContainer                 | _rawimages_                                                                                                             |
 | ServiceBusQueueOptions\_\_ThumbnailContainer             | _thumbnails_                                                                                                            |
-| ServiceBusQueueOptions\_\_ThumbnailQueueConnectionString | use the Connection String from the Shared Access Policy (**Queue**) for sending messages - **thumbnailssend**           |
+| ServiceBusQueueOptions\_\_ThumbnailQueueConnectionString | use the Connection String from the Shared Access Policy (**Queue**) for sending messages - **send**                     |
 
 :::tip
 📝 You can delete all **StorageQueueOptions\_\_** app settings!
@@ -293,11 +293,11 @@ Azure Function for **Image Manipulation / Resizer Service**:
 
 Configuration / Application Settings:
 
-| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                |
-| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
-| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                       |
-| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                     |
+| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                      |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **listen**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                             |
+| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                           |
 
 :::tip
 📝 You can delete the **QueueName** app settings!
@@ -351,7 +351,7 @@ When finished, apply these settings to the Web App Configuration settings:
 
 ### Create and deploy the Contacts Search Indexer Function
 
-Now we have deployed an Azure Search Service and an API that is able to query the search index. But how will contacts be pushed to the Azure Search index? Therefor, we will be using another Azure Function that listens to created and changed contacts via an Azure Service Bus Topic (**sbt-contacts**, you already created it - as well as the corresponding subscription **contactsearch**)!
+Now we have deployed an Azure Search Service and an API that is able to query the search index. But how will contacts be pushed to the Azure Search index? Therefore, we will be using another Azure Function that listens to created and changed contacts via an Azure Service Bus Topic (**sbt-contacts**, you already created it - as well as the corresponding subscription **contactsearch**)!
 
 Create the Azure function in the **scm-breakout-rg** resource group with the follwing parameters:
 
@@ -422,11 +422,11 @@ When the Web App has been created, go to the Configuration section and add the f
 
 **Azure Web App / Configuration / Connection Strings**
 
-| Parameter               | Value                                                                                                          | Type     |
-| ----------------------- | -------------------------------------------------------------------------------------------------------------- | -------- |
-| COSMOSKEY               | Primary Key of your Cosmos DB                                                                                  | _Custom_ |
-| SBCONTACTSTOPIC_CONNSTR | Primary Connection String of the Service Bus **Contacts** Topic (**sbt-contacts** / _scmtopiclisten_)          | _Custom_ |
-| SBVRTOPIC_CONNSTR       | Primary Connection String of the Service Bus **Visit Reports** Topic (**sbt-visitreports** / _scmvrtopicsend_) | _Custom_ |
+| Parameter               | Value                                                                                                | Type     |
+| ----------------------- | ---------------------------------------------------------------------------------------------------- | -------- |
+| COSMOSKEY               | Primary Key of your Cosmos DB                                                                        | _Custom_ |
+| SBCONTACTSTOPIC_CONNSTR | Primary Connection String of the Service Bus **Contacts** Topic (**sbt-contacts** / _listen_)        | _Custom_ |
+| SBVRTOPIC_CONNSTR       | Primary Connection String of the Service Bus **Visit Reports** Topic (**sbt-visitreports** / _send_) | _Custom_ |
 
 ![Visit Reports API Configuration Settings](./images/portal_bo_add_vr.png 'Visit Reports API Configuration Settings')
 

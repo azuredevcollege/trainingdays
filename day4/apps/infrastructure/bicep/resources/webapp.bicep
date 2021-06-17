@@ -80,7 +80,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'StorageQueueOptions__Queue'
-          value: 'thumbnails'
+          value: 'sbq-scm-thumbnails'
         }
         {
           name: 'ServiceBusOptions__ImageContainer'

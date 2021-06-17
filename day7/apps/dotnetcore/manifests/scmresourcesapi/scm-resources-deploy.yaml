@@ -29,11 +29,11 @@ spec:
         - name: application
           resources:
             requests:
-              memory: '64Mi'
-              cpu: '100m'
+              memory: "64Mi"
+              cpu: "100m"
             limits:
-              memory: '256Mi'
-              cpu: '500m'
+              memory: "256Mi"
+              cpu: "500m"
           image: azuredevcollege.azurecr.io/adcd7/scmresourceapi
           env:
             - name: ImageStoreOptions__StorageAccountConnectionString
@@ -44,7 +44,7 @@ spec:
             - name: ImageStoreOptions__ImageContainer
               value: rawimages
             - name: ImageStoreOptions__ThumbnailContainer
-              value: thumbnails
+              value: sbq-scm-thumbnails
             - name: ServiceBusQueueOptions__ThumbnailQueueConnectionString
               valueFrom:
                 secretKeyRef:

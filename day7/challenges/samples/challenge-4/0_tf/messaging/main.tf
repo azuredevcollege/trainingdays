@@ -19,7 +19,7 @@ resource "azurerm_servicebus_namespace" "sbn" {
 # Thumbnail Queue
 
 resource "azurerm_servicebus_queue" "queue_thumbnails" {
-  name                = "thumbnails"
+  name                = "sbq-scm-thumbnails"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }

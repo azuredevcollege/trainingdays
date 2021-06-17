@@ -25,7 +25,7 @@
         "defaultSASKeyName": "RootManageSharedAccessKey",
         "defaultAuthRuleResourceId": "[resourceId('Microsoft.ServiceBus/namespaces/authorizationRules', parameters('serviceBusNamespaceName'), variables('defaultSASKeyName'))]",
         "sbVersion": "2017-04-01",
-        "sbThumbnailsQueueName": "thumbnails",
+        "sbThumbnailsQueueName": "sbq-scm-thumbnails",
         "sbThumbnailsSendRule": "thumbnailssend",
         "sbThumbnailsListenRule": "thumbnailslisten",
         "sbThumbnailSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbThumbnailsQueueName'), variables('sbThumbnailsSendRule'))]",
