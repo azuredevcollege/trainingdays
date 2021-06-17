@@ -8,7 +8,7 @@ function init(connectionString) {
     return new Promise((resolve, reject) => {
         try {
             const serviceBusNs = ServiceBusClient.createFromConnectionString(connectionString);
-            const topic = serviceBusNs.createTopicClient('scmvrtopic').createSender();
+            const topic = serviceBusNs.createTopicClient('sbt-visitreports').createSender();
             return resolve({ serviceBus: serviceBusNs, topic: topic });
         } catch {
             err => {

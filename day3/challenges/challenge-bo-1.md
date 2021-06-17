@@ -177,7 +177,7 @@ Subscription for Search Service / indexing of contacts:
 
 | Parameter            | Value                                                         |
 | -------------------- | ------------------------------------------------------------- |
-| _Name_               | scmcontactsearch                                              |
+| _Name_               | contactsearch                                                 |
 | _Max delivery count_ | 10                                                            |
 | _Enable Sessions_    | true (in this sample, we will be using Service Bus sessions!) |
 
@@ -187,13 +187,13 @@ Subscription for Search Service / indexing of contacts:
 
 Subscription for Visit Reports Service
 
-| Parameter            | Value                 |
-| -------------------- | --------------------- |
-| _Name_               | scmcontactvisitreport |
-| _Max delivery count_ | 10                    |
-| _Enable Sessions_    | false                 |
+| Parameter            | Value        |
+| -------------------- | ------------ |
+| _Name_               | visitreports |
+| _Max delivery count_ | 10           |
+| _Enable Sessions_    | false        |
 
-When you have successfully added the two subscriptions, go back to **Shared Access Policies** of the Service Bus Topic **scmtopic** and add two policies:
+When you have successfully added the two subscriptions, go back to **Shared Access Policies** of the Service Bus Topic **sbt-contacts** and add two policies:
 
 - Name: _scmtopiclisten_ (enable checkbox **Listen**)
   - will be used by clients that only need to listen to the Service Bus Topic
@@ -210,7 +210,7 @@ Visit Reports Topic Properties:
 
 Leave all other settings as suggested and click **Create**.
 
-When successfully added, go back to **Shared Access Policies** of the Service Bus Topic **scmvrtopic** and add two policies:
+When successfully added, go back to **Shared Access Policies** of the Service Bus Topic **sbt-visitreports** and add two policies:
 
 - Name: _scmvrtopiclisten_ (enable checkbox **Listen**)
   - will be used by clients that only need to listen to the Service Bus Topic
@@ -258,9 +258,9 @@ Azure Web App for **Contacts Service**:
 
 Application Configuration/Settings:
 
-| Parameter                                         | Value / Hint                                                                                                         |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| EventServiceOptions\_\_ServiceBusConnectionString | use the Connection String from the Shared Access Policy (**Topic scmtopic**) for sending messages - **scmtopicsend** |
+| Parameter                                         | Value / Hint                                                                                                             |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| EventServiceOptions\_\_ServiceBusConnectionString | use the Connection String from the Shared Access Policy (**Topic sbt-contacts**) for sending messages - **scmtopicsend** |
 
 Connection Strings:
 
@@ -293,11 +293,11 @@ Azure Function for **Image Manipulation / Resizer Service**:
 
 Configuration / Application Settings:
 
-| Parameter                                               | Value / Hint                                                                                                            |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string!  |
-| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                   |
-| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
+| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                       |
+| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                     |
 
 :::tip
 📝 You can delete the **QueueName** app settings!
@@ -351,7 +351,7 @@ When finished, apply these settings to the Web App Configuration settings:
 
 ### Create and deploy the Contacts Search Indexer Function
 
-Now we have deployed an Azure Search Service and an API that is able to query the search index. But how will contacts be pushed to the Azure Search index? Therefor, we will be using another Azure Function that listens to created and changed contacts via an Azure Service Bus Topic (**scmtopic**, you already created it - as well as the corresponding subscription **scmcontactsearch**)!
+Now we have deployed an Azure Search Service and an API that is able to query the search index. But how will contacts be pushed to the Azure Search index? Therefor, we will be using another Azure Function that listens to created and changed contacts via an Azure Service Bus Topic (**sbt-contacts**, you already created it - as well as the corresponding subscription **contactsearch**)!
 
 Create the Azure function in the **scm-breakout-rg** resource group with the follwing parameters:
 
@@ -367,12 +367,12 @@ Create the Azure function in the **scm-breakout-rg** resource group with the fol
 
 When finished, apply these settings to the App Configuration settings:
 
-| Parameter                            | Value / Hint                                                                                                                                                                                                                                                                                            |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ContactIndexerOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                                                                                                                                                                                 |
-| ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                                                           |
-| ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                                                   |
-| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **scmtopic**) for listening for messages - **scmtopiclisten**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
+| Parameter                            | Value / Hint                                                                                                                                                                                                                                                                                                |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ContactIndexerOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                                                                                                                                                                                     |
+| ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                                                               |
+| ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                                                       |
+| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **sbt-contacts**) for listening for messages - **scmtopiclisten**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
 
 ![Search Indexer Function Configuration Settings](./images/portal_bo_add_searchindexer.png 'Search Indexer Function Configuration Settings')
 
@@ -422,11 +422,11 @@ When the Web App has been created, go to the Configuration section and add the f
 
 **Azure Web App / Configuration / Connection Strings**
 
-| Parameter               | Value                                                                                                    | Type     |
-| ----------------------- | -------------------------------------------------------------------------------------------------------- | -------- |
-| COSMOSKEY               | Primary Key of your Cosmos DB                                                                            | _Custom_ |
-| SBCONTACTSTOPIC_CONNSTR | Primary Connection String of the Service Bus **Contacts** Topic (**scmtopic** / _scmtopiclisten_)        | _Custom_ |
-| SBVRTOPIC_CONNSTR       | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopicsend_) | _Custom_ |
+| Parameter               | Value                                                                                                          | Type     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------- | -------- |
+| COSMOSKEY               | Primary Key of your Cosmos DB                                                                                  | _Custom_ |
+| SBCONTACTSTOPIC_CONNSTR | Primary Connection String of the Service Bus **Contacts** Topic (**sbt-contacts** / _scmtopiclisten_)          | _Custom_ |
+| SBVRTOPIC_CONNSTR       | Primary Connection String of the Service Bus **Visit Reports** Topic (**sbt-visitreports** / _scmvrtopicsend_) | _Custom_ |
 
 ![Visit Reports API Configuration Settings](./images/portal_bo_add_vr.png 'Visit Reports API Configuration Settings')
 

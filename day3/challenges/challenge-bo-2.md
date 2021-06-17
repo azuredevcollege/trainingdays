@@ -42,11 +42,11 @@ Go to the Portal and create the new resource (search for _Cognitive Services_). 
 
 ## Create an Azure Function to Analyze Visit Report Results
 
-As described in the introduction section, we will be using an Azure Function to call the Text Analyisis services - this time the function will be hosted on a Linux OS. It will be triggered by an Azure Service Bus Topic (**scmvrtopic**) we created in the Break Out 1 session earlier this day.
+As described in the introduction section, we will be using an Azure Function to call the Text Analyisis services - this time the function will be hosted on a Linux OS. It will be triggered by an Azure Service Bus Topic (**sbt-visitreports**) we created in the Break Out 1 session earlier this day.
 
 ### Add Service Bus Topic Subscription
 
-First, we need to add the Service Bus Topic subscription. Please go to your Azure Service Bus and open the topic **scmvrtopic**. Under **Subscriptions**, add a new one called **scmvisitreporttextanalytics**. Make sure sessions are **disabled** and **Max delivery count** is set to `10` - leave all other properties as proposed by the Azure Portal.
+First, we need to add the Service Bus Topic subscription. Please go to your Azure Service Bus and open the topic **sbt-visitreports**. Under **Subscriptions**, add a new one called **textanalytics**. Make sure sessions are **disabled** and **Max delivery count** is set to `10` - leave all other properties as proposed by the Azure Portal.
 
 ### Create the Azure Function App
 
@@ -71,13 +71,13 @@ Create the Azure Function App with the following parameters.
 
 Create it and when the Function App has been deployed, go to the **Configuration** section and add the following App configuration/settings.
 
-| Parameter                  | Value / Hint                                                                                                                                                                                                                                                                      |
-| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString | Primary Connection String of the Service Bus **Visit Reports** Topic (**scmvrtopic** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
-| COSMOSDB                   | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                                                            |
-| COSMOSKEY                  | Primary Key of your Cosmos DB                                                                                                                                                                                                                                                     |
-| TA_SUBSCRIPTION_KEY        | the Azure Cognitive Services **subscription key**. Obtain it from the _Keys and Endpoint_ view under _Resource Management_ of your Cognitive Services account                                                                                                                     |
-| TA_SUBSCRIPTIONENDPOINT    | the Azure Cognitive Services **endpoint URL**. Obtain it from the _Keys and Endpoint_view under_Resource Management_ of your Cognitive Services account                                                                                                                           |
+| Parameter                  | Value / Hint                                                                                                                                                                                                                                                                            |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString | Primary Connection String of the Service Bus **Visit Reports** Topic (**sbt-visitreports** / _scmvrtopiclisten_ Shared Access Key) <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| COSMOSDB                   | the endpoint to the Cosmos DB, e.g. <https://adcd3cosmos-dev.documents.azure.com:443/>                                                                                                                                                                                                  |
+| COSMOSKEY                  | Primary Key of your Cosmos DB                                                                                                                                                                                                                                                           |
+| TA_SUBSCRIPTION_KEY        | the Azure Cognitive Services **subscription key**. Obtain it from the _Keys and Endpoint_ view under _Resource Management_ of your Cognitive Services account                                                                                                                           |
+| TA_SUBSCRIPTIONENDPOINT    | the Azure Cognitive Services **endpoint URL**. Obtain it from the _Keys and Endpoint_view under_Resource Management_ of your Cognitive Services account                                                                                                                                 |
 
 Save the settings. We can now start deploying the code that will call the Azure Cognitive services.
 

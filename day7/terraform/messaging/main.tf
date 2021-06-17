@@ -42,7 +42,7 @@ resource "azurerm_servicebus_queue_authorization_rule" "queue_thumbnails_send" {
 # Contacts Topic
 
 resource "azurerm_servicebus_topic" "contacts" {
-  name                = "scmtopic"
+  name                = "sbt-contacts"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }
@@ -68,7 +68,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_contacts_send" {
 }
 
 resource "azurerm_servicebus_subscription" "contacts_search" {
-  name                = "scmcontactsearch"
+  name                = "contactsearch"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
@@ -77,7 +77,7 @@ resource "azurerm_servicebus_subscription" "contacts_search" {
 }
 
 resource "azurerm_servicebus_subscription" "contacts_visitreport" {
-  name                = "scmcontactvisitreport"
+  name                = "visitreports"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.contacts.name
@@ -88,7 +88,7 @@ resource "azurerm_servicebus_subscription" "contacts_visitreport" {
 # Contacts Topic
 
 resource "azurerm_servicebus_topic" "visitreports" {
-  name                = "scmvrtopic"
+  name                = "sbt-visitreports"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
 }
@@ -114,7 +114,7 @@ resource "azurerm_servicebus_topic_authorization_rule" "topic_visitreports_send"
 }
 
 resource "azurerm_servicebus_subscription" "visitreports_textanalytics" {
-  name                = "scmvisitreporttextanalytics"
+  name                = "textanalytics"
   resource_group_name = var.resource_group_name
   namespace_name      = azurerm_servicebus_namespace.sbn.name
   topic_name          = azurerm_servicebus_topic.visitreports.name
