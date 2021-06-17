@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-  
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: drop
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -70,12 +70,18 @@ jobs:
               echo "Azure resource group created"
             fi
 
-      - name: Deploy to dev environment
-        uses: azure/arm-deploy@v1
+      - name: Deploy to
+        uses: Azure/CLI@v1
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./scm-common.json
-          parameters: env=${{ env.ENV_NAME }}
+          inlineScript: |
+            #!/bin/bash
+            az deployment group create -n run01 -g ${{ env.RESOURCE_GROUP_NAME }} --template-file ./scm-common.json --parameters env=${{ env.ENV_NAME }}
+      # - name: Deploy to dev environment
+      #   uses: azure/arm-deploy@v1
+      #   with:
+      #     resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+      #     template: ./scm-common.json
+      #     parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
@@ -92,7 +98,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: drop
-      
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -110,7 +116,7 @@ jobs:
               echo "Azure resource group created"
             fi
 
-      - name: Deploy to dev environment
+      - name: Deploy to test environment
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
