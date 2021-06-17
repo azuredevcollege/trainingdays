@@ -77,7 +77,7 @@ jobs:
       #       #!/bin/bash
       #       az deployment group create -n run01 -g ${{ env.RESOURCE_GROUP_NAME }} --template-file ./scm-common.json --parameters env=${{ env.ENV_NAME }}
       - name: Deploy to dev environment
-        uses: azure/arm-deploy@v1.0.2
+        uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./scm-common.bicep
