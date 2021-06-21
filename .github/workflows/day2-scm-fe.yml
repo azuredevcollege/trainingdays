@@ -136,8 +136,14 @@ jobs:
           --404-document index.html
 
       - name: Patch SCM Frontend settings
-        run: |
-          echo "var uisettings = { \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" };" > ./scmfe/settings/settings.js
+        run: >
+          echo "var uisettings = 
+          { 
+            \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
+            \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
+            \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
+          };" 
+          > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
         run: >
