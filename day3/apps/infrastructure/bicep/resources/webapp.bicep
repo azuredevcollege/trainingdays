@@ -78,15 +78,11 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
           value: listKeys(sbqThumbnailsSendRule.id, sbqThumbnailsSendRule.apiVersion).primaryConnectionString
         }
         {
-          name: 'StorageQueueOptions__Queue'
-          value: 'sbq-scm-thumbnails'
-        }
-        {
-          name: 'ServiceBusOptions__ImageContainer'
+          name: 'ServiceBusQueueOptions__ImageContainer'
           value: 'rawimages'
         }
         {
-          name: 'ServiceBusOptions__ThumbnailContainer'
+          name: 'ServiceBusQueueOptions__ThumbnailContainer'
           value: 'thumbnails'
         }
       ]
