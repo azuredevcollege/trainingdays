@@ -19,34 +19,22 @@ on:
 
   workflow_dispatch:
 
+env:
+  API_PACKAGE_NAME: "scmresourcesapi.zip"
+  RESIZER_PACKAGE_NAME: "resizer.zip"
+  BICEP_FILE_NAME: "scm-resourcesapi.bicep"
+
 jobs:
-  build:
+  build-api:
     runs-on: ubuntu-latest
     env:
       API_PACKAGE_PATH: "publish/scmresourcesapi"
-      RESIZER_PACKAGE_PATH: "publish/resizer"
-      BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-resourcesapi.bicep"
-      BICEP_FILE_NAME: "scm-resourceapi.bicep"
       API_PROJECT_PATH: "./day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api"
-      RESIZER_PROJECT_PATH: "./day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
-      API_PACKAGE_NAME: "scmresourcesapi.zip"
-      RESIZER_PACKAGE_NAME: "resizer.zip"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Transpile bicep files
-        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
-
-      - name: Archive bicep file
-        uses: actions/upload-artifact@v2
-        if: env.NEED_DEPLOY == 'true'
-        with:
-          name: drop
-          path: ${{ env.BICEP_FILE_PATH }}
-          retention-days: 30
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
@@ -73,6 +61,22 @@ jobs:
           path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
           retention-days: 30
 
+  build-resizer:
+    runs-on: ubuntu-latest
+    env:
+      RESIZER_PACKAGE_PATH: "publish/resizer"
+      RESIZER_PROJECT_PATH: "./day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
       - name: Build and publish SCM ImageResizer
         working-directory: ${{ env.RESIZER_PROJECT_PATH }}
         run: |
@@ -90,21 +94,39 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: "${{ env.RESIZER_PROJECT_NAME }}/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}"
+          path: "${{ env.RESIZER_PROJECT_PATH }}/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}"
+          retention-days: 30
+
+  build-bicep:
+    runs-on: ubuntu-latest
+    env:
+      BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-resourcesapi.bicep"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
+
+      - name: Archive bicep file
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: ${{ env.BICEP_FILE_PATH }}
           retention-days: 30
 
   deploy-to-dev:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
-    needs: build
+    needs: [build-api, build-resizer, build-bicep]
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd2
-      API_PACKAGE_NAME: "scmresourcesapi.zip"
-      RESIZER_PACKAGE_NAME: "resizer.zip"
-      BICEP_FILE_NAME: "scm-resourceapi.bicep"
 
     steps:
       - name: Login via Azure CLI
@@ -152,9 +174,6 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd2
-      API_PACKAGE_NAME: "scmresourcesapi.zip"
-      RESIZER_PACKAGE_NAME: "resizer.zip"
-      BICEP_FILE_NAME: "scm-resourceapi.bicep"
 
     steps:
       - name: Login via Azure CLI
