@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/common/commonmain.bicep"
+      BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/common/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -39,7 +40,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: ${{ env.BICEP_FILE_PATH }}
+          path: ${{ env.BICEP_MODULE_PATH }}
           retention-days: 30
 
   deploy-to-dev:
