@@ -45,7 +45,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: ${{ BICEP_FILE_PATH }}
+          path: ${{ env.BICEP_FILE_PATH }}
           retention-days: 30
 
       - name: Setup .NET Core
@@ -147,7 +147,7 @@ jobs:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-test
-    needs: build
+    needs: deploy-to-dev
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
