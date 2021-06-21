@@ -31,6 +31,7 @@ jobs:
     env:
       BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/search/searchmain.bicep"
       BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/search/"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -54,6 +55,7 @@ jobs:
     env:
       API_PROJECT_PATH: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
       API_PACKAGE_PATH: "publish/scmsearchapi"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -91,6 +93,7 @@ jobs:
     env:
       INDEXER_PROJECT_PATH: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"
       INDEXER_PACKAGE_PATH: "publish/indexer"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
