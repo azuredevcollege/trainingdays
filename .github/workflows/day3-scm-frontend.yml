@@ -20,7 +20,7 @@ on:
   workflow_dispatch:
 
 env:
-  BICEP_FILE_NAME: frontendmain.bicep
+  BICEP_FILE_NAME: "frontendmain.bicep"
 
 jobs:
   build-bicep:
