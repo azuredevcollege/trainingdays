@@ -114,13 +114,13 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.steps.createResourceGroupName.outputs.name }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy infrastructure to dev environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.steps.createResourceGroupName.outputs.name }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }} sku=B1
 
