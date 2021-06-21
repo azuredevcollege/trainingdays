@@ -102,7 +102,7 @@ jobs:
         id: createResourceGroupName
         run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
-      - name: Download bicep artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: drop
@@ -153,7 +153,7 @@ jobs:
         id: createResourceGroupName
         run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
-      - name: Download bicep artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
           name: drop
