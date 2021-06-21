@@ -125,7 +125,7 @@ jobs:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
-    needs: [buil-bicep, build-api, build-ta]
+    needs: [build-bicep, build-api, build-ta]
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
