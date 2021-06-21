@@ -21,6 +21,7 @@ env:
 
 jobs:
   build:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-common.bicep"
@@ -44,7 +45,7 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day2-scm-dev
     needs: build
@@ -85,7 +86,7 @@ jobs:
           parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
-    if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day2-scm-test
     needs: deploy-to-dev
