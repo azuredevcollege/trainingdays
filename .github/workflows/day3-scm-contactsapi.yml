@@ -122,7 +122,7 @@ jobs:
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
@@ -173,7 +173,7 @@ jobs:
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
