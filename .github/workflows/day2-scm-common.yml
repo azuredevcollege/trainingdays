@@ -26,9 +26,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Transpile bicep files
-      #   run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-common.bicep
+      # Transpile to ARM template to validate bicep
+      - name: Transpile bicep files
+        run: az bicep build -f ./day2/apps/infrastructure/bicep/scm-common.bicep
 
+      # Archive bicep file to use it later during deployment
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
@@ -70,14 +72,8 @@ jobs:
               echo "Azure resource group created"
             fi
 
-      # - name: Deploy to
-      #   uses: Azure/CLI@v1
-      #   with:
-      #     inlineScript: |
-      #       #!/bin/bash
-      #       az deployment group create -n run01 -g ${{ env.RESOURCE_GROUP_NAME }} --template-file ./scm-common.json --parameters env=${{ env.ENV_NAME }}
       - name: Deploy to dev environment
-        uses: azure/arm-deploy@6212dde5b668fa95c1cf6239dee431c3cde5b43c
+        uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./scm-common.bicep
@@ -120,5 +116,5 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./scm-common.json
+          template: ./scm-common.bicep
           parameters: env=${{ env.ENV_NAME }}
