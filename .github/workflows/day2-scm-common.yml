@@ -58,7 +58,8 @@ jobs:
         uses: rlespinasse/github-slug-action@v3.x
 
       - name: Create ResourceGroup name
-        run: echo "::set-env name=RESOURCE_GROUP_NAME::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -74,7 +75,7 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy to dev environment
         uses: azure/arm-deploy@v1
@@ -98,7 +99,8 @@ jobs:
         uses: rlespinasse/github-slug-action@v3.x
 
       - name: Create ResourceGroup name
-        run: echo "::set-env name=RESOURCE_GROUP_NAME::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -114,7 +116,7 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy to test environment
         uses: azure/arm-deploy@v1
