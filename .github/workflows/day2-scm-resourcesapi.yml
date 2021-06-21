@@ -171,7 +171,7 @@ jobs:
     environment: day2-scm-test
     needs: deploy-to-dev
     env:
-      RESOURCE_GROUP_NAME: rg-scm-devday2
+      RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd2
 
