@@ -118,7 +118,7 @@ jobs:
         id: infrastructure
         with:
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
-          template: ./${{ BICEP_FILE_NAME }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Download SCM Frontend artifacts
@@ -194,7 +194,7 @@ jobs:
         id: infrastructure
         with:
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
-          template: ./${{ BICEP_FILE_NAME }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Download SCM Frontend artifacts
