@@ -82,7 +82,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: "${{ env-API_PROJECT_PATH }}/${{ env.API_PACKAGE_NAME }}"
+          path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_NAME }}"
           if-no-files-found: error
           retention-days: 30
 
