@@ -22,14 +22,14 @@ on:
 env:
   API_PACKAGE_NAME: "scmresourcesapi.zip"
   RESIZER_PACKAGE_NAME: "resizer.zip"
-  BICEP_FILE_NAME: "resources.bicep"
+  BICEP_FILE_NAME: "resourcesmain.bicep"
 
 jobs:
   build-bicep:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/resources/resources.bicep"
+      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/resources/resourcesmain.bicep"
       BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/resources/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
