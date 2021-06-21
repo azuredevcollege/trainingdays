@@ -12,7 +12,6 @@ param storageConnectionString string
 var webAppName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-var stForFunctiontName = 'stfn${env}${take(uniqueString(resourceGroup().id), 11)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbqThumbnailsName = 'sbq-scm-thumbnails'
 var location = resourceGroup().location
