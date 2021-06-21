@@ -19,11 +19,16 @@ on:
 
   workflow_dispatch:
 
+env:
+  BICEP_FILE_NAME: frontendmain.bicep
+
 jobs:
-  build:
+  build-bicep:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      NODE_VERSION: '14.x'
+      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/frontend/frontendmain.bicep"
+      BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/frontend/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -31,15 +36,29 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Transpile bicep files
-        run: az bicep build -f ./day3/apps/infrastructure/bicep/frontend/frontendmain.bicep
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
 
-      - name: Archive ARM Templates artifacts
+      - name: Archive bicep file
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: bicep
-          path: ./day3/apps/infrastructure/bicep/frontend/frontendmain.json
+          path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
           retention-days: 30
+
+  build-frontend:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      FRONTEND_PROJECT_PATH: "./day3/apps/frontend/scmfe"
+      FRONTEND_DIST_PATH: "./day3/apps/frontend/scmfe/dist/"
+      NODE_VERSION: "14.x"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Use Node.js ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v2.1.5
@@ -47,7 +66,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: npm install and build
-        working-directory: ./day3/apps/frontend/scmfe
+        working-directory: ${{ env.FRONTEND_PROJECT_PATH }}
         run: |
           npm install
           npm run build
@@ -57,7 +76,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: scmfe
-          path: ./day3/apps/frontend/scmfe/dist/
+          path: ${{ env.FRONTEND_DIST_PATH }}
           retention-days: 30
 
   deploy-to-dev:
@@ -71,6 +90,13 @@ jobs:
       ENV_NAME: devd3
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download bicep artifacts
         uses: actions/download-artifact@v2
         with:
@@ -81,24 +107,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy infrastructure to dev environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./frontendmain.json
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Download SCM Frontend artifacts
@@ -108,31 +128,32 @@ jobs:
           path: ./scmfe
 
       - name: Enable static website hosting
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az storage blob service-properties update --account-name ${{ steps.infrastructure.outputs.storageAccountName }} --static-website  --index-document index.html --404-document index.html
+        run: >
+          az storage blob service-properties update 
+          --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
+          --static-website  
+          --index-document index.html 
+          --404-document index.html
 
       - name: Patch SCM Frontend settings
         run: >
           echo "var uisettings = 
           { 
-          \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
-          \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
-          \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
-          \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
-          \"enableStats\": true,
-          \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
+            \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
+            \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
+            \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
+            \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
+            \"enableStats\": true,
+            \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
           };" 
           > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe
+        run: >
+          az storage blob upload-batch 
+          -d '$web' 
+          --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
+          -s ./scmfe
 
   deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -145,6 +166,13 @@ jobs:
       ENV_NAME: testd3
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download bicep artifacts
         uses: actions/download-artifact@v2
         with:
@@ -155,24 +183,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
-      - name: Deploy infrastructure to dev environment
+      - name: Deploy infrastructure to test environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./frontendmain.json
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Download SCM Frontend artifacts
@@ -182,28 +204,29 @@ jobs:
           path: ./scmfe
 
       - name: Enable static website hosting
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az storage blob service-properties update --account-name ${{ steps.infrastructure.outputs.storageAccountName }} --static-website  --index-document index.html --404-document index.html
+        run: >
+          az storage blob service-properties update 
+          --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
+          --static-website  
+          --index-document index.html 
+          --404-document index.html
 
       - name: Patch SCM Frontend settings
         run: >
           echo "var uisettings = 
           { 
-          \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
-          \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
-          \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
-          \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
-          \"enableStats\": true,
-          \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
+            \"endpoint\": \"${{ steps.infrastructure.outputs.contactsApiEndpoint }}\", 
+            \"resourcesEndpoint\": \"${{ steps.infrastructure.outputs.resourcesApiEndpoint }}\", 
+            \"searchEndpoint\": \"${{ steps.infrastructure.outputs.searchApiEndpoint }}\",
+            \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
+            \"enableStats\": true,
+            \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\" 
           };" 
           > ./scmfe/settings/settings.js
 
       - name: Deploy SCM Frontend
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            az storage blob upload-batch -d '$web' --account-name ${{ steps.infrastructure.outputs.storageAccountName }} -s ./scmfe
+        run: >
+          az storage blob upload-batch 
+          -d '$web' 
+          --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
+          -s ./scmfe
