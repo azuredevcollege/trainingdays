@@ -41,6 +41,7 @@ jobs:
         with:
           name: drop
           path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
           retention-days: 30
 
   deploy-to-dev:
