@@ -58,7 +58,7 @@ jobs:
         uses: rlespinasse/github-slug-action@v3.x
 
       - name: Create ResourceGroup name
-        run: echo "::set-env RESOURCE_GROUP_NAME=${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+        run: echo "::set-env name=RESOURCE_GROUP_NAME::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
@@ -98,7 +98,7 @@ jobs:
         uses: rlespinasse/github-slug-action@v3.x
 
       - name: Create ResourceGroup name
-        run: echo "::set-env RESOURCE_GROUP_NAME=${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+        run: echo "::set-env name=RESOURCE_GROUP_NAME::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
 
       - name: Download artifacts
         uses: actions/download-artifact@v2
