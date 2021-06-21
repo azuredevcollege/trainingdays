@@ -57,6 +57,7 @@ jobs:
     env:
       API_PROJECT_PATH: "./day3/apps/nodejs/visitreport"
       NODE_VERSION: "12.x"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
@@ -92,6 +93,7 @@ jobs:
     env:
       TA_PROJECT_PATH: "./day3/apps/nodejs/textanalytics"
       NODE_VERSION: "12.x"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
       - name: Checkout
