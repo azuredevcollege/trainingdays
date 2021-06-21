@@ -20,15 +20,38 @@ on:
   workflow_dispatch:
 
 env:
-  API_PACKAGE_NAME: 'scmsearchapi.zip'
-  INDEXER_PACKAGE_NAME: 'indexer.zip'
+  API_PACKAGE_NAME: "scmsearchapi.zip"
+  INDEXER_PACKAGE_NAME: "indexer.zip"
+  BICEP_FILE_NAME: "searchmain.bicep"
 
 jobs:
+  build-bicep:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/search/searchmain.bicep"
+      BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/search/"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
+
+      - name: Archive ARM Templates artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: ${{ env.BICEP_MODULE_PATH }}
+          retention-days: 30
+
   build:
     runs-on: ubuntu-latest
     env:
-      API_PACKAGE_PATH: 'publish/scmsearchapi'
-      INDEXER_PACKAGE_PATH: 'publish/indexer'
+      API_PACKAGE_PATH: "publish/scmsearchapi"
+      INDEXER_PACKAGE_PATH: "publish/indexer"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -68,7 +91,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: scmsearchapi
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}'
+          path: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
           retention-days: 30
 
       - name: Build and publish SCM SearchIndexer
@@ -88,7 +111,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: indexer
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}/${{ env.INDEXER_PACKAGE_NAME }}'
+          path: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}/${{ env.INDEXER_PACKAGE_NAME }}"
           retention-days: 30
 
   deploy-to-dev:

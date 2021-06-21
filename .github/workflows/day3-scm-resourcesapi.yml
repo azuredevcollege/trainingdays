@@ -45,7 +45,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: ${{ env.BICEP_FILE_PATH }}
+          path: ${{ env.BICEP_MODULE_PATH }}
           if-no-files-found: error
           retention-days: 30
 
