@@ -18,13 +18,14 @@ on:
 
   workflow_dispatch:
 
+env:
+  API_PACKAGE_NAME: "scmcontactsapi.zip"
+  BICEP_FILE_NAME: "scm-contactsapi.bicep"
+
 jobs:
-  build:
+  build-bicep:
     runs-on: ubuntu-latest
     env:
-      DOTNETCORE_PACKAGE_PATH: "publish/scmcontactsapi"
-      DOTNETCORE_PACKAGE_NAME: "scmcontactsapi.zip"
-      DOTNETCORE_PROJECT_PATH: "./day2/apps/dotnetcore/Scm/Adc.Scm.Api"
       BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-contactsapi.bicep"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
@@ -44,22 +45,33 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  build-api:
+    runs-on: ubuntu-latest
+    env:
+      API_PACKAGE_PATH: "publish/scmcontactsapi"
+      API_PROJECT_PATH: "./day2/apps/dotnetcore/Scm/Adc.Scm.Api"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.x
 
       - name: Build and publish SCM ContactsAPI
-        working-directory: ${{ env.DOTNETCORE_PROJECT_PATH }}
+        working-directory: ${{ env.API_PROJECT_PATH }}
         run: |
           dotnet restore
           dotnet build --configuration Release
-          dotnet publish -c Release -o './${{ env.DOTNETCORE_PACKAGE_PATH }}'
+          dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
 
       - name: Zip SCM ContactsAPI
-        working-directory: ${{ env.DOTNETCORE_PROJECT_PATH }}/${{ env.DOTNETCORE_PACKAGE_PATH }}
+        working-directory: ${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}
         run: |
-          zip -r ${{ env.DOTNETCORE_PACKAGE_NAME }} ./*
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
 
       - name: Archive dotnetcore package artifacts
         uses: actions/upload-artifact@v2
@@ -74,15 +86,20 @@ jobs:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment: day2-scm-dev
-    needs: build
+    needs: [build-bicep, build-api]
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd2
-      DOTNETCORE_PACKAGE_NAME: "scmcontactsapi.zip"
-      BICEP_FILE_NAME: "scm-contactsapi.bicep"
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download drop artifacts
         uses: actions/download-artifact@v2
         with:
@@ -97,13 +114,13 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ env.steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy infrastructure to dev environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ env.steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }} sku=B1
 
@@ -111,7 +128,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
-          package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
+          package: ./${{ env.API_PACKAGE_NAME }}
 
   deploy-to-test:
     if: (github.event_name == 'push') || (github.event_name == 'workflow_dispatch')
@@ -122,10 +139,15 @@ jobs:
       RESOURCE_GROUP_NAME: rg-scm-testday2
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: testd2
-      DOTNETCORE_PACKAGE_NAME: "scmcontactsapi.zip"
-      BICEP_FILE_NAME: "scm-contactsapi.bicep"
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download drop artifacts
         uses: actions/download-artifact@v2
         with:
@@ -140,13 +162,13 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy infrastructure to dev environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }} sku=B1
 
@@ -154,4 +176,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
-          package: ./${{ env.DOTNETCORE_PACKAGE_NAME }}
+          package: ./${{ env.API_PACKAGE_NAME }}
