@@ -59,6 +59,7 @@ jobs:
         with:
           name: drop
           path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
+          if-no-files-found: error
           retention-days: 30
 
   build-resizer:
@@ -95,6 +96,7 @@ jobs:
         with:
           name: drop
           path: "${{ env.RESIZER_PROJECT_PATH }}/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}"
+          if-no-files-found: error
           retention-days: 30
 
   build-bicep:
@@ -116,6 +118,7 @@ jobs:
         with:
           name: drop
           path: ${{ env.BICEP_FILE_PATH }}
+          if-no-files-found: error
           retention-days: 30
 
   deploy-to-dev:
