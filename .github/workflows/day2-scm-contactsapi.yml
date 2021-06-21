@@ -36,7 +36,7 @@ jobs:
       - name: Transpile bicep files
         run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
 
-      - name: Archive ARM Template artifacts
+      - name: Archive bicep artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
@@ -78,7 +78,7 @@ jobs:
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: "${{ env.DOTNETCORE_PROJECT_PATH }}/${{ env.DOTNETCORE_PACKAGE_PATH }}/${{ env.DOTNETCORE_PACKAGE_NAME }}"
+          path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
           if-no-files-found: error
           retention-days: 30
 
