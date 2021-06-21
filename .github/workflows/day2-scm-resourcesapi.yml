@@ -132,6 +132,13 @@ jobs:
       ENV_NAME: devd2
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -141,7 +148,7 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Download drop artifacts
         uses: actions/download-artifact@v2
@@ -152,7 +159,7 @@ jobs:
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }} sku=B1
 
@@ -179,6 +186,13 @@ jobs:
       ENV_NAME: testd2
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
@@ -188,18 +202,18 @@ jobs:
         run: >
           az group create
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Download drop artifacts
         uses: actions/download-artifact@v2
         with:
           name: drop
 
-      - name: Deploy infrastructure to dev environment
+      - name: Deploy infrastructure to test environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }} sku=B1
 

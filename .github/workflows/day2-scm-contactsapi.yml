@@ -164,7 +164,7 @@ jobs:
           -l ${{ env.RESOURCE_GROUP_LOCATION }}
           -n ${{ steps.createResourceGroupName.outputs.name }}
 
-      - name: Deploy infrastructure to dev environment
+      - name: Deploy infrastructure to test environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
