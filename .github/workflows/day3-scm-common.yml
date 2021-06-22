@@ -91,6 +91,10 @@ jobs:
     environment: day3-scm-test
     needs: deploy-to-dev
 
+    steps:
+      - name: Approved
+        run: echo "Deployment to test environment approved"
+
   deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
