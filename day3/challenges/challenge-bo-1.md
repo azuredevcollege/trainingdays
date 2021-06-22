@@ -281,7 +281,7 @@ Application Settings:
 | ImageStoreOptions\_\_StorageAccountConnectionString      | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
 | ServiceBusQueueOptions\_\_ImageContainer                 | _rawimages_                                                                                                             |
 | ServiceBusQueueOptions\_\_ThumbnailContainer             | _thumbnails_                                                                                                            |
-| ServiceBusQueueOptions\_\_ThumbnailQueueConnectionString | use the Connection String from the Shared Access Policy (**Queue**) for sending messages - **send**                     |
+| ServiceBusQueueOptions\_\_ThumbnailQueueConnectionString | use the Connection String from the Shared Access Policy (**Queue sbq-scm-thumbnails**) for sending messages - **send**  |
 
 :::tip
 📝 You can delete all **StorageQueueOptions\_\_** app settings!
@@ -293,11 +293,11 @@ Azure Function for **Image Manipulation / Resizer Service**:
 
 Configuration / Application Settings:
 
-| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                      |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **listen**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
-| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                             |
-| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                           |
+| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue sbq-scm-thumbnails**) for listening for messages - **listen**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                                |
+| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                              |
 
 :::tip
 📝 You can delete the **QueueName** app settings!
@@ -367,12 +367,12 @@ Create the Azure function in the **scm-breakout-rg** resource group with the fol
 
 When finished, apply these settings to the App Configuration settings:
 
-| Parameter                            | Value / Hint                                                                                                                                                                                                                                                                                                |
-| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ContactIndexerOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                                                                                                                                                                                     |
-| ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                                                               |
-| ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                                                       |
-| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **sbt-contacts**) for listening for messages - **scmtopiclisten**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
+| Parameter                            | Value / Hint                                                                                                                                                                                                                                                                                        |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ContactIndexerOptions\_\_AdminApiKey | use the Primary Admin Key from Azure Search (under **Settings / Keys**)                                                                                                                                                                                                                             |
+| ContactIndexerOptions\_\_IndexName   | _scmcontacts_                                                                                                                                                                                                                                                                                       |
+| ContactIndexerOptions\_\_ServiceName | the name of your previously created Azure Search (just the subdomain! So from <https://adcd3search-dev.search.windows.net>, only **adcd3search-dev**)                                                                                                                                               |
+| ServiceBusConnectionString           | use the Service Bus Connection String from the Shared Access Policy (**Topics** / **sbt-contacts**) for listening for messages - **listen**. <br><br><span style="color:red">**Important**</span>: Please remove the **EntityPath** variable (incl. the value) at the end of the connection string! |
 
 ![Search Indexer Function Configuration Settings](./images/portal_bo_add_searchindexer.png 'Search Indexer Function Configuration Settings')
 
@@ -394,20 +394,16 @@ Now, let's add the Visit Reports API.
 
 To deploy the Visit Reports API, we - as usual - need another Web App. As this service runs on NodeJS and we want to leverage **Azure Web Apps on Linux** this time, let's create one that is backed by a Linux OS.
 
-::: warning
-⚠️ Currently, you can't mix Windows and Linux Web Apps in the same resource group, so we create another resource group to host the NodeJS Linux WebApp.
-:::
-
 **Azure WebApp Properties**
 
 Create the Linux Web App with the following parameters.
 
-| Parameter        | Value / Hint                                              |
-| ---------------- | --------------------------------------------------------- |
-| Resource Group   | Create a new resource group, e.g. **scm-breakout-tux-rg** |
-| Publish          | _Code_                                                    |
-| Runtime Stack    | _Node 14 LTS_                                             |
-| App Service Plan | Create a new one: OS - _Linux_, SKU - _S1_                |
+| Parameter        | Value / Hint                               |
+| ---------------- | ------------------------------------------ |
+| Resource Group   | **scm-breakout-rg**                        |
+| Publish          | _Code_                                     |
+| Runtime Stack    | _Node 14 LTS_                              |
+| App Service Plan | Create a new one: OS - _Linux_, SKU - _S1_ |
 
 ![Visit Reports API AppService](./images/day3_bo_tux_vr.png 'Visit Reports API AppService')
 
