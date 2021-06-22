@@ -85,11 +85,21 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
-  deploy-to-test:
+  test-env-approval:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: deploy-to-dev
+
+    steps:
+      - name: Approved
+        run: echo "Deployment to test environment approved"
+
+  deploy-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    # environment: day3-scm-test
+    needs: test-env-approval
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
