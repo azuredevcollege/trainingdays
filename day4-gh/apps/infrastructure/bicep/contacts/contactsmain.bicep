@@ -1,4 +1,4 @@
-@minLength(3)
+@minLength(5)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'

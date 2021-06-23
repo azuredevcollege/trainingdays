@@ -77,6 +77,5 @@ module cosmos 'cosmos.bicep' = {
   name: 'deployCosmosAccount'
   params: {
     env: env
-    resourceTag: resourceTag
   }
 }
