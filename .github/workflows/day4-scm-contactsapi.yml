@@ -132,7 +132,6 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserName=${{ secrets.SQL_USERNAME }}
             sqlUserPwd=${{ secrets.SQL_PWD }}
 
       - name: Deploy SCM Contacts API
@@ -183,7 +182,6 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserName=${{ secrets.SQL_USERNAME }}
             sqlUserPwd=${{ secrets.SQL_PWD }}
 
       - name: Deploy SCM Contacts API
