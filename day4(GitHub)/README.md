@@ -1,4 +1,4 @@
-# Day n Topic Name
+# Day 4 DevOps and Monitoring
 
 ## Welcome
 
@@ -11,8 +11,8 @@ This day is about getting your hands dirty with **ABC** in Azure. We will dig in
 
 ## Challenges
 
-- [Challenge n: Name or Brief Description](challenges/NN-challenge.md)
-- 💎 _[Breakout n: Name or Brief Description](challenges/NN-challenge-bo.md)_ 💎
+- [Challenge 0: Create a GitHub organization](challenges/challenge-0.md)
+- 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/challenge-bo-1.md)_ 💎
 
 ## Day n - Goal
 

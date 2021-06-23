@@ -1,6 +1,6 @@
-# 💎 Breakout n: Name or Brief Description 💎
+# 💎 Breakout 1:  Deploy the sample application with GitHub workflows💎
 
-⏲️ *Est. time to complete: xx min.* ⏲️
+⏲️ *Est. time to complete: 60 min.* ⏲️
 
 ## Here is what you will learn 🎯
 
