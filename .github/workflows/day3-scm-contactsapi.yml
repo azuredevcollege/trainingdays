@@ -135,19 +135,11 @@ jobs:
           app-name: ${{ steps.infrastructure.outputs.contactsApiWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
 
-  test-env-approval:
+  deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: deploy-to-dev
-
-    steps:
-      - name: Approved
-        run: echo "Deployment to test environment approved"
-
-  deploy-to-test:
-    runs-on: ubuntu-latest
-    needs: test-env-approval
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope

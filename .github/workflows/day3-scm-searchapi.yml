@@ -125,11 +125,15 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  deploy-to-dev:
+  deploy-infrastructure-to-dev:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
     needs: [build-bicep, build-api, build-indexer]
+    outputs:
+      searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
+      indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
@@ -167,23 +171,57 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
+  deploy-searchapi-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
       - name: Deploy SCM Search API
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.searchApiWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-indexer-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
 
       - name: Deploy Indexer Function
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
 
-  deploy-to-test:
+  deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
-    needs: deploy-to-dev
+    needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
+    outputs:
+      searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
+      indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
@@ -231,4 +269,46 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+          package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+  deploy-searchapi-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy SCM Search API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.searchApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-indexer-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Indexer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}

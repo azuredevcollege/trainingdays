@@ -213,19 +213,11 @@ jobs:
           app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.imageResizerFunctionName }}
           package: ./${{ env.RESIZER_PACKAGE_NAME }}
 
-  test-env-approval:
+  deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: [deploy-resourceapi-to-dev, deploy-resizer-to-dev]
-
-    steps:
-      - name: Approved
-        run: echo "Deployment to test environment approved"
-
-  deploy-infrastructure-to-test:
-    runs-on: ubuntu-latest
-    needs: test-env-approval
     outputs:
       resourceApiWebAppName: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
       imageResizerFunctionName: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}

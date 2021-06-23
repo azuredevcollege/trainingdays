@@ -123,11 +123,15 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-  deploy-to-dev:
+  deploy-infrastructure-to-dev:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
     needs: [build-bicep, build-api, build-ta]
+    outputs:
+      visitreportsWebAppName: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
+      textanalyticsFunctionName: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
@@ -165,23 +169,53 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
+  deploy-visitreportapi-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
       - name: Deploy SCM Visitreports API
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.visitreportsWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-textanalytics-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
 
       - name: Deploy Textanalytics
         uses: Azure/functions-action@v1
         with:
-          app-name: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.textanalyticsFunctionName }}
           package: ./${{ env.TA_PACKAGE_NAME }}
 
-  deploy-to-test:
+  deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
-    needs: deploy-to-dev
+    needs: [deploy-visitreportapi-to-dev, deploy-textanalytics-to-dev]
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
@@ -229,4 +263,46 @@ jobs:
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+          package: ./${{ env.TA_PACKAGE_NAME }}
+
+  deploy-visitreportapi-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy SCM Visitreports API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.visitreportsWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-textanalytics-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Textanalytics
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.textanalyticsFunctionName }}
           package: ./${{ env.TA_PACKAGE_NAME }}
