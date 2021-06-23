@@ -132,7 +132,7 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserPwd=${{ secrets.SQL_PWD }}
+            sqlUserPwd=${{ secrets.SQL_PASSWORD }}
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
@@ -182,7 +182,7 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserPwd=${{ secrets.SQL_PWD }}
+            sqlUserPwd=${{ secrets.SQL_PASSWORD }}
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
