@@ -3,6 +3,9 @@
 @description('Name of environment')
 param env string = 'devd4'
 
+@description('Resource tags object to use')
+param resourceTag object
+
 var cosmosAccount = 'cosmos-scm-${env}-${uniqueString(resourceGroup().id)}'
 var location = resourceGroup().location
 

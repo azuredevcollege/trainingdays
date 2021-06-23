@@ -1,13 +1,13 @@
-@minLength(5)
+@minLength(3)
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
 
+var sqlUserName = uniqueString(resourceGroup().id, env, sqlUserPwd)
+
 @secure()
 @description('Sql server\'s admin password')
 param sqlUserPwd string
-
-var sqlUserName = uniqueString(resourceGroup().id, env, sqlUserPwd)
 
 var resourceTag = {
   Environment: env
