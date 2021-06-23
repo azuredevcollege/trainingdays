@@ -1,4 +1,4 @@
-name: day3-scm-cleanup
+name: day4-scm-cleanup
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ jobs:
   destroy:
     runs-on: ubuntu-latest
     env:
-      RG_DEV: rg-scm-devday3
-      RG_TEST: rg-scm-testday3
+      RG_DEV: rg-scm-devday4
+      RG_TEST: rg-scm-testday4
 
     steps:
       - name: Inject slug/short variables
