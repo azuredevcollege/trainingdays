@@ -66,10 +66,17 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
+      - name: Use Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.nuget/packages"
+          key: ${{ runner.os }}-nuget-${{ hashFiles('${{ env.API_PROJECT_PATH }}/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Build and publish SCM Resources API
         working-directory: ${{ env.API_PROJECT_PATH }}
         run: |
-          dotnet restore
+          dotnet restore --locked-mode
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
 
@@ -104,10 +111,17 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
+      - name: Use Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.nuget/packages"
+          key: ${{ runner.os }}-nuget-${{ hashFiles('${{ env.RESIZER_PROJECT_PATH }}/packages.lock.json') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
       - name: Build and publish SCM ImageResizer
         working-directory: ${{ env.RESIZER_PROJECT_PATH }}
         run: |
-          dotnet restore
+          dotnet restore --locked-mode
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
 

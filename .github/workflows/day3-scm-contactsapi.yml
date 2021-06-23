@@ -83,7 +83,7 @@ jobs:
       - name: Transpile bicep files
         run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
 
-      - name: Archive ARM Template artifacts
+      - name: Archive artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
