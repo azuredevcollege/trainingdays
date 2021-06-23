@@ -65,6 +65,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Cache npm dependencies to speed up deployment
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/frontend/scmfe/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: npm install and build
         working-directory: ${{ env.FRONTEND_PROJECT_PATH }}
         run: |

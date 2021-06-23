@@ -68,6 +68,14 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Cache npm dependencies to speed up deployment
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/nodejs/textanalytics/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: npm install VisitReport
         working-directory: ${{ env.API_PROJECT_PATH }}
         run: |
@@ -103,6 +111,14 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache npm dependencies to speed up deployment
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/nodejs/textanalytics/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: npm install TextAnalytics
         working-directory: ${{ env.TA_PROJECT_PATH }}
