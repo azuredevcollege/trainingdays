@@ -71,4 +71,4 @@ export BASE_RES_WEBAPP_NAME=<NameOfTheResourcesApiWebApp>
 export BASE_RES_FUNCAPP_NAME=<NameOfTheFunctionsApp>
 ```
 
-[🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-1.md)
+[🔼 Day 3](../README.md) | [Next challenge ▶](./01-challenge-cosmosdb.md)

@@ -29,20 +29,20 @@ Azure Cognitive Services:
 
 In this challenge we will focus on the following Cognitive Services:
 
-|Service Name|Service Description|
-|:-----------|:------------------|
-|[Text Analytics](https://docs.microsoft.com/azure/cognitive-services/text-analytics/ "Text Analytics")|Text Analytics provides natural language processing over raw text for sentiment analysis, key phrase extraction and language detection.|
-|[Translator Text](https://docs.microsoft.com/azure/cognitive-services/translator/ "Translator Text")|Translator text provides for machine-based text translation in near real-time.|
-[Computer Vision](https://docs.microsoft.com/azure/cognitive-services/computer-vision/ "Computer Vision")|The Computer Vision service provides you with access to advanced algorithms for processing images and returning information.|
-|[Face](https://docs.microsoft.com/azure/cognitive-services/face/ "Face")| The Face service provides access to advanced face algorithms, enabling face attribute detection and recognition.|
+| Service Name                                                                                              | Service Description                                                                                                                     |
+| :-------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
+| [Text Analytics](https://docs.microsoft.com/azure/cognitive-services/text-analytics/ "Text Analytics")    | Text Analytics provides natural language processing over raw text for sentiment analysis, key phrase extraction and language detection. |
+| [Translator Text](https://docs.microsoft.com/azure/cognitive-services/translator/ "Translator Text")      | Translator text provides for machine-based text translation in near real-time.                                                          |
+| [Computer Vision](https://docs.microsoft.com/azure/cognitive-services/computer-vision/ "Computer Vision") | The Computer Vision service provides you with access to advanced algorithms for processing images and returning information.            |
+| [Face](https://docs.microsoft.com/azure/cognitive-services/face/ "Face")                                  | The Face service provides access to advanced face algorithms, enabling face attribute detection and recognition.                        |
 
 ## Create and use a Text Analysis Cognitive Service
 
 You can solve these tasks in a programming language of your choice. For the sake of convenience, we are providing hints in `Node.js`. SDK support for `C#` or `.NET Core` is also available.
 
-|Azure Cognitive Services|Information|
-|---|---|
-|[Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)|<https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
+| Azure Cognitive Services                                                                            | Information                                                                                   |
+| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| [Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) | <https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
 
 We will now leverage the _Text Analytics API_ for extracting language, sentiment, key phrases, and entities from text. Please use a new resource group, e.g. **adc-cognitive-rg**. As a **Pricing Tier**, select the smallest possible in the chosen region.
 
@@ -787,4 +787,4 @@ Remove the sample resource group.
 az group delete -n adc-cognitive-rg
 ```
 
-[◀ Previous challenge](./challenge-bo-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-bo-2.md)
+[◀ Previous challenge](./04-challenge-bo-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./06-challenge-bo-2.md)

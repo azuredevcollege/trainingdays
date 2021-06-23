@@ -448,4 +448,4 @@ Remove the sample resource group:
 az group delete --name adc-sql-db-rg
 ```
 
-[◀ Previous challenge](./challenge-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-3.md)
+[◀ Previous challenge](./01-challenge-cosmosdb.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./03-challenge-search.md)

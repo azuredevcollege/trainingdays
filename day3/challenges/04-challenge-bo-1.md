@@ -293,11 +293,11 @@ Azure Function for **Image Manipulation / Resizer Service**:
 
 Configuration / Application Settings:
 
-| Parameter                                               | Value / Hint                                                                                                            |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string!  |
-| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                   |
-| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same) |
+| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue**) for listening for messages - **thumbnailslisten**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                       |
+| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                     |
 
 :::tip
 📝 You can delete the **QueueName** app settings!
@@ -508,4 +508,4 @@ In this Breakout Challenge, you made use of:
 - [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
 - [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
 
-[◀ Previous challenge](./challenge-3.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./challenge-4.md)
+[◀ Previous challenge](./03-challenge-search.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./05-challenge-cognitive-services.md)

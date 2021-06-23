@@ -137,4 +137,4 @@ In this Breakout Challenge, you made use of:
 - [Azure Cognitive Services / Text Analytics](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/)
 - [Azure Functions on Linux](https://docs.microsoft.com/en-us/azure/azure-functions/create-function-app-linux-app-service-plan)
 
-[◀ Previous challenge](./challenge-4.md) | [🔼 Day 3](../README.md)
+[◀ Previous challenge](./05-challenge-cognitive-services.md) | [🔼 Day 3](../README.md)
