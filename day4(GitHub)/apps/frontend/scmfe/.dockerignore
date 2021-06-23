@@ -1,0 +1,11 @@
+.vscode
+node_modules
+test
+.dockerignore
+.env
+.env_template
+.gitignore
+README.md
+Dockerfile
+templates
+/public/settings/settings.js

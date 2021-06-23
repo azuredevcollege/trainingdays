@@ -1,0 +1,35 @@
+parameters:
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
+steps:
+  - task: Npm@1
+    inputs:
+      command: "install"
+      workingDir: "day3/apps/frontend/scmfe"
+  - task: Npm@1
+    inputs:
+      command: "custom"
+      workingDir: "day3/apps/frontend/scmfe"
+      customCommand: "run build"
+
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
+    inputs:
+      repository: adcday3/scmfe
+      command: build
+      dockerfile: day3/apps/frontend/scmfe/Dockerfile
+      buildContext: day3/apps/frontend/scmfe
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Push Docker image
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      repository: adcday3/scmfe
+      command: buildAndPush
+      dockerfile: day3/apps/frontend/scmfe/Dockerfile
+      buildContext: day3/apps/frontend/scmfe
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}

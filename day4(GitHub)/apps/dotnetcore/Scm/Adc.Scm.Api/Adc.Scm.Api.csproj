@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.8.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Adc.Scm.DomainObjects\Adc.Scm.DomainObjects.csproj" />
+    <ProjectReference Include="..\Adc.Scm.Events\Adc.Scm.Events.csproj" />
+    <ProjectReference Include="..\Adc.Scm.Repository.CosmosDb\Adc.Scm.Repository.CosmosDb.csproj" />
+    <ProjectReference Include="..\Adc.Scm.Repository.EntityFrameworkCore\Adc.Scm.Repository.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Adc.Scm.Repository.Interfaces\Adc.Scm.Repository.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>
