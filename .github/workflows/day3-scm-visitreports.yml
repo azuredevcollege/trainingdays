@@ -216,6 +216,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: [deploy-visitreportapi-to-dev, deploy-textanalytics-to-dev]
+    outputs:
+      visitreportsWebAppName: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
+      textanalyticsFunctionName: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday3
       RESOURCE_GROUP_LOCATION: westeurope
@@ -252,18 +256,6 @@ jobs:
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
-
-      - name: Deploy SCM Visitreports API
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
-          package: ./${{ env.API_PACKAGE_NAME }}
-
-      - name: Deploy Textanalytics
-        uses: Azure/functions-action@v1
-        with:
-          app-name: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
-          package: ./${{ env.TA_PACKAGE_NAME }}
 
   deploy-visitreportapi-to-test:
     runs-on: ubuntu-latest
