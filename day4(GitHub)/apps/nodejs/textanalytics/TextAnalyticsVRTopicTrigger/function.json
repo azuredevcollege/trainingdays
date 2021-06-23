@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "mySbMsg",
+      "type": "serviceBusTrigger",
+      "direction": "in",
+      "topicName": "sbt-visitreports",
+      "subscriptionName": "textanalytics",
+      "connection": "ServiceBusConnectionString"
+    }
+  ]
+}

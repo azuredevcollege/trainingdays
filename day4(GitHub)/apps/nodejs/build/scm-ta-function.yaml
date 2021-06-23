@@ -1,0 +1,19 @@
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  - task: Bash@3
+    inputs:
+      workingDirectory: '$(Build.SourcesDirectory)/day3/apps/nodejs/textanalytics'
+      targetType: 'inline'
+      displayName: 'npm install'
+      script: npm install
+  - task: ArchiveFiles@2
+    displayName: 'Archive build files'
+    inputs:
+      rootFolderOrFile: '$(Build.SourcesDirectory)/day3/apps/nodejs/textanalytics'
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.TaFunc.zip
+      replaceExistingArchive: true
