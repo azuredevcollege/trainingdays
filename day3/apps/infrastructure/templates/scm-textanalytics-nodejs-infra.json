@@ -38,7 +38,7 @@
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmVisitReportTopicListenAuthRule": "scmvrtopiclisten",
-        "sbScmVisitReportTopic": "scmvrtopic",
+        "sbScmVisitReportTopic": "sbt-visitreports",
         "sbScmVisitReportTopicListenAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicListenAuthRule'))]"
     },
     "resources": [
@@ -116,6 +116,5 @@
             }
         }
     ],
-    "outputs": {
-    }
+    "outputs": {}
 }

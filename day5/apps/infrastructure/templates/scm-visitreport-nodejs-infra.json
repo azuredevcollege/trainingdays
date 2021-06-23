@@ -47,8 +47,8 @@
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmVisitReportTopicSendAuthRule": "scmvrtopicsend",
-        "sbScmVisitReportTopic": "scmvrtopic",
-        "sbScmContactTopic": "scmtopic",
+        "sbScmVisitReportTopic": "sbt-visitreports",
+        "sbScmContactTopic": "sbt-contacts",
         "sbScmContactTopicListenAuthRule": "scmtopiclisten",
         "sbScmVisitReportTopicSendAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicSendAuthRule'))]",
         "sbScmContactTopicListenAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicListenAuthRule'))]"
@@ -60,10 +60,8 @@
             "type": "Microsoft.Web/serverfarms",
             "location": "[variables('location')]",
             "kind": "linux",
-            "tags": {
-            },
-            "dependsOn": [
-            ],
+            "tags": {},
+            "dependsOn": [],
             "properties": {
                 "name": "[variables('appServicePlanName')]",
                 "reserved": true
@@ -81,8 +79,7 @@
             "dependsOn": [
                 "[concat('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
             ],
-            "tags": {
-            },
+            "tags": {},
             "properties": {
                 "name": "[parameters('webAppName')]",
                 "siteConfig": {
@@ -136,6 +133,5 @@
             }
         }
     ],
-    "outputs": {
-    }
+    "outputs": {}
 }

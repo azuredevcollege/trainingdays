@@ -13,7 +13,6 @@ var cosmosAccount = 'cosmos-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbtVisitReportsName = 'sbt-visitreports'
 var sbtContactsName = 'sbt-contacts'
-var sbtContactsVisitReportsSubscription = 'visitreports'
 var location = resourceGroup().location
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
@@ -57,7 +56,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
     serverFarmId: planLinux.id
     httpsOnly: true
     clientAffinityEnabled: false
-    siteConfig:{
+    siteConfig: {
       alwaysOn: true
       use32BitWorkerProcess: false
       linuxFxVersion: 'NODE|12-lts'
@@ -67,7 +66,7 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
           '*'
         ]
       }
-      appSettings:[
+      appSettings: [
         {
           name: 'APPINSIGHTS_KEY'
           value: appi.properties.InstrumentationKey

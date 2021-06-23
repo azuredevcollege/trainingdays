@@ -13,13 +13,12 @@ module cosmos 'cosmosdb.bicep' = {
   name: 'deployCosmos'
   params: {
     env: env
-    resourceTag: resourceTag
   }
 }
 
 module webapp 'webapp.bicep' = {
   name: 'deployWebAppReports'
-  params:{
+  params: {
     env: env
     resourceTag: resourceTag
   }

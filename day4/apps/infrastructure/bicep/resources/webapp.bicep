@@ -12,7 +12,6 @@ param storageConnectionString string
 var webAppName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-var stForFunctiontName = 'stfn${env}${take(uniqueString(resourceGroup().id), 11)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbqThumbnailsName = 'sbq-scm-thumbnails'
 var location = resourceGroup().location
@@ -79,15 +78,11 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
           value: listKeys(sbqThumbnailsSendRule.id, sbqThumbnailsSendRule.apiVersion).primaryConnectionString
         }
         {
-          name: 'StorageQueueOptions__Queue'
-          value: 'thumbnails'
-        }
-        {
-          name: 'ServiceBusOptions__ImageContainer'
+          name: 'ServiceBusQueueOptions__ImageContainer'
           value: 'rawimages'
         }
         {
-          name: 'ServiceBusOptions__ThumbnailContainer'
+          name: 'ServiceBusQueueOptions__ThumbnailContainer'
           value: 'thumbnails'
         }
       ]

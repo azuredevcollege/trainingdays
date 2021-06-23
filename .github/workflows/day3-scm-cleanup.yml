@@ -1,4 +1,4 @@
-name: day2-scm-cleanup
+name: day3-scm-cleanup
 
 on:
   workflow_dispatch:

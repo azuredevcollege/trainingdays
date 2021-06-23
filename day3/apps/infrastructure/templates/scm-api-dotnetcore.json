@@ -53,7 +53,7 @@
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
         "sbScmContactTopicSendAuthRule": "scmtopicsend",
-        "sbScmContactTopic": "scmtopic",
+        "sbScmContactTopic": "sbt-contacts",
         "sbScmContactTopicSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicSendAuthRule'))]"
     },
     "resources": [
@@ -63,10 +63,8 @@
             "kind": "app",
             "name": "[variables('appServicePlanName')]",
             "location": "[variables('location')]",
-            "properties": {
-            },
-            "dependsOn": [
-            ],
+            "properties": {},
+            "dependsOn": [],
             "sku": {
                 "name": "[parameters('sku')]"
             }
@@ -174,6 +172,5 @@
             }
         }
     ],
-    "outputs": {
-    }
+    "outputs": {}
 }
