@@ -13,14 +13,70 @@ In this challenge you will learn how to:
 
 ## Table Of Contents
 
-1. [Create a Comsos DB Account and Database](#create-a-cosmos-db-account-and-database)
-2. [Topic B](#topic-b)
+1. [Create a Comsos DB Account, Database and Containers](#create-a-comsos-db-account-database-and-containers)
+2. [Add and query data](#add-and-query-data)
 3. [Azure Samples](#azure-samples)
 4. [Cleanup](#cleanup)
 
-## Create a Comsos DB Account and Database
+## Create a Comsos DB Account, Database and Containers
 
-lcreate sit-cosmos-db-account amet cursus sit amet dictum sit amet justo donec enim diam vulputate ut pharetra sit amet aliquam id diam maecenas ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus urna neque viverra justo
+Before we start creating a database account in Azure, let's have a brief look at the resource model of Cosmos DB. It is made of the following objects:
+
+- _Account_: manages one or more databases
+- _Database_: manages users, permissions and containers
+- _Container_: a schema-agnostic container of user-generated JSON items and JavaScript based stored procedures, triggers and user-defined-functions (UDFs)
+- _Item_: user-generated document stored in a container
+
+![Cosmos DB Resource Model](./images/cosmosdb/resourcemodel.png "Comsos DB Resource Model")
+
+To create a Cosmos DB account, database and the corresponding containers we will use in this challenge, you have two options:
+
+- [Azure Portal](#azure-portal)
+- [Azure Bicep](#azure-bicep)
+
+Both are decribed in the next chapters, choose only one of them.
+
+:::tip
+📝 The "Bicep" option is much faster, because it will create all the objects automatically at once. If you want to go with that one, please also have a look at the "Create View" in the portal to make yourself familiar with all the settings you can adjust for a Cosmos DB account, db and container.
+:::
+
+### Azure Portal
+
+Go to the portal...
+
+### Azure Bicep
+
+You can run the following commands on your local machine or in the Azure Cloud Shell. If Azure Bicep isn't installed already, just do so via the Azure CLI:
+
+```shell
+$ az bicep install #only needed, if bicep isn't present in the environment
+
+$ cd day3/challenges/cosmosdb
+
+$ az group create --name rg-azdccosmos --location westeurope
+{
+  "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-azdccosmos",
+  "location": "westeurope",
+  "managedBy": null,
+  "name": "rg-azdccosmos",
+  "properties": {
+    "provisioningState": "Succeeded"
+  },
+  "tags": null,
+  "type": "Microsoft.Resources/resourceGroups"
+}
+
+$ az deployment group create -f cosmos.bicep -g rg-azdccosmos
+{
+  "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-azdccosmos/providers/Microsoft.Resources/deployments/cosmos",
+  "location": null,
+  "name": "cosmos",
+  ...
+  ...
+  ...
+  ...
+}
+```
 
 ### Tips, Warnings, Detail Sections
 
@@ -152,7 +208,7 @@ namespace AzDevCollege.Function
 }
 ```
 
-## Topic B
+## Add and query data
 
 Aliquam vestibulum morbi blandit cursus risus at ultrices mi tempus imperdiet nulla malesuada pellentesque elit eget gravida cum sociis natoque penatibus et magnis dis parturient montes nascetur ridiculus mus mauris vitae ultricies leo integer malesuada nunc vel risus commodo viverra maecenas accumsan lacus vel facilisis volutpat est velit egestas dui
 

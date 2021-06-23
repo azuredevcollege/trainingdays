@@ -7,7 +7,6 @@ In this challenge you will learn how to:
 - create an Azure Search Service in the Portal
 - add Cognitive Skills to Azure Search
 - integrate Azure Search in an Node.js application
-- create an Azure Cognitive Search index in Python using Jupyter notebooks (optional)
 
 ## Table Of Contents
 
