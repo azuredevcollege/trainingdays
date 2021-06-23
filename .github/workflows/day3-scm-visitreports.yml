@@ -72,7 +72,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/nodejs/textanalytics/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/nodejs/visitreport/package-lock.json') }}
 
       - name: npm install VisitReport
         working-directory: ${{ env.API_PROJECT_PATH }}
