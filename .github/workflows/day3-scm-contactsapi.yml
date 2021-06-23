@@ -45,7 +45,6 @@ jobs:
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm/Adc.Scm.Api/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build and publish SCM ContactsAPI
         working-directory: ${{ env.API_PROJECT_PATH }}

@@ -73,8 +73,6 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('./day3/apps/nodejs/textanalytics/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
 
       - name: npm install VisitReport
         working-directory: ${{ env.API_PROJECT_PATH }}

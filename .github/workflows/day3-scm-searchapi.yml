@@ -71,7 +71,6 @@ jobs:
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build and publish SCM Search API
         working-directory: ${{ env.API_PROJECT_PATH }}
@@ -116,7 +115,6 @@ jobs:
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build and publish Indexer
         working-directory: ${{ env.INDEXER_PROJECT_PATH }}

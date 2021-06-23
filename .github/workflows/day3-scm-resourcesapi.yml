@@ -71,7 +71,6 @@ jobs:
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build and publish SCM Resources API
         working-directory: ${{ env.API_PROJECT_PATH }}
@@ -116,7 +115,6 @@ jobs:
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/packages.lock.json') }}
-          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Build and publish SCM ImageResizer
         working-directory: ${{ env.RESIZER_PROJECT_PATH }}
