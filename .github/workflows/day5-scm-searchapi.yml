@@ -1,21 +1,21 @@
-name: day4-scm-searchapi
+name: day5-scm-searchapi
 
 on:
   push:
     branches:
       - master
     paths:
-      - day4/apps/infrastructure/bicep/search/**
-      - day4/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day4-scm-search.yml
+      - day5/apps/infrastructure/bicep/search/**
+      - day5/apps/dotnetcore/Scm.Search/**
+      - .github/workflows/day5-scm-search.yml
 
   pull_request:
     branches:
       - master
     paths:
-      - day4/apps/infrastructure/bicep/search/**
-      - day4/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day4-scm-search.yml
+      - day5/apps/infrastructure/bicep/search/**
+      - day5/apps/dotnetcore/Scm.Search/**
+      - .github/workflows/day5-scm-search.yml
 
   workflow_dispatch:
 
@@ -29,8 +29,8 @@ jobs:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      BICEP_FILE_PATH: "./day4/apps/infrastructure/bicep/search/searchmain.bicep"
-      BICEP_MODULE_PATH: "./day4/apps/infrastructure/bicep/search/"
+      BICEP_FILE_PATH: "./day5/apps/infrastructure/bicep/search/searchmain.bicep"
+      BICEP_MODULE_PATH: "./day5/apps/infrastructure/bicep/search/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -53,7 +53,7 @@ jobs:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      API_PROJECT_PATH: "./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
+      API_PROJECT_PATH: "./day5/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
       API_PACKAGE_PATH: "publish/scmsearchapi"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
@@ -70,7 +70,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: "~/.nuget/packages"
-          key: ${{ runner.os }}-nuget-${{ hashFiles('./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('./day5/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/packages.lock.json') }}
 
       - name: Build and publish SCM Search API
         working-directory: ${{ env.API_PROJECT_PATH }}
@@ -97,7 +97,7 @@ jobs:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      INDEXER_PROJECT_PATH: "./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"
+      INDEXER_PROJECT_PATH: "./day5/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"
       INDEXER_PACKAGE_PATH: "publish/indexer"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
@@ -114,7 +114,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: "~/.nuget/packages"
-          key: ${{ runner.os }}-nuget-${{ hashFiles('./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/packages.lock.json') }}
+          key: ${{ runner.os }}-nuget-${{ hashFiles('./day5/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/packages.lock.json') }}
 
       - name: Build and publish Indexer
         working-directory: ${{ env.INDEXER_PROJECT_PATH }}
@@ -140,16 +140,16 @@ jobs:
   deploy-infrastructure-to-dev:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
-    environment: day4-scm-dev
+    environment: day5-scm-dev
     needs: [build-bicep, build-api, build-indexer]
     outputs:
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
     env:
-      RESOURCE_GROUP_NAME: rg-scm-devday4
+      RESOURCE_GROUP_NAME: rg-scm-devday5
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: devd4
+      ENV_NAME: devd5
 
     steps:
       - name: Inject slug/short variables
@@ -181,7 +181,13 @@ jobs:
         with:
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
-          parameters: env=${{ env.ENV_NAME }}
+          parameters: >
+            env=${{ env.ENV_NAME }}
+            aadInstance=${{ secrets.AAD_INSTANCE }}
+            aadTenantId=${{ secrets.AAD_TENANT_ID }}
+            aadClientId=${{ secrets.AAD_API_CLIENT_ID }}
+            aadDomain=${{ secrets.AAD_DOMAIN }}
+            aadClientIdUri=${{ secrets.AAD_API_CLIENT_ID_URI }}
 
   deploy-searchapi-to-dev:
     runs-on: ubuntu-latest
@@ -228,16 +234,16 @@ jobs:
   deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
-    environment: day4-scm-test
+    environment: day5-scm-test
     needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
     outputs:
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
     env:
-      RESOURCE_GROUP_NAME: rg-scm-testday4
+      RESOURCE_GROUP_NAME: rg-scm-testday5
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: testd4
+      ENV_NAME: testd5
 
     steps:
       - name: Inject slug/short variables
@@ -269,7 +275,13 @@ jobs:
         with:
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
-          parameters: env=${{ env.ENV_NAME }}
+          parameters: >
+            env=${{ env.ENV_NAME }}
+            aadInstance=${{ secrets.AAD_INSTANCE }}
+            aadTenantId=${{ secrets.AAD_TENANT_ID }}
+            aadClientId=${{ secrets.AAD_API_CLIENT_ID }}
+            aadDomain=${{ secrets.AAD_DOMAIN }}
+            aadClientIdUri=${{ secrets.AAD_API_CLIENT_ID_URI }}
 
   deploy-searchapi-to-test:
     runs-on: ubuntu-latest
