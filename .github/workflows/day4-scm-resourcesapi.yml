@@ -185,7 +185,6 @@ jobs:
 
   deploy-resourceapi-to-dev:
     runs-on: ubuntu-latest
-    environment: day4-scm-dev
     needs: deploy-infrastructure-to-dev
 
     steps:
@@ -207,7 +206,6 @@ jobs:
 
   deploy-resizer-to-dev:
     runs-on: ubuntu-latest
-    environment: day4-scm-dev
     needs: deploy-infrastructure-to-dev
 
     steps:
@@ -275,7 +273,6 @@ jobs:
 
   deploy-resourceapi-to-test:
     runs-on: ubuntu-latest
-    environment: day4-scm-test
     needs: deploy-infrastructure-to-test
 
     steps:
@@ -297,7 +294,6 @@ jobs:
 
   deploy-resizer-to-test:
     runs-on: ubuntu-latest
-    environment: day4-scm-test
     needs: deploy-infrastructure-to-test
 
     steps:
