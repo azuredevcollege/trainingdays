@@ -13,7 +13,6 @@ var cosmosAccount = 'cosmos-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbtVisitReportsName = 'sbt-visitreports'
 var sbtContactsName = 'sbt-contacts'
-var sbtContactsVisitReportsSubscription = 'visitreports'
 var location = resourceGroup().location
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {

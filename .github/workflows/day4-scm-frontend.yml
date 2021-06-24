@@ -93,7 +93,7 @@ jobs:
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday4
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: devd3
+      ENV_NAME: devd4
 
     steps:
       - name: Inject slug/short variables
@@ -169,7 +169,7 @@ jobs:
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday4
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: testd3
+      ENV_NAME: testd4
 
     steps:
       - name: Inject slug/short variables

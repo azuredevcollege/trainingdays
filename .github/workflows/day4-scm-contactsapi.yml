@@ -98,7 +98,7 @@ jobs:
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday4
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: devd3
+      ENV_NAME: devd4
 
     steps:
       - name: Inject slug/short variables
@@ -132,7 +132,7 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserPwd=${{ secrets.SQL_PWD }}
+            sqlUserPwd=${{ secrets.SQL_PASSWORD }}
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
@@ -148,7 +148,7 @@ jobs:
     env:
       RESOURCE_GROUP_NAME: rg-scm-testday4
       RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: testd3
+      ENV_NAME: testd4
 
     steps:
       - name: Inject slug/short variables
@@ -182,7 +182,7 @@ jobs:
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: >
             env=${{ env.ENV_NAME }} 
-            sqlUserPwd=${{ secrets.SQL_PWD }}
+            sqlUserPwd=${{ secrets.SQL_PASSWORD }}
 
       - name: Deploy SCM Contacts API
         uses: azure/webapps-deploy@v2
