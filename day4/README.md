@@ -45,7 +45,7 @@ A GitHub repository contains all of your project's files and each file's revisio
 
 ![GitHub Actions](./images/github-actions.png)
 
-GitHub actions helps you to automate task within your software development lifcycle. GitHub Actiosn makes it easy to automate all your software workflows like CI/CD.
+GitHub actions helps you to automate task within your software development lifcycle. GitHub Actions makes it easy to automate all your software workflows like CI/CD.
 Today you will dive into GitHub Actions workflows and learn how to build and deploy each microservice of the sample application. 
  
 ### Azure Bicep
