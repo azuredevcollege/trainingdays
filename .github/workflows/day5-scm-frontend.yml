@@ -151,7 +151,7 @@ jobs:
             \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
             \"enableStats\": true,
             \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\",
-            \"tenatId\":\"${{ secrets.AAD_TENANT_ID }}\",
+            \"tenantId\":\"${{ secrets.AAD_TENANT_ID }}\",
             \"audience\":\"${{ secrets.AAD_API_CLIENT_ID_URI }}\",
             \"clientId\":\"${{ secrets.AAD_FE_CLIENT_ID }}\"
           };" 
@@ -230,7 +230,7 @@ jobs:
             \"reportsEndpoint\": \"${{ steps.infrastructure.outputs.visitReportsEndpoint }}\",
             \"enableStats\": true,
             \"aiKey\": \"${{ steps.infrastructure.outputs.applicationInsightsKey }}\",
-            \"tenatId\":\"${{ secrets.AAD_TENANT_ID }}\",
+            \"tenantId\":\"${{ secrets.AAD_TENANT_ID }}\",
             \"audience\":\"${{ secrets.AAD_API_CLIENT_ID_URI }}\",
             \"clientId\":\"${{ secrets.AAD_FE_CLIENT_ID }}\"
           };" 
