@@ -52,6 +52,7 @@ Today you will dive into GitHub Actions workflows and learn how to build and dep
 
 ![Azure Bicep](./images/azure-bicep.jpg)
 
+You already have seen how to use ARM Templates, but with Azure Bicep it is easier to author your infrastructure as code. 
 Azure Bicep is a Domain Specific Language (DSL) for deploying Azure resource declaratively. It aims to drastically simplify the authoring experience with a cleaner syntax, improved type safety, and better support for modularity and code re-use. Today you will deploy a simple Azure Bicep file using a GitHub Actions workflow. 
 The sample application itself uses Azure Bicep to deploy all needed Azure resources.
 
