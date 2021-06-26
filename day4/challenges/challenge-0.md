@@ -20,6 +20,18 @@ In this challenge you will learn how to:
 
 ## Create a GitHub organization
 
+A GitHub organization is a shared account where business and open-source projects can collaborate across many projects. Owners and Administrators can manage member access to the organization's data and projects with security and administrative features. In the first part of this challenge we are going to create our own GitHub organization which we use for all challenges today. 
+
+:::tip
+📝 _If you don't have a GitHub account, you need to create one. You can create your account [here](https://github.com/join)._
+:::
+
+First we need to [login to GitHub](https://github.com/login).
+
+Next, navigate to _Your organizations_.
+
+![GitHub Your organizations](./images/gh-your-orgs.png)
+
 ## Invite organization members an assign roles
 
 ## Create your first repository
