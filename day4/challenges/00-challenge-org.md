@@ -119,7 +119,7 @@ A GitHub repository contains all of your project's files and each file's revisio
 ![GitHub repository manage access](./images/gh-repo-manage-access.png)
 
 In the _Who has access_ area you can see that the repository is a private one. 
-Two members have _Read_ access to the repository. You are the _Owner_ of the repository and your invited colleague has _Read_ access to it, because we have given members_Read_ access to all repositories in the _Manage privileges_ settings of the organization.
+Two members have _Read_ access to the repository. You are the _Owner_ of the repository and your invited colleague has _Read_ access to it, because we have given members _Read_ access to all repositories in the _Manage privileges_ settings of the organization.
 
 ![GitHub repository base role](./images/gh-repo-base-role.png)
 
