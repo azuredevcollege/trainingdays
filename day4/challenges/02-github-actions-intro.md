@@ -103,3 +103,80 @@ jobs:
               body: "Hello 🌍 from GitHub Actions!"
             });
 ```
+
+```md
+# <username or organizationname>.github.io
+
+This is a sample README.md where you document your newly created Coding Dreams! :fairy_woman: :fairy_man:
+
+And if you'd like to use syntax highlighting, include the language:
+
+```javascript
+if (isAwesome) {
+  return true
+}
+```
+
+
+:superhero_woman: :superhero_man:
+
+But I have to admit, tasks lists are my favorite:
+
+- [x] This is a complete item
+- [ ] This is an incomplete item
+
+```
+
+```yml
+
+name: pages
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: "12"
+
+      - run: npx vuepress build
+      - name: Upload result of vuepress build
+        uses: actions/upload-artifact@v2
+        with:
+          name: static-website
+          path: .vuepress/dist
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    steps:
+      - name: Download build of static website
+        uses: actions/download-artifact@v2
+        with:
+          name: static-website
+          path: .vuepress/dist
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          build_dir: .vuepress/dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+```
+
