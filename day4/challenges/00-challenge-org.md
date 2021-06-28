@@ -30,7 +30,7 @@ First we need to [login to GitHub](https://github.com/login).
 
 Next, navigate to _Your organizations_ and create a new oragnization.
 
-![GitHub Your organizations](./images/gh-your-orgs.png)
+<img src="./images/gh-your-orgs.png" width="340" height="416" alt="GitHub your organization">
 
 First you have to choose a plan for your organization. For today a free plan is enough.
 Next, you need to specify a global unique name for your organization an tell GitHub that the organization belongs to your personal account. After you have set all needed values, click _Next_ and complete the setup. We don't need to add organization members now, because we want to do that in the next part of this challenge.
