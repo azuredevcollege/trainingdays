@@ -1,0 +1,123 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sku": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is Standard"
+            }
+        },
+        "skuCode": {
+            "type": "string",
+            "defaultValue": "S1",
+            "metadata": {
+                "description": "The SKU of App Service Plan, default is S1"
+            }
+        },
+        "webAppName": {
+            "type": "string",
+            "metadata": {
+                "description": "Base name of the resource such as web app name and app service plan"
+            },
+            "minLength": 5
+        },
+        "applicationInsightsName": {
+            "type": "string"
+        },
+        "commonResGroup": {
+            "type": "string"
+        },
+        "cosmosDbAccount": {
+            "type": "string"
+        },
+        "serviceBusNamespaceName": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "appServicePlanName": "[concat(parameters('webAppName'), '-plan')]",
+        "location": "[resourceGroup().location]",
+        "sbVersion": "2017-04-01",
+        "sbScmVisitReportTopicSendAuthRule": "scmvrtopicsend",
+        "sbScmVisitReportTopic": "sbt-visitreports",
+        "sbScmContactTopic": "sbt-contacts",
+        "sbScmContactTopicListenAuthRule": "scmtopiclisten",
+        "sbScmVisitReportTopicSendAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmVisitReportTopic'), variables('sbScmVisitReportTopicSendAuthRule'))]",
+        "sbScmContactTopicListenAuthRuleId": "[resourceId(parameters('commonResGroup'), 'Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicListenAuthRule'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2019-08-01",
+            "name": "[variables('appServicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[variables('location')]",
+            "kind": "linux",
+            "tags": {},
+            "dependsOn": [],
+            "properties": {
+                "name": "[variables('appServicePlanName')]",
+                "reserved": true
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('webAppName')]",
+            "location": "[variables('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', variables('appServicePlanName'))]"
+            ],
+            "tags": {},
+            "properties": {
+                "name": "[parameters('webAppName')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "APPINSIGHTS_KEY",
+                            "value": "[reference(resourceId(parameters('commonResGroup'), 'Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
+                        },
+                        {
+                            "name": "COSMOSDB",
+                            "value": "[reference(resourceId(parameters('commonResGroup'), 'Microsoft.DocumentDb/databaseAccounts', parameters('cosmosDbAccount')), '2015-04-08').documentEndpoint]"
+                        }
+                    ],
+                    "connectionStrings": [
+                        {
+                            "name": "COSMOSKEY",
+                            "connectionString": "[listKeys(resourceId(parameters('commonResGroup'), 'Microsoft.DocumentDb/databaseAccounts', parameters('cosmosDbAccount')), '2015-04-08').primaryMasterKey]",
+                            "type": "Custom"
+                        },
+                        {
+                            "name": "SBVRTOPIC_CONNSTR",
+                            "connectionString": "[listKeys(variables('sbScmVisitReportTopicSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]",
+                            "type": "Custom"
+                        },
+                        {
+                            "name": "SBCONTACTSTOPIC_CONNSTR",
+                            "connectionString": "[listKeys(variables('sbScmContactTopicListenAuthRuleId'), variables('sbVersion')).primaryConnectionString]",
+                            "type": "Custom"
+                        }
+                    ],
+                    "linuxFxVersion": "NODE|12-lts",
+                    "alwaysOn": true,
+                    "use32BitWorkerProcess": false,
+                    "cors": {
+                        "allowedOrigins": [
+                            "*"
+                        ]
+                    }
+                },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+                "clientAffinityEnabled": false,
+                "httpsOnly": true
+            }
+        }
+    ],
+    "outputs": {}
+}

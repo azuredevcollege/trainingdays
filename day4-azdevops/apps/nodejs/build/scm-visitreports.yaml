@@ -1,0 +1,44 @@
+parameters:
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
+steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "12.x"
+    displayName: "Install Node.js"
+  - task: Bash@3
+    inputs:
+      workingDirectory: "$(Build.SourcesDirectory)/day3/apps/nodejs/visitreport"
+      targetType: "inline"
+      displayName: "npm install"
+      script: npm install
+  - task: ArchiveFiles@2
+    displayName: "Archive build files"
+    inputs:
+      rootFolderOrFile: "$(Build.SourcesDirectory)/day3/apps/nodejs/visitreport"
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.VisitReports.zip
+      replaceExistingArchive: true
+
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
+    inputs:
+      repository: adcday3/scmvisitreportsapi
+      command: build
+      dockerfile: day3/apps/nodejs/visitreport/Dockerfile
+      buildContext: day3/apps/nodejs/visitreport
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Push Docker image
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      repository: adcday3/scmvisitreportsapi
+      command: buildAndPush
+      dockerfile: day3/apps/nodejs/visitreport/Dockerfile
+      buildContext: day3/apps/nodejs/visitreport
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}

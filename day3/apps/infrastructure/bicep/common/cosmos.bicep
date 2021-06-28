@@ -1,4 +1,3 @@
-
 @minLength(5)
 @maxLength(8)
 @description('Name of environment')
@@ -14,6 +13,7 @@ var location = resourceGroup().location
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' = {
   name: cosmosAccount
   location: location
+  tags: resourceTag
   kind: 'GlobalDocumentDB'
   properties: {
     consistencyPolicy: {

@@ -96,7 +96,7 @@
         "indexername": "scmcontacts",
         "sbVersion": "2017-04-01",
         "sbScmContactTopicListenAuthRule": "scmtopiclisten",
-        "sbScmContactTopic": "scmtopic",
+        "sbScmContactTopic": "sbt-contacts",
         "sbScmContactTopicListenAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/topics/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbScmContactTopic'), variables('sbScmContactTopicListenAuthRule'))]"
     },
     "resources": [
@@ -122,8 +122,7 @@
                 "name": "Standard_LRS"
             },
             "kind": "StorageV2",
-            "properties": {
-            }
+            "properties": {}
         },
         {
             "apiVersion": "2018-02-01",
@@ -131,10 +130,8 @@
             "kind": "app",
             "name": "[variables('appServicePlanName')]",
             "location": "[variables('location')]",
-            "properties": {
-            },
-            "dependsOn": [
-            ],
+            "properties": {},
+            "dependsOn": [],
             "sku": {
                 "name": "[parameters('appPlanSKU')]"
             }
@@ -271,6 +268,5 @@
             }
         }
     ],
-    "outputs": {
-    }
+    "outputs": {}
 }

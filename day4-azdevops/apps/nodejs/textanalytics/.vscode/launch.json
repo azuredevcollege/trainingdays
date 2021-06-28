@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Day4 - Launch Text Analytics Function",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "preLaunchTask": "host start",
+    }
+  ]
+}
