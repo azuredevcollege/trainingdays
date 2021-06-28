@@ -30,7 +30,8 @@ First we need to [login to GitHub](https://github.com/login).
 
 Next, navigate to _Your organizations_ and create a new oragnization.
 
-<img src="./images/gh-your-orgs.png" width="340" height="416" alt="GitHub your organization">
+![GitHub Your organizations](./images/gh-your-orgs.png)
+
 
 First you have to choose a plan for your organization. For today a free plan is enough.
 Next, you need to specify a global unique name for your organization an tell GitHub that the organization belongs to your personal account. After you have set all needed values, click _Next_ and complete the setup. We don't need to add organization members now, because we want to do that in the next part of this challenge.
@@ -112,8 +113,71 @@ Please initialize the repository with a _README_ file.
 
 Click the _Create repository_ button to create the repository.
 
+A GitHub repository contains all of your project's files and each file's revision history. Currently, 2 people have access to the repository. You as the owner with full access and your invited colleague with read access. Of course we want to work together on the project or repository. That's why we have to give the colleague write permissions. Therefore navigate to the repository's settings section and go to _Manage access_.
+
+![GitHub repository manage access](./images/gh-repo-manage-access.png)
+
+In the _Who has access_ area you can see that the repository is a private one. 
+Two members have _Read_ access to the repository. You are the _Owner_ of the repository and your invited colleague has _Read_ access, because we have given _Read_ access to all repositories for members in the _Manage privileges_ of the organization.
+
+![GitHub repository base role](./images/gh-repo-base-role.png)
+
+We have two ways to give access to the repository.
+
+**People:**
+Assigning individual people who are either members of the organization, or _Outside Collaborators_. An _Outside collaborator_ is a person who isn't explicitly a member of your organisation. 
+
+**Teams:**
+We can organize people into team, and assign rights to the team.
+
+In the next section we will create a _Team_ and give it write access to the repository, but let us first clone the repository to your local machine.
+
+Cloning a public repository from GitHub using git commandline tool is very easy, but when it comes to clone a private repository it is a bit tricky. You can either clone the repository with a password, a token or you can clone it using SSH credentials.
+
+### Clone the repository with a password
+
+Navigate to your repository, select the _<> Code_ section, click the green _Code_ botton and copy the _HTTPS_ url.
+
+![GitHub repository clone HTTPS](./images/gh-clone-repo-https.png)
+
+Now, open a terminal and clone the repository to a location of your choice using the git clone command and your GitHub username:
+
+```Shell
+git clone https://your_username@repository_url
+```
+
+After a short time, you will be prompted for a password. Once the git client authenticated, the repository is cloned to your local machine.
+
+::: tip
+📝 _If you have enabled MFA for your account, you need to use SSH credentials to clone the repository._
+:::
+
+Using your username and password you have to input your password every time for each operation to the repository. You can permanently store your password in the git configuration, but first you have to enable the credentials helper by running the git config command:
+
+```Shell
+git config --global credential.helper store
+```
+
+Now you only have to enter your password once, when you clone a repository.
+
+### Clone the repository with SSH keys
+
+First, you need to generate an SSH keypair on your local machine and add the public key to your GitHub account.
+GitHub has a very good documentation: [Connectiong to GitHub with SSA](https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh)
+After you added your public SSH key to your GitHub account, you can clone the repository using SSH.
+
+![GitHub clone repository SSH](./images/gh-clone-repo-ssh.png)
+
+Open a terminal and use the git clone command to clone the repository:
+
+```
+git clone git@github.com:<your-org-name>/<your-repo-name>.git
+```
 
 ## Create a team and assign permission
+
+
+
 
 
 [🔼 Day 4(GitHub)](../README.md) | [Next challenge ▶](./NN-challenge.md)
