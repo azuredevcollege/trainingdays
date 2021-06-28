@@ -73,3 +73,27 @@ Your page should look something like this:
 We'll this is still kind of boring, what about the ACTION?
 
 Let's create one now.
+
+```yaml
+name: Hello World!
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send a hello world
+        uses: actions/github-script@v4.0.2
+        with:
+          script: |
+            github.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: "Hello World! 👋",
+              body: "Hello 🌍 from GitHub Actions!"
+            });
+```
