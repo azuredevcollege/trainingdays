@@ -23,6 +23,12 @@ the repository as a profile page make sure to name it:
 
 `<username or organizationname>.github.io`
 
+![create new repository](./images/create-new-repository-1.png)
+
+See an example for naming your repository here:
+
+![detailed view of repository](./images/create-new-repository-2.png)
+
 This allows you to later access this site using your GitHub username or
 organizaions name like this:
 
