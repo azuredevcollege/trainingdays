@@ -38,10 +38,80 @@ Next, you need to specify a global unique name for your organization an tell Git
 ![GitHub new organization form](./images/gh-new-org-form.png)
 
 
-
 ## Invite organization members an assign roles
 
+At the moment you are the _Owner_ and the only one who can access the newly created organization. You can check this by navigating to the _People_ section in the GitHub's navigation bar. The members list shows each member and their access level. 
+Owners have full access to teams, repositories and settings of the organization.
+Of course we want to work with colleagues. We are now looking at how we can add our colleagues to the organization and what access rights we can give them. To add a new member, navigate to the _People_ section, enter the invitee's email or GitHub handle and click _Invite Member_. 
+
+![GitHub Invite Member](./images/gh-invite-member.png)
+
+Next, you need to specify the invitee's organization role. 
+
+**Member:**
+Members can see all other members and can be granted access to repositories. They can create teams and repositories.
+
+**Owner**
+Owners have full administrative rights to the organization and have complete access to all repositories and teams.
+
+Actually, at least two people should be assigned to the Owner role. In this training, however, it is enough that there is only one owner. Therefore we assign the role _Member_ to the invited person.
+
+![GitHub Invitation Member Role](./images/gh-invite-role-org.png)
+
+
+After clicking _Send invitation_ the invitee gets an email where the invitation can be accepted. 
+When we navigate back to the _People_ section, we see that there is one pending invitation. The pending invitation state of the invitee is going to be changed as soon the invitee has accepted the invitation. The status of the invitee's pending invitation will be changed once the invitee has accepted the invitation.
+
+Wait until the invitee has accepted the invitation and verified that they have access to the organization.
+
+:::tip
+📝 _If you want, the invitee can check if they can create a repository. It is be possible, because the Member role was assigned. But it is not possible to change settings of the organisation. Therefore the Settings section in the GitHub's navigation bar is not displayed. _
+:::
+
+### Outside collaborators
+
+When you look at the _People_ section there is an entry named _Outside collaborators_ under the _Organization permissions_. So, what is an _Outside collaborator_? An _Outside collaborator_ is a person who isn't explicitly a member of your organization, but who has _Read_, or _Admin_ permissions to one or more repositories of your organization. 
+This is useful when, for example, we are working with partner companies on a project but don't want partners to have organization-level access. Partners cannot view members of the organization and cannot create repositories. We only give partners access to selected repositories.
+We will look at how to give _Outside collaborators_ access to repositories later.
+
+### Member privileges
+
+As an organization _Owner_, we can manage _Members'_ privileges. Navigate to the organization's _Settings_ section in the GitHub's navigation bar and click _Manage privileges_.
+
+![GitHub Members privileges](./images/gh-member-privileges-org.png)
+
+
+Here you can manage what members of the organization are allowed to do. For example, if you want to control access to repositories for members, we need to look at _base permissions_. Per default, members can clone and pull all repositories within the organization, regardless if the repositories are public or private. If we want to restrict access to repositories as owner, we can set the value _None_. With this setting it is only possible to clone and pull public repositories. If members need access to a repository, we need to add them to teams or make them collaborators on individual repositories.
+But it also works the other way around, members can be assigned more rights.  With _Write_ and _Admin_ members will get more access rights to each repository within the organization.
+
+For this challenge we leave it at the default setting.
+
+![GitHub member privileges base permissions](./images/gh-members-priv-base.png)
+
+
+Take your time and have a look at the other settings and feel free to discuss them within your team mates.
+
+
 ## Create your first repository
+
+Now it is time to create your first repository and clone it to your local machine. Navigate to the _Repositories_ section in the GitHub's navigation bar and click the green _New_ button. 
+Give the repository a name e.g. _myfirst-repo_ (If you want, you can add a description).
+At this time, we want to make the repository private and choose later who can commit. 
+
+:::tip
+📝 _Since we have already invited a colleague as a member of the organization and used the default _Read_ setting as Base permission in the member privileges, the invited colleague can clone and pull the newly created repository._
+:::
+
+Please initialize the repository with a _README_ file. 
+
+::: tip
+📝 _If you want, you can initialize the repository with a _.gitignore_ file, by selecting a template._
+:::
+
+![GitHub new repository](./images/gh-new-repo.png)
+
+Click the _Create repository_ button to create the repository.
+
 
 ## Create a team and assign permission
 
