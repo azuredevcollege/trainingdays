@@ -17,6 +17,7 @@ In this challenge you will learn how to:
 2. [Invite organization members an assign roles](#invite-organization-members-an-assign-roles)
 3. [Create your first repository](#create-your-first-repository)
 4. [Create a team and assign permission](#create-a-team-and-assign-permission)
+5. [Clone the repository to your local machine](#clone-the-repository-to-your-local-machine)
 
 ## Create a GitHub organization
 
@@ -113,16 +114,16 @@ Please initialize the repository with a _README_ file.
 
 Click the _Create repository_ button to create the repository.
 
-A GitHub repository contains all of your project's files and each file's revision history. Currently, 2 people have access to the repository. You as the owner with full access and your invited colleague with read access. Of course we want to work together on the project or repository. That's why we have to give the colleague write permissions. Therefore navigate to the repository's settings section and go to _Manage access_.
+A GitHub repository contains all of your project's files and each file's revision history. Currently, 2 people have access to the repository. You, as owner, have full access and your invited colleague has read access. Of course we want to work together on the repository. That's why we have to give the colleague write permissions. Therefore navigate to the repository's settings section and go to _Manage access_.
 
 ![GitHub repository manage access](./images/gh-repo-manage-access.png)
 
 In the _Who has access_ area you can see that the repository is a private one. 
-Two members have _Read_ access to the repository. You are the _Owner_ of the repository and your invited colleague has _Read_ access, because we have given _Read_ access to all repositories for members in the _Manage privileges_ of the organization.
+Two members have _Read_ access to the repository. You are the _Owner_ of the repository and your invited colleague has _Read_ access to it, because we have given members_Read_ access to all repositories in the _Manage privileges_ settings of the organization.
 
 ![GitHub repository base role](./images/gh-repo-base-role.png)
 
-We have two ways to give access to the repository.
+There are two ways to give someone more access than the Base permission allows.
 
 **People:**
 Assigning individual people who are either members of the organization, or _Outside Collaborators_. An _Outside collaborator_ is a person who isn't explicitly a member of your organisation. 
@@ -130,7 +131,14 @@ Assigning individual people who are either members of the organization, or _Outs
 **Teams:**
 We can organize people into team, and assign rights to the team.
 
-In the next section we will create a _Team_ and give it write access to the repository, but let us first clone the repository to your local machine.
+In the next section we will create a _Team_ and give it write access to the repository.
+
+## Create a team and assign permission
+
+
+
+## Clone the repository to your local machine
+
 
 Cloning a public repository from GitHub using git commandline tool is very easy, but when it comes to clone a private repository it is a bit tricky. You can either clone the repository with a password, a token or you can clone it using SSH credentials.
 
@@ -173,9 +181,6 @@ Open a terminal and use the git clone command to clone the repository:
 ```
 git clone git@github.com:<your-org-name>/<your-repo-name>.git
 ```
-
-## Create a team and assign permission
-
 
 
 
