@@ -8,22 +8,38 @@ create a GitHub user profile page with automated deployment.
 
 Let's get started! 💪👩
 
-## A clean slate 🧻
+## A clean slate 🧻 - GitHub Pages
 
-For this challenge let's create a new GitHub repository so nothing comes in the
-way of our automation madness.
+For this challenge we will again work on an empty repository so nothing comes in
+the way of our automation madness.
 
-As an added bonus you can use this challenge to create a GitHub profile page for
-your organization or personal github account.
+We want to also give you a quick tour on GitHub Pages. This feature allows you
+to host static websites directly on GitHub, making for a great place to
+host your documentation for your project together with it's source code.
+
+GitHub Pages are hosted dependent on the repository name.
+
+After enabling the feature, your page is available under the following link by default:
+
+`https://<username or organization name>.github.io/<repository name`
+
+For each organization and user there is one _special_ repository name `<username or organization name>.github.io` reserved to host the root level GitHub Page
+`https://<username or organization name>.github.io/` for you account or
+organization.
+
+Let's try this now!
+
+:::tip 📝
+As an added bonus you can use this challenge to create a profile,
+portfolio or documentation page for your organization or personal github
+account.
+:::
 
 ### Create a new repository
 
-On your private or organizational create a new repository. If you want to use
-the repository as a profile page make sure to name it:
+Create a new repository on your private or organizational account, but be careful when naming this repository.
 
-`<username or organizationname>.github.io`
-
-![create new repository](./images/create-new-repository-1.png)
+Just like before create a new repository
 
 See an example for naming your repository here:
 
@@ -57,12 +73,13 @@ Let's write some fancy HTML "hello world":
 <!-- index.html -->
 Hello World! 🌍
 ```
+
 ![Index.html](./images/helloworldindexhtml.png)
 
-And save the file using the commit changes dialog at the very bottom of the
+And save the file using the commit changes dialog at the bottom of the
 editor window.
 
-A few **minutes** later your profile page will be visibile on:
+**Minutes** later your profile page will be visible on:
 
 `https://<username or organizationname>.github.io`
 
@@ -142,14 +159,11 @@ But I have to admit, tasks lists are my favorite:
 
 - [x] This is a complete item
 - [ ] This is an incomplete item
-
 ````
 
 ![README](./images/ReadMeSample.png)
 
-
 ```yml
-
 name: pages
 
 on:
@@ -170,7 +184,7 @@ jobs:
 
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: "12"
+          node-version: '12'
 
       - run: npx vuepress build
       - name: Upload result of vuepress build
@@ -197,13 +211,10 @@ jobs:
           build_dir: .vuepress/dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-
 ```
 
 ![change branches](./images/changebranchesinpages.png)
 
 ![save branch](./images/changebranchessave.png)
-
 
 ![vuepress](./images/vuepressreadme.png)
