@@ -9,7 +9,7 @@ In this challenge you will learn how to:
 - Create a GitHub organization
 - Invite organization members and assign roles
 - Create your first repository
-- Create a team and assign permission to a repository
+- Create a team and assign permissions to a repository
 
 ## Table Of Contents
 
