@@ -25,7 +25,7 @@ Output will be something like:
 501ff8e64847a6ac9510761f42a3c1ebe2aee20f0e3e78752d04056eb941a8c1
  ```
 
-We have created a container called ```con1``` with ```-d``` option from the image ```nginx:latest```. As you remember, -d means run it in background. Nginx is an open source reverse proxy-webserver daemon. When you create a container from that image, nginx webserver daemon runs and starts to listen on tcp port 80. Nginx is a service, not one time application, so when it starts, it continues to run. Hence, container is up and running too. With ```-p 80:80``` option, we instructed to Docker that we want to forward host's TCP 80 port to container's TCP 80 port. Any request that reaches to host's 80 port will be forwarded to the container. If you open a web browser on the host and type ```http://127.0.0.1```, you'll access to the website running inside this container. We'll come to network details later.
+We have created a container called ```con1``` with ```-d``` option from the image ```nginx:latest```. As you remember, -d means run it in background. Nginx is an open source reverse proxy-webserver daemon. When you create a container from that image, nginx webserver daemon runs and starts to listen on tcp port 80. Nginx is a service, not one time application, so when it starts, it continues to run. Hence, the container is up and running too. With ```-p 80:80``` option, we instructed to Docker that we want to forward host's TCP 80 port to container's TCP 80 port. Any request that reaches to host's 80 port will be forwarded to the container. If you open a web browser on the host and type ```http://127.0.0.1```, you'll access the website running inside this container. We'll come to network details later.
 
 <img src="./img/nginx.png">
 
@@ -50,7 +50,7 @@ Status: Downloaded newer image for chuanwen/cowsay:latest
 385b768034d531ca050b0334f359cc29cfa3077d479a143634fe23b1acf4c55e
  ```
 
-We've created 2 containers named ```con1``` and ```con2```. Con1 is still running but con2 is exited because the running process inside container done its job and exited. Let's check them.
+We've created 2 containers named ```con1``` and ```con2```. Con1 is still running but con2 is exited because the running process inside the container has done its job and exited. Let's check them.
 
 Type: 
 ```shell
@@ -115,7 +115,7 @@ Output will be something like:
 2020-06-03T00:46:16.592773000Z                 ||     ||
  ```
 
-What if this was a long log and we just wanted to see last couple of lines instead of whole log output? We can use ```--tail``` option for that. 
+What if this was a long log and we just wanted to see the last couple of lines instead of the whole log output? We can use ```--tail``` option for that. 
 
 Type: 
 ```shell
@@ -152,7 +152,7 @@ Output will be something like:
 172.17.0.1 - - [03/Jun/2020:10:45:47 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36 Edg/84.0.522.50" "-"
 ```
 
-Now we're attached to the log. Open a browser and visit ```http://127.0.0.1``` and refresh the page couple of times. Then turn back to terminal and you'll see new logs generated. You can follow them in real time. You can cut the connection to the log by typing ```CTRL + C``` when you're done. 
+Now we're attached to the log. Open a browser and visit ```http://127.0.0.1``` and refresh the page a couple of times. Then turn back to terminal and you'll see new logs generated. You can follow them in real time. You can cut the connection to the log by typing ```CTRL + C``` when you're done. 
 </details>
 
 ***
@@ -184,7 +184,7 @@ Output will be something like:
 Error response from daemon: Container 385b768034d531ca050b0334f359cc29cfa3077d479a143634fe23b1acf4c55e is not running
 ```
 
-That was the way how we can see running processes in the container. Now it's time to check container's resource usage. For that, we're gonna use ```docker stats``` command. If you type ```docker stats``` without any option, it'll start showing all the running containers' resource usage stats. But you can also just check single container's resource usage by adding container name or id to the command, something like ```docker stats con1```. Let's try that.  
+That was how we can see running processes in the container. Now it's time to check container's resource usage. For that, we're gonna use ```docker stats``` command. If you type ```docker stats``` without any option, it'll start showing all the running containers' resource usage stats. But you can also just check single container's resource usage by adding container name or id to the command, something like ```docker stats con1```. Let's try that.  
 
 Type: 
 ```shell
@@ -204,7 +204,7 @@ CONTAINER ID        NAME                CPU %               MEM USAGE / LIMIT   
 <details>
   <summary>Click to expand!</summary>
 
-It isn't wise to run any container on any production system without limiting its cpu and memory usage. If we don't limit container's memory and cpu usage, due to a faulty process or load, container may start using all the system resources of the host where it's running. This means that all the other containers and processes on that node would crash. Docker allows us to limit any container's memory and cpu usage. Memory part is relatively easy. You can specify maximum amount of ram that container can access. For example ```--memory=512M``` option dedicates 512 Megabyte of Ram. Memory option takes a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes. Also you can use ```--memory-swap``` option to set the amount of memory this container is allowed to swap to disk. Let's try to create a new container with restricted memory. 
+It isn't wise to run any container on any production system without limiting its cpu and memory usage. If we don't limit container's memory and cpu usage, due to a faulty process or load, the container may start using all the system resources of the host where it's running. This means that all the other containers and processes on that node would crash. Docker allows us to limit any container's memory and cpu usage. Memory part is relatively easy. You can specify maximum amount of ram that container can access. For example ```--memory=512M``` option dedicates 512 Megabyte of Ram. Memory option takes a positive integer, followed by a suffix of b, k, m, g, to indicate bytes, kilobytes, megabytes, or gigabytes. Also you can use ```--memory-swap``` option to set the amount of memory this container is allowed to swap to disk. Let's try to create a new container with restricted memory. 
 
 Type: 
 ```shell
@@ -219,7 +219,7 @@ You may use ```docker stats con3``` command to see that container started with l
 
 <img src="./img/conmemory.png">
 
-As said, memory is relatively easy. Actually limiting the cpu is also easy but there isn't something like "just access to 200 Mhz of the CPU" :). Cpu limits are not the same as memory limits. You can't specify amount of the CPU power. Instead of that, you can only specify which cpu core that container can access or not. If you don't specify that, by default, any container can access to all cpu cores of the host. ```–cpus``` option allows us to limit maximum number of cores that container can access. For example, ```–cpus=“3”``` means that container can only access 3 cpu cores of the host. There is another option which is ```--cpuset-cpus=```. This allows us to restrict the container to specific cpu cores. For example, ```--cpuset-cpus=“1,3”```  means that container can only use core number 1 and core number 3 on that host. Let's try these and create 2 new containers with limited cpu.
+As said, memory is relatively easy. Actually limiting the cpu is also easy but there isn't something like "just access to 200 Mhz of the CPU" :). Cpu limits are not the same as memory limits. You can't specify the amount of CPU power. Instead of that, you can only specify which cpu core that container can access or not. If you don't specify that, by default, any container can access to all cpu cores of the host. ```–cpus``` option allows us to limit maximum number of cores that container can access. For example, ```–cpus=“3”``` means that container can only access 3 cpu cores of the host. There is another option which is ```--cpuset-cpus=```. This allows us to restrict the container to specific cpu cores. For example, ```--cpuset-cpus=“1,3”```  means that container can only use core number 1 and core number 3 on that host. Let's try these and create 2 new containers with limited cpu.
 
 Type: 
 ```shell
@@ -285,7 +285,7 @@ name=test
 database_server=test.contoso.com
 HOME=/root
 ```
-Let's delete containers that have been created so far
+Let's delete the containers that have been created so far
 
 Type: 
 ```shell
@@ -306,6 +306,6 @@ env_test2
 ***
 ## Wrap up
 
-__Congratulations__ you have completed the Container 101 challenge and learned couple of very essential Docker commands.
+__Congratulations__ you have completed the Container 101 challenge and learned a couple of very essential Docker commands.
 
 *** Reference: https://docs.docker.com

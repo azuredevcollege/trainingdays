@@ -18,7 +18,7 @@ In this challenge, we're gonna play with Volume and Network objects which are th
   <summary>Click to expand!</summary>
 
 Docker volumes are docker objects, just like containers and images. We create them just like creating images or containers. By default, we create them on the host where Docker daemon is running. But if we want, they can be created using various volume plug-ins and these plug-ins allow us to store the data, for example on a nfs drive or on the cloud. 
-After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. In this way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when container is deleted. Volumes allow us to keep files independent of containers' lifetime. Let's create our first volume and see that in action. 
+After the volume is created, we can mount that volume to any folder inside the container. From that moment, any files written to that folder will be physically stored in the volume. This way, we can keep these files longer than the container's lifetime. Any file in the container is deleted and lost, when container is deleted. Volumes allow us to keep files independent of containers' lifetime. Let's create our first volume and see that in action. 
 
 First let's check if there is any volume has been created on the host before. 
 
@@ -62,11 +62,11 @@ Output will be something like:
     }
 ]
 ```
-I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, folder will be created when container is created.
+I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, the folder will be created when container is created.
 
 Now it's time to create a container and mount that volume. We're gonna create a new interactive container from ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to container's ```/test``` folder. After it's created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
 
-(We will use another useful option too, which is ```--rm```. If you create a Docker container with ```--rm```, container will be automatically deleted when it's exited. Therefore you don't need to manually clean later. Please use with caution.)
+(We will use another useful option too, which is ```--rm```. If you create a Docker container with ```--rm```, the container will be automatically deleted when it's exited. Therefore you don't need to manually clean later. Please use with caution.)
 
 Type: 
 ```shell
@@ -80,7 +80,7 @@ root@666540d6384b:/#
 Now we're connected to the container. Let's jump to the /test folder and create a file in it. 
 
 ```shell
-root@666540d6384b:/# cd test
+root@666540d6384b:/# cd /test
 root@666540d6384b:/test# echo "this is a test line" > test.txt
 root@666540d6384b:/test# ls
 test.txt
@@ -88,7 +88,7 @@ root@666540d6384b:/test# exit
 exit
 ```
 
-When we exited, container stopped working. We created that container with ```--rm``` therefore container is deleted too. You can check this by typing ```docker ps -a```. There shouldn't be any running or stopped container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything was written to that folder actually was written to the volume. Container was deleted but volume still remains. So our data too. Let's create another container and see that. This time we're gonna create another container from alpine image to see that it doesn't matter which image we use. 
+When we exited, the container stopped working. We created that container with ```--rm``` therefore container is deleted too. You can check this by typing ```docker ps -a```. There shouldn't be any running or stopped container at the moment. ```first_volume``` has been mounted to this container's ```/test``` folder. Therefore anything was written to that folder actually was written to the volume. Container was deleted but volume still remains. So our data too. Let's create another container and see that. This time we're gonna create another container from alpine image to see that it doesn't matter which image we use. 
 
 Type: 
 ```shell
@@ -115,7 +115,7 @@ this is a test line
 /test2 # exit
 ```
 
-Yes! file is there. As you can see, we kept our data longer than the container's lifetime. Don't forget, containers are disposable and can be deleted but your data doesn't need to be.
+Yes! The file is there. As you can see, we kept our data longer than the container's lifetime. Don't forget, containers are disposable and can be deleted but your data doesn't need to be.
 </details>
 
 ***
@@ -123,7 +123,7 @@ Yes! file is there. As you can see, we kept our data longer than the container's
 <details>
   <summary>Click to expand!</summary>
 
-Another use case of the volumes is that you can mount same volume to multiple containers at the same time. Let's try that.
+Another use case of the volumes is that you can mount the same volume to multiple containers at the same time. Let's try that.
 
 
 Type: 
@@ -167,7 +167,7 @@ from-con2.txt  test.txt
 root@70fd46786a11:/test#
 ```
 
-This time, we'll create another container and mount ```first_volume``` to ```/test3``` folder but this time volume will be mounted read only. For that, we're gonna use ```:ro``` option. Open another terminal window and;
+This time, we'll create another container and mount ```first_volume``` to ```/test3``` folder but this time the volume will be mounted read only. For that, we're gonna use ```:ro``` option. Open another terminal window and;
 
 Type: 
 ```shell
@@ -414,7 +414,7 @@ PING 172.17.0.3 (172.17.0.3) 56(84) bytes of data.
 4 packets transmitted, 4 received, 0% packet loss, time 3086ms
 rtt min/avg/max/mdev = 0.090/1.299/4.848/2.048 ms
 ```
-It seems that connection between con1 and con2 is possible. Because they're connected to same default bridge network. They can communicate directly without exposing their ports. They're on the same network and there isn't any rule that blocks this communication. But I wonder if they can solve each other's name too? Is there any dns mechanism running behind the scenes? Let's try that. First we're gonna try to ping www.bing.com and see if container can solve public domain names. 
+It seems that connection between con1 and con2 is possible. Because they're connected to the same default bridge network. They can communicate directly without exposing their ports. They're on the same network and there isn't any rule that blocks this communication. But I wonder if they can solve each other's name too? Is there any dns mechanism running behind the scenes? Let's try that. First we're gonna try to ping www.bing.com and see if container can solve public domain names. 
 
 Type: 
 ```shell
@@ -469,7 +469,7 @@ lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
-As you can see, only the loopback adapter remains. Let's type CTRL-p CTRL-q and detach from the container again. Delete containers by typing ```docker container rm -f con1 con2```
+As you can see, only the loopback adapter remains. Let's type CTRL-p CTRL-q and detach from the container again. Delete the containers by typing ```docker container rm -f con1 con2```
 </details>
 
 ***
@@ -477,7 +477,7 @@ As you can see, only the loopback adapter remains. Let's type CTRL-p CTRL-q and 
 <details>
   <summary>Click to expand!</summary>
 
-Another network that has been created when Docker starts is "host" network. If you attach a container to the "host" network, that container’s network stack is not isolated from Docker host's network stack (container shares the host’s networking namespace), and container does not get its own IP-address allocated. Let's create another container and connect that to the host network.
+Another network that has been created when Docker starts is "host" network. If you attach a container to the "host" network, that container’s network stack is not isolated from Docker host's network stack (container shares the host’s networking namespace), and the container does not get its own IP-address allocated. Let's create another container and connect it to the host network.
 
 Type: 
 ```shell
@@ -561,7 +561,7 @@ Output will be something like:
 2: sit0@NONE: <NOARP> mtu 1480 qdisc noop state DOWN qlen 1000
     link/sit 0.0.0.0 brd 0.0.0.0
 ``` 
-As you can see, there isn't any eth device that has created. This container can't communicate with any endpoint. Type exit, container will be automatically deleted. 
+As you can see, there isn't any eth device that has been created. This container can't communicate with any endpoint. Type exit, the container will be automatically deleted. 
 </details>
 
 ***
@@ -570,7 +570,7 @@ As you can see, there isn't any eth device that has created. This container can'
   <summary>Click to expand!</summary>
 
 All containers without a --network specified are connected to the default bridge network. This can be a risk, as unrelated stacks/services/containers are then able to communicate. Using a user-defined network provides a scoped network in which only containers attached to that network are able to communicate.
-If your containers use the default bridge network, you can configure it, but all the containers use the same settings, such as MTU and iptables rules. In addition, configuring the default bridge network happens outside of Docker itself, and requires a restart of Docker. User-defined bridge networks are created by using ```docker network create``` command. If different group of applications have different network requirements, you can configure each user-defined bridge network separately while creating them. Containers connected to the same user-defined bridge network effectively expose all ports to each other. For a port to be accessible to containers or non-Docker hosts on different networks, that port must be published using the -p or --publish flag which we will come later. For now let's create our first user-defined bridge network. 
+If your containers use the default bridge network, you can configure it, but all the containers use the same settings, such as MTU and iptables rules. In addition, configuring the default bridge network happens outside of Docker itself, and requires a restart of Docker. User-defined bridge networks are created by using ```docker network create``` command. If different groups of applications have different network requirements, you can configure each user-defined bridge network separately while creating them. Containers connected to the same user-defined bridge network effectively expose all ports to each other. For a port to be accessible to containers or non-Docker hosts on different networks, that port must be published using the -p or --publish flag which we will come later. For now let's create our first user-defined bridge network. 
 
 Type: 
 ```shell
@@ -634,7 +634,7 @@ Output will be something like:
 ]
 ``` 
 
-Again, I want you to notice Gateway and Subnet section of this output. We've created a user-defined bridge network. We didn't specify any subnet option. That is why it got the next ip block after default bridge network. So subnet is "172.18.0.0/16". If we create another one, it will get "172.19.0.0/16" and this goes like that. Let's create 2 containers again and connect them to this newly created network. 
+Again, I want you to notice the Gateway and Subnet section of this output. We've created a user-defined bridge network. We didn't specify any subnet option. That is why it got the next ip block after default bridge network. So subnet is "172.18.0.0/16". If we create another one, it will get "172.19.0.0/16" and this goes on like that. Let's create 2 containers again and connect them to this newly created network. 
 
 
 Type: 
