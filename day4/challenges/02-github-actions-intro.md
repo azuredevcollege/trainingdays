@@ -57,6 +57,7 @@ Let's write some fancy HTML "hello world":
 <!-- index.html -->
 Hello World! 🌍
 ```
+![Index.html](./images/helloworldindexhtml.png)
 
 And save the file using the commit changes dialog at the very bottom of the
 editor window.
@@ -77,6 +78,10 @@ Your page should look something like this:
 ## Action
 
 We'll this is still kind of boring, what about the ACTION?
+
+First let's setup a workflow:
+
+![Workflow Setup](./images/setupworkflow.png)
 
 Let's create one now.
 
@@ -104,6 +109,18 @@ jobs:
             });
 ```
 
+![Hello World Action](./images/helloworldaction.png)
+
+![Action Running](./images/actionrunning.png)
+
+Afterwards you will see under the `Issues` section a new `Hello World Issue`:
+
+![Hello World Issue](./images/helloworldissue.png)
+
+Then we will add our first README.md:
+
+![Add README.md](./images/AddReadMe.png)
+
 ````md
 # azdc-training.github.io
 
@@ -127,6 +144,8 @@ But I have to admit, tasks lists are my favorite:
 - [ ] This is an incomplete item
 
 ````
+
+![README](./images/ReadMeSample.png)
 
 
 ```yml
@@ -181,3 +200,10 @@ jobs:
 
 
 ```
+
+![change branches](./images/changebranchesinpages.png)
+
+![save branch](./images/changebranchessave.png)
+
+
+![vuepress](./images/vuepressreadme.png)
