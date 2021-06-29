@@ -20,8 +20,22 @@ az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.js
 az ad sp create --id $API_APP_ID
 
 # create the UI App
-UI_APP=$(az ad app create --display-name $UI_APP_NAME --oauth2-allow-implicit-flow true --reply-urls $UI_APP_REPLYURL)
+UI_APP=$(az ad app create --display-name $UI_APP_NAME --oauth2-allow-implicit-flow true)
 UI_APP_ID=$(echo $UI_APP | jq -r '.appId')
+UI_APP_OBJECTID=$(echo $UI_APP | jq -r '.objectId')
+
+echo "Making sure apps are available in AAD. Sleeping 30s..."
+sleep 30s
+
+echo "Patching AAD Frontend app via URL:"
+echo "https://graph.microsoft.com/v1.0/applications/$UI_APP_OBJECTID"
+echo "Payload:"
+echo "{\"spa\":{\"redirectUris\":[\"$UI_APP_REPLYURL\"]}}" | jq
+
+az rest --method PATCH \
+ --uri https://graph.microsoft.com/v1.0/applications/$UI_APP_OBJECTID \
+ --headers "Content-Type=application/json" \
+ --body "{\"spa\":{\"redirectUris\":[\"$UI_APP_REPLYURL\"]}}"
 
 echo "UI AppId: $UI_APP_ID"
 echo "API AppId: $API_APP_ID"

@@ -10,9 +10,9 @@ namespace AzDevCollege.Function
 {
     public static class BlobTrigger
     {
-        [FunctionName("BlobTrigge")]
+        [FunctionName(nameof(BlobTrigger))]
         public static void Run(
-            [BlobTrigger("originals/{name}", Connection = "StorageAccountConnectionString")]Stream myBlob, string name,
+            [BlobTrigger("originals/{name}", Connection = "StorageAccountConnectionString")] Stream myBlob, string name,
             [Blob("processed/proc_{name}", FileAccess.Write)] Stream outStream, ILogger log)
         {
             using (Image image = Image.Load(myBlob))

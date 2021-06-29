@@ -119,7 +119,7 @@ It is fairly simple to figure out how the Docker Cli is used. Just type ```docke
 Long story short, Docker Cli syntax is fairly simple. Just type ```docker``` and after that type the management command of the object that you want to play, like ```image```, ```container```, ```volume``` and after that type the command that you want to execute, like ```run```, ```stop```, ```pull```, ```inspect``` + options that you want to use. Couple of examples:
 
 ```shell 
-$ docker container run --name container1 ubuntu ping 10.0.0.1
+$ docker container run --name container1 busybox ping -c 5 www.bing.com
 
 $ docker image pull mysql:5.7
 

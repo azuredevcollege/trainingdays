@@ -696,7 +696,7 @@ Output will be something like:
 / #
 ```
 
-"test" container has been created and you're connected to its shell. Try to ping "database" contaiber by its name and ip address.
+"test" container has been created and you're connected to its shell. Try to ping "database" container by its name and ip address.
 
 ```shell
 / # ping database

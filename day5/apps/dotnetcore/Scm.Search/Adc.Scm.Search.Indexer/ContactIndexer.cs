@@ -24,8 +24,8 @@ namespace Adc.Scm.Search.Indexer
             get { return _serviceProvider.Value; }
         }
 
-        [FunctionName("ContactIndexer")]
-        public static void Run([ServiceBusTrigger("scmtopic", "scmcontactsearch", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)]ContactMessage msg, ILogger log, ExecutionContext context)
+        [FunctionName(nameof(ContactIndexer))]
+        public static void Run([ServiceBusTrigger("sbt-contacts", "contactsearch", Connection = "ServiceBusConnectionString", IsSessionsEnabled = true)] ContactMessage msg, ILogger log, ExecutionContext context)
         {
             _context = context;
 

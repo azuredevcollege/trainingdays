@@ -24,8 +24,8 @@ namespace Adc.Scm.Resources.ImageResizer
             get { return _serviceProvider.Value; }
         }
 
-        [FunctionName("Function1")]
-        public static void Run([ServiceBusTrigger("thumbnails", Connection = "ServiceBusConnectionString")]ResizeMessage msg, 
+        [FunctionName(nameof(ImageResizer))]
+        public static void Run([ServiceBusTrigger("sbq-scm-thumbnails", Connection = "ServiceBusConnectionString")] ResizeMessage msg,
             ILogger log, ExecutionContext context)
         {
             _context = context;
@@ -38,7 +38,7 @@ namespace Adc.Scm.Resources.ImageResizer
             {
                 log.LogInformation(ex.Message);
             }
-            
+
 
             log.LogInformation($"Function processed: {msg}");
         }

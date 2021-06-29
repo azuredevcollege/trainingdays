@@ -1,0 +1,29 @@
+{
+  "name": "Azure Dev College Codespace",
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "ms-dotnettools.csharp",
+    "ms-vscode.vscode-node-azure-pack",
+    "msjsdiag.debugger-for-chrome",
+    "davidanson.vscode-markdownlint",
+    "esbenp.prettier-vscode"
+  ],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "az --version",
+  "postCreateCommand": "curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - && sudo apt-add-repository \"deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main\"  && sudo apt-get update && sudo apt-get install terraform && curl -Lo bicep.bin https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64 && chmod +x ./bicep.bin && mv ./bicep.bin /home/codespace/.local/bin/bicep",
+  "runArgs": [
+    "--cap-add=SYS_PTRACE",
+    "--security-opt",
+    "seccomp=unconfined",
+    "--privileged",
+    "--init"
+  ],
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "codespace"
+}

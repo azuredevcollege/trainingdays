@@ -55,7 +55,7 @@
         "consumpltionPlanName": "[concat(parameters('functionAppName'), '-plan')]",
         "location": "[resourceGroup().location]",
         "sbVersion": "2017-04-01",
-        "sbThumbnailsQueueName": "thumbnails",
+        "sbThumbnailsQueueName": "sbq-scm-thumbnails",
         "sbThumbnailsSendRule": "thumbnailssend",
         "sbThumbnailsListenRule": "thumbnailslisten",
         "sbThumbnailSendAuthRuleId": "[resourceId('Microsoft.ServiceBus/namespaces/queues/authorizationRules', parameters('serviceBusNamespaceName'), variables('sbThumbnailsQueueName'), variables('sbThumbnailsSendRule'))]",
@@ -71,8 +71,7 @@
                 "name": "Standard_LRS"
             },
             "kind": "StorageV2",
-            "properties": {
-            }
+            "properties": {}
         },
         {
             "apiVersion": "2018-02-01",
@@ -80,10 +79,8 @@
             "kind": "app",
             "name": "[variables('appServicePlanName')]",
             "location": "[variables('location')]",
-            "properties": {
-            },
-            "dependsOn": [
-            ],
+            "properties": {},
+            "dependsOn": [],
             "sku": {
                 "name": "[parameters('sku')]"
             }
@@ -136,7 +133,7 @@
                 "ImageStoreOptions__ThumbnailContainer": "thumbnails",
                 "ServiceBusQueueOptions__ThumbnailQueueConnectionString": "[listKeys(variables('sbThumbnailSendAuthRuleId'), variables('sbVersion')).primaryConnectionString]",
                 "ServiceBusQueueOptions__ImageContainer": "rawimages",
-                "ServiceBusQueueOptions__ThumbnailContainer": "thumbnails",
+                "ServiceBusQueueOptions__ThumbnailContainer": "sbq-scm-thumbnails",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', parameters('applicationInsightsName')), '2015-05-01').InstrumentationKey]"
             }
         },
@@ -186,7 +183,7 @@
                         },
                         {
                             "name": "ServiceBusConnectionString",
-                            "value": "[replace(listKeys(variables('sbThumbnailListenAuthRuleId'), variables('sbVersion')).primaryConnectionString, 'EntityPath=thumbnails', '')]"
+                            "value": "[replace(listKeys(variables('sbThumbnailListenAuthRuleId'), variables('sbVersion')).primaryConnectionString, 'EntityPath=sbq-scm-thumbnails', '')]"
                         },
                         {
                             "name": "FUNCTIONS_WORKER_RUNTIME",
@@ -213,6 +210,5 @@
             }
         }
     ],
-    "outputs": {
-    }
+    "outputs": {}
 }

@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~> 2.6.0"
+  version = "~> 2.49.0"
   features {
   }
 }
@@ -39,4 +39,3 @@ output "funcs_primary_connection_string" {
   value       = azurerm_storage_account.functions.primary_connection_string
   description = "Functions Storage Connection"
 }
-

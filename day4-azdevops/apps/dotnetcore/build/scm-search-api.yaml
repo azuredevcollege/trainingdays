@@ -1,0 +1,58 @@
+parameters:
+  buildConfiguration: release
+  buildNumber: ""
+  publishDockerImage: true
+  containerRegistryServiceConnection: ""
+
+steps:
+  - task: UseDotNet@2
+    displayName: 'Acquire .NET Core Sdk 3.1.x'
+    inputs:
+      packageType: Sdk
+      version: 3.1.x
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: "day3/apps/dotnetcore/Scm.Search/**/*.csproj"
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      projects: "day3/apps/dotnetcore/Scm.Search/**/*.csproj"
+      arguments: --configuration ${{ parameters.buildConfiguration }}
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Adc.Scm.Search.Api.csproj
+      arguments: --configuration ${{ parameters.buildConfiguration }} --output $(build.artifactstagingdirectory)
+      zipAfterPublish: True
+  - task: DotNetCoreCLI@2
+    displayName: Publish
+    inputs:
+      command: publish
+      publishWebProjects: false
+      projects: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/Adc.Scm.Search.Indexer.csproj
+      arguments: --configuration ${{ parameters.buildConfiguration }} --output $(build.artifactstagingdirectory)
+      zipAfterPublish: True
+
+  - task: Docker@2
+    displayName: Build Docker image
+    condition: eq(${{ parameters.publishDockerImage }}, false)
+    inputs:
+      repository: adcday3/scmsearchapi
+      command: build
+      dockerfile: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
+      buildContext: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+      tags: ${{parameters.buildNumber}}
+  - task: Docker@2
+    displayName: Build and Push Docker image
+    condition: ${{ parameters.publishDockerImage }}
+    inputs:
+      repository: adcday3/scmsearchapi
+      command: buildAndPush
+      dockerfile: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Dockerfile
+      buildContext: day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+      containerRegistry: ${{ parameters.containerRegistryServiceConnection }}
+      tags: ${{ parameters.buildNumber }}

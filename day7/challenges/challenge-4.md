@@ -1,34 +1,65 @@
-# Deploy a microservice-oriented sample application
+# Challenge 4: Deploy a Microservice-Oriented Sample Application
 
-## Goal / Architecture
+## Here is what you will learn 🎯
 
-We have been working with the Contacts API now for some time, let's deploy the "full-blown" Simple Contacts Management (SCM) app to your Kubernetes cluster. To give you an impression how this will look like in the end, here are some screenshots:
+In this challenge you will apply what you have learned in the previous challenges to our Contacts API i.e. you will deploy the Simple Contacts Management (SCM) application to your Kubernetes cluster.
 
-![app_home](./img/app_home.png)
-![app_contacts](./img/app_contacts.png)
-![app_contacts_details](./img/app_contact_details.png)
-![app_stats](./img/app_stats.png)
+# Table Of Contents
 
-The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org). It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possiblity to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc. We also followed a "microservice" approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.). Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers!
+1. [Architecture](#architecture)
+2. [Terraform - Deploy Azure Infrastructure](#terraform-deploy-azure-infrastructure)
+3. [Deploy Configuration / Secrets](#deploy-configuration-secrets)
+4. [Build all required Docker Images](#build-all-required-docker-images)
+5. [Deploy Backend APIs](#deploy-backend-apis)
+6. [Deploy Functions / Daemon Services](#deploy-functions-daemon-services)
+7. [Deploy UI](#deploy-ui)
+8. [Check](#check)
+9. [Monitoring (Optional)](#monitoring-optional)
+10. [Wrap-Up](#wrap-up)
+
+## Architecture
+
+We have been working with the Contacts API now for some time. Let's deploy the "full-blown" Simple Contacts Management (SCM) app to your Kubernetes cluster.
+
+To give you an impression how this will look like in the end, here are some screenshots:
+
+![app_home](./images/app_home.png)
+![app_contacts](./images/app_contacts.png)
+![app_contacts_details](./images/app_contact_details.png)
+![app_stats](./images/app_stats.png)
+
+The application is capable managing contacts and visit reports via a modern, responsive UI that is written in [VueJS](https://vuejs.org).
+
+It makes use of several Azure services to have a good UX, e.g. indexing contacts in an [Azure Search service](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search) to give users the possibility to search for contacts anywhere in the app, send visit report results to an [Azure Congitive Service](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/) instance to analyze the sentiment of the result description etc.
+
+We also followed a microservice approach by giving each service its own data store ([Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/) for contacts service, [Cosmos DB](https://docs.microsoft.com/en-us/azure/cosmos-db/) for visit reports service etc.).
+
+Under the hood, services communicate with each other by sending messages over an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) instance via several topics so that we can guarantee that each services operates on its own. Some of these messages are also handled by "background/daemon"-services which we implemented by using the [Azure Functions runtime](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) - yes, you can host Azure Functions via Docker containers (see [Create a function on Linux using a custom container](https://docs.microsoft.com/azure/azure-functions/functions-create-function-linux-custom-image?tabs=bash%2Cportal&pivots=programming-language-csharp) for details)!
 
 That said, we are also following the best practice to push all possible state of the application out of your cluster. That means, we won't host any database within the cluster. Stateless clusters are much easier to manage!
 
 This is how the architecture looks like after deploying Azure and in-cluster services:
 
-![architecture](./img/aks_arch.png)
+![architecture](./images/aks_arch.png)
 
-## Terraform / Deploy Azure Infrastructure
+## Terraform - Deploy Azure Infrastructure
 
-To create the Azure infrastructure, we are using [Terraform](https://www.terraform.io/), a very popular tool in the "Infrastructure-as-Code" space. If you haven't installed it already, please follow the official tutorial: <https://www.terraform.io/downloads.html>.
+To create the Azure infrastructure, we are using [Terraform](https://www.terraform.io/), a very popular tool in the "Infrastructure-as-Code" space.
 
-If you have successfully installed Terrraform CLI, let's create the Azure service, we need. Go to folder `day7/challenges/samples/challenge-4/0_tf` and open the file `variables.tf`. You need to adjust a few settings:
+::: tip
+📝 If you haven't installed it already, please follow the official tutorial: <https://www.terraform.io/downloads.html>.
+:::
 
-- default vaule of `location` - choose the same location as your AKS cluster to create all services in the same location
-- default value of `prefix` - we use a prefix to have consitent naming of services. Please choose one that fits for you, but be careful to NOT use more than 6 characters for it.
+If you have successfully installed the Terrraform CLI, let's create the Azure service, we need.
+
+Go to folder `day7/challenges/samples/challenge-4/0_tf` and open the file `variables.tf`. You need to adjust a few settings:
+
+- default value of `location` - choose the same location as your AKS cluster to create all services in the same location
+- default value of `prefix` - we use a prefix to have consistent naming of services. Please choose one that fits for you, but be careful to **not** use more than **6** characters for it.
 
 You can leave all other variables with their default values. The file should then look similar to that:
 
-```tf
+```hcl
 variable "location" {
   type    = string
   default = "westeurope"
@@ -71,33 +102,37 @@ variable "sqldbpassword" {
 
 After adjusting the file, you can execute the following commands (in folder `day7/challenges/samples/challenge-4/0_tf`):
 
-```zsh
+```shell
 $ terraform init
 $ terraform apply
 # Answer with 'yes' when asked, that the changes will be applied.
 ```
 
-> **Note:** If you get an error because of the validation section in the `variables.tf` file, you probably used an older version of `terraform`. If you don't want to update to a newer version, just remove that section.
+::: tip
+📝 If you get an error because of the validation section in the `variables.tf` file, you probably used an older version of `terraform`. If you don't want to update to a newer version, just remove that section.
+:::
 
-**This will take up to 20 minutes to finish** - grab a coffee :) and after the script has successfully finished, save the variables/secrets from Azure to a file:
+**This will take up to 20 minutes to finish** - grab a coffee ☕
 
-```zsh
-$ terraform output > azure_output.txt
+After the script has successfully finished, save the variables/secrets from Azure to a file:
+
+```shell
+terraform output > azure_output.txt
 ```
 
 ## Create a new Kubernetes Namespace
 
 We will put our application into a namespace called `contactsapp`. Let's create it:
 
-```zsh
+```shell
 $ kubectl create ns contactsapp
 
 namespace/contactsapp created
 ```
 
-We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands.
+We set the new namespace as the current _default one_. Otherwise, we would always have to append `--namespace contactsapp` to our commands:
 
-```zsh
+```shell
 $ kubectl config set-context --current --namespace=contactsapp
 
 Context "adc-cluster" modified.
@@ -110,6 +145,12 @@ Context "adc-cluster" modified.
 Now we have to create two configuration objects that we use to read the Azure configuration within the Kubernetes cluster: a `Secret` and a `ConfigMap`.
 
 Go to `day7/challenges/samples/challenge-4/1_config` and replace the placeholders `#{var_name}#` in the file `secrets.yaml` with the corresponding value from the `azure_output.txt` file.
+
+::: tip
+📝 There is a bash script called `replace_variables.sh` in the same directory that you can use to automatically create the `ConfigMap` and `Secret` file for you.
+
+Just run it and it will produce two files called `local-configmap.yaml` and `local-secrets.yaml` (the script will keep the original files untouched). Use the `local` versions for deployment:
+:::
 
 ```yaml
 apiVersion: v1
@@ -137,9 +178,11 @@ data:
   'VRSENDCONNSTR': '#{visitreports_send_connectionstring_base64}#'
 ```
 
-**IMPORTANT:** The value of a variable should **not contain** the opening/closing tags anymore, e.g. `'APPINSIGHTSKEY': '1234567890'`.
+::: warning
+⚠️ The value of a variable should **not contain** the opening/closing tags anymore, e.g. `'APPINSIGHTSKEY': '1234567890'`.
+:::
 
-Do the same with the file `configmap.yaml`.
+Do the same with the file `configmap.yaml`:
 
 ```yaml
 kind: ConfigMap
@@ -149,20 +192,22 @@ metadata:
 data:
   settings.js: |-
     var uisettings = {
-      endpoint: 'http://#{YOUR_HOST_NAME}#/api/contacts/',
-      resourcesEndpoint: 'http://#{YOUR_HOST_NAME}#/api/resources/',
-      searchEndpoint: 'http://#{YOUR_HOST_NAME}#/api/search/',
-      reportsEndpoint: 'http://#{YOUR_HOST_NAME}#/api/visitreports/',
+      endpoint: '/api/contacts/',
+      resourcesEndpoint: '/api/resources/',
+      searchEndpoint: '/api/search/',
+      reportsEndpoint: '/api/visitreports/',
       enableStats: true,
       aiKey: '#{appinsights}#',
     }
 ```
 
-The variable `YOUR_HOST_NAME` should be the `nip.io` adress for your ingress controller you used before, e.g. `20-67-122-249.nip.io` in our case here. And **be careful**, in this `ConfigMap` the AppInsights Key (`aiKey`) is **NOT** the base64-encoded one!
+::: tip
+📝 Be careful: in this `ConfigMap` the AppInsights Key (`aiKey`) is **not** the base64-encoded one!
+:::
 
-Please apply both files to your cluster:
+Please apply both files to your cluster. If you ran the `replace_variables.sh` script, the files are `local-configmap.yaml` and `local-secrets.yaml`:
 
-```zsh
+```shell
 $ kubectl apply -f configmap.yaml
 configmap/uisettings created
 
@@ -172,80 +217,92 @@ secret/scmsecrets created
 
 ## Build all required Docker images
 
-Now we need to build all Docker images for our application. In total, we will have 8 images in our repository after this task. BTW, for conveniance reasons, we build all images in the container registry!
+Now we need to build all Docker images for our application. In total, we will have **8** images in our repository after this task. For convenience reasons, we build all images in the container registry!
 
-Now, build all the required images one by one...of course, replace `<ACR_NAME>` with the name of your container registry.
+Now, build all the required images one by one.
 
-1. Contacts API: Folder `day7/apps/dotnetcore/Scm`:
+Therefore first create a shell variable `ACR_NAME` with the name of your container registry like this:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-contacts-api:2.0 -f ./Adc.Scm.Api/Dockerfile .
+```shell
+ACR_NAME=yourRegistryNameHere
 ```
 
-2. Resources API: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api`:
+This variable is used for all the following Docker builds in ACR. Go to the root directory of the repository `trainingdays` and fire all docker builds one after another:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-api:2.0 .
+1. Contacts API:
+
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-contacts-api:2.0 -f ./day7/apps/dotnetcore/Scm/Adc.Scm.Api/Dockerfile ./day7/apps/dotnetcore/Scm
 ```
 
-3. Image Resizer Function: Folder `day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer`:
+2. Resources API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-resources-func:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-api:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api
 ```
 
-4. Search API: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api`:
+3. Image Resizer Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-api:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-resources-func:2.0 ./day7/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer
 ```
 
-5. Search Indexer Function: Folder `day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer`:
+4. Search API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-search-func:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-api:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
 ```
 
-6. Visit Reports API: Folder `day7/apps/nodejs/visitreport`:
+5. Search Indexer Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-visitreports-api:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-search-func:2.0 ./day7/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
 ```
 
-7. Text Analytics Function: Folder `day7/apps/nodejs/textanalytics`:
+6. Visit Reports API:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-textanalytics-func:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-visitreports-api:2.0 ./day7/apps/nodejs/visitreport
 ```
 
-8. Frontend / UI: Folder `day7/apps/frontend/scmfe`:
+7. Text Analytics Function:
 
-```zsh
-$ az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:2.0 .
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-textanalytics-func:2.0 ./day7/apps/nodejs/textanalytics
+```
+
+8. Frontend / UI:
+
+```shell
+az acr build -r $ACR_NAME -t $ACR_NAME.azurecr.io/adc-frontend-ui:2.0 ./day7/apps/frontend/scmfe
 ```
 
 Now, all images are present in your container registry. You can check the repositories in the portal, if you want:
 
-![acr_portal](./img/acr_portal.png)
+![acr_portal](./images/acr_portal.png)
 
 ## Deploy Backend APIs
 
 We are now all set to deploy the services to the Kubernetes cluster.
 
-**But first**, we need to do some clean-up. We created ingress definitions in `Challenge 2` that would now interfere with the ones we will be creating in this challenge. So let's cleanup these **OLD INGRESS definitions**:
+But first, we need to do some clean-up. We created ingress definitions in [challenge 2](./challenge-2.md#create-ingress-definitions) that would now interfere with the ones we will be creating in this challenge.
 
-```zsh
-$ kubectl delete ingress ing-frontend -n default
-$ kubectl delete ingress ing-contacts -n default
+So let's clean up these old ingress definitions:
+
+```shell
+kubectl delete ingress ing-frontend -n default
+kubectl delete ingress ing-contacts -n default
 ```
 
-We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. For each of these services, that includes a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.
+We are ready to deploy the API services (contacts, resources, search, visitreport APIs) to the cluster now. Each of these services comprises a `Deployment`, a `ClusterIP Service` and an `Ingress` definition.
 
-**For each service, you need to adjust some variables in the predefined YAML manifests. So please carefully read the hints in each API section.**
+::: tip
+📝 For each service, you need to adjust some variables in the predefined YAML manifests. So please carefully read the hints in each API section.
+:::
 
 ### Contacts API
 
-Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `ca-deploy.yaml` and `ca-ingress.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `ca-deploy.yaml` and `ca-ingress.yaml` as described below.
 
 Settings to adjust:
 
@@ -254,11 +311,9 @@ Settings to adjust:
 | ca-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | ca-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 1_contactsapi
 
 deployment.apps/ca-deploy created
@@ -268,7 +323,7 @@ service/contactsapi created
 
 ### Resources API
 
-Go to folder `day7/challenges/samples/challenge-4/2_apis`and adjust the `resources-deploy.yaml` and `resources-ingress.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/2_apis`and adjust the `resources-deploy.yaml` and `resources-ingress.yaml` as described below.
 
 Settings to adjust:
 
@@ -277,11 +332,9 @@ Settings to adjust:
 | resources-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | resources-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 2_resourcesapi
 
 deployment.apps/resources-deploy created
@@ -291,7 +344,7 @@ service/resourcesapi created
 
 ### Search API
 
-Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `search-deploy.yaml` and `search-ingress.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `search-deploy.yaml` and `search-ingress.yaml` as described below.
 
 Settings to adjust:
 
@@ -300,11 +353,9 @@ Settings to adjust:
 | search-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | search-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 3_searchapi
 
 deployment.apps/search-deploy created
@@ -314,7 +365,7 @@ service/searchapi created
 
 ### Visit Reports API
 
-Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `visitreports-deploy.yaml` and `visitreports-ingress.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/2_apis` and adjust the `visitreports-deploy.yaml` and `visitreports-ingress.yaml` as described below.
 
 Settings to adjust:
 
@@ -323,11 +374,9 @@ Settings to adjust:
 | visitreports-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | visitreports-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 4_visitreports
 
 deployment.apps/visitreports-deploy created
@@ -337,13 +386,17 @@ service/visitreportapi created
 
 ## Deploy Functions / Daemon Services
 
-Next, we deploy the background/daemon services. For each of these background services, that only includes a `Deployment` as they won't be called directly (most of them listen for messages of the Azure Service Bus we already created)...so, same procedure:
+Next, we deploy the background/daemon services. For each of these background services, we only need a `Deployment` as they won't be called directly. Most of them listen for messages of the Azure Service Bus we already created.
 
-**For each service, you need to adjust some variables in the predefined YAML manifest. So please carefully read the hints in each API section.**
+So, same procedure as before.
+
+::: tip
+📝 For each service, you need to adjust some variables in the predefined YAML manifests. So please carefully read the hints in each API section.
+:::
 
 ### Resources / Image Resizer
 
-Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `resources-function-deploy.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `resources-function-deploy.yaml` as described below.
 
 Settings to adjust:
 
@@ -351,11 +404,9 @@ Settings to adjust:
 | ------------------------------ | ---------- | ----------------------------------------------------------------------------------------------- |
 | resources-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 1_resourcesfunc
 
 deployment.apps/resources-function-deploy created
@@ -363,7 +414,7 @@ deployment.apps/resources-function-deploy created
 
 ### Search / Contacts Indexer
 
-Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `search-function-deploy.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `search-function-deploy.yaml` as described below.
 
 Settings to adjust:
 
@@ -371,11 +422,9 @@ Settings to adjust:
 | --------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
 | search-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 2_searchfunc
 
 deployment.apps/search-function-deploy created
@@ -383,7 +432,7 @@ deployment.apps/search-function-deploy created
 
 ### Text Analytics / Visit Reports Sentiment Analysis
 
-Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `textanalytics-function-deploy.yaml` as described below:
+Go to folder `day7/challenges/samples/challenge-4/3_functions` and adjust the `textanalytics-function-deploy.yaml` as described below.
 
 Settings to adjust:
 
@@ -391,11 +440,9 @@ Settings to adjust:
 | ---------------------------------- | ---------- | ----------------------------------------------------------------------------------------------- |
 | textanalytics-function-deploy.yaml | <ACR_NAME> | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 3_textanalyticsfunc
 
 deployment.apps/textanalytics-function-deploy created
@@ -405,7 +452,7 @@ deployment.apps/textanalytics-function-deploy created
 
 Last, but not least, we also need to deploy the VueJS Single Page Application.
 
-Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below: 
+Go to folder `day7/challenges/samples/challenge-4/4_frontend` and adjust the `ui-deploy.yaml` and `ui-ingress.yaml` as described below.
 
 Settings to adjust:
 
@@ -414,11 +461,9 @@ Settings to adjust:
 | ui-deploy.yaml  | <ACR_NAME>         | Replace with the name of your Azure Container Registry, e.g. in our case here `adccontainerreg` |
 | ui-ingress.yaml | #{YOUR_HOST_NAME}# | Replace with the nip.io domain name, e.g. `20-67-122-249.nip.io`                                |
 
-<br>
+Apply the definitions in the mentioned path:
 
-Now apply the definitions in the mentioned path.
-
-```zsh
+```shell
 $ kubectl apply -f 1_ui
 
 deployment.apps/frontend-deploy created
@@ -428,9 +473,9 @@ service/frontend created
 
 ## Check
 
-That was a lot of manual typing and, of course, errors happen when doing so. So, let's check the state of the cluster:
+That was a lot of manual typing and, of course, errors happen when doing so. Let's check the state of the cluster:
 
-```zsh
+```shell
 $ kubectl get deployment,pods,service,endpoints,ingress
 NAME                                            READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/ca-deploy                       2/2     2            2           23h
@@ -482,39 +527,47 @@ ingress.extensions/ing-search         20-67-122-249.nip.io   20.67.122.249   80 
 ingress.extensions/ing-visitreports   20-67-122-249.nip.io   20.67.122.249   80      22h
 ```
 
-You should no see a similar output, having 8 deployments, 16 pods (each deployment set `replicas: 2`), 5 services with corresponding endpoints and 5 ingress definitions.
+You should see a similar output, having 8 deployments, 16 pods (each deployment set `replicas: 2`), 5 services with corresponding endpoints and 5 ingress definitions.
 
-If that is the case, open a browser and navigate to you nip.io domain and give it a try! Create contacts, create visit reports for an existing contact, search via the search bar at the top of the website, have a look at the statistics!
+If that is the case, open a browser and navigate to you nip.io domain and give it a try!
+
+Create contacts, create visit reports for an existing contact, search via the search bar at the top of the website and have a look at the statistics.
 
 ## Monitoring (Optional)
 
-In case you missed it, we already created a service that is helping you with monitoring your application running in the Kubernetes cluster: Application Insights! Each service (API, background service, frontend) is communication with Application Insights (via the instrumentation key) and sending telemetry data like, request/response time, errors that may have occured, how your users navigate through the frontend.
+In case you missed it, we already created a service that is helping you with monitoring your application running in the Kubernetes cluster: _Application Insights_.
 
-Navigate to the Application Insights component in the portal and check the data that is sent to that service:
+Each service (API, background service, frontend) is communicating with Application Insights via the instrumentation key and sending telemetry data like, request/response time, errors that may have occured, how your users navigate through the frontend.
+
+Navigate to the Application Insights component in the Azure Portal and check the data that is sent to that service:
 
 ### Application Map
 
-![map](./img/monitoring_map.png)
-![map](./img/monitoring_error.png)
+![map](./images/monitoring_map.png)
+![map](./images/monitoring_error.png)
 
 ### Application Performance
 
-![map](./img/monitoring_performance.png)
+![map](./images/monitoring_performance.png)
 
 ### Application User Events / Frontend Integration
 
-![map](./img/monitoring_userevents.png)
+![map](./images/monitoring_userevents.png)
 
 ### Application End2End Transactions
 
-![map](./img/monitoring_end2end.png)
+![map](./images/monitoring_end2end.png)
 
 ### Application Dashboard
 
 You can also create an application dashboard by clicking on `Application Dashboard` on the overview page of the Application Insights component.
 
-![map](./img/monitoring_dashboard.png)
+![map](./images/monitoring_dashboard.png)
 
 ## Wrap-Up
 
-Congratulations, you have successfully deployed a full-blown, microservice-oriented application to your AKS cluster.
+🎉 **_Congratulations_** 🎉
+
+You have successfully deployed a full-blown, microservice-oriented application to your AKS cluster.
+
+[◀ Previous challenge](./challenge-3.md) | [🔼 Day 7](../README.md) | [Next challenge ▶](./bonus-1.md)

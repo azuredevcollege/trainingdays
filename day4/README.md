@@ -1,49 +1,75 @@
-# Day 4 Azure DevOps
+# Day 4 DevOps and Monitoring
 
-- [Challenge 0 - Create an Azure DevOps Organisation](challenges/challenge-0.md)
-- [Challenge 1 - Plan your first Project Iteration](challenges/challenge-1.md)
-- [Challenge 2 - Working with Azure Repo](challenges/challenge-2.md)
-- [Challenge 3 - Working with Azure Pipelines](challenges/challenge-3.md)
-- [Challenge 4 - Build and deploy the SCM Contacts API](challenges/challenge-4.md)
-- [Challenge 5 - Build and deploy the SCM Frontend](challenges/challenge-5.md)
-- :small_orange_diamond: *[Breakout! - Create CI/CD pipelines to deploy the Azure Dev College sample application to Azure](challenges/challenge-bo-1.md)* :small_orange_diamond:
+## Welcome
 
-# Day4 - Goal
+Today we are going to focus on the topic _DevOps_. Therefore we take a closer look at GitHub, its components and how we can deploy infrastructure to Azure using code. 
 
-You already have deployed the sample application to Azure manually. Today we want to dive into Azure DevOps to show you how you can automate your build and deployment process.
-In addition we want to show you how you can plan and manage your work with Azure Boards and how you collaborate on code development using Azure Repo.
+- GitHub organization
+- GitHub project boards
+- GitHub repositories
+- GitHub Actions workflows
+- Azure Bicep
+- Azure Application Insights
 
-## Azure Boards
+## Challenges
 
-![Azure Boards](./challenges/images/boards.svg)
+- [Challenge 0: Create a GitHub organization](challenges/challenge-0.md)
+- 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/challenge-bo-1.md)_ 💎
 
-We use Azure Boards to plan your work for Day4. During the day you will use Azure Boards to define Features, UserStories and Tasks to reflect the progress of Day4.
-At the end of the day you will know how to plan and track your work with Azure Boards and how you can plan your agile iterations.
+## Day 4 - Goal
 
-![Goal Azure Boards](./challenges/images/goal-azure-boards.png)
+You already have deployed the sample application to Azure manually. Today we want to dive into GitHub Actions workflows to show you how you can
+automate your _build_ and _deployment process_ to constantly and continuously roll out an application and its components. Realizing a DevOps process means to plan, track and prioritize your work in an agile way. With GitHub projects boards, we can visualize a lean project management process to get everyone involved in the project on track and stay focused. We are going to use GitHub repositories to collaborate on code within the team. As we don't want to setup the needed Azure resources for the sample application by clicking in the portal, Azure bicep is introduced to describe the needed infrastructure as code. 
 
-## Azure Repos
+Today you are going to create your own GitHub organization to manage all topics mentioned above.
 
-![Azure Repo](./challenges/images/repos.svg)
+### GitHub organization
 
-We use Azure Repo to work with a Git repository. During the day you will work with Git branches, commits and PullRequests.
+![GitHub Logo](./images/github-logo.png)
 
-## Azure Pipelines
+A GitHub organization is a shared account where business and open-source projects can collaborate across many projects. Owners and Administrators can manage member access to the organization's data and projects with security and administrative features. At the beginning of the day you are going to create your own GitHub organization, invite team members and manage access to projects and repositories.
 
-![Azure Pipelines](./challenges/images/pipelines.svg)
+### GitHub project boards
 
-We use Azure Pipelines to build and deploy the sample application to a Development and Testing stage on your Azure subscription.
-At the end of the day you will know how to create a CI/CD Pipeline for all Microservices of the sample application and how you continuously and consistently deploy services to Azure during your application lifcycle process.
+![GitHub Logo](./images/github-logo.png)
 
-To give you a short overview of all Microservices that are part of the sample application the following table shows you all services and the runtime that is used to implement the service.
+Project boards on GitHub help you organize and prioritize your work. You can create project boards for specific feature work, comprehensive roadmaps or even release checklists. With project boards, you have the flexibility to create customized workflows that suits your needs. To organize and prioritize your work today, we are going to create a project board at the organization level, grant access to specific teams and visuialize the differnent challenges with Kanban columns. We will see how to visualize pull requests and issues on the board and how they flow from the _ToDo_ state to the _Closed_ state.
 
-|Service| Tech|
-|-------|-----|
-|SCM Contacts API|ASP.NET Core|
-|SCM Resource API|ASP.NET Core|
-|SCM Search|ASP.NET Core|
-|SCM Visitreports API|NodeJs|
-|SCm Textanalytics|NodeJs|
-|SCM Frontend|NodeJs|
+### GitHub repository
 
+![GitHub repository](./images/github-repository.png)
 
+A GitHub repository contains all of your project's files and each file's revision history. During the day you are going to work with Git branches, commits and pull requests.
+
+### GitHub Actions workflows
+
+![GitHub Actions](./images/github-actions.png)
+
+GitHub actions helps you to automate task within your software development lifcycle. GitHub Actions makes it easy to automate all your software workflows like CI/CD.
+Today you will dive into GitHub Actions workflows and learn how to build and deploy each microservice of the sample application. 
+ 
+### Azure Bicep
+
+![Azure Bicep](./images/azure-bicep.jpg)
+
+You already have seen how to use ARM Templates, but with Azure Bicep it is easier to author your infrastructure as code. 
+Azure Bicep is a Domain Specific Language (DSL) for deploying Azure resource declaratively. It aims to drastically simplify the authoring experience with a cleaner syntax, improved type safety, and better support for modularity and code re-use. Today you will deploy a simple Azure Bicep file using a GitHub Actions workflow. 
+The sample application itself uses Azure Bicep to deploy all needed Azure resources.
+
+### Azure Application Insights
+
+![Application Insights](./images/application-insights.png)
+
+Application Insights, a feature of Azure Monitor, is an extensible Application Performance Management (APM) service for developers and DevOps professionals. Use it to monitor your live applications. It will automatically detect performance anomalies, and includes powerful analytics tools to help you diagnose issues and to understand what users actually do with your app. Today you will learn how to use Application Insights to monitor the sample application.
+
+### Architecture
+
+At the end of the day we will have deployed the same architecture for the sample application. 
+
+![Architecture of Day 4](./images/architecture_day4.png)
+
+### Remarks
+
+The challenges marked with the "💎" are the ones that focus on the sample application and represent the adoption of what you have learned in the challenges before. They results of the "💎" challenges will be reused in the next days.
+
+Happy hacking! 😎

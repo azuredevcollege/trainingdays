@@ -36,6 +36,8 @@ spec:
               cpu: '500m'
           image: <ACR_NAME>.azurecr.io/adc-search-func:2.0
           env:
+            - name: WEBSITE_SITE_NAME
+              value: func-search-indexer
             - name: AzureWebJobsDashboard
               valueFrom:
                 secretKeyRef:

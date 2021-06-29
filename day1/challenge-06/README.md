@@ -1,125 +1,181 @@
-# Challenge 6: Storage Account: Creating Data Storage for VMs and Applications 
+# Challenge 6: Storage Account - Creating Data Storage for VMs and Applications
 
-## Here is what you will learn ##
-- how to create an azure storage account using the portal for the use as a 'cloud file share'
+## Here is what you will learn 🎯
+
+- how to create an Azure storage account using the portal for the use as a 'cloud file share'
 - enable 'secured' access to the storage account data (e.g. blobs) using Shared Access Signatures
 - create a SAS policy to enable permission modification after SAS tokens have been issued.
 - use AAD credentials as 'better' way for storage account authorization
-- create a file share and attach it to your azure virtual machine
+- create a file share and attach it to your Azure virtual machine
 
-## Table of Contents ##
-1. [Create a storage account and a container using the azure portal](#Create-a-storage-account-and-a-container-using-the-azure-portal)
-2. [[optional] Authorize access to blobs using AAD](#Authorize-access-to-blobs-using-AAD)
-3. [Add an azure file share to a server](#Add-an-azure-file-share-to-a-server)
-4. [Cleanup](#Cleanup)
+## Table of Contents
 
-# Create a storage account and a container using the azure portal #
+1. [Create a storage account and a container using the Azure portal](#create-a-storage-account-and-a-container-using-the-azure-portal)
+2. [Authorize access to blobs using AAD (optional)](#authorize-access-to-blobs-using-aad-optional)
+3. [Add an Azure file share to a server](#add-an-azure-file-share-to-a-server)
+4. [Cleanup](#cleanup)
 
-1. Login to your azure subscription **and search the marketplace for 'Storage Account'**  
-![Storage Account Marketplace Item](./sa01.png)  
-**Create a storage account** with the following values:
+## Create a storage account and a container using the Azure portal
 
-| Name | Value |
-|---|---|
-| Resource Group  |  **(new)** rg-sachallenge |
-| Storage account name  |  _%unique lowercase value%_ |
-| Location | **North Europe** |
-| Account kind  |  StorageV2 |
-| Performance  |  Standard |
-| Replication  |  **Locally-redundand storage (LRS)** |
-| Access tier  |  Hot |
+1. Login to your Azure subscription and search the marketplace for 'Storage Account'
 
-See some use cases for SAS / [SAS use cases](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview#when-to-use-a-shared-access-signature)
+  ![Storage Account Marketplace Item](./images/sa01.png)  
 
-2. Once the sa is created - **generate a new "container"** within the storage account:  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> "+ Container"
-```
-| Name | Value |
-|---|---|
-| Name  |  **secured** |
-| Public access level  |  Private (no anonymous access) |
+2. Create a storage account with the following values:
 
-Now **upload a small file**.  
-![Upload a txt file to a storage account](./sa02.png)  
+  | Name | Value |
+  |---|---|
+  | _Resource Group_  |  **(new)** rg-sachallenge |
+  | _Storage account name_  |  %unique lowercase value% |
+  | _Location_ | West Europe |
+  | _Account kind_  |  StorageV2 |
+  | _Performance_  |  Standard |
+  | _Replication:  |  Locally-redundant storage (LRS) |
+  | _Access tier_  |  Hot |
 
-**Can you download the file** using its URI in another browser session?  
-![Download URI](./sa03.png)  
+  :::tip
+  📝 Find some use cases for [SAS](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview#when-to-use-a-shared-access-signature)
+  :::
+
+3. Once the storage account is created,  generate a new container within the storage account:  
+
+  ```
+  [Azure Portal] -> %Your Storage Account% -> Containers -> "+ Container"
+  ```
+
+  | Name | Value |
+  |---|---|
+  | _Name_  |  secured |
+  | _Public access level_  |  Private (no anonymous access) |
+
+4. Now upload a small file:
+
+  ![Upload a txt file to a storage account](./images/sa02.png)  
+
+> ❔ **Question:** Can you download the file using its URI in another browser session?
+>
+> ![Download URI](./images/sa03.png)  
+>
+> **Answer:** No. Because anonymous access is not allowed and this URI does not contain any auth token
+>
+> ![Download error](./images/downloadError.png)
   
-**Answer: No. Because anonymous access is not allowed** and this URI does not 'carry' any auth token:  
+5. Create a Shared Access Signature via the portal to enable blob access: 
+
+  ```
+  [Azure Portal] 
+  -> %Your Storage Account% 
+  -> Shared access signature 
+  -> "Generate SAS and connection string"
+  ```
+
+6. Copy the Blob Service SAS URL to the clipboard
+
+  ![SAS URL](./images/sas01.png)  
   
+7. In the result copy the SAS token:
 
-![Download error](./downloadError.png)
+  ![SAS URL](./images/sas02.png)  
   
-
+  and edit the SAS URL: You need to add the path to uploaded file - it should look similar to:
   
+  ```http  
+  https://**%Your Storage Account Name%**.blob.core.windows.net/**secured/HelloWorld.txt**?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-01-26T00:03:42Z&st=2020-01-25T16:03:42Z&spr=https&sig=Pehc....  
+  ```
 
-3. **Create a Shared Access Signature** [via the portal] to enable blob access. 
-```
-[Azure Portal] -> %Your Storage Account% -> Shared access signature -> "Generate SAS and connection string"
-```
-**Copy the Blob Service SAS URL to the clipboard**
-![SAS URL](./sas01.png)  
+> ❔ **Question:** Can you now download the file in the browser [Yes]  
+> ![Download with edited URI works](./images/downloadSuccess.png)
+
+  :::tip
+  📝 If a SAS:
+
+- is leaked, it can be used by anyone who obtains it, which can potentially compromise your storage account.
+- is provided to a client application expires and the application is unable to retrieve a new SAS from your service, then the application's functionality may be hindered.
+
+  :::
+
+8. Revoke the storage account's access key1 (optional)
   
-In the result copy the SAS token:  
-![SAS URL](./sas02.png)  
-and **edit the SAS URL**: You need to add the path to uploaded file - it should look similar to:  
+  ```
+  [Azure Portal] 
+  -> %Your Storage Account% 
+  -> Access keys 
+  -> key1 
+  -> 'regenerate' 
+  ```
 
-> https://**%Your Storage Account Name%**.blob.core.windows.net/**secured/HelloWorld.txt**?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2020-01-26T00:03:42Z&st=2020-01-25T16:03:42Z&spr=https&sig=Pehc....  
+> ❔ **Questions:**
+>
+> - Can you still download the file in the browser using aboves URL [No]
+> - Why? [Because the SAS key was generated using the previous key1 -> which is no longer valid.]
 
-**Can you now download the file** in the browser [Yes]  
-![Download with edited URI works](./downloadSuccess.png)
-
-> **Note**: If a SAS,...  
-> - ... is leaked, it can be used by anyone who obtains it, which can potentially compromise your storage account.
-> - ... provided to a client application expires and the application is unable to retrieve a new SAS from your service, then the application's functionality may be hindered.
-
-4. [optional] **Revoke the storage account's access key1**.
-```
-[Azure Portal] -> %Your Storage Account% -> Access keys -> key1 -> 'regenerate'
-```
-Can you still download the file in the browser using aboves URL [No]  
-Why? Because the SAS key was generated using the previous key1 -> which is no longer valid.
-
-## Create a stored access policy to control permissions after SAS token is issued. ##
+### Create a stored access policy to control permissions after SAS token is issued
 
 1. Define a stored access policy ('mypolicy') on the container "secured" (write)  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' -> Access policy -> 'Storage access policy' -> '+' Add policy
-```
-| Name | Value |
-|---|---|
-| Identifier  |  **securedap** |
-| Permissions  |  **Write** |  
 
-**Note** Don't forget to use the **save** button!  
-![Access policy](./saaccpol01.png)
+  ```
+  [Azure Portal] 
+  -> %Your Storage Account% 
+  -> Containers 
+  -> 'secured' 
+  -> Access policy 
+  -> 'Stored access policy' 
+  -> '+' Add policy
+  ```
 
-2. **Create a SAS URL that is using this access policy** using Azure Storage Explorer  
-**Open** [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and  [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
-**Navigate to your storage account** and container.  
-**Right click** and do 'Get Shared Access Signature' based on our policy.  
-![Storage Explorer generate SAS URI](./saaccpol02.png)  
-**Copy the URI** to the clipboard.  
-**Edit the SAS URI** -> add the path to uploaded file -> can you now download the file in the browser [No]  
-**Edit the stored access policy 'securedap' to allow READ access**  
-```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' -> Access policy -> Under 'Storage access policy' -> 'securedap' -> '...' -> Edit -> Permissions -> Add READ -> OK -> Save
-```
-![RW Access Policy](./saaccpol03.png)  
-**Can you now download the file in the browser** [Yes]
+  | Name        | Value |
+  |---          |---|
+  | _Identifier_  |  securedap |
+  | _Permissions_ |  Write |  
 
-> **Note**:  
-> When you now distribute this SAS URI to users or Apps you can later modify it's behaviour by modifying the access policy.  
-> So stored access policies can help to modify permissions to a container after the SAS has been issued to users / apps.
+  :::tip
+  📝Don't forget to use the **save** button!
+
+  ![Access policy](./images/saaccpol01.png)
+  :::
+
+2. Create a SAS URL that is using this access policy using Azure Storage Explorer
+2.1 Open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
+2.2 Navigate to your storage account and container.  
+2.3 Right click and do 'Get Shared Access Signature' based on our policy.
+
+  ![Storage Explorer generate SAS URI](./images/saaccpol02.png)  
+2.4 Copy the URI to the clipboard.  
+2.5 Edit the SAS URI -> add the path to uploaded file
+
+  >❔ **Question:** Can you now download the file in the browser? [No]  
+
+2.5 Edit the stored access policy 'securedap' to allow READ access  
+
+  ```
+  [Azure Portal] 
+  -> %Your Storage Account% 
+  -> Containers 
+  -> 'secured' 
+  -> Access policy 
+  -> Under 'Stored access policy' 
+  -> 'securedap' 
+  -> '...' 
+  -> Edit 
+  -> Permissions 
+  -> Add READ 
+  -> OK 
+  -> Save
+  ```
+
+  ![RW Access Policy](./images/saaccpol03.png)  
+
+  >❔ **Question:** Can you now download the file in the browser? [Yes]
+
+  :::tip
+  📝 When you now distribute this SAS URI to users or Apps you can later modify it's behavior by modifying the access policy. So stored access policies can help to modify permissions to a container after the SAS has been issued to users / apps.
+  :::  
   
-# [optional]
-# Authorize access to blobs using AAD #  
-**You can** also **authorize access to storage accounts using Azure Active Directory (AAD) credentials**. [See](https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json).  
-Which means you assign users RBAC permissions to a e.g. container. This **is in fact the recommended way**.  
-Apps however might want to use 'service accounts' as users (aka Service Principals) in Azure.  
-The following PowerShell code creates a Service Principal in AAD.  
-**Run this** in your [**cloud shell** (how?!)](../challenge-05/README.md):  
+## Authorize access to blobs using AAD (optional)  
+
+You can also authorize access to storage accounts using Azure Active Directory (AAD) credentials ([documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json)) which means you assign users RBAC permissions to e.g. a  container. This is in fact the _recommended way_.
+
+However, apps might want to use 'service accounts' as users (aka Service Principals) in Azure. The following PowerShell code creates a Service Principal in AAD. Run this in your cloud shell (How? See [challenge 5](../challenge-05/README.md)):  
 
 ```PowerShell
 $servicePrincipalName = "myADCServicePrincipal$(get-random -min 100 -max 999)"   #must be unique within AAD tenant
@@ -137,7 +193,7 @@ Write-Host "You created SP: $servicePrincipalName with password: $SPPassword in 
 
 ```
 
-Below is some PowerShell Code that should 'simulate' your app. It'll login to Azure as Service Principal and access the storage account.  
+Below is some PowerShell Code that simulates your app. It will login to Azure as Service Principal and access the storage account.  
 Run this in the Cloud Shell:  
 
 ```PowerShell
@@ -146,18 +202,26 @@ $passwd = ConvertTo-SecureString $SPPassword -AsPlainText -Force
 $pscredential = New-Object System.Management.Automation.PSCredential($SPName, $passwd)
 Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantID
 ```
-**Did the login work?**. E.g.:  
 
-```
+Check if the login worked via:  
+
+```PowerShell
 Account                         SubscriptionName                             TenantId                             Environment
 -------                         ----------------                             --------                             -----------
 http://myADCServicePrincipal925 Microsoft Azure ...                       72f988bf-........                        AzureCloud
 ```
-**If yes - proceed.**
 
-**You need to give this 'user' or better 'service principal' permissions to your storage account** -> container  
+If yes - proceed.
+
+You need to give this 'user' or better 'service principal' permissions to your storage account -> container  
+
 ```
-[Azure Portal] -> %Your Storage Account% -> Containers -> 'secured' ->  Access Control (IAM) -> Add a role assignment...
+[Azure Portal] 
+-> %Your Storage Account% 
+-> Containers 
+-> 'secured' 
+->  Access Control (IAM) 
+-> Add a role assignment...
     Role: e.g. "Storage Blob Data Contributor"
     Select: "myADCServicePrincipal..."
 ```
@@ -200,7 +264,8 @@ Write-Host -ForegroundColor DarkYellow $content
 ":-)"  
 
 ```
-You now want to delete your service principal?
+
+You now want to delete your service principal? Do this:
 
 ```PowerShell
 #cleanup
@@ -210,40 +275,55 @@ $SPDisplayName = ($jsonResult | convertfrom-json).displayName
 Remove-AzADApplication -DisplayName $SPDisplayName -Force
 ```  
   
+## Add an Azure file share to a server
 
-# Add an azure file share to a server #
+### Prerequisites  
 
-## Prerequisites  
-
-**Create a vm** to attach the file share to if you don't have one - **Click** on the 
+1. Create a VM to attach the file share to if you don't have one. **Click** on the
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-06%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
-button. 
+button.
 
-## Create a file share via the portal:  
-```
-[Azure Portal] -> Storage Account -> File Shares -> "+" File Share
-```
-| Name | Value |
-|---|---|
-| Name  |  **myfiles** |
-| Quota  |  _empty_ |   
-  
-## In your Azure VM mount the share  
-as drive by executing the command taken from:  
-```
-[Azure Portal] -> Storage Account -> File Shares -> 'myfiles' -> Connect -> copy the code into the clipboard
-```  
-![Azure Files](./azfiles01.png))  
-  
-In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted.  
-![Mounted Azure File Share](./azfiles02.png)
+2. Create a file share via the portal:  
 
-> Questions:
-> - What is the default quota of an azure file share? 
-> - Which user account is used for establishing the connection? 
+  ```
+  [Azure Portal] 
+  -> Storage Account 
+  -> File Shares 
+  -> "+" File Share
+  ```
+
+  | Name | Value |
+  |---|---|
+  | _Name_  |  myfiles |
+  | _Quota_  |  %empty% |
+  
+3. In your Azure VM mount the share as drive by executing the command taken from:
+
+  ```
+  [Azure Portal] 
+  -> Storage Account 
+  -> File Shares 
+  -> 'myfiles' 
+  -> Connect 
+  -> copy the code into the clipboard
+  ```  
+  
+  ![Azure Files](./images/azfiles01.png))  
+  
+4. In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted:
+  
+  ![Mounted Azure File Share](./images/azfiles02.png)
+
+>❔ **Question:**
+>
+> - What is the default quota of an Azure file share?
+> - Which user account is used for establishing the connection?
 > - Is the 'drive' available to other users that logon to the VM? [No]
 > - Is the 'drive' mounted 'automatically' after a reboot? [Yes]
 > - Can I mount a file share located in e.g. North Europe from a machine located in e.g. West Europe [Yes]  
   
-# Cleanup
-Delete Resource Group _rg-sachallenge_
+## Cleanup
+
+Delete Resource Group `rg-sachallenge`
+
+[◀ Previous challenge](../challenge-05/README.md) | [🔼 Day 1](../README.md) | [Next challenge ▶](../challenge-07/README.md)

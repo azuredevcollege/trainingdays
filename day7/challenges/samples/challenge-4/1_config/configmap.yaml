@@ -5,10 +5,10 @@ metadata:
 data:
   settings.js: |-
     var uisettings = {
-      endpoint: 'http://#{YOUR_HOST_NAME}#/api/contacts/',
-      resourcesEndpoint: 'http://#{YOUR_HOST_NAME}#/api/resources/',
-      searchEndpoint: 'http://#{YOUR_HOST_NAME}#/api/search/',
-      reportsEndpoint: 'http://#{YOUR_HOST_NAME}#/api/visitreports/',
+      endpoint: '/api/contacts/',
+      resourcesEndpoint: '/api/resources/',
+      searchEndpoint: '/api/search/',
+      reportsEndpoint: '/api/visitreports/',
       enableStats: true,
       aiKey: '#{appinsights}#',
     }

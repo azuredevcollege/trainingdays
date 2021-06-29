@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "./"
+		}
+	],
+	"settings": {
+		"markdown.extension.toc.updateOnSave": false,
+		"files.insertFinalNewline": true,
+		"files.trimFinalNewlines": true,
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.markdownlint": true
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": []
+	}
+}

@@ -1,22 +1,32 @@
-# OAuth 2 Implicit Flow
+# Challenge 2: OAuth 2 Implicit Flow
 
-## Here is what you'll learn
+## Here is what you'll learn 🎯
 
 - How to register an Azure AD application and allow the OAuth2 Implicit Grant Flow
 - How to register an Azure AD application and expose an API with OAuth2 permissions
 - How to authenticate an user and start an OAuth2 implicit flow to acquire an access token for the API
 
-*Important Note:*
-The Implicit Grant Flow is less secure than the Code Grant Flow. This is because the generation of the `access_token` for accessing the user's data on a resource server (e.g., the Graph API), is completely happening on the front channel. However, as the flow completely happens in the browser, it is suited for applications that do not have a server backend (e.g., 100% JS-based SPA). 
+:::warning
+The Implicit Grant Flow is less secure than the Code Grant Flow. This is because the generation of the `access_token` for accessing the user's data on a resource server (e.g., the Graph API), is completely happening on the front channel. However, as the flow completely happens in the browser, it is suited for applications that do not have a server backend (e.g., 100% JS-based SPA).
+:::
 
-## Create an Azure AD application and enable Implicit Grant Flow
+## Table Of Contents
 
-Before you can authenticate an user and acquire an access token for the API you have to register an application in your Azure AD tenant. 
-By default the Implicit Grant Flow for issuing access tokens is disabled.
+1. [Create an Azure AD Application and enable Implicit Grant Flow](#create-an-azure-ad-application-and-enable-implicit-grant-flow)
+2. [Create an Azure AD Application and expose an API with OAuth2 Permissions](#create-an-azure-ad-application-and-expose-an-api-with-oauth2-permissions)
+3. [Run the Token Echo Server](#run-the-token-echo-server)
+4. [Create the Request to directly acquire an `access_token` for the Microsoft Graph API](#create-the-request-to-directly-acquire-an-access-token-for-the-microsoft-graph-api)
+5. [Wrap-Up](#wrap-up)
+6. [Cleanup](#cleanup)
+
+## Create an Azure AD Application and enable Implicit Grant Flow
+
+Before you can authenticate an user and acquire an access token for the API you must register an application in your Azure AD tenant.
+By default the _Implicit Grant Flow_ for issuing access tokens is disabled.
 
 ### Azure CLI
 
-Firstly, create a new Azure AD Application, this time with `oauth2-allow-implicit-flow` enabled:
+First, create a new Azure AD Application, this time with `oauth2-allow-implicit-flow` enabled:
 
 ```shell
 az ad app create --display-name challengeimplicitgrant --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://challengeimplicitgrantflow --oauth2-allow-implicit-flow true
@@ -25,27 +35,29 @@ az ad app create --display-name challengeimplicitgrant --reply-urls http://local
 As before, note down the `appId`. Next, retrieve and note the ID of your current Azure AD tenant via:
 
 ```shell
-az account show 
+az account show
 ```
 
-## Create an Azure AD application and expose an API with OAuth2 permissions
+## Create an Azure AD Application and expose an API with OAuth2 Permissions
 
 In this sample we create an API that exposes four OAuth2 permissions:
-1. Contacts.Read
-2. Contacts.Create
-3. Contacts.Update
-4. Contacts.Delete
+
+- Contacts.Read
+- Contacts.Create
+- Contacts.Update
+- Contacts.Delete
 
 ### Azure CLI
 
-Firstly, create a new Azure AD application and write the output to a variable:
+First, create a new Azure AD application and write the output to a variable:
 
-```Shell
+```shell
 API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
-``` 
+```
 
->_*Note:*_ The example here describes how to execute the commands in a bash. If you don't have a bash on your system, you can use the Azure Cloud
-> Shell
+:::tip
+📝The example here describes how to execute the commands in a bash. If you don't have a bash on your system, you can use the Azure Cloud Shell
+:::
 
 After that we have created an Azure AD application that contains one default OAuth2 permission which was created by Azure AD.
 To make your own OAuth2 permission, the default permission must be disabled first:
@@ -57,17 +69,20 @@ API_APP_ID=$(echo $API_APP | jq -r '.appId')
 DEFAULT_SCOPE=$(az ad app show --id $API_APP_ID | jq '.oauth2Permissions[0].isEnabled = false' | jq -r '.oauth2Permissions')
 az ad app update --id $API_APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
 ```
+
 Now your own OAuth2 permissions can be added:
+
 ```shell
 # set needed scopes from file 'ouath2-permissions (day5/challenges/oauth2-permissions)'
 az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.json
 ```
+
 To keep it simple, the needed OAuth2 permissions are defined in a [.json](oauth2-permissions.json) file.
 
-In Azure AD an Application is something like a template with all necessary settings like ReplyUrl, required permissions, OAuth2 Permissions etc.
-When a user logs in for the first time and grants consent, an instance of the application is created. The instance is called a __Service Principal__.
-All created Service principals can be found in your Azure AD under __Enterprise Applications__.
-As no user ever logs on to an API we must create the __Service Principal__ for the API.
+In Azure AD an _Application_ is something like a template with all necessary settings like ReplyUrl, required permissions, OAuth2 Permissions etc.
+When a user logs in for the first time and grants consent, an instance of the application is created. The instance is called a **Service Principal**.
+All created Service principals can be found in your Azure AD under **Enterprise Applications**.
+As no user ever logs on to an API we must create the **Service Principal** for the API.
 
 ```shell
 az ad sp create --id $API_APP_ID
@@ -82,17 +97,17 @@ Open another shell and run the `Token Echo Server` from [`day5/apps/token-echo-s
 
 Run the application via:
 
-```
+```shell
 dotnet run
 ```
 
-## Create the request to directly acquire an `access_token` for the Microsoft Graph API
+## Create the Request to directly acquire an `access_token` for the Microsoft Graph API
 
 We can directly request an `access_token` by specifying `token` in the `response_type` field. Adding `token` will allow our app to receive an `access_token` immediately from the authorize endpoint without having to make a second request to the token endpoint. If you use the token in `response_type`, the scope parameter must contain a scope indicating which resource to issue the token for.
 
 Replace `TENANT_ID` with your AAD Tenant Id and `APPLICATION_ID` with your Application Id (this is the id that you received when you created the first application). Open a browser and paste the request:
 
-```HTTP
+```http
 https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize?
 client_id=APPLICATION_ID
 &response_type=id_token+token
@@ -105,7 +120,7 @@ client_id=APPLICATION_ID
 After executing the request and you have signed in, Azure AD shows you a consent page and you have to grant access for the requested API permissions.
 After giving consent, have a look at your browser's address bar. The `access_token` is in the fragment of the url and should look something like this:
 
-```
+```http
 http://localhost:5001/api/tokenechofragment#access_token=eyJ0eX...&token_type=Bearer&expires_in=3599&scope=openid+profile+User.Read+email&id_token=eyJ0eXAiOi...&session_state=0f76c823-eac5-4ec0-9d4a-edf40b783583
 ```
 
@@ -115,15 +130,17 @@ Go to [https://jwt.ms](http://jwt.ms), paste the token and have a look at the de
 
 More details on how the OAuth2 Implicit Grant Flow request can be used is documented [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow#send-the-sign-in-request).
 
-## Cleanup resources
+## Wrap-Up
 
-### Azure CLI
+This challenge showed how to create a new application in AAD and use the OAuth 2.0 Implicit Grant Flow to request an access token for accessing the Graph API. The full process is described [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow).
+
+## Cleanup
+
+Remove the created resources via the Azure CLI:
 
 ```shell
 az ad app delete --id <applicationid>
 az ad app delete --id $API_APP_ID
 ```
 
-## Summary
-
-This challenge showed how to create a new application in AAD and use the OAuth 2.0 Implicit Grant Flow to request an access token for accessing the Graph API. The full process is described [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-implicit-grant-flow).
+[◀ Previous challenge](./challenge-1.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./challenge-3.md)

@@ -1,12 +1,29 @@
-# Challenge 0 - Setup your System
+# Challenge 0: Setup your System
 
-## git Version Control
+## Here is what you will learn 🎯
 
-The repository is located at GitHub, so - obviously - we'll need a local git client to interact with the repo. Download and install the appropriate version of git for you here: <https://git-scm.com/download>
+In this challenge you will learn:
+
+- What prerequisites are needed for dealing with Kubernetes and Azure Kubernetes Service
+- How to install them
+
+## Table Of Contents
+
+1. [Git Version Control](#git-version-control)
+2. [Azure CLI](#azure-cli)
+3. [Kubectl](#kubectl)
+4. [Helm](#helm)
+5. [Terraform](#terraform)
+
+## Git Version Control
+
+The repository is located at GitHub, so - obviously - we'll need a local _Git client_ to interact with the repository. Download and install the appropriate version of Git for you here: <https://git-scm.com/download>
 
 ## Azure CLI
 
-We will be using the Azure command line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
+We will be using the _Azure command line interface_ to create and interact with resources running in Azure.
+
+To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
 When finished, login to your Azure account from the command line:
 
@@ -59,17 +76,17 @@ $ az account list -o table
 $ az account set -s <SUBSCRIPTIONID_YOU_WANT_TO_USE>
 ```
 
-## Install Kubectl
+## Kubectl
 
-`kubectl` is the commandline interface for Kubernetes. You will need the tool to interact with the cluster, e.g. to create a pod, deployment or service.
+`kubectl` is the _command line interface_ for Kubernetes. You will need the tool to interact with the cluster, e.g. to create a pod, a deployment or a service.
 
 If you already have the Azure CLI on your machine, you can just install it using the following command:
 
-```zsh
-$ az aks install-cli
+```shell
+az aks install-cli
 ```
 
-Or refer to the documentation for you specific platform.
+or refer to the documentation for you specific platform.
 
 [Install kubectl on Linux](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-binary-with-curl-on-linux)
 
@@ -77,14 +94,16 @@ Or refer to the documentation for you specific platform.
 
 [Install kubectl on Windows](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-on-windows-using-chocolatey-or-scoop)
 
-## Install Helm
+## Helm
 
-`Helm` is the package manager for Kubernetes. We will need it for installing several 3rd party components for our solution:
+`Helm` is the _package manager_ for Kubernetes. We will need it for installing several 3rd party components for our solution:
 
-https://helm.sh/docs/intro/install/
+<https://helm.sh/docs/intro/install/>
 
 ## Terraform
 
-`Terraform` is an open-source "infrastructure as code" software tool created by HashiCorp. It is a tool for building, changing, and versioning infrastructure safely and efficiently. We will use terraform to create several PaaS services like Azure SQL Db, ComsosDB etc. in this workshop.
+`Terraform` is an _open-source "infrastructure as code" software tool_ created by HashiCorp. It is a tool for building, changing, and versioning infrastructure safely and efficiently. We will use terraform to create several PaaS services like Azure SQL Db, CosmosDB etc. in this workshop.
 
-https://www.terraform.io/downloads.html
+<https://www.terraform.io/downloads.html>
+
+[🔼 Day 7](../README.md) | [Next challenge ▶](./challenge-1.md)

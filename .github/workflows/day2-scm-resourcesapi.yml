@@ -1,0 +1,233 @@
+name: day2-scm-resourcesapi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day2/apps/infrastructure/bicep/scm-resourcesapi.bicep
+      - day2/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day2-scm-resourcesapi.yml
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day2/apps/infrastructure/bicep/scm-resourcesapi.bicep
+      - day2/apps/dotnetcore/Scm.Resources/**
+      - .github/workflows/day2-scm-resourcesapi.yml
+
+  workflow_dispatch:
+
+env:
+  API_PACKAGE_NAME: "scmresourcesapi.zip"
+  RESIZER_PACKAGE_NAME: "resizer.zip"
+  BICEP_FILE_NAME: "scm-resourcesapi.bicep"
+
+jobs:
+  build-api:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      API_PACKAGE_PATH: "publish/scmresourcesapi"
+      API_PROJECT_PATH: "./day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Build and publish SCM Resources API
+        working-directory: ${{ env.API_PROJECT_PATH }}
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
+
+      - name: Zip SCM ResourceAPI
+        working-directory: ${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
+      - name: Archive api package
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
+          if-no-files-found: error
+          retention-days: 30
+
+  build-resizer:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      RESIZER_PACKAGE_PATH: "publish/resizer"
+      RESIZER_PROJECT_PATH: "./day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Build and publish SCM ImageResizer
+        working-directory: ${{ env.RESIZER_PROJECT_PATH }}
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish -c Release -o './${{ env.RESIZER_PACKAGE_PATH }}'
+
+      - name: Zip Resizer
+        working-directory: ${{ env.RESIZER_PROJECT_PATH }}/${{ env.RESIZER_PACKAGE_PATH }}
+        run: |
+          zip -r ${{ env.RESIZER_PACKAGE_NAME }} ./*
+
+      - name: Archive Resizer dotnetcore package artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: "${{ env.RESIZER_PROJECT_PATH }}/${{ env.RESIZER_PACKAGE_PATH }}/${{ env.RESIZER_PACKAGE_NAME }}"
+          if-no-files-found: error
+          retention-days: 30
+
+  build-bicep:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-resourcesapi.bicep"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
+
+      - name: Archive bicep file
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: ${{ env.BICEP_FILE_PATH }}
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy-to-dev:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day2-scm-dev
+    needs: [build-api, build-resizer, build-bicep]
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd2
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Download drop artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }} sku=B1
+
+      - name: Deploy SCM Resources API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+      - name: Deploy Resizer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}
+
+  deploy-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day2-scm-test
+    needs: deploy-to-dev
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-testday2
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd2
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Download drop artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy infrastructure to test environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }} sku=B1
+
+      - name: Deploy SCM Resources API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+      - name: Deploy Resizer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
+          package: ./${{ env.RESIZER_PACKAGE_NAME }}

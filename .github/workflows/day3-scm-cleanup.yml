@@ -1,0 +1,34 @@
+name: day3-scm-cleanup
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+    env:
+      RG_DEV: rg-scm-devday3
+      RG_TEST: rg-scm-testday3
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup names
+        id: createResourceGroupNames
+        run: |
+          echo "::set-output name=dev::${{ env.RG_DEV }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+          echo "::set-output name=test::${{ env.RG_TEST }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Destroy resource groups
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            #!/bin/bash
+            az group delete -n ${{ steps.createResourceGroupName.outputs.dev }} -y
+            az group delete -n ${{ steps.createResourceGroupName.outputs.test }} -y
