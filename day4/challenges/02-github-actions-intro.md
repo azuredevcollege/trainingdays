@@ -104,10 +104,10 @@ jobs:
             });
 ```
 
-```md
+````md
 # <username or organizationname>.github.io
 
-This is a sample README.md where you document your newly created Coding Dreams! :fairy_woman: :fairy_man:
+This is a sample README.md where you document your newly created Coding Dreams! 🧚‍♀️ 🧚‍♂️
 
 And if you'd like to use syntax highlighting, include the language:
 
@@ -117,15 +117,15 @@ if (isAwesome) {
 }
 ```
 
-
-:superhero_woman: :superhero_man:
+🦸‍♀️ 🦸‍♂️
 
 But I have to admit, tasks lists are my favorite:
 
 - [x] This is a complete item
 - [ ] This is an incomplete item
 
-```
+````
+
 
 ```yml
 
@@ -179,4 +179,3 @@ jobs:
 
 
 ```
-
