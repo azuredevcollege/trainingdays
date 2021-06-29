@@ -18,6 +18,7 @@ In this challenge you will learn how to:
 3. [Create your first repository](#create-your-first-repository)
 4. [Create a team and assign permission](#create-a-team-and-assign-permission)
 5. [Clone the repository to your local machine](#clone-the-repository-to-your-local-machine)
+6. [Useful Links](#useful-links)
 
 ## Create a GitHub organization
 
@@ -135,10 +136,39 @@ In the next section we will create a _Team_ and give it write access to the repo
 
 ## Create a team and assign permission
 
+Navigate to the _Teams_ section  of your organization and click the green _New Team_ button. 
+Name the Team _AzDC-Team_ and give a description. At this time we make the team visible. 
 
+![GitHub new Team](./images/gh-new-team.png)
+
+After you have created the Team, you can add members in the _Members_ section. Again, we have the option to add both members of the organization or _Outside collaborators_. 
+Now add the invited colleague to the team. After your colleague was added you can change their role within the Team. You can choose between _Member_ and _Maintainer_.
+
+*Maintainer:* Maintainers can add and remove team members and create child teams.
+
+*Member:* A member has not administrative permissions to the team.
+
+For the moment we leave it at the role _Member_, which is the default.
+
+Next, we add the existing repository to the Team and grant write access. Navigate to the _Repositories_ section within your Team and add the repository we created earlier.
+
+![GitHub add repository to Team](./images/gh-add-repo-to-team.png)
+
+After the repository was added, you can change the access level in the dropdown menu.
+
+![GitHub team's repo access level](./images/gh-team-reop-access-level.png)
+
+In the dropdown menu all possible access levels are listed. For our scenario we choose _Write_, because we want to allow the team to push to the repository and to manage issues and pull requests.
+
+:::tip
+📝 _If you want to validate the access level, add an Outside collaborator and assign Read permission and validate if the added Outside collaborator can edit the created README.md file and push the changes to the repository. The Outside collaborator can use the GitHub UI and does not need to clone the repository. Then validate if your invited colleague (Member of the organization and the AzDC-Team) can edit the file and push the changes to the repository._
+:::
+
+:::tip
+📝 _Navigate to the Discussion section within your Team and checkout the Team's page. Each team has its own page within an organization. On a team's page, you can view team members, child teams, and the team's repositories. Organization owners and team maintainers can access team settings and update the team's description and profile picture from the team's page_
+:::
 
 ## Clone the repository to your local machine
-
 
 Cloning a public repository from GitHub using git commandline tool is very easy, but when it comes to clone a private repository it is a bit tricky. You can either clone the repository with a password, a token or you can clone it using SSH credentials.
 
@@ -182,7 +212,13 @@ Open a terminal and use the git clone command to clone the repository:
 git clone git@github.com:<your-org-name>/<your-repo-name>.git
 ```
 
+## Useful Links
 
+[About GitHub organisations](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/about-organizations)
+
+[About GitHub repositories](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-repositories)
+
+[About GitHub Teams](https://docs.github.com/en/organizations/organizing-members-into-teams/about-teams)
 
 
 [🔼 Day 4(GitHub)](../README.md) | [Next challenge ▶](./NN-challenge.md)
