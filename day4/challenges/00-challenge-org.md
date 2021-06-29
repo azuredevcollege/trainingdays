@@ -1,6 +1,6 @@
 # Challenge 0: Create a GitHub organization
 
-⏲️ *Est. time to complete: 15 min.* ⏲️
+⏲️ *Est. time to complete: 30 min.* ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -221,4 +221,4 @@ git clone git@github.com:<your-org-name>/<your-repo-name>.git
 [About GitHub Teams](https://docs.github.com/en/organizations/organizing-members-into-teams/about-teams)
 
 
-[🔼 Day 4(GitHub)](../README.md) | [Next challenge ▶](./NN-challenge.md)
+[🔼 Day 4(GitHub)](../README.md) | [Next challenge ▶](./01-challenge-boards.md)
