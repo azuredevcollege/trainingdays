@@ -13,7 +13,7 @@ Today we are going to focus on the topic _DevOps_. Therefore we take a closer lo
 
 ## Challenges
 
-- [Challenge 0: Create a GitHub organization](challenges/00-challenge-org.md)
+- [Challenge 0: Create a GitHub organization](challenges/00-challenge-org.md) _(30 min.)_
 - 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/challenge-bo-1.md)_ 💎
 
 ## Day 4 - Goal
