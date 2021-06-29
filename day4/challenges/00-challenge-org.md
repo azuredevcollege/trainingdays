@@ -144,9 +144,9 @@ Name the Team _AzDC-Team_ and give a description. At this time we make the team 
 After you have created the Team, you can add members in the _Members_ section. Again, we have the option to add both members of the organization or _Outside collaborators_. 
 Now add the invited colleague to the team. After your colleague was added you can change their role within the Team. You can choose between _Member_ and _Maintainer_.
 
-*Maintainer:* Maintainers can add and remove team members and create child teams.
+**Maintainer:** Maintainers can add and remove team members and create child teams.
 
-*Member:* A member has not administrative permissions to the team.
+**Member:** A member has no administrative permissions to the team.
 
 For the moment we leave it at the role _Member_, which is the default.
 
