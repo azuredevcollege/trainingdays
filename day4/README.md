@@ -13,7 +13,7 @@ Today we are going to focus on the topic _DevOps_. Therefore we take a closer lo
 
 ## Challenges
 
-- [Challenge 0: Create a GitHub organization](challenges/challenge-0.md)
+- [Challenge 0: Create a GitHub organization](challenges/00-challenge-org.md) _(30 min.)_
 - 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/challenge-bo-1.md)_ 💎
 
 ## Day 4 - Goal
@@ -50,7 +50,7 @@ Today you will dive into GitHub Actions workflows and learn how to build and dep
  
 ### Azure Bicep
 
-![Azure Bicep](./images/azure-bicep.jpg)
+![Azure Bicep](./images/azure-bicep.png)
 
 You already have seen how to use ARM Templates, but with Azure Bicep it is easier to author your infrastructure as code. 
 Azure Bicep is a Domain Specific Language (DSL) for deploying Azure resource declaratively. It aims to drastically simplify the authoring experience with a cleaner syntax, improved type safety, and better support for modularity and code re-use. Today you will deploy a simple Azure Bicep file using a GitHub Actions workflow. 
