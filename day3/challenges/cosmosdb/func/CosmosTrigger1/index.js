@@ -8,7 +8,7 @@ module.exports = async function (context, documents) {
                 val.addresses.length > 0 &&
                 val.addresses[0].country != undefined &&
                 val.addresses[0].country != null &&
-                ( val.addresses[0].country == "DE" || val.addresses[0].country == "FR" ) // just use 'DE' to limit processing time
+                (val.addresses[0].country == "DE" || val.addresses[0].country == "FR") // just use 'DE' and 'FR' to limit processing time
             ) {
                 out.push({
                     id: val.id,
@@ -23,7 +23,7 @@ module.exports = async function (context, documents) {
                 });
             }
         });
-        
+
         context.log('Processed input documents: ', documents.length);
 
         if (out.length > 0) {
