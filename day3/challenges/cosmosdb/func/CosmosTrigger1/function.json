@@ -1,0 +1,24 @@
+{
+  "bindings": [
+    {
+      "type": "cosmosDBTrigger",
+      "name": "documents",
+      "direction": "in",
+      "leaseCollectionName": "leases",
+      "connectionStringSetting": "myDB_DOCUMENTDB",
+      "databaseName": "AzDCdb",
+      "collectionName": "customer",
+      "createLeaseCollectionIfNotExists": true,
+      "startFromBeginning": true,
+      "leaseCollectionPrefix": "custview"
+    },
+    {
+      "name": "custDocs",
+      "type": "cosmosDB",
+      "databaseName": "AzDCdb",
+      "collectionName": "customerView",
+      "connectionStringSetting": "myDB_DOCUMENTDB",
+      "direction": "out"
+    }
+  ]
+}

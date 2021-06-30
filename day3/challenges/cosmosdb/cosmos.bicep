@@ -55,7 +55,25 @@ resource containerCustomer 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/c
         ]
         excludedPaths: [
           {
-            path: '/"_etag"/?'
+            path: '/title/?'
+          }
+          {
+            path: '/firstName/?'
+          }
+          {
+            path: '/lastName/?'
+          }
+          {
+            path: '/emailAddress/?'
+          }
+          {
+            path: '/phoneNumber/?'
+          }
+          {
+            path: '/creationDate/?'
+          }
+          {
+            path: '/addresses/*'
           }
         ]
       }
@@ -95,35 +113,35 @@ resource containerProduct 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
   }
 }
 
-resource containerProductMeta 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2021-03-15' = {
-  name: '${cosmosDbDatabase.name}/productMeta'
-  location: resourceGroup().location
-  properties: {
-    resource: {
-      id: 'productMeta'
-      partitionKey: {
-        paths: [
-          '/type'
-        ]
-        kind: 'Hash'
-      }
-      indexingPolicy: {
-        automatic: true
-        indexingMode: 'consistent'
-        includedPaths: [
-          {
-            path: '/*'
-          }
-        ]
-        excludedPaths: [
-          {
-            path: '/"_etag"/?'
-          }
-        ]
-      }
-      defaultTtl: -1
-    }
-  }
-}
+// resource containerCustomerView 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2021-03-15' = {
+//   name: '${cosmosDbDatabase.name}/customerView'
+//   location: resourceGroup().location
+//   properties: {
+//     resource: {
+//       id: 'customerView'
+//       partitionKey: {
+//         paths: [
+//           '/area'
+//         ]
+//         kind: 'Hash'
+//       }
+//       indexingPolicy: {
+//         automatic: true
+//         indexingMode: 'consistent'
+//         includedPaths: [
+//           {
+//             path: '/*'
+//           }
+//         ]
+//         excludedPaths: [
+//           {
+//             path: '/"_etag"/?'
+//           }
+//         ]
+//       }
+//       defaultTtl: -1
+//     }
+//   }
+// }
 
 output cosmosDbAccount string = cosmosDbAccount.name
