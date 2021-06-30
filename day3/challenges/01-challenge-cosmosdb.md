@@ -184,9 +184,9 @@ Now, it's time to add data to the _customer_ and _product_ containers. There a t
 
 ### Customer Dataset
 
-The _customer_ dataset contains of two types of objects that we put in the same container: **customer** and **salesOrder**. Wait...two object types in the same container? You learned that when dealing with data in a (relational) database, the data should always be normalized and that is best to have one object type in one table! "This totally is against that principle", you might think.
+The _customer_ dataset contains of two types of objects that we put in the same container: **customer** and **salesOrder**. Wait...two object types in the same container? You learned that when dealing with data in a (relational) database, the data should always be normalized and that it's best to have one object type in one table! "This is totally against that principle", you might think.
 
-Yes, you are right. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). You also tend to follow the "de-normalization" principle. That means that data dublication, embedding etc. is not only possible, but encouraged.
+Yes, you are right in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged.
 
 <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
 
@@ -261,9 +261,9 @@ Explain why in the same collection --> same partition key. Again: embedding.
 
 Explain dataset
 
-<https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
+Download: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
 
-Product Data
+#### Product Data
 
 ```json
 {
