@@ -1,6 +1,6 @@
 # Challenge 01: Cosmos DB
 
-⏲️ *Est. time to complete: 45 min.* ⏲️
+⏲️ *Est. time to complete: 60 min.* ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -15,8 +15,9 @@ In this challenge you will learn how to:
 
 1. [Create a Comsos DB Account, Database and Containers](#create-a-comsos-db-account-database-and-containers)
 2. [Add and query data](#add-and-query-data)
-3. [Azure Samples](#azure-samples)
-4. [Cleanup](#cleanup)
+3. [Use the Cosmos DB Change Feed](#use-the-cosmos-db-change-feed)
+4. [Azure Samples](#azure-samples)
+5. [Cleanup](#cleanup)
 
 ## Create a Comsos DB Account, Database and Containers
 
