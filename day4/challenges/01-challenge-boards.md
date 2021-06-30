@@ -59,7 +59,7 @@ Open the board's menu again. Click the ellipsis _..._ button and open the _Setti
 In the _Options_ section you can manage the visibility of the project and organization member's permissions. _Write_ is the default baseline permission level for all members of the organization. 
 
 :::tip
-📝 _To restrict access to all organisation members, set Read as basline permission level._
+📝 _To restrict access to all organisation members, set Read as baseline permission level._
 :::
 
 Since we are working with a single team in our organization today and we may have already added _Outside collaborators_ to this team, we still need to give _Write_ permissions to this team. Navigate to the _Teams_ section and assign _Write_ permissions to the _AzDC-Team_ team.
@@ -74,6 +74,65 @@ As the organization owner, only you have full administrative rights in this proj
 ![GitHub board collaborators](./images/gh-board-collaborators.png)
 
 ## Working with cards
+
+If we want to plan and prioritize our work, we can work with notes in the board. You can add notes to serve as task reminders or to add information related to the project you are working on. 
+
+:::tip
+📝 _You can format your notes using Markdown syntax._
+:::
+
+Let's create a note and take a closer look at how to convert the note into an issue when you start working.
+Click the _+_ button in the _To do_ column to add a note and set the following text:
+
+```Text
+#### Convert note to issue.
+
+A sample note to see how a note is converted to an issue.
+```
+
+Now let's create another note to take a closer look at how we can reference an issue.
+Add the node and set the following text:
+
+```Text
+#### Reference an issue
+
+A sample note to see how a note can reference an issue.
+```
+
+You can drag and drop to reorder notes and move them between columns.
+
+Now let us convert the first note _Convert note to issue_ to an issue to assign it to a repository.
+Click the ellipses _..._ on the _Convert to issue_ card and click _Convert to issue_.
+
+![GitHub note to issue](./images/gh-note-to-issue.png)
+
+Choose the _myfirst-repo_ repository and convert the note to an issue.
+
+![GitHub note to issue convert](./images/gh-note-to-issue-convert.png)
+
+After the note is converted, open the issue and have a look at the additional option we have to specify more details about the issue. Assign yourself to the issue and set the label _good first issue_.
+
+![GitHub issue details](./images/gh-issue-details.png)
+
+Your board should now look like this:
+
+![GitHub board overview-01](./images/gh-board-overview-01.png)
+
+Now you may wonder why you convert a note into an issue. In an issue we can additionally specify more concrete information. We can specify who is responsible for the issue, which repository it refers to and we can assign labels to classify the issue. With this approach, we could map the following workflow: 
+
+_We use notes to plan and prioritize the work for our next milestone (sprint). When we start working on the task, we convert the note into an issue, choose a repository, assign a responsible person, classify it and push it to the _In progress_ column._
+
+This is a very simple but agile process flow. But maybe this flow is not sufficient, especially if notes do not always refer to only one repository, but are spread over several repositories. Notes can be used to summarize issues in different repositories. If we work according to agile methods, we can e.g. store a _UserStory_ as a note in our board and create tasks in different repositories as an issue. Or we can go one level higher and use Notes to map _Features_ and Issues to map _UserStories_ in one repository. Ultimately, there are many ways to map an agile process with GitHub project boards. There is no one-size-fits-all solution. 
+
+Finally, in this part of the Challenge, let's look at how we can reference Issues in a note. Navigate to your _myfirst-repo_ repository and go to the _Issues_ section. You see that there is already an listed. It is the issue that we created earlier. Now, add a new Issue name it _Referenced Issue_, set the label _good first issue_, assign yourself and submit the new issue. Copy the issue's URL from the browser's address bar and go back to your project board. Edit the note _Reference an issue_ and paste the issue's URL.
+
+Your board should now look like this:
+
+![GitHub board overview-02](./images/gh-board-overview-02.png)
+
+
+
+
 
 ## Plan milestones (sprints)
 
