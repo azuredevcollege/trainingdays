@@ -241,7 +241,7 @@ Here's a sample object from the container:
 
 #### SalesOrder Data
 
-The salesorder object is similar to the customer object. It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
+The salesorder object is similar to the customer object (```type```is set to _salesOrder_). It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
 
 As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
 
