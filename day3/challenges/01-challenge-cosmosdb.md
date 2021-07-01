@@ -10,6 +10,7 @@ In this challenge you will learn how to:
 - Add data and query via the data explorer
 - Learn about partitions and the effect of cross-partition queries
 - Use the Cosmos DB change feed
+- Monitor your database
 
 ## Table Of Contents
 
