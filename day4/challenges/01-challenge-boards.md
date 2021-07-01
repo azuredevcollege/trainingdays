@@ -10,7 +10,7 @@ In this challenge you will learn how to:
 - Add project Administrators
 - Working with cards
 - Plan milestones (sprints)
-- Use GitHub labels to categorize issues and pull requests
+- Use GitHub labels to classify issues and pull requests
 - See how issues and pull requests flow automatically through the different board's columns
 
 ## Table of content
@@ -19,8 +19,9 @@ In this challenge you will learn how to:
 2. [Assign permissions to a team](#assign-permissions-to-a-team)
 3. [Add project Administrators](#add-project-administrators)
 4. [Working with cards](#working-with-cards)
-5. [See how issues and pull requests flow automatically through the different board's columns](#use-github-labels-to-categorize-issues-and-pull-requests)
-6. [Plan your work for day4](#plan-your-work-for-day4)
+5. [Use GitHub labels to classify issues and pull requests](#use-github-labels-to-classify-issues-and-pull-requests)
+6. [See how issues and pull requests flow automatically through the different board's columns](#use-github-labels-to-categorize-issues-and-pull-requests)
+7. [Plan your work for day4](#plan-your-work-for-day4)
 
 
 ## Create a GitHub project board
@@ -131,13 +132,117 @@ Your board should now look like this:
 ![GitHub board overview-02](./images/gh-board-overview-02.png)
 
 
-
-
-
 ## Plan milestones (sprints)
 
-## Use GitHub labels to categorize issues and pull requests
+You can use milestones to group and track on groups of issues and pull requests in a repository. Unfortunately you can not define milestones at organisation level. Therefore it is not possible to set a uniform rhythm for all projects within an organisation. Instead you have to define milestones in each repository and keep them in sync. 
+
+Milestones would be an excellent way to plan a Sprint. But as mentioned, milestones cannot be created on an organizational level. Therefore, we need to find another way to assign tasks to a Sprint. For example, we could work with labels and create a label for each Sprint. We can then assign these Sprint labels to issues and pull requests.
+
+Another option would be to create a new project for each sprint and put the sprint name at the end of the project name.
+
+If you want to take a closer look at Milestones, just check out the GitHub documentation [here](https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/about-milestones).
+
+## Use GitHub labels to classify issues and pull requests
+
+GitHub labels are used to classify issues, pull requests and discussions. You can apply labels in the repository the label was created in. As with Milestones it is not possible to manage lables at organization level, but you can manage default labels which are automatically added to a repository when the repository is created. 
+
+Now we want to add two new default labels which will be added to each new repository.
+Navigate to your organization's settings, go to _Repository defaults_ and add the following labels:
+
+| Name            | Description              | Color         |
+| --------------- | ------------------------ | ------------- |
+| azdc-challenege | An AzDC-Challenge        | _your choice_ |
+| azdc-breakout   | An AzDC-Breakout session | _your choice_ |
+
+Unfortunately, we have to add these labels to the _myfirst-repo_ manually, because there is no syncing in the background to add these label to already created repositories. Therefore, navigate to _myfirst-repo_, go to _Issues_ and add these labels.
+
+Now go back to your project board and assign the _acdc-challenge_ label to both issues we created earlier.
+
+Your board should look like this:
+
+![HitHub board overview-03](./images/gh-board-overview-03.png)
+
+In the last part of this challenge we will plan the rest of the work for today, but we will add a note now for the _Breakout Session_ where we will deploy the Azure Developer College's sample application to Azure with GitHub Actions workflows.
+Add the note with the following text:
+
+```Text
+#### Deploy the sample application
+
+Use GitHub Actions workflows to deploy the sample application to your Azure subscription.
+```
+
+Labels help us to classify our issues. We can filter the board by labels etc. to get a reduced view on our project. Click on the filters/search box in the board to get an overview of how filtering works in GitHub. 
+Try to filter by the label _azdc-challenge_.
 
 ## See how issues and pull requests flow automatically through the different board's columns
 
+In the previous section we have seen how we can use a project board to plan our work. Now it is time to see how an issue and a pull request flow automatically through the different board's column to track progress. Therefore we add a new _Note_, convert it to an issue and edit the _README.md_ file within a feature branch. We commit and push changes to the feature branch and create a pull request to merge these changes to the _main_ branch.
+
+First, go to your project board and add a _Note_ with the following text:
+
+```text
+Issue and Pull Request
+
+Change README.md in a feature branch, commit and push changes and merge these changes 
+to the _main_ branch with a pull request
+```
+
+Next, convert the _Note_ to an issue, link it to the repository _myfirst-repo_, assign yourself and set the label _azdc-challenge_.
+
+:::tip
+📝 _Note down the issue's id, because we need it later to reference it in the pull request. You can find the id after the '#' character._
+:::
+
+Your board should look like this:
+
+![GitHub board overview](./images/gh-board-overview-04.png)
+
+Now, drag and drop the issue to the _In progress_ column to show project members that you are working on that topic.
+
+Open a terminal and navigate to the folder where you have cloned the repository. Use the _git branch_ and _git checkout_ commands to create a new branch and check it out:
+
+```shell
+git branch issueprdemo
+git checkout issueprdemo
+```
+
+Change the text in the _README.md_ file and commit an push your changes:
+
+```
+git add .
+git commit -m "Changed text"
+git push --set-upstream origin issueprdemo
+```
+
+Now, in your browser, navigate to the repository _myfirst-repo_ and go to the section _Pull requests_. You will see that GitHub informs us that there are recent pushes to the branch _issueprdemo_ available. Click _Compare & pull request_.
+
+![GitHub compare and pull request](./images/gh-compare-and-pr.png)
+
+In the _Open a pull request_ view, set the label _azdc-challenge_ and the project _AcDC-Day4-Project_ to link the pull request to the project. In the pull request's body we use the keyword _close_ and the character _#_ to link the pull request to our issue (please use your issue's id) and to inform GitHub that this issue is closed when the pull request is merged into the _main_ branch.
+
+![GitHub open pull request](./images/gh-open-pr.png)
+
+Now, navigate back to your project board. You will see that there is a new card with the pull request symbol displayed. Why is the pull request displayd on the board? When we created the board we used the template _Automated kanban_ which comes with predefined automation rules. These rules allows us to display issues and pull requests on the board, as long as they are linked to our project. Both are displayed depending on their status in the columns of the board. You can find the rules by clicking at the _Manage_ link in each column. Take your time and checkout the rules for each column.
+
+![GitHub](./images/gh-board-automation-rules.png)
+
+Now let's look at how both cards automatically move from the _In progress_ column to the _Done_ column when we complete our pull request. To do this, we navigate to the open pull request and merge it into the _main_ branch.
+
+![GitHub merge pull request](./images/gh-merge-pr.png)
+
+After the pull request is merged, we see that both cards were moved to the _Done_ column.
+
 ## Plan your work for day4
+
+As the day goes on, we will keep reflecting our work on the board in the challenges that are still to come. In the respective challenges it is pointed out to create _Notes_ or _Issues_ and to link them to our project. 
+
+## Summary and outlook
+
+We have seen how to plan and track our work with GitHub project boards. There are many ways to map an agile process, but certainly no one-size-fits-all solution. 
+Projects can be created and managed at the organizational or repository level. Unfortunately, labels, milestones and issues are always assigned to a repository, which makes the handling of a project at the organizational level somewhat difficult, especially if you want to manage a project across multiple repositories. 
+
+GitHub is working on the next generation of Project planning and it will be exciting to see how more complex planning scenarios can be mapped with it. if you are interested, why don't you sign up for the beta?
+[GitHub Issues - Project planning for developers](https://github.com/features/issues).
+
+If you've already worked with Azure Boards, you can also connect Azure Boards to GitHub:
+[Azure Boards & GitHub](https://docs.microsoft.com/en-us/azure/devops/boards/github/?view=azure-devops)
