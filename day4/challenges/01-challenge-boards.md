@@ -26,23 +26,23 @@ In this challenge you will learn how to:
 
 ## Create a GitHub project board
 
-Project boards on GitHub help you organize and prioritize your work. You can create project boards for specific feature work, comprehensive roadmaps or even release checklists. With project boards, you have the flexibility to create customized workflows that suits your needs. To organize and prioritize your work today, we are going to create a project board at the organization level. Of course it is possible to create a board on repository level, but as we will create more repositories during the day and we want to visualize our work across all repositories, we create a board on organization level. GitHub provides different template for a project board. Today, we use the template _Automated kanban_. With this template, we get a simple board with three columns:
-- To do, for cards that must be done
-- In progress, to display cards we are currently working on
-- Done, cards we have completed
+Project boards on GitHub help you organize and prioritize your work. You can create project boards for specific feature work, comprehensive roadmaps or even release checklists. With project boards, you have the flexibility to create customized workflows that suits your needs. To organize and prioritize your work today, we are going to create a project board at the organizational level. Of course it is possible to create a board on repository level, but as we will create more repositories during the day and we want to visualize our work across all repositories, we create a board on organization level. GitHub provides different templates for a project board. Today, we use the template _Automated kanban_. With this template, we get a simple board with three columns:
+- **To do**, for cards that must be done
+- **In progress**, to display cards we are currently working on
+- **Done**, cards we have completed
 
 Let us create the project board. Navigate to the _Project_ section of your organization and create a new project.
-Name the project _AcDC-Day4-Project_ give it a description.
+Name the project _AcDC-Day4-Project_ and give it a description.
 
 ![GitHub create project part1](./images/gh-create-project-part1.png)
 
-Select the _Automated kanban_ template and choose _Private_ for the visibility of the project. Link the project to your repository as well to be able to show issues on the board later.
+Select the _Automated kanban_ template and choose _Private_ for the visibility of the project. Link the project to your repository _myfirst-repo_ as well to be able to show issues and pull requests on the board later.
 
 ![GitHub create project part2](./images/gh-create-project-part2.png)
 
-After the project is created, we can add notes to plan and track our work. There are already some example notes created in the _To Do_ column of the board. You can delete these notes, as we don't need them. A project board is made up of issues, pull requests and notes which are displayed as cards. Cards are categorized in columns of your choice. We can move cards from one column to another. As we have selected the _Automated kanban_ template, the board is made up of three columns, but you can add more columns to the board to categorize cards the way you want it. 
+After the project was created, we can add notes to plan and track our work. There are already some example notes created in the _To Do_ column of the board. You can delete these notes, as we don't need them. A project board is made up of issues, pull requests and notes which are displayed as cards. Cards are categorized in columns of your choice. We can move cards from one column to another. As we have selected the _Automated kanban_ template, the board is made up of three columns, but you can add more columns to the board to categorize cards the way you want it. 
 
-The project is already linked to the repository _myfirst_repo_. There is a _Menu_ button at the upper right corner of the board. When you click the button, you get an overview of activities and a list of linked repositories. 
+The project is already linked to the repository _myfirst-repo_. There is a _Menu_ button at the upper right corner of the board. When you click the button, you get an overview of activities and a list of linked repositories. 
 
 :::tip
 📝 _Maybe the button is not visible, because there is the flyout dislayed that allows you to add cards. Close it and you will see the Menu button._
@@ -52,7 +52,7 @@ The project is already linked to the repository _myfirst_repo_. There is a _Menu
 
 ## Assign permissions to a team
 
-At the moment organisation owners and members are the only one who can add and manage cards. We need to assign permissions to a team so they can create and manage cards.
+At the moment ther project creator, organisation owners and members are the only one who can add and manage cards. We need to assign permissions to a team so they can create and manage cards.
 Open the board's menu again. Click the ellipsis _..._ button and open the _Settings_. 
 
 ![GitHub board menu ellipses](./images/gh-board-menu-ellipses.png)
@@ -70,7 +70,7 @@ Since we are working with a single team in our organization today and we may hav
 
 ## Add project Administrators
 
-As the organization owner, only you have full administrative rights in this project. We can make both members of the organization, but also _Outside collaborators_ project administrators. In the _Collaborators_ section you can add collaborators and give them _Admin_ permissions.
+As the organization owner and project creator, only you have full administrative rights in this project. We can make both members of the organization, but also _Outside collaborators_ project administrators. In the _Collaborators_ section you can add collaborators and give them _Admin_ permissions.
 
 ![GitHub board collaborators](./images/gh-board-collaborators.png)
 
@@ -103,7 +103,7 @@ A sample note to see how a note can reference an issue.
 You can drag and drop to reorder notes and move them between columns.
 
 Now let us convert the first note _Convert note to issue_ to an issue to assign it to a repository.
-Click the ellipses _..._ on the _Convert to issue_ card and click _Convert to issue_.
+Click the ellipsis _..._ button on the _Convert to issue_ card and click _Convert to issue_.
 
 ![GitHub note to issue](./images/gh-note-to-issue.png)
 
@@ -111,7 +111,7 @@ Choose the _myfirst-repo_ repository and convert the note to an issue.
 
 ![GitHub note to issue convert](./images/gh-note-to-issue-convert.png)
 
-After the note is converted, open the issue and have a look at the additional option we have to specify more details about the issue. Assign yourself to the issue and set the label _good first issue_.
+After the note was converted, open the issue and have a look at the additional option we have to specify more details about the issue. Assign yourself to the issue and set the label _good first issue_.
 
 ![GitHub issue details](./images/gh-issue-details.png)
 
@@ -123,7 +123,7 @@ Now you may wonder why you convert a note into an issue. In an issue we can addi
 
 _We use notes to plan and prioritize the work for our next milestone (sprint). When we start working on the task, we convert the note into an issue, choose a repository, assign a responsible person, classify it and push it to the _In progress_ column._
 
-This is a very simple but agile process flow. But maybe this flow is not sufficient, especially if notes do not always refer to only one repository, but are spread over several repositories. Notes can be used to summarize issues in different repositories. If we work according to agile methods, we can e.g. store a _UserStory_ as a note in our board and create tasks in different repositories as an issue. Or we can go one level higher and use Notes to map _Features_ and Issues to map _UserStories_ in one repository. Ultimately, there are many ways to map an agile process with GitHub project boards. There is no one-size-fits-all solution. 
+This is a very simple but agile process flow. But maybe this flow is not sufficient, especially if notes do not always refer to only one repository, but are spread over several repositories. Notes can be used to summarize issues in different repositories. If we work according to agile methods, we can e.g. store a _UserStory_ as a note in our board and create tasks in different repositories as an issue. Or we can go one level higher and use Notes to map _Features_ and Issues to map _UserStories_ in a repository. Ultimately, there are many ways to map an agile process with GitHub project boards. There is no one-size-fits-all solution. 
 
 Finally, in this part of the Challenge, let's look at how we can reference Issues in a note. Navigate to your _myfirst-repo_ repository and go to the _Issues_ section. You see that there is already an issue listed. It is the issue that we created earlier. Now, add a new Issue name it _Referenced Issue_, set the label _good first issue_, assign yourself and submit the new issue. Copy the issue's URL from the browser's address bar and go back to your project board. Edit the note _Reference an issue_ and paste the issue's URL.
 
@@ -154,7 +154,7 @@ Navigate to your organization's settings, go to _Repository defaults_ and add th
 | azdc-challenege | An AzDC-Challenge        | _your choice_ |
 | azdc-breakout   | An AzDC-Breakout session | _your choice_ |
 
-Unfortunately, we have to add these labels to the _myfirst-repo_ manually, because there is no syncing in the background to add these label to already created repositories. Therefore, navigate to _myfirst-repo_, go to _Issues_ and add these labels.
+Unfortunately, we have to add these labels to the _myfirst-repo_ manually, because there is no syncing in the background to add these labels to already created repositories. Therefore, navigate to _myfirst-repo_, go to _Issues_ and add these labels.
 
 Now go back to your project board and assign the _acdc-challenge_ label to both issues we created earlier.
 
@@ -162,7 +162,7 @@ Your board should look like this:
 
 ![HitHub board overview-03](./images/gh-board-overview-03.png)
 
-In the last part of this challenge we will plan the rest of the work for today, but we will add a note now for the _Breakout Session_ where we will deploy the Azure Developer College's sample application to Azure with GitHub Actions workflows.
+In the last part of this challenge we will describe how to plan the rest of the work for today, but we will add a note now for the _Breakout Session_ where we will deploy the Azure Developer College's sample application to Azure with GitHub Actions workflows.
 Add the note with the following text:
 
 ```Text
@@ -176,7 +176,7 @@ Try to filter by the label _azdc-challenge_.
 
 ## See how issues and pull requests flow automatically through the different board's columns
 
-In the previous section we have seen how we can use a project board to plan our work. Now it is time to see how an issue and a pull request flow automatically through the different board's column to track progress. Therefore we add a new _Note_, convert it to an issue and edit the _README.md_ file within a feature branch. We commit and push changes to the feature branch and create a pull request to merge these changes to the _main_ branch.
+In the previous section we have seen how we can use a project board to plan our work. Now it is time to see how an issue and a pull request automatically flow through the different board's column to track progress. Therefore we add a new _Note_, convert it to an issue and edit the _README.md_ file within a feature branch. We commit and push changes to the feature branch and create a pull request to merge these changes to the _main_ branch.
 
 First, go to your project board and add a _Note_ with the following text:
 
@@ -206,7 +206,7 @@ git branch issueprdemo
 git checkout issueprdemo
 ```
 
-Change the text in the _README.md_ file and commit an push your changes:
+Change the text in the _README.md_ file and commit and push your changes:
 
 ```
 git add .
@@ -241,7 +241,7 @@ As the day goes on, we will keep reflecting our work on the board in the challen
 We have seen how to plan and track our work with GitHub project boards. There are many ways to map an agile process, but certainly no one-size-fits-all solution. 
 Projects can be created and managed at the organizational or repository level. Unfortunately, labels, milestones and issues are always assigned to a repository, which makes the handling of a project at the organizational level somewhat difficult, especially if you want to manage a project across multiple repositories. 
 
-GitHub is working on the next generation of Project planning and it will be exciting to see how more complex planning scenarios can be mapped with it. if you are interested, why don't you sign up for the beta?
+GitHub is working on the next generation of Project planning and it will be exciting to see how more complex planning scenarios can be mapped with it. If you are interested, why don't you sign up for the beta?
 [GitHub Issues - Project planning for developers](https://github.com/features/issues).
 
 If you've already worked with Azure Boards, you can also connect Azure Boards to GitHub:
