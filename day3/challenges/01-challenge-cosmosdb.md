@@ -16,8 +16,9 @@ In this challenge you will learn how to:
 1. [Create a Comsos DB Account, Database and Containers](#create-a-comsos-db-account-database-and-containers)
 2. [Add and query data](#add-and-query-data)
 3. [Use the Cosmos DB Change Feed](#use-the-cosmos-db-change-feed)
-4. [Azure Samples](#azure-samples)
-5. [Cleanup](#cleanup)
+4. [Monitor Cosmos DB](#monitor-cosmos-db)
+5. [Azure Samples](#azure-samples)
+6. [Cleanup](#cleanup)
 
 ## Create a Comsos DB Account, Database and Containers
 
@@ -186,13 +187,27 @@ Now, it's time to add data to the _customer_ and _product_ containers. There a t
 
 The _customer_ dataset contains of two types of objects that we put in the same container: **customer** and **salesOrder**. Wait...two object types in the same container? You learned that when dealing with data in a (relational) database, the data should always be normalized and that it's best to have one object type in one table! "This is totally against that principle", you might think.
 
-Yes, you are right in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged.
+Yes, you are right - in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged.
 
-<https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
+You can download the customer dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
 
 #### Customer Data
 
-Explain --> type property, embedding
+A customer document has a property ```type``` set to _customer_ and contains several properties like ```firstName```, ```lastName```, ```emailAddress``` etc. You can see, that it also uses document embedding for ```addresses``` - the property is an array, so you can add multiple addresses to one customer.
+
+:::tip When to use embedding? When to use referencing?
+📝 To model relations in a document-oriented database, you have two choices: embedding and referencing. But which should you choose when?
+
+| Embedding                                     | Referencing                                        |
+| --------------------------------------------- | -------------------------------------------------- |
+| 1:1 relationship                              | 1:many relationship (especially if unbounded)      |
+| 1:few relationship                            | Many:many relationship                             |
+| Related items are queried or updated together | Related items are queried or updated independently |
+:::
+
+The partition key of the container has been set to ```/customerId```, so each customer is placed in its own logical partition. With that approach, we achive the best distribution of data in terms of horizontal scaling and will never hit any storage limits - so we are prepared for massive growth of the data/application. On the other hand, this is not the best way when we want to search within our customer base, because we will definitely have cross-partition queries and they will consume more and more RUs as the data grows. How to deal with such a situation is discussed later in the challenge.
+
+Here's a sample object from the container:
 
 ```json
 {
@@ -225,7 +240,11 @@ Explain --> type property, embedding
 
 #### SalesOrder Data
 
-Explain why in the same collection --> same partition key. Again: embedding.
+The salesorder object is similar to the customer object. It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
+
+As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
+
+Here's a sample object from the container:
 
 ```json
 {
@@ -259,11 +278,13 @@ Explain why in the same collection --> same partition key. Again: embedding.
 
 ### Product Dataset
 
-Explain dataset
+The product dataset contains just one object type: ```product```. It simply stores the information for each product like ```name```, ```price```, ```categoryName```. The collection is partitioned by ```/categoryId```, so products are logically grouped by and can be queried via category.
 
-Download: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
+You can download the product dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
 
 #### Product Data
+
+Here's a sample object from the container:
 
 ```json
 {
@@ -297,7 +318,7 @@ Download: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.js
 
 ### Uplopad the datasets
 
-To add the datasets to Cosmos DB, go to the _Data Explorer_ and first open the _Items_ menu item of the _customer_ container. When the tab appears, you'll see a _Upload Item_ button in the toolbar. Click on that button and then select the _customer.json_ file that you previously downloaded. Upload it.
+To add the datasets to Cosmos DB, go to the _Data Explorer_ and first open the _Items_ menu item of the _customer_ container. When the tab appears, you'll see an _Upload Item_ button in the toolbar. Click on that button, then select the _customer.json_ file that you previously downloaded and click _Upload_.
 
 ![Upload data to a container in the data explorer](./images/cosmosdb/portal_dataexplorer_upload.png "Upload data")
 
@@ -349,6 +370,8 @@ Explain what is done in index.js
 Run function (let it process all changes --> then show collection content)
 
 Update a customer in original collection and show result in "view" collection --> they are in sync
+
+## Monitor Cosmos DB
 
 ## Azure Samples
 
