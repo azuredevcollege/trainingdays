@@ -316,7 +316,7 @@ Here's a sample object from the container:
 }
 ```
 
-### Uplopad the datasets
+### Upload the datasets
 
 To add the datasets to Cosmos DB, go to the _Data Explorer_ and first open the _Items_ menu item of the _customer_ container. When the tab appears, you'll see an _Upload Item_ button in the toolbar. Click on that button, then select the _customer.json_ file that you previously downloaded and click _Upload_.
 
