@@ -2,16 +2,26 @@
 
 ⏲️ _est. time to complete: 30 min._ ⏲️
 
-## here is what you will learn 🎯
+## Here is what you will learn 🎯
 
-in this challenge you will learn:
+In this challenge you will learn:
 
 - how github pages serves static content from you repositories
 - how to create a first github action
 - how the github script action can help you do workflow automation
 - how to use github actions to run a static site generator
 
-## Getting started
+## Table of contents
+
+- [Github Actions in Action](#github-actions-in-action)
+  - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
+  - [Table of contents](#table-of-contents)
+  - [Getting started](#getting-started)
+  - [A clean slate 🧻 - GitHub Pages](#a-clean-slate----github-pages)
+  - [Create a new repository](#create-a-new-repository)
+    - [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
+  - [Action](#action)
+- [azdc-training.github.io](#azdc-traininggithubio)## Getting started
 
 In this challenge we will take a first look at GitHub Actions. GitHub Actions is
 GitHubs built in workflow automation and CI/CD tool.

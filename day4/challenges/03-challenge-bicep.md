@@ -2,9 +2,9 @@
 
 ⏲️ _est. time to complete: 30 min._ ⏲️
 
-## here is what you will learn 🎯
+## Here is what you will learn 🎯
 
-in this challenge you will learn how to:
+In this challenge you will learn how to:
 
 - access your Azure Subscription from GitHub Actions
 - use GitHub Secrets to securely store access credentials
@@ -13,7 +13,16 @@ in this challenge you will learn how to:
 - deploy a bicep template using GitHub Actions
 - build and deploy your WebApp to Azure AppService
 
-## Azure Login Action
+## Table of contents
+
+- [Deploy to Azure WebApp using GitHub Actions](#deploy-to-azure-webapp-using-github-actions)
+- [here is what you will learn 🎯](#here-is-what-you-will-learn-)
+- [Azure Login Action](#azure-login-action)
+- [Create Service Principal](#create-service-principal)
+- [Create Azure Bicep template](#create-azure-bicep-template)
+- [Create resource group and deploy Bicep template](#create-resource-group-and-deploy-bicep-template)
+- [Create a simple express app](#create-a-simple-express-app)
+- [Deploy AppService](#deploy-appservice)## Azure Login Action
 
 ```yaml
 # az-login.yaml
@@ -21,11 +30,6 @@ name: Display Account Info
 
 on:
   push:
-
-env:
-  RESOURCE_GROUP_NAME: github-action-bicep-rg
-  RESOURCE_GROUP_LOCATION: westeurope
-  ENV_NAME: github-action
 
 jobs:
   build:
