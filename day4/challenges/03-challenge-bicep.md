@@ -156,5 +156,68 @@ npx express-generator ./ --view pug --git
 ## Deploy AppService
 
 ```yaml
+name: CI
 
+on:
+  push:
+
+env:
+  RESOURCE_GROUP_NAME: github-action-bicep-rg
+  RESOURCE_GROUP_LOCATION: westeurope
+  ENV_NAME: devd4
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    outputs:
+      webAppName: ${{ steps.infra.outputs.webAppName }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ env.RESOURCE_GROUP_NAME }}
+
+      - uses: azure/arm-deploy@v1
+        id: infra
+        with:
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./infra.bicep
+          parameters: env=${{ env.ENV_NAME }}
+
+      - name: Print WebApp endpoint
+        run: echo ${{steps.infra.outputs.webAppEndpoint }}
+
+  deploy-webapp:
+    needs: [deploy-infra]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 12.x
+
+      - name: Npm install
+        run: npm ci
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Azure WebApp
+        uses: Azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infra.outputs.webAppName }}
+          startup-command: npm start
 ```
