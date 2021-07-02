@@ -354,7 +354,7 @@ navigate to the open pull request and merge it into the _main_ branch.
 After the pull request is merged, we see that both cards were moved to the
 _Done_ column.
 
-## Plan your work for the day4
+## Plan your work for day4
 
 As the day goes on, we will keep reflecting our work on the board in the
 challenges that are still to come. In the respective challenges it's pointed out
