@@ -1,4 +1,17 @@
-# GitHub Actions in Action
+# Github Actions in Action
+
+⏲️ _est. time to complete: 30 min._ ⏲️
+
+## here is what you will learn 🎯
+
+in this challenge you will learn:
+
+- how github pages serves static content from you repositories
+- how to create a first github action
+- how the github script action can help you do workflow automation
+- how to use github actions to run a static site generator
+
+## Getting started
 
 In this challenge we will take a first look at GitHub Actions. GitHub Actions is
 GitHubs built in workflow automation and CI/CD tool.
@@ -35,11 +48,11 @@ portfolio or documentation page for your organization or personal github
 account.
 :::
 
-### Create a new repository
+## Create a new repository
 
 Create a new repository on your private or organizational account, but be careful when naming this repository.
 
-Just like before create a new repository
+Like before, create a new repository.
 
 See an example for naming your repository here:
 

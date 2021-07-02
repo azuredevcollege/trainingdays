@@ -1,5 +1,18 @@
 # Deploy to Azure WebApp using GitHub Actions
 
+⏲️ _est. time to complete: 30 min._ ⏲️
+
+## here is what you will learn 🎯
+
+in this challenge you will learn how to:
+
+- access your Azure Subscription from GitHub Actions
+- use GitHub Secrets to securely store access credentials
+- create a Service Principal for your Azure Subscription
+- create a Resource Group in GitHub Actions
+- deploy a bicep template using GitHub Actions
+- build and deploy your WebApp to Azure AppService
+
 ## Azure Login Action
 
 ```yaml
