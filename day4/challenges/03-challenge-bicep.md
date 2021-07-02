@@ -144,13 +144,17 @@ jobs:
             env=${{ env.ENV_NAME }}
 
       - name: Print WebApp endpoint
-        run: echo ${{steps.infra.outputs.webAppEndpoint }}
+        run: echo https://${{ steps.infra.outputs.webAppEndpoint }}
 ```
 
 ## Create a simple express app
 
 ```shell
 npx express-generator ./ --view pug --git
+npm install
+git add .
+git commit -m "Add simple express app"
+git push
 ```
 
 ## Deploy AppService
@@ -193,7 +197,7 @@ jobs:
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Print WebApp endpoint
-        run: echo https://${{steps.infra.outputs.webAppEndpoint }}
+        run: echo https://${{ steps.infra.outputs.webAppEndpoint }}
 
   deploy-webapp:
     needs: [deploy-infra]
