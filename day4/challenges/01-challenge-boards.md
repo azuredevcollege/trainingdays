@@ -23,6 +23,7 @@ In this challenge you will learn how to:
 5. [Use GitHub labels to classify issues and pull requests](#use-github-labels-to-classify-issues-and-pull-requests)
 6. [See how issues and pull requests flow automatically through the different board's columns](#use-github-labels-to-categorize-issues-and-pull-requests)
 7. [Plan your work for day4](#plan-your-work-for-day4)
+8. [Summary and outlook](#summary-and-outlook)
 
 ## Create a GitHub project board
 
@@ -44,7 +45,7 @@ simple board with three columns:
 - **Done**, cards we have completed
 
 Let us create the project board. Navigate to the _Project_ section of your
-organization and create a new project. Name the project _AZDC-Day4-Project_ and
+organization and create a new project. Name the project _AzDC-Day4-Project_ and
 give it a description.
 
 ![GitHub create project - step 1](./images/gh-create-project-part1.png)
@@ -239,7 +240,7 @@ because there is no syncing in the background to add these labels to already
 created repositories. Navigate to _myfirst-repo_, go to _Issues_ and
 add these labels.
 
-Now go back to your project board and assign the _acdc-challenge_ label to both
+Now go back to your project board and assign the _azdc-challenge_ label to both
 issues we created earlier.
 
 Your board should look like this:
@@ -324,7 +325,7 @@ pushes to the branch _issueprdemo_ available. Click _Compare & pull request_.
 ![GitHub compare and pull request](./images/gh-compare-and-pr.png)
 
 In the _Open a pull request_ view, set the label _azdc-challenge_ and the
-project _AcDC-Day4-Project_ to link the pull request to the project. In the pull
+project _AzDC-Day4-Project_ to link the pull request to the project. In the pull
 request's body we use the keyword _close_ and the character _#_ to link the pull
 request to our issue (please use your issue's id) and to inform GitHub that this
 issue is closed when the pull request is merged into the _main_ branch.
@@ -353,7 +354,7 @@ navigate to the open pull request and merge it into the _main_ branch.
 After the pull request is merged, we see that both cards were moved to the
 _Done_ column.
 
-## Plan your work for the day
+## Plan your work for the day4
 
 As the day goes on, we will keep reflecting our work on the board in the
 challenges that are still to come. In the respective challenges it's pointed out
