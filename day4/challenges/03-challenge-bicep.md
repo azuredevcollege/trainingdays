@@ -32,7 +32,7 @@ on:
   push:
 
 jobs:
-  build:
+  login:
     runs-on: ubuntu-latest
 
     steps:
@@ -117,7 +117,7 @@ env:
   ENV_NAME: devd4
 
 jobs:
-  build:
+  deploy-infra:
     runs-on: ubuntu-latest
 
     steps:
