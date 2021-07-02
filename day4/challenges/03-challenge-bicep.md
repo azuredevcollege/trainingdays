@@ -54,7 +54,9 @@ az ad sp create-for-rbac --name "{name}-github-actions-sp" --sdk-auth --role con
 ## Create Azure Bicep template
 
 ```bicep
-@minLength(3)
+@description('The SKU of App Service Plan')
+param planSku string = 'B1'
+
 @maxLength(8)
 @description('Name of environment')
 param env string = 'webapp'
@@ -64,30 +66,10 @@ param resourceTag object = {
   Environment: env
   Application: 'Webapp'
 }
-
-@description('The SKU of App Service Plan, default is B2')
-@allowed([
-  'D1'
-  'F1'
-  'B1'
-  'B2'
-  'B3'
-  'S1'
-  'S2'
-  'S3'
-  'P1'
-  'P2'
-  'P3'
-  'P1V2'
-  'P2V2'
-  'P3V2'
-])
-param planSku string = 'B1'
+var location = resourceGroup().location
 
 var webAppName = 'app-webapp-${env}-${uniqueString(resourceGroup().id)}'
 var planName = 'plan-webapp-${env}-${uniqueString(resourceGroup().id)}'
-
-var location = resourceGroup().location
 
 resource appplan 'Microsoft.Web/serverfarms@2020-12-01' = {
   name: planName
@@ -119,8 +101,6 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
 
 output webAppName string = webAppName
 output webAppEndpoint string = webapp.properties.defaultHostName
-
-
 ```
 
 ## Create resource group and deploy Bicep template
