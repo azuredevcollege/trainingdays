@@ -193,7 +193,7 @@ jobs:
           parameters: env=${{ env.ENV_NAME }}
 
       - name: Print WebApp endpoint
-        run: echo ${{steps.infra.outputs.webAppEndpoint }}
+        run: echo https://${{steps.infra.outputs.webAppEndpoint }}
 
   deploy-webapp:
     needs: [deploy-infra]
