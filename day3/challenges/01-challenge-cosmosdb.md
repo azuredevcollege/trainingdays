@@ -356,6 +356,8 @@ Which APIs are supported...
 
 ### Why to use it?
 
+![Overview Change Feed](./images/cosmosdb/changefeedvisual.png)
+
 ### What does it support?
 
 ### How to consume the Change Feed?
@@ -363,6 +365,11 @@ Which APIs are supported...
 Describe Azure Function and ChangeFeed Processor
 
 ### Sample: Create a CustomerView collection for query optimized access to Customer data
+
+```shell
+az group create -n day3cosmos -l westeurope
+az deployment group create -g day3cosmos --template-file cosmos.bicep
+```
 
 Create collection "customerView" (partition key '/area' - see bicep file) + Az Function under day3/challenges/cosmosdb/func (Adjust connection string to db)
 
