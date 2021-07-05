@@ -13,15 +13,25 @@ In this challenge you will learn:
 
 ## Table of contents
 
-- [Github Actions in Action](#github-actions-in-action)
-  - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
-  - [Table of contents](#table-of-contents)
-  - [Getting started](#getting-started)
-  - [A clean slate 🧻 - GitHub Pages](#a-clean-slate----github-pages)
-  - [Create a new repository](#create-a-new-repository)
-    - [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
-  - [Action](#action)
-- [azdc-training.github.io](#azdc-traininggithubio)
+1. [Github Actions in Action](#github-actions-in-action)
+   1. [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
+   2. [Table of contents](#table-of-contents)
+   3. [Getting started](#getting-started)
+   4. [A clean slate 🧻 - GitHub Pages](#a-clean-slate----github-pages)
+   5. [Create a new repository](#create-a-new-repository)
+      1. [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
+   6. [Action](#action)
+      1. [Workflows](#workflows)
+         1. [name - Workflow](#name---workflow)
+         2. [on - Event](#on---event)
+         3. [jobs](#jobs)
+         4. [steps](#steps)
+         5. [Actions](#actions)
+         6. [Context and expression syntax](#context-and-expression-syntax)
+      2. [Committing the workflow file](#committing-the-workflow-file)
+   7. [Run a static site generator in your workflow](#run-a-static-site-generator-in-your-workflow)
+2. [azdc-training.github.io](#azdc-traininggithubio)
+   1. [Further reading](#further-reading)
 
 ## Getting started
 
@@ -296,9 +306,13 @@ workflow automation.
 
 #### Context and expression syntax
 
+::: v-pre
+
 In the first three steps of our sample workflow we use some the expression
 syntax `${{ expression accessing the context }}` to access the context of our
 workflow.
+
+:::
 
 The expression syntax allow you to access context information for your workflow
 like:
@@ -310,13 +324,25 @@ like:
 
 ### Committing the workflow file
 
+Now that we've discussed the basics of workflows and this sample let's commit
+the file directly to our `main` branch.
+
 ![Hello World Action](./images/helloworldaction.png)
+
+This should immediately start our workflow since we declared the `on: push`
+event as a trigger for the workflow.
+
+Take a look if you can spot the running Action an drill down into logs the
+current workflow run.
 
 ![Action Running](./images/actionrunning.png)
 
-Afterwards you will see under the `Issues` section a new `Hello World Issue`:
+Once the workflow is executed successfully you will see a new `Hello World Issue` under the `Issues`
+section.
 
 ![Hello World Issue](./images/helloworldissue.png)
+
+## Run a static site generator in your workflow
 
 Then we will add our first README.md:
 
