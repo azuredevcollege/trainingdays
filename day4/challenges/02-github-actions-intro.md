@@ -21,7 +21,9 @@ In this challenge you will learn:
   - [Create a new repository](#create-a-new-repository)
     - [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
   - [Action](#action)
-- [azdc-training.github.io](#azdc-traininggithubio)## Getting started
+- [azdc-training.github.io](#azdc-traininggithubio)
+
+## Getting started
 
 In this challenge we will take a first look at GitHub Actions. GitHub Actions is
 GitHubs built in workflow automation and CI/CD tool.
@@ -34,9 +36,10 @@ Let's get started! 💪👩
 ## A clean slate 🧻 - GitHub Pages
 
 For this challenge we will again work on an empty repository so nothing comes in
-the way of our automation madness.
+the way of our automation attempts. Before you create this repository, please read
+this section about repository naming in relation to GitHub Pages.
 
-We want to also give you a quick tour on GitHub Pages. This feature allows you
+We also want to give you a quick tour on GitHub Pages. This feature allows you
 to host static websites directly on GitHub, making for a great place to
 host your documentation for your project together with it's source code.
 
@@ -60,16 +63,13 @@ account.
 
 ## Create a new repository
 
-Create a new repository on your private or organizational account, but be careful when naming this repository.
-
-Like before, create a new repository.
+Create a new **public** repository on your organizational account for todays exercises, but be careful when naming this repository.
 
 See an example for naming your repository here:
 
 ![detailed view of repository](./images/create-new-repository-2.png)
 
-This allows you to later access this site using your GitHub username or
-organizaions name like this:
+This allows you to later access this site using your organizations name like this:
 
 `https://<username or organizationname>.github.io`
 
@@ -86,15 +86,15 @@ Pages on your repository manually though.
 For anything to show up on your GitHub Page you have to create an `index.html`
 file on the `main` branch. So let's do just that!
 
-You can create a new file directly on the GitHub website.
+You can create a new file directly on the GitHub website:
 
 ![Hint to create new file](./images/create-new-file.png)
 
-Let's write some fancy HTML "hello world":
+Let's insert some fancy "hello world" HTML:
 
 ```html
 <!-- index.html -->
-Hello World! 🌍
+<h1>Hello World! 🌍</h1>
 ```
 
 ![Index.html](./images/helloworldindexhtml.png)
@@ -102,30 +102,67 @@ Hello World! 🌍
 And save the file using the commit changes dialog at the bottom of the
 editor window.
 
-**Minutes** later your profile page will be visible on:
+Seconds later your profile page will be visible on:
 
 `https://<username or organizationname>.github.io`
 
 :::tip
 📝 If you created a repository with a different name you have to enable
-GitHub Pages under your repositories `Settings > Pages`.
+GitHub Pages under your repositories `Settings > Pages` menu.
 :::
 
 Your page should look something like this:
 
 ![Hello World website](./images/hello-world.png)
 
+For now we've learned about GitHub Pages and how we can use them to serve simple
+static content on the default `github.io` domain. In your repositories settings
+you can enable custom domains. Custom domains allow you to serve your site from
+a domain other than `github.io`.
+
+Although the static content might seem limiting, GitHub Pages can host complex
+Javascript Static WebApps. Pages are an excellent way to host documentations for
+your projects and the Azure developer college itself uses GitHub Pages to serve
+you this tutorial content.
+
+Another interesting project you might want to look at is
+[netlify cms](https://www.netlifycms.org/). By using GitHubs own API Netlify
+enables you to use your repository as a backend for a fully featured content
+management system.
+
 ## Action
 
-We'll this is still kind of boring, what about the ACTION?
+But where is the **Action** in all this, you might ask yourself. Worry not, we
+are getting started.
 
-First let's setup a workflow:
+Now we will write our first "Hello World" style GitHub Action workflow and once
+we get the basics of it we will take a look how we could combine GitHub Actions
+with GitHub Pages to generate and serve beautiful websites.
+
+### Workflows
+
+GitHub Actions are written and run in so called Workflows. A GitHub Actions
+Workflow is a single `.yaml` file in your repositories `.github/workflows/`
+folder.
+
+First let's setup a new `hello-world` workflow by navigating to `Actions` and
+using the `set up a workflow yourself` option.
 
 ![Workflow Setup](./images/setupworkflow.png)
 
-Let's create one now.
+Take a good look at the provided example as it has comments every line for you
+to orient yourself if the syntax for workflows is new to you.
+
+:::tip 📝
+If you are all new to `yaml` please take a look at the [further
+reading](#further-reading) section at the end of this page.
+:::
+
+Now let's replace the content of the workflow file with the Hello World
+workflow, provided in the listing below.
 
 ```yaml
+# hello-world.yaml
 name: Hello World!
 
 on:
@@ -137,6 +174,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Send a hello world
         uses: actions/github-script@v4.0.2
         with:
@@ -148,6 +188,127 @@ jobs:
               body: "Hello 🌍 from GitHub Actions!"
             });
 ```
+
+Let's take a close look at the most important parts and keywords of this first
+workflow.
+
+#### name - Workflow
+
+The name of your workflow. GitHub displays the names of your workflows on your
+repository's actions page.
+
+#### on - Event
+
+The `on` keywords is required and allows you to specify the kind of _events_
+your workflow file is executed **on**.
+
+Some of the most used events are:
+
+- **push**: triggered when a new commit is pushed to your repository.
+- **pull_request**: triggered when a pull request is opened in your repository.
+- **release**: triggered when a new release tag was created on your repository.
+- **workflow_dispatch**: triggered when a user manually starts the workflow
+  on the GitHub website.
+
+You can configure your workflows to run when specific activity on GitHub
+happens, at a scheduled time, or when an event outside of GitHub occurs.
+
+For more information and a detailed explanation of [events that trigger
+workflows](https://docs.github.com/en/actions/reference/events-that-trigger-workflows)
+please refer to the GitHub documentation.
+
+#### jobs
+
+A workflow run is made up of one or more jobs. Jobs run in parallel by default.
+To run jobs sequentially, you can define dependencies on other jobs using the
+`jobs.<job_id>.needs` keyword.
+
+Jobs require the `runs-on` keyword, to tell the pipeline on which kind of machine
+"runner" to execute the job.
+
+You can run an unlimited number of jobs as long as you are within the workflow
+usage limits.
+
+In our example we have just one job with the `job_id` _greet_, but we could have
+multiple jobs for _build_, _test_ and _deploy_ tasks.
+
+```yaml
+jobs:
+  build: ...
+  test:
+    needs: [build]
+    ...
+  deploy:
+    needs: [build, test]
+    ...
+```
+
+#### steps
+
+A job contains a sequence of tasks called steps. Steps can run commands, run
+setup tasks, or run an action in your repository, a public repository, or an
+action published in a Docker registry. Not all steps run actions, but all
+actions run as a step. Each step runs in its own process in the runner
+environment and has access to the workspace and filesystem. Because steps run in
+their own process, changes to environment variables are not preserved between
+steps.
+
+In our example we have to kinds of steps:
+
+```yaml
+steps:
+  - run: ...
+  - uses: actions/...
+```
+
+The `run` steps directly execute in the shell of the jobs runner.
+
+The steps with the `uses` keyword refer to an Action which can perform more
+complex tasks.
+
+#### Actions
+
+The most powerful feature of GitHub Actions are the Actions themselves. There is
+a large collection of predefined GitHub Actions on GitHubs own
+[marketplace](https://github.com/marketplace?type=actions).
+
+Take a look at the marketplace and search for `Azure` actions. You will see that
+there is already a variety of convenience functions pre-built to be used in your
+own workflows. Anytime you write a new workflow file, this is the first place to
+take a look if there is already something that you could use.
+
+[GitHubs own Actions](https://github.com/actions) can be found in the _actions_
+org on GitHub.
+
+Please be careful when using Actions from unverified sources or any third party
+that you don't trust, since these Actions are usually executed in the context of
+your own repository.
+
+For your repository and your organizations under `Settings > Actions` you can
+configure policies that allow or prevent 3rd party actions from being run inside
+your workflows. You can also restrict the kind of permission that workflows have
+by default on your repository.
+
+In our sample we use the [GitHub Script
+Action](https://github.com/actions/github-script) to have a simple interface for
+interacting with GitHubs own APIs. This Action can be used to do some amazing
+workflow automation.
+
+#### Context and expression syntax
+
+In the first three steps of our sample workflow we use some the expression
+syntax `${{ expression accessing the context }}` to access the context of our
+workflow.
+
+The expression syntax allow you to access context information for your workflow
+like:
+
+- environment variables
+- secrets stored for your workflows
+- details about the event and user that triggered the workflow
+- information about your repository and organization
+
+### Committing the workflow file
 
 ![Hello World Action](./images/helloworldaction.png)
 
@@ -241,3 +402,7 @@ jobs:
 ![save branch](./images/changebranchessave.png)
 
 ![vuepress](./images/vuepressreadme.png)
+
+### Further reading
+
+[Introduction to YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f)
