@@ -57,12 +57,12 @@ In the Azure Portal, click on _Create Resource_ and select _Azure Cosmos DB_. Wh
 
 On the wizard, please choose/enter the following parameters:
 
-| Option Name    | Value                                                                                                         |
-| -------------- | ------------------------------------------------------------------------------------------------------------- |
-| Resource Group | Create a new resource group called **rg-cosmos-challenge**                                                    |
-| Account Name   | Enter a globally unique account name, like **azdc-cosmos-challenge**                                          |
-| Location       | West Europe                                                                                                   |
-| Capacity mode  | **Serverless** (we use the serverless option, because it's the cheapest option for development/test purposes) |
+| Option Name      | Value                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------- |
+| _Resource Group_ | Create a new resource group called **rg-cosmos-challenge**                                                    |
+| _Account Name_   | Enter a globally unique account name, like **azdc-cosmos-challenge**                                          |
+| _Location_       | West Europe                                                                                                   |
+| _Capacity mode_  | **Serverless** (we use the serverless option, because it's the cheapest option for development/test purposes) |
 
 ![Cosmos DB Create Wizard](./images/cosmosdb/portal_create_overview.png "Cosmos DB Create Wizard")
 
@@ -76,11 +76,11 @@ The most convenient way to add a database and containers to a CosmosDB account i
 
 #### Container: Customer
 
-| Option Name   | Value                                                                                                               |
-| ------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Database id   | Select the option _Create new_ and enter the name _AzDCdb_. With this first container, we also create the database. |
-| Container id  | customer                                                                                                            |
-| Partition key | /customerId                                                                                                         |
+| Option Name     | Value                                                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| _Database id_   | Select the option _Create new_ and enter the name _AzDCdb_. With this first container, we also create the database. |
+| _Container id_  | customer                                                                                                            |
+| _Partition key_ | /customerId                                                                                                         |
 
 Click _Ok_ and when the operation has finished, go to the _Settings_ view of the _customer_ container in the _Data Explorer_ and adjust the _Indexing Policy_. Copy the following JSON document in the editor and click _Save_ in the toolbar:
 
@@ -128,11 +128,11 @@ Click _Ok_ and when the operation has finished, go to the _Settings_ view of the
 
 #### Container: Product
 
-| Option Name   | Value                                                 |
-| ------------- | ----------------------------------------------------- |
-| Database id   | Select the option _Use existing_ and select _AzDCdb_. |
-| Container id  | customer                                              |
-| Partition key | /customerId                                           |
+| Option Name     | Value                                                 |
+| --------------- | ----------------------------------------------------- |
+| _Database id_   | Select the option _Use existing_ and select _AzDCdb_. |
+| _Container id_  | customer                                              |
+| _Partition key_ | /customerId                                           |
 
 After you have created the database and the containers, the _Data Explorer_ should look like that:
 
@@ -188,7 +188,7 @@ Now, it's time to add data to the _customer_ and _product_ containers. There a t
 
 The _customer_ dataset contains of two types of objects that we put in the same container: **customer** and **salesOrder**. Wait...two object types in the same container? You learned that when dealing with data in a (relational) database, the data should always be normalized and that it's best to have one object type in one table! "This is totally against that principle", you might think.
 
-Yes, you are right - in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged.
+Yes, you are right - in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged. You optimize data models to make sure that all the required data is ready to be served by queries.
 
 You can download the customer dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
 
@@ -241,7 +241,7 @@ Here's a sample object from the container:
 
 #### SalesOrder Data
 
-The salesorder object is similar to the customer object (```type```is set to _salesOrder_). It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
+The salesorder object is similar to the customer object (```type``` is set to _salesOrder_). It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
 
 As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
 
@@ -331,24 +331,122 @@ Do the same with the _product.json_ file for the _product_ collection.
 
 ### Queries
 
-How much data?
-SELECT VALUE(COUNT(1)) FROM c
+Let's work with the data and execute some queries against the two containers.
+
+:::tip
+📝 You can open the Data Explorer as a separate window via the toolbar.
+:::
 
 #### Simple Query
 
-#### Partition-Aware Queries
+First, let's issue queries in the _customer_ container where we have customer and sales order objects. Let's start with a few simple queries.
 
-#### Can I do JOINs?
+Therefor, go to the Data Explorer, open the _Items_ menu item of the _customer_ container and click on _New SQL Query_ in the toolbar.
 
-Multiple types in same partition key / collection...
+![Create new SQL query in Data Explorer](./images/cosmosdb/portal_dataexplorer_newquery.png "New SQL Query")
+
+In the newly created tab, enter the following SQL command and click _Execute_.
+
+```sql
+SELECT * from c
+```
+
+As you can see in the _Results_ tab, Cosmos DB returns a set of documents, that live in the _customer_ container. It returns a paged resultset, showing documents in batches of 100 items.
+
+![Results of a SQL query in Data Explorer](./images/cosmosdb/portal_dataexplorer_results.png "SQL Query resultset")
+
+Also, have a look at the _Query Stats_ tab. Here you can see
+
+There is a bunch of properties, that have a special meaning for documents stored via the SQL API, e.g. _id_, __rid_, __ts_ etc. All properties are described in the following table (excerpt from the official Comsos DB documentation):
+
+| Property       | Description                                                                                                                                                                                                                                                                               |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| _id_           | Required. It is a user settable property. It is the unique attribute that identifies the document, that is, no two documents share the same ID **within a logical partition**. Partition and ID uniquely identifies an item in the database. The id field must not exceed 255 characters. |
+| __rid_         | It is a system generated property. The resource ID (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement and navigation of the document resource.                                                     |
+| __ts_          | It is a system generated property. It specifies the last updated timestamp of the resource. The value is a timestamp.                                                                                                                                                                     |
+| __self_        | It is a system generated property. It is the unique addressable URI for the resource.                                                                                                                                                                                                     |
+| __etag_        | It is a system generated property that specifies the resource etag required for [optimistic concurrency control](https://docs.microsoft.com/en-us/azure/cosmos-db/database-transactions-optimistic-concurrency#optimistic-concurrency-control).                                           |
+| __attachments_ | It is a system generated property that specifies the addressable path for the attachments resource.                                                                                                                                                                                       |
+
+Let's execute another query to determine the amount of documents stored in the _customer collection.
+
+```sql
+SELECT COUNT(1) as numDocuments FROM c
+```
+
+The result should produce a JSON document like this:
+
+```json
+[
+  {
+    "numDocuments": 50584
+    }
+]
+```
+
+You can also query the value directly by adding the ```VALUE``` keyword:
+
+```sql
+SELECT VALUE(COUNT(1)) FROM c
+```
+
+Result:
+
+```json
+[
+  50584
+]
+```
+
+#### Indexing and Partition-Aware Queries
+
+In Azure Cosmos DB, documents are automatically indexed without having to define a schema or create any secondary indexes. Every document that is stored in Cosmos DB is converted to a tree object, so that you can reference each property via its path.
+
+![Tree respresentation in Cosmos DB](./images/cosmosdb/document_tree.png "Propery tree")
+
+E.g., you can access the _city_ property of the first address of a customer object via ```/addresses/0/city```.
+
+Adding an index can significantly reduce the query time and consumed RUs, but can also be expensive when adding or updating a document, because after each action, the index has to be recalculated/recreated for the document data. So, if you have write-intensive workloads, it better to tweak the indexing policy.
+
+Let's have a look at the _customer_ document. The indexing policy has been adjusted to NOT(!) index fields like _firstName_, _title_, _addresses_ etc. Adding or updating a customer consumes ~ 8.5 RUs. Using the standard indexing policy (which means all properties will be indexed), the same operation consumes ~13.2 RUs. That's about 150% "the price".
+
+:::tip Index Types
+📝 Cosmos DB supports several index types like range, spatial (for geo-data) and composite indexes. To learn more about when to use what kind of index, refer to the official documentation: <https://docs.microsoft.com/en-us/azure/cosmos-db/index-overview>.
+:::
+
+Select cross-partition:
+
+SELECT * FROM c where c.firstName = "Franklin"
+
+Select with partition:
+
+SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+
+Adjust index (when you know how to search):
+
+SELECT * FROM c where c.firstName = "Franklin"
+
+With index and partition
+
+SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+
+#### Can I do (relational) JOINs?
+
+Inter-document joins are supported, see . Multiple types in same partition key / collection...
 
 #### Aggerations
 
-E.g. number of line items per sales order or number of tags per product
+E.g. average price per category
 
-#### Indexing
+SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c group by c.categoryName
 
-What is it and why you should adjust the default settings?!
+Partition-aware:
+
+SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c where c.categoryId = "75BF1ACB-168D-469C-9AA3-1FD26BB4EA4C" group by c.categoryName
+
+TOP 10 Customers by Sales Order Count
+
+SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c WHERE c.type = 'customer' ORDER BY c.salesOrderCount DESC
 
 ## Use the Cosmos DB Change Feed
 
@@ -381,13 +479,11 @@ Update a customer in original collection and show result in "view" collection --
 
 ## Monitor Cosmos DB
 
-## Azure Samples
+## Azure Samples / Further Information
 
-_Add some links to Azure samples that might be of interest, e.g.:_
-
-Azure AppService code samples:
-
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
+- <https://aka.ms/PracticalCosmosDB>  - model a blog platform
+- <https://youtube.com/azurecosmosdb> - videos on CosmosDB
+- <https://devblogs.microsoft.com/cosmosdb/> - official CosmosDB blog
 
 ## Cleanup
 
