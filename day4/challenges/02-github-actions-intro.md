@@ -163,7 +163,9 @@ using the `set up a workflow yourself` option.
 Take a good look at the provided example as it has comments every line for you
 to orient yourself if the syntax for workflows is new to you.
 
-:::tip 📝
+:::tip
+
+📝
 If you are all new to `yaml` please take a look at the [further
 reading](#further-reading) section at the end of this page.
 :::
@@ -219,6 +221,8 @@ Some of the most used events are:
 - **release**: triggered when a new release tag was created on your repository.
 - **workflow_dispatch**: triggered when a user manually starts the workflow
   on the GitHub website.
+- **repository_dispatch**: to allow custom webhooks to trigger your workflow.
+- **schedule**: for recurring task to run on a schedule.
 
 You can configure your workflows to run when specific activity on GitHub
 happens, at a scheduled time, or when an event outside of GitHub occurs.
@@ -344,9 +348,33 @@ section.
 
 ## Run a static site generator in your workflow
 
-Then we will add our first README.md:
+Now we will combine what we have learned about Pages and Actions to create a
+workflow that takes the markdown files in our repository, generates a static
+html website and deploys it directly to our GitHub Page.
+
+Since our repository does not even have a minimal `README.md` file at the moment
+let's create one. GitHub should show you an `Add a README` button right on your
+projects landing page.
 
 ![Add README.md](./images/AddReadMe.png)
+
+Write you own `README` or copy over the sample we've provided here. This
+`README` will be the basis for your website content we will generate using
+[VuePress](https://vuepress.vuejs.org/).
+
+The sample shows some of the basics you can do with Markdown. Markdown uses a
+simple plain text system to be rendered to semantic HTML.
+
+:::tip
+
+📝
+Note that GitHub renders the `README.md` using [GitHub Flavored
+Markdown](https://github.github.com/gfm/) to display a landing page for your
+project whereas [VuePress](https://vuepress.vuejs.org/) uses
+[markdown-it](https://github.com/markdown-it/markdown-it) to render the Markdown
+into HTML.
+
+:::
 
 ````md
 # azdc-training.github.io
@@ -369,9 +397,41 @@ But I have to admit, tasks lists are my favorite:
 
 - [x] This is a complete item
 - [ ] This is an incomplete item
+
+Don't forget to add images:
+
+![wow](https://upload.wikimedia.org/wikipedia/en/5/5f/Original_Doge_meme.jpg)
+
+and [Links](https://en.wikipedia.org/wiki/Doge_(meme)
 ````
 
-![README](./images/ReadMeSample.png)
+### Setting up the workflow
+
+This time we will start to write a little more complex workflow that will do the
+following:
+
+- when pushing to the `main` branch
+- or when creating a Pull Request to the `main` branch
+
+- run a `build` job that
+
+  - checks out the source code
+  - sets up nodejs
+  - runs the `vuepress build` using `npx`
+  - stores the result as an artifact
+
+- and a `deploy` job
+
+  - that only runs on the `main` branch
+  - downloads the stored artifact
+  - deploys the content of the artifact on the `gh-pages` branch in the same repository
+
+:::warning
+
+To see that the deploy job only runs on the main branch commit the workflow file
+on a separate branch and open a new Pull Request.
+
+:::
 
 ```yml
 name: pages
@@ -423,12 +483,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
+Once we approve the Pull Request both jobs should execute and you should see a
+new branch named `gh-pages` on your repository.
+
+Your GitHub Page still serves the default `main` branch so for you to actually
+see the hosted website change you need to go to your repositories `Settings > Pages`
+site, change the branch used to serve the Page and save.
+
 ![change branches](./images/changebranchesinpages.png)
 
-![save branch](./images/changebranchessave.png)
+Now your website should update and show the content of the `README.md` rendered
+using VuePress.
 
 ![vuepress](./images/vuepressreadme.png)
 
+### What we've learned
+
+We've taken a tour of two important features of GitHub. We've seen GitHub
+Actions being able to build, test and deploy a simple website and having the
+ability to do workflow scripting using GitHubs own APIs.
+
+And we've discovered GitHub Pages and used them as a deployment target for our
+first CI/CD pipeline creating a static website.
+
 ### Further reading
 
-[Introduction to YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f)
+- [Introduction to YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f)
+- [VuePress](https://vuepress.vuejs.org/)
+- [Netlify CMS](https://www.netlifycms.org/)
