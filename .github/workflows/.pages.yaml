@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v2.1.5
         with:
-          node-version: '12'
+          node-version: "12"
 
       - run: npm init -y
       - run: npm install vuepress vuepress-plugin-code-copy
