@@ -333,15 +333,15 @@ Do the same with the _product.json_ file for the _product_ collection.
 
 Let's work with the data and execute some queries against the two containers.
 
-:::tip
-📝 You can open the Data Explorer as a separate window via the toolbar.
-:::
-
-#### Simple Query
+#### Simple queries
 
 First, let's issue queries in the _customer_ container where we have customer and sales order objects. Let's start with a few simple queries.
 
 Therefor, go to the Data Explorer, open the _Items_ menu item of the _customer_ container and click on _New SQL Query_ in the toolbar.
+
+:::tip
+📝 You can open the _Data Explorer_ as a separate window via the toolbar.
+:::
 
 ![Create new SQL query in Data Explorer](./images/cosmosdb/portal_dataexplorer_newquery.png "New SQL Query")
 
@@ -355,9 +355,11 @@ As you can see in the _Results_ tab, Cosmos DB returns a set of documents, that 
 
 ![Results of a SQL query in Data Explorer](./images/cosmosdb/portal_dataexplorer_results.png "SQL Query resultset")
 
-Also, have a look at the _Query Stats_ tab. Here you can see
+:::tip
+📝 Have a look at the _Query Stats_ tab! Here you can see what amount of RUs have been consumed by the query (and also other statistics).
+:::
 
-There is a bunch of properties, that have a special meaning for documents stored via the SQL API, e.g. _id_, __rid_, __ts_ etc. All properties are described in the following table (excerpt from the official Comsos DB documentation):
+As you can see in the result document, there is a bunch of properties, that have a special meaning for documents stored via the SQL API, e.g. _id_, __rid_, __ts_ etc. All properties are described in the following table (excerpt from the official Comsos DB documentation):
 
 | Property       | Description                                                                                                                                                                                                                                                                                                                                                                          |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -425,7 +427,7 @@ SELECT * FROM c where c.firstName = "Franklin"
 
 The problem here is, that we are querying for a property that is not indexed **and** the query itself is a _cross-partition_ query. Azure Cosmos DB needs to fan-out the query to all physical partitions of the database. If you have a lot of data in the collection (e.g. 100GB), the cost for such a query will be a lot more expensive, because the amount of physical partitions will grow depending on how much data is stored in a container and thus the number of queries that need to be managed under the hood by the db engine.
 
-Let's add the partition key to the query (means: Cosmos DB knows exactly where to send the query to).
+Let's add the partition key to the query (means: Cosmos DB knows exactly to which physical partition to send the query to.).
 
 ```SQL
 SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
@@ -464,9 +466,42 @@ With partition key:
 SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
+:::tip
+📝 You can see, even cross-partition queries profit from proper indexing when executing queries. Nevertheless, you should definitely avoid these kind of queries as the cost grows with the amount of data stored in a container.
+:::
+
 #### Can I do (relational) JOINs?
 
-Inter-document joins are supported, see . Multiple types in same partition key / collection...
+One of the most discussed topics is how to model relations in Cosmos DB. You already saw one technique how to query related data: embedding. With embedding, you simply add the related data to the document as shown in the _customer_ object with _addresses_. When you read a customer document, the addresses will automatically be fetched as well, because the information is part of the object itself.
+
+```json
+{
+    "id": "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161",
+    "type": "customer",
+    "customerId": "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161",
+    ...
+    ...
+    "creationDate": "2014-02-05T00:00:00",
+    "addresses": [
+        {
+            "addressLine1": "1796 Westbury Dr.",
+            "addressLine2": "",
+            "city": "Melton",
+            "state": "VIC",
+            "country": "AU",
+            "zipCode": "3337"
+        }
+    ]
+}
+```
+
+This is a good practice, if you have 1:few relationships. If you have unbounded collections/relations, this is an anti-pattern, because storing and querying such a document is really expensive (and: you have an upper limit regarding the document size, which is currently set to _2MB_.).
+
+Another technqiue is to place the related data in the same container, with the same partion key, so that you can query all data at once with a single command. Since all objects are placed in the same logical partition, commands consume the least amount of RUs possible and perform very well.
+
+Example:
+
+Consider having customers and orders objects in your application, that are placed in **separate containers**. To query a specific customer and all related orders, you would first issue a query that gets the customer and a second query that retrieves all order objects. In a relational database, you would just use one SQL query with a JOIN statement over these two tables.
 
 #### Aggerations
 
@@ -513,11 +548,16 @@ Update a customer in original collection and show result in "view" collection --
 
 ## Monitor Cosmos DB
 
+CosmosDB insights
+
 ## Azure Samples / Further Information
 
+- <https://docs.microsoft.com/en-us/azure/cosmos-db/modeling-data> - Modelling data
+- <https://docs.microsoft.com/en-us/azure/cosmos-db/sql-query-getting-started> - SQL API Queries
 - <https://aka.ms/PracticalCosmosDB>  - model a blog platform
 - <https://youtube.com/azurecosmosdb> - videos on CosmosDB
 - <https://devblogs.microsoft.com/cosmosdb/> - official CosmosDB blog
+- <https://docs.microsoft.com/en-us/azure/cosmos-db/concepts-limits> - Service limits
 
 ## Cleanup
 
