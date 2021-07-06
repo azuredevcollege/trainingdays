@@ -2,14 +2,15 @@ name: day2-scm-cleanup
 
 on:
   workflow_dispatch:
-    
+
 jobs:
   destroy:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
-    env: 
+    env:
       RG_DEV: rg-scm-devday2
       RG_TEST: rg-scm-testday2
-    
+
     steps:
       - name: Login via Azure CLI
         uses: azure/login@v1
