@@ -7,7 +7,7 @@
 In this challenge you will learn how to:
 
 - Import the Azure Developer College's repository into your organization
-- Set branch rules to require reviewers
+- Set branch rules to require reviewers and status checks
 
 
 ## Table Of Contents
@@ -18,7 +18,7 @@ In this challenge you will learn how to:
 
 ## Import the Azure Developer College's repository into your organization
 
-In the last challenges we have learned a lot about tGitHub features and Azure bicep. Now it's time to come back to the Azure Developer College's sample application and connect the dots. In the next challenges and breakout sessions we want to show you how to use a CI/CD workflow to deploy the sample application to Azure using GitHub Actions workflows. All Azure bicep and GitHub Actions workflows are already available in the Azure Developer College's repository. Don't worry you don't have to implement all parts to create a professional CI/CD workflow. We just need to import the repository into your GitHub organisation. So, let us start!
+In the last challenges we have learned a lot about GitHub features and Azure bicep. Now it's time to come back to the Azure Developer College's sample application and connect the dots. In the next challenges and breakout sessions we want to show you how to use a CI/CD workflow to deploy the sample application to Azure using GitHub Actions workflows. All Azure bicep and GitHub Actions workflows are already available in the Azure Developer College's repository. Don't worry you don't have to implement all parts to create a professional CI/CD workflow. We just need to import the repository into your GitHub organisation. So, let us start!
 
 Navigate to your GitHub organisation and go to the section _Repositories_ and create a new repository. In the _New repository_ form click the _Import a repository_ link.
 
@@ -69,4 +69,4 @@ Now we specify in _Protect matching branches_ which rules we want to apply.
 
 Take your time and have a look at the other protection rules. You can find more about them in the GitHub Documentation [here](https://docs.github.com/en/github/administering-a-repository/defining-the-mergeability-of-pull-requests/about-protected-branches).
 
-
+[◀ Previous challenge](./03-challenge-bicep.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./05-challenge-common-cicd.md)
