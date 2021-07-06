@@ -24,6 +24,30 @@ In this challenge you will learn how to:
 - [Create a simple express app](#create-a-simple-express-app)
 - [Deploy AppService](#deploy-appservice)## Azure Login Action
 
+## Getting started
+
+In this challenge we will learn how to securely access your Azure Subscriptions
+from GitHub, how to create infrastructure from code and how to deploy into the
+freshly created infrastructure.
+
+As in the previous challenges we will start with a new repository.
+
+Create one now.
+
+### Accessing Azure
+
+In your fresh repository create a new GitHub Actions workflow.
+
+We will use the `Azure/login` Action to give our deploy job permissions within
+our Azure Subscription. Take a look at the
+[documentation](https://github.com/Azure/login) for the `Azure/login` Action and
+read through the ["Configure deployment
+credentials"](https://github.com/Azure/login#configure-deployment-credentials)
+section.
+
+You can use the sample workflow provided below. Just commit it into your
+repository and watch the first execution fail.
+
 ```yaml
 # az-login.yaml
 name: Display Account Info
@@ -45,9 +69,31 @@ jobs:
         run: az account show -o yaml
 ```
 
-## Create Service Principal
+Out of the box your GitHub Pipeline will not have any credentials in place to
+log into your Azure Subscriptions. The first run of your pipeline should fail
+with an error message like this:
+
+```
+Error: Az CLI Login failed. Please check the credentials.
+```
+
+![Failed pipeline run due to missing credentials](./images/MissingCreds.png)
+
+## Programmatic access to Azure
+
+To allow GitHub to interact with our Azure Subscriptions we need to create a
+Service Account in our Azure Active Directory. This account represents not a
+user but a service, machine or digital agent. These accounts are called
+**Service Principal**.
+
+Having read the documentation on the `Azure/login` you might already have seen
+the following line to create a Service Principal for role based access control.
+
+Make sure to **change the name** for your service principal so you can identify it
+later on your Azure AD.
 
 ```shell
+# Change the name and set use your subscription-id to create a Service Principal.
 az ad sp create-for-rbac --name "{name}-github-actions-sp" --sdk-auth --role contributor --scopes /subscriptions/{subscription-id}
 ```
 
