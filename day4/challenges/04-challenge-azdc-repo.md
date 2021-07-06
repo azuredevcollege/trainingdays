@@ -1,6 +1,6 @@
 # Challenge 04: Import the Azure Developer College's repository and set branch rules
 
-⏲️ *Est. time to complete: 10 min.* ⏲️
+⏲️ *Est. time to complete: 15 min.* ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -13,6 +13,7 @@ In this challenge you will learn how to:
 ## Table Of Contents
 
 1. [Import the Azure Developer College's repository into your organization](#import-the-azure-developer-colleges-repository-into-your-organization)
+2. [Set branch rules](#set-branch-rules)
 
 
 ## Import the Azure Developer College's repository into your organization
@@ -36,5 +37,36 @@ After all values are set, we can start the import.
 
 ![GitHub import repository view](./images/gh-import-repo-view.png)
 
+It may take some time until the repository is imported. 
+
+After the import was successful, we can get started and take a look at the repository. 
+Don't worry if there are still some branches that want to be merged into the master. 
+When importing a repository, all branches are also imported. The college is continuously being developed in branches, 
+but we can ignore these branches. 
+
+## Set branch rules
+
+With GitHub branch rules you can protect your branches and enforce certain workflows, such as requiring an approving review 
+or passing status checks for all pull requests.
+
+We want to establish the following workflow for all our pull requests before changes can be merged into the master branch:
+  - A pull request needs at minimum one approving review
+  - All status checks must pass
+
+To set a branch rule for the master branch, navigate to the imported _trainingdays_ repository and go to the _Settings_ section. On the left navigation bar choose _Branches_. Under _Branch protection rules_ we can add a new protection rule.
+
+In the view _Branch protection rule_ we use *master* as _Branch name pattern_ as we want to apply the rule to the master branch only.
+Now we specify in _Protect matching branches_ which rules we want to apply. 
+- Set _Require pull request review before merging_ and require one approving reviewer
+- Set _Require status checks to pass before merging_
+
+:::tip
+📝 If you want to enforce all configured restrictions even for administrators. Set _Include administrators_.
+:::
+
+![GitHub branch protection rules](./images/gh-branch-protection-rules.png)
+
+
+Take your time and have a look at the other protection rules. You can find more about them in the GitHub Documentation [here](https://docs.github.com/en/github/administering-a-repository/defining-the-mergeability-of-pull-requests/about-protected-branches).
 
 
