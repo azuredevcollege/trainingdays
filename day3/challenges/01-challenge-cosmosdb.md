@@ -323,11 +323,11 @@ To add the datasets to Cosmos DB, go to the _Data Explorer_ and first open the _
 
 ![Upload data to a container in the data explorer](./images/cosmosdb/portal_dataexplorer_upload.png "Upload data")
 
-:::tip
-📝 Depending on your network speed and latency, this should take about 2-3 minutes.
-:::
-
 Do the same with the _product.json_ file for the _product_ collection.
+
+:::tip
+📝 Depending on your network speed and latency, the uploads should take about 2-4 minutes.
+:::
 
 ### Queries
 
@@ -359,14 +359,15 @@ Also, have a look at the _Query Stats_ tab. Here you can see
 
 There is a bunch of properties, that have a special meaning for documents stored via the SQL API, e.g. _id_, __rid_, __ts_ etc. All properties are described in the following table (excerpt from the official Comsos DB documentation):
 
-| Property       | Description                                                                                                                                                                                                                                                                               |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| _id_           | Required. It is a user settable property. It is the unique attribute that identifies the document, that is, no two documents share the same ID **within a logical partition**. Partition and ID uniquely identifies an item in the database. The id field must not exceed 255 characters. |
-| __rid_         | It is a system generated property. The resource ID (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement and navigation of the document resource.                                                     |
-| __ts_          | It is a system generated property. It specifies the last updated timestamp of the resource. The value is a timestamp.                                                                                                                                                                     |
-| __self_        | It is a system generated property. It is the unique addressable URI for the resource.                                                                                                                                                                                                     |
-| __etag_        | It is a system generated property that specifies the resource etag required for [optimistic concurrency control](https://docs.microsoft.com/en-us/azure/cosmos-db/database-transactions-optimistic-concurrency#optimistic-concurrency-control).                                           |
-| __attachments_ | It is a system generated property that specifies the addressable path for the attachments resource.                                                                                                                                                                                       |
+| Property       | Description                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| _id_           | Required. It is a user settable property. It is the unique attribute that identifies the document, that is, no two documents share the same ID **within a logical partition**. Partition and ID uniquely identifies an item in the database. The id field must not exceed 255 characters.                                                                                            |
+| __rid_         | It is a system generated property. The resource ID (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement and navigation of the document resource.                                                                                                                                                |
+| __ts_          | It is a system generated property. It specifies the last updated timestamp of the resource. The value is a timestamp.                                                                                                                                                                                                                                                                |
+| __self_        | It is a system generated property. It is the unique addressable URI for the resource.                                                                                                                                                                                                                                                                                                |
+| __etag_        | It is a system generated property that specifies the resource etag required for [optimistic concurrency control](https://docs.microsoft.com/en-us/azure/cosmos-db/database-transactions-optimistic-concurrency#optimistic-concurrency-control).                                                                                                                                      |
+| __attachments_ | It is a system generated property that specifies the addressable path for the attachments resource.                                                                                                                                                                                                                                                                                  |
+| _ttl_          | Azure Cosmos DB provides the ability to delete items automatically from a container after a certain time period. By default, you can set _time to live_ or _TTL_ at the container level and override the value on a per-item basis. Use the _ttl_ property for setting the per-item time period. More on that [here](https://docs.microsoft.com/en-us/azure/cosmos-db/time-to-live). |
 
 Let's execute another query to determine the amount of documents stored in the _customer collection.
 
@@ -411,24 +412,57 @@ Adding an index can significantly reduce the query time and consumed RUs, but ca
 Let's have a look at the _customer_ document. The indexing policy has been adjusted to NOT(!) index fields like _firstName_, _title_, _addresses_ etc. Adding or updating a customer consumes ~ 8.5 RUs. Using the standard indexing policy (which means all properties will be indexed), the same operation consumes ~13.2 RUs. That's about 150% "the price".
 
 :::tip Index Types
-📝 Cosmos DB supports several index types like range, spatial (for geo-data) and composite indexes. To learn more about when to use what kind of index, refer to the official documentation: <https://docs.microsoft.com/en-us/azure/cosmos-db/index-overview>.
+📝 Cosmos DB supports several index types like _range_, _spatial_ (for geo-data) and _composite indexes_. To learn more about when to use what kind of index, refer to the official documentation: <https://docs.microsoft.com/en-us/azure/cosmos-db/index-overview>.
 :::
 
-Select cross-partition:
+You saw that limiting the amount of properties that get indexed is beneficial for storing data. RU cost is significantly reduced. But it has impact on querying data. If you want to use the collection to give users of your application to search and query for any properties, it has the opposite impact. A lot of RUs will be consumed.
 
+Let's demonstrate that. Open a new query tab for the _customer_ container, issue the following queries and have a look at the _Query Stats_ tab to see the amount of RUs consumed.
+
+```SQL
 SELECT * FROM c where c.firstName = "Franklin"
+```
 
-Select with partition:
+The problem here is, that we are querying for a property that is not indexed **and** the query itself is a _cross-partition_ query. Azure Cosmos DB needs to fan-out the query to all physical partitions of the database. If you have a lot of data in the collection (e.g. 100GB), the cost for such a query will be a lot more expensive, because the amount of physical partitions will grow depending on how much data is stored in a container and thus the number of queries that need to be managed under the hood by the db engine.
 
+Let's add the partition key to the query (means: Cosmos DB knows exactly where to send the query to).
+
+```SQL
 SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+```
 
-Adjust index (when you know how to search):
+This is __much_ better! Now, let's adjust the indexing policy so that all properties will be indexed. Go to the _Scale & Settings_ menu item of the _customer_ container and set the indexing policy to:
 
+```json
+{
+    "indexingMode": "consistent",
+    "automatic": true,
+    "includedPaths": [
+        {
+            "path": "/*"
+        }
+    ],
+    "excludedPaths": [
+        {
+            "path": "/\"_etag\"/?"
+        }
+    ]
+}
+```
+
+Comsos DB needs a few minutes to index the container - now for a query intensive application. Exceute the queries again and have another look at the _Query Stats_. You'll see a huge improvement in terms of RU cost.
+
+Cross-partition:
+
+```sql
 SELECT * FROM c where c.firstName = "Franklin"
+```
 
-With index and partition
+With partition key:
 
+```sql
 SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+```
 
 #### Can I do (relational) JOINs?
 
