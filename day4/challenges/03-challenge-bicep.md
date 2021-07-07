@@ -15,14 +15,7 @@ In this challenge you will learn how to:
 
 ## Table of contents
 
-- [Deploy to Azure WebApp using GitHub Actions](#deploy-to-azure-webapp-using-github-actions)
-- [here is what you will learn 🎯](#here-is-what-you-will-learn-)
-- [Azure Login Action](#azure-login-action)
-- [Create Service Principal](#create-service-principal)
-- [Create Azure Bicep template](#create-azure-bicep-template)
-- [Create resource group and deploy Bicep template](#create-resource-group-and-deploy-bicep-template)
-- [Create a simple express app](#create-a-simple-express-app)
-- [Deploy AppService](#deploy-appservice)## Azure Login Action
+[[toc]]
 
 ## Getting started
 
@@ -79,23 +72,71 @@ Error: Az CLI Login failed. Please check the credentials.
 
 ![Failed pipeline run due to missing credentials](./images/MissingCreds.png)
 
-## Programmatic access to Azure
+### Programmatic access to Azure
 
 To allow GitHub to interact with our Azure Subscriptions we need to create a
 Service Account in our Azure Active Directory. This account represents not a
 user but a service, machine or digital agent. These accounts are called
-**Service Principal**.
+[**Service
+Principal**](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object).
 
 Having read the documentation on the `Azure/login` you might already have seen
 the following line to create a Service Principal for role based access control.
 
-Make sure to **change the name** for your service principal so you can identify it
-later on your Azure AD.
+Make sure to **change the name** for your service principal so you can identify
+it later on your Azure AD and scope the contributor access to your subscription
+by setting your subscription id for the scope.
 
 ```shell
 # Change the name and set use your subscription-id to create a Service Principal.
 az ad sp create-for-rbac --name "{name}-github-actions-sp" --sdk-auth --role contributor --scopes /subscriptions/{subscription-id}
 ```
+
+:::warning
+
+Take a **secure** note of the `json` response returned by this command. You can
+reuse these credentials throughout the day.
+
+:::
+
+:::tip
+
+📝 It is best practice to set the scope of the Service Principal based on the
+**principal of least privilege**. Here we scope to the entire subscription so you
+can use it to create resource groups programmatically and reuse it for the rest
+of todays challenges. On production accounts you will probably scope the access
+to a specific resource group.
+
+```shell
+--scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group}
+```
+
+Or even a specific resource:
+
+```shell
+--scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group}/providers/Microsoft.Web/sites/{app-name}
+```
+
+:::
+
+### Storing the secret
+
+Now that we have created the Service Principal and have acquired the necessary
+access credentials we can store them in our repository in GitHub.
+
+Navigate to your repositories `Settings > Secrets` page and add a new secret
+named `AZURE_CREDENTIALS`.
+
+::: v-pre
+
+Now we should be able to re-run our workflow file from the beginning. We
+referenced the GitHub secret using the `${{ secrets.AZURE_CREDENTIALS }}`
+expression in the `azure/login` action.
+
+:::
+
+Before continuing, make sure the workflow executes successfully and you can see
+your account information in the workflow output.
 
 ## Create Azure Bicep template
 

@@ -13,25 +13,7 @@ In this challenge you will learn:
 
 ## Table of contents
 
-1. [Github Actions in Action](#github-actions-in-action)
-   1. [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
-   2. [Table of contents](#table-of-contents)
-   3. [Getting started](#getting-started)
-   4. [A clean slate 🧻 - GitHub Pages](#a-clean-slate----github-pages)
-   5. [Create a new repository](#create-a-new-repository)
-      1. [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
-   6. [Action](#action)
-      1. [Workflows](#workflows)
-         1. [name - Workflow](#name---workflow)
-         2. [on - Event](#on---event)
-         3. [jobs](#jobs)
-         4. [steps](#steps)
-         5. [Actions](#actions)
-         6. [Context and expression syntax](#context-and-expression-syntax)
-      2. [Committing the workflow file](#committing-the-workflow-file)
-   7. [Run a static site generator in your workflow](#run-a-static-site-generator-in-your-workflow)
-2. [azdc-training.github.io](#azdc-traininggithubio)
-   1. [Further reading](#further-reading)
+[[toc]]
 
 ## Getting started
 
