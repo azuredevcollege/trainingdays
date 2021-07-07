@@ -140,6 +140,8 @@ your account information in the workflow output.
 
 ## Create Azure Bicep template
 
+![AppServicePlan and AppService](./images/appserviceandplan.png)
+
 ```bicep
 @description('The SKU of App Service Plan')
 param planSku string = 'B1'
