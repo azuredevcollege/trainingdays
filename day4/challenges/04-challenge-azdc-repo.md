@@ -79,9 +79,9 @@ Now, grant write permissions to the _AzDC-Team_ we created in [00-challenge-org]
 
 ## Summary
 
-With barnch protection rules we can protect branches and enforce certain workflows. In our case we have applied rules which enforce the following workflow:
-- whenever we want to make changes in the master branch, we have to create a new branch from the master first, as a direct push to the master branch is prevented.
-- once the work in the new branch is completed, we have to integrate it into the master branch via a pull request.
+With branch protection rules we can protect branches and enforce certain workflows. In our case we have applied rules which enforce the following workflow:
+- whenever we want to make changes in the master branch, we have to create a new branch from the master first, as a direct push to the master branch is prevented
+- once the work in the new branch is completed, we have to integrate it into the master branch via a pull request
 - the pull request must be verified by at least one reviewer
 - status checks must pass (we will create them in the next challenge)
 
