@@ -140,9 +140,21 @@ your account information in the workflow output.
 
 ## Create Azure Bicep template
 
-![AppServicePlan and AppService](./images/appserviceandplan.png)
+Let's see how we can prepare our infrastructure for our WebApp deployment.
+
+We will start pretty simple with just the minimal requirements to run an Azure
+App Service. That mean deploying an App Service Plan and the App Service itself.
+
+![Architecture of AppServicePlan and AppService](./images/appserviceandplan.png)
+
+To be able to expand and evolve our infrastructure together with our
+applications source code, we will use _infrastructure as code_ **IaC** to
+describe the desired state of our resources.
+
+Take a look a the following Azure Bicep template.
 
 ```bicep
+// infra.bicep
 @description('The SKU of App Service Plan')
 param planSku string = 'B1'
 
@@ -192,15 +204,54 @@ output webAppName string = webAppName
 output webAppEndpoint string = webapp.properties.defaultHostName
 ```
 
+This template describes just the two resources we will need for now.
+
+Note that we can configure this template using it's parameters `env`, `planSku`
+and `resourceTag` and that a deployment of this template will output two values
+`webAppName` and `webAppEndpoint`. We will use these in the following step, when
+we deploy the template to a resource group using our workflow in GitHub.
+
+Create a new `infra.bicep` file in your repository containing the bicep template
+above.
+
+If you want to try out the bicep template from your local machine before
+automating everything in GitHub you can do so by creating a new resource group.
+
+```shell
+az group create --name bicep-template-test --location westeurope
+```
+
+Then deploy the template to that resource group like this:
+
+```shell
+az deployment group create -g bicep-template-test --template-file infra.bicep
+```
+
+If you do this don't forget to delete the resource group when you are done.
+
 ## Create resource group and deploy Bicep template
 
+Let's go back to our GitHub Actions workflow from the beginning.
+
+We will start by renaming and extending the workflow file to do the following:
+
+- declare variables for all steps in the entire workflow
+- checkout the repository
+- log in to Azure
+- create a new resource group
+- deploy the bicep template to that group
+- print one of the template outputs in the workflow log
+
 ```yaml
+# deploy-infra.yaml
 name: Deploy Bicep template
 
 on:
   push:
 
 env:
+  # Change this if more then one user is deploying to
+  # the same subscription
   RESOURCE_GROUP_NAME: github-action-bicep-rg
   RESOURCE_GROUP_LOCATION: westeurope
   ENV_NAME: devd4
@@ -229,26 +280,87 @@ jobs:
         with:
           resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
           template: ./infra.bicep
+          # Here we pass the template parameters to the deployment
           parameters: >
             env=${{ env.ENV_NAME }}
 
       - name: Print WebApp endpoint
+        # Here we read the outputs of our previously deployed template
         run: echo https://${{ steps.infra.outputs.webAppEndpoint }}
 ```
 
+With the updated workflow file, the stored secret and the `infra.bicep` template
+in place, we should be able to run our first deployment directly into our Azure
+subscription.
+
+Check the workflow log. You should be able to find the `Print WebApp endpoint`
+step and within the link to your freshly deployed app service. You can also take
+a look at the Azure Portal to make sure the desired resources have been
+deployed.
+
+![WebApp endpoint being printed to the workflow log](./images/webappendpoint.png)
+
+:::tip
+
+📝 Should you run into any errors during the template deployment steps, you can
+check the resource groups deployment tab on the Azure Portal to get more
+information on what went wrong.
+
+![Resource group deployment error detail on Azure Portal](./images/deploymenterror.png)
+
+:::
+
 ## Create a simple express app
+
+You should have just seen the welcome page for the Azure App Service. Now we
+want to see how we could deploy our own application to the App Service.
+
+In this section we will use
+[express-generator](https://expressjs.com/en/starter/generator.html) to generate
+a small nodejs express app and make sure we can run it locally.
 
 ```shell
 npx express-generator ./ --view pug --git
 npm install
+npm start
+```
+
+This should start a small web application on
+[`localhost:3000`](http://localhost:3000). If everything checks out for you
+feel free to look around the app and don't forget to commit and push the app to
+your repository.
+
+```
 git add .
 git commit -m "Add simple express app"
 git push
 ```
 
+With a proper web application in place, we can now take a look at how to deploy
+this to the Azure App Service.
+
 ## Deploy AppService
 
+By now your repositories content should look something like this:
+
+![List of files your repository](./images/list-of-files.png)
+
+You should have a workflow file under `.github/workflows/`, an `infra.bicep` and
+various files and folders specific to the generated express app.
+
+Let's go to our workflow file and extend it by creating a second job named
+`deploy-webapp` and an output that we can reference for our `deploy-infra` job.
+
+The new `deploy-webapp` job runs the following steps:
+
+- check out the source code
+- setup nodejs 12
+- install the npm dependencies from the lockfile
+- login to Azure
+- deploy to the Azure App Service
+
 ```yaml
+#deploy.yaml
 name: CI
 
 on:
@@ -262,6 +374,7 @@ env:
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
+    # The output can be read from other jobs that depend on this one
     outputs:
       webAppName: ${{ steps.infra.outputs.webAppName }}
     steps:
@@ -311,6 +424,22 @@ jobs:
       - name: Deploy Azure WebApp
         uses: Azure/webapps-deploy@v2
         with:
+          # We reference the webAppName output of the deploy-infra job
           app-name: ${{ needs.deploy-infra.outputs.webAppName }}
           startup-command: npm start
 ```
+
+Once you've updated an started your workflow you should see both dependant jobs
+in graphical overview on your workflows summary page.
+
+![Deployment with two depending jobs running](./images/deploywebapp.png)
+
+Wait for the deployment to complete and access your webapps endpoint again from your browser.
+You should see the deployed express app running on your App Service.
+
+## Finish
+
+Congratulations! You've just deployed your first infrastructure and webapp using GitHub Actions.
+
+Feel free to make a few minor changes to the webapp and see how the updates to
+your repository trigger a new deployment updating the WebApp in place.
