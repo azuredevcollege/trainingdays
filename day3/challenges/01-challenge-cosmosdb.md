@@ -533,18 +533,30 @@ Describe Azure Function and ChangeFeed Processor
 
 ### Sample: Create a CustomerView collection for query optimized access to Customer data
 
+There are two options either to deploy the Cosmos DB via Portal or via _bicep_ file:
+
 ```shell
-az group create -n day3cosmos -l westeurope
-az deployment group create -g day3cosmos --template-file cosmos.bicep
+az group create -n rg-cosmos-challenge -l westeurope
+az deployment group create -g rg-cosmos-challenge --template-file cosmos.bicep
 ```
 
 Create collection "customerView" (partition key '/area' - see bicep file) + Az Function under day3/challenges/cosmosdb/func (Adjust connection string to db)
 
 Explain what is done in index.js
 
+```
+cd trainingdays\day3\challenges\cosmosdb\func> code .
+```
+
 Run function (let it process all changes --> then show collection content)
 
 Update a customer in original collection and show result in "view" collection --> they are in sync
+
+**Optional**:
+
+```
+az deployment group create -g rg-cosmos-challenge --template-file function.bicep
+```
 
 ## Monitor Cosmos DB
 
