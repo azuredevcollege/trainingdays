@@ -14,6 +14,7 @@ In this challenge you will learn how to:
 1. [Import the Azure Developer College's repository into your organization](#import-the-azure-developer-colleges-repository-into-your-organization)
 2. [Set branch rules](#set-branch-rules)
 3. [Manage access](#manage-access)
+4. [Summary](#summary)
 
 ## Import the Azure Developer College's repository into your organization
 
