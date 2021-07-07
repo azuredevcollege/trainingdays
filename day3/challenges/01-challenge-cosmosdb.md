@@ -535,6 +535,12 @@ Describe Azure Function and ChangeFeed Processor
 
 There are two options either to deploy the Cosmos DB via Portal or via _bicep_ file:
 
+| Option Name     | Value                                                 |
+| --------------- | ----------------------------------------------------- |
+| _Database id_   | Select the option _Use existing_ and select _AzDCdb_. |
+| _Container id_  | customerView                                          |
+| _Partition key_ | /area                                                 |
+
 ```shell
 az group create -n rg-cosmos-challenge -l westeurope
 az deployment group create -g rg-cosmos-challenge --template-file cosmos.bicep
@@ -543,12 +549,18 @@ az deployment group create -g rg-cosmos-challenge --template-file cosmos.bicep
 Create collection "customerView" (partition key '/area' - see bicep file) + Az Function under day3/challenges/cosmosdb/func (Adjust connection string to db)
 
 Explain what is done in index.js
+The function listens to every change on the customer collection and pushes customer documents that
+have Germany or France as their addresses to the customer view collection.
+
+The function
 
 ```
 cd trainingdays\day3\challenges\cosmosdb\func> code .
 ```
 
 Run function (let it process all changes --> then show collection content)
+There are two options to start listening to the change feed list.
+We set the StartFromBeginning CosmosDBTrigger attribute in your function.json to true: _"startFromBeginning": true"_ which lets the function listen to within the change feed list from the beginning on and not just from the point in time where the function starts to read and process all changes to the change feed.Restart the Azure function. It will now read and process all changes from the beginning. Setting StartFromBeginning to true will tell the Azure function to start reading changes from the beginning of the history of the collection instead of the current time.
 
 Update a customer in original collection and show result in "view" collection --> they are in sync
 
