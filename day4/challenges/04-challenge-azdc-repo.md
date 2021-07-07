@@ -9,12 +9,11 @@ In this challenge you will learn how to:
 - Import the Azure Developer College's repository into your organization
 - Set branch rules to require reviewers and status checks
 
-
 ## Table Of Contents
 
 1. [Import the Azure Developer College's repository into your organization](#import-the-azure-developer-colleges-repository-into-your-organization)
 2. [Set branch rules](#set-branch-rules)
-
+3. [Manage access](#manage-access)
 
 ## Import the Azure Developer College's repository into your organization
 
@@ -68,5 +67,24 @@ Now we specify in _Protect matching branches_ which rules we want to apply.
 
 
 Take your time and have a look at the other protection rules. You can find more about them in the GitHub Documentation [here](https://docs.github.com/en/github/administering-a-repository/defining-the-mergeability-of-pull-requests/about-protected-branches).
+
+## Manage access 
+
+At the moment you, as the repository's owner, are the only one who can contribute to the repository and manage issues and pull requests. 
+As we have applied branch rules, we need to give access to other people to allow them to manage issues and pull requests. 
+We have already seen how to manage access and grant write permissions to a repository in [00-challenge-org](./00-challenge-org.md#create-a-team-and-assign-permission). 
+
+Now, grant write permissions to the _AzDC-Team_ we created in [00-challenge-org](./00-challenge-org.md).
+
+## Summary
+
+With barnch protection rules we can protect branches and enforce certain workflows. In our case we have applied rules which enforce the following workflow:
+- whenever we want to make changes in the master branch, we have to create a new branch from the master first, as a direct push to the master branch is prevented.
+- once the work in the new branch is completed, we have to integrate it into the master branch via a pull request.
+- the pull request must be verified by at least one reviewer
+- status checks must pass (we will create them in the next challenge)
+
+In the next challenge we will see how we can request reviewers to approve a pull request and how we can add GitHub Actions workflows as status checks.
+
 
 [◀ Previous challenge](./03-challenge-bicep.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./05-challenge-common-cicd.md)
