@@ -13,8 +13,14 @@ In this challenge you will learn:
 
 ## Table of contents
 
-[[toc]]
-
+1. [Getting started](#getting-started)
+2. [A clean slate - GitHub Pages](#a-clean-slate----github-pages)
+3. [Create a new repository](#create-a-new-repository)
+4. [Create a Hello World on Github Pages](#create-a-hello-world-on-github-pages)
+5. [Action](#action)
+6. [What we've learned](#what-weve-learned)
+7. [Further reading](#further-reading)
+   
 ## Getting started
 
 In this challenge we will take a first look at GitHub Actions. GitHub Actions is
@@ -479,7 +485,7 @@ using VuePress.
 
 ![vuepress](./images/vuepressreadme.png)
 
-### What we've learned
+## What we've learned
 
 We've taken a tour of two important features of GitHub. We've seen GitHub
 Actions being able to build, test and deploy a simple website and having the
@@ -488,7 +494,7 @@ ability to do workflow scripting using GitHubs own APIs.
 And we've discovered GitHub Pages and used them as a deployment target for our
 first CI/CD pipeline creating a static website.
 
-### Further reading
+## Further reading
 
 - [Introduction to YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f)
 - [VuePress](https://vuepress.vuejs.org/)

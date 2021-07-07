@@ -15,7 +15,12 @@ In this challenge you will learn how to:
 
 ## Table of contents
 
-[[toc]]
+1. [Getting started](#getting-started)
+2. [Create Azure Bicep template](#create-azure-bicep-template)
+3. [Create resource group and deploy Bicep template](#create-resource-group-and-deploy-bicep-template)
+4. [Create a simple express app](#create-a-simple-express-app)
+5. [Deploy AppService](#deploy-appservice)
+6. [Finish](#finish)
 
 ## Getting started
 
