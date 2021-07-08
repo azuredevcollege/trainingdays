@@ -47,5 +47,20 @@ Later in the day we will create the following CI/CD workflows to deploy to a dev
 - scm-visitreportapi
 - scm-frontend
 
+In the SCM sample application's architecture no service within a bounded context communicates directly with services from another bounded context. Instead changes to a domain object within a bounded context are published through events, which describe that changes. Technically, a message bus is used to notify other bounded contexts about the changes. With this approach we can decouple the bounded contexts. Decoupling increases the availability of our application, because when a request is made to the API, not all services have to be addressed. A bounded context is informed of changes via the message bus. These changes can then be processed asynchronously and the own domain model can be updated. This approach is also used within a bounded context. The Resource Context for example, stores uploaded images in an Azure blob first an uses a message queue to notify the image resizer that a new image is available. The image resizer loads the image asynchronously in the background and creates a thumbnail of the image. 
 
+## Goal
 
+The goal of this challenge is to create a CI/CD workflow for shared Azure resources. Before we can deploy all other services we need to create a set of Azure resources, which are used by all services. We will create the necessary GitHub Actions workflow. Don't worry, the workflow is already created, but we need to take a few steps to activate it. This will also give us the opportunity to introduce GitHub environments and understand how a pull request workflow works, including status checks and reviewers. At the end of this challenge we will have created one Azure resource group for each environment (Dev, Test). Each resource group contains the shared components:
+
+- *Azure ApplicationInsights*, to get a contnuous monitoring of the application
+- *Azure ServiceBus*, used to transport events from one bounded context to another and for events within a bounded context
+- *AppServicePlan Windows*, for Windows based workloads
+- *AppServicePlan Linux*, for Linux base workloads
+- *Consumption based AppServicePlan Windows*, for Windows based Azure Functions
+- *Storage Account*, needed for Azure Functions
+- *Cosmos DB Account*, account for Cosmos DB
+
+## Plan your work
+
+First we want to reflect our work for this challenge in the project board. 
