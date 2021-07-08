@@ -561,22 +561,61 @@ Which APIs are supported...
 
 ### How to consume the Change Feed?
 
-Describe Azure Function and ChangeFeed Processor
+Describe Azure Function and [ChangeFeed Processor](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
 
 ### Sample: Create a CustomerView collection for query optimized access to Customer data
 
+There are two options either to deploy the Cosmos DB via Portal or via _bicep_ file:
+
+#### Option 1: Deployment via Portal
+
+See the description of how to deploy a Cosmos DB via Portal from above or use the existing one.
+Create a collection "customerView" using as partition key '/area'.
+
+| Option Name     | Value                                                 |
+| --------------- | ----------------------------------------------------- |
+| _Database id_   | Select the option _Use existing_ and select _AzDCdb_. |
+| _Container id_  | customerView                                          |
+| _Partition key_ | /area                                                 |
+
+#### Option 2: Deployment via Bicep File:
+
+We have prepared a bicep file for you which lets you automatically deploy the Cosmos DB.
+We will go deeper into bicep files in the DevOps part on day 4.
+
 ```shell
-az group create -n day3cosmos -l westeurope
-az deployment group create -g day3cosmos --template-file cosmos.bicep
+az group create -n rg-cosmos-challenge -l westeurope
+az deployment group create -g rg-cosmos-challenge --template-file cosmos.bicep
 ```
 
-Create collection "customerView" (partition key '/area' - see bicep file) + Az Function under day3/challenges/cosmosdb/func (Adjust connection string to db)
+#### Explanation: what is done in index.js
 
 Explain what is done in index.js
+The function listens to every change on the customer collection and pushes customer documents that
+have Germany or France as their addresses to the customerView collection.
+Adjust the connection string of the azure function under _day3/challenges/cosmosdb/func/local.settings.json_.
+
+```
+cd trainingdays\day3\challenges\cosmosdb\func> code .
+```
 
 Run function (let it process all changes --> then show collection content)
+There are two options to start listening to the change feed list.
+We set the StartFromBeginning CosmosDBTrigger attribute in your function.json to true: _"startFromBeginning": true"_ which lets the function listen to within the change feed list from the beginning on and not just from the point in time where the function starts to read and process all changes to the change feed.Restart the Azure function. It will now read and process all changes from the beginning. Setting StartFromBeginning to true will tell the Azure function to start reading changes from the beginning of the history of the collection instead of the current time.
 
 Update a customer in original collection and show result in "view" collection --> they are in sync
+
+![create a customer item](./images/cosmosdb/createcustomer.png)
+
+![Breakpoint](./images/cosmosdb/Breakpointchangefeed.png)
+
+![CustomerView](./images/cosmosdb/customerviewresult.png)
+
+**Optional**:
+
+```
+az deployment group create -g rg-cosmos-challenge --template-file function.bicep
+```
 
 ## Monitor Cosmos DB
 
