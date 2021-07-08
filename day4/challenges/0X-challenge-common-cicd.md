@@ -15,6 +15,8 @@ In this challenge you will learn how to:
 ## Table of content
 
 1. [Get started](#get-started)
+2. [Goal](#goal)
+3. [Plan your work](#plan-your-work)
 
 ## Get started
 
