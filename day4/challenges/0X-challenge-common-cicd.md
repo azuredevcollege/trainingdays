@@ -55,13 +55,13 @@ In the SCM sample application's architecture no service within a bounded context
 
 The goal of this challenge is to create a CI/CD workflow for shared Azure resources. Before we can deploy all other services we need to create a set of Azure resources, which are used by all services. We will create the necessary GitHub Actions workflow. Don't worry, the workflow is already created, but we need to take a few steps to activate it. This will also give us the opportunity to introduce GitHub environments and understand how a pull request workflow works, including status checks and reviewers. At the end of this challenge we will have created one Azure resource group for each environment (Dev, Test). Each resource group contains the shared components:
 
-- *Azure ApplicationInsights*, to get a contnuous monitoring of the application
-- *Azure ServiceBus*, used to transport events from one bounded context to another and for events within a bounded context
-- *AppServicePlan Windows*, for Windows based workloads
-- *AppServicePlan Linux*, for Linux base workloads
-- *Consumption based AppServicePlan Windows*, for Windows based Azure Functions
-- *Storage Account*, needed for Azure Functions
-- *Cosmos DB Account*, account for Cosmos DB
+- **Azure ApplicationInsights**, to get a contnuous monitoring of the application
+- **Azure ServiceBus**, used to transport events from one bounded context to another and for events within a bounded context
+- **AppServicePlan Windows**, for Windows based workloads
+- **AppServicePlan Linux**, for Linux base workloads
+- **Consumption based AppServicePlan Windows**, for Windows based Azure Functions
+- **Storage Account**, needed for Azure Functions
+- **Cosmos DB Account**, account for Cosmos DB
 
 ## Plan your work
 
