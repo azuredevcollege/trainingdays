@@ -507,14 +507,14 @@ In Comsos DB, just put the objects in the same container and with the same parti
 
 The current sample dataset `customer` is designed like that, so let's query for those objects.
 
-##### Query for a customer
+##### Query for a customer object
 
 ```sql
 SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
   and c.type = "customer"
 ```
 
-##### Query for the sales order of that customer
+##### Query for the sales orders of that customer
 
 ```sql
 SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
@@ -529,7 +529,7 @@ SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 
 #### Aggerations, Functions etc
 
-Of course, Cosmos DB also supports aggregations, functions, geo-spatial data, triggers, subqueries, and much more. To give you an impression, what is possible, here are a few queries you can try on the _product_ and _customer_ container.
+Of course, Cosmos DB also supports aggregations, functions, geo-spatial data handling, triggers, subqueries, and much more. To give you an impression, what is possible, here are a few queries you can try on the _product_ and _customer_ container.
 
 ##### Get the average price of products by category
 
@@ -542,6 +542,8 @@ SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c group by c.ca
 ```sql
 SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c where c.categoryId = "75BF1ACB-168D-469C-9AA3-1FD26BB4EA4C" group by c.categoryName
 ```
+
+Bottom line, Cosmos DB supports the ...
 
 ##### Get the top 10 customers by orders - _customer_ container
 
@@ -578,7 +580,7 @@ Create a collection "customerView" using as partition key '/area'.
 | _Container id_  | customerView                                          |
 | _Partition key_ | /area                                                 |
 
-#### Option 2: Deployment via Bicep File:
+#### Option 2: Deployment via Bicep File
 
 We have prepared a bicep file for you which lets you automatically deploy the Cosmos DB.
 We will go deeper into bicep files in the DevOps part on day 4.
