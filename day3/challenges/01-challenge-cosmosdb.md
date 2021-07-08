@@ -371,7 +371,7 @@ As you can see in the result document, there is a bunch of properties, that have
 | __attachments_ | It is a system generated property that specifies the addressable path for the attachments resource.                                                                                                                                                                                                                                                                                  |
 | _ttl_          | Azure Cosmos DB provides the ability to delete items automatically from a container after a certain time period. By default, you can set _time to live_ or _TTL_ at the container level and override the value on a per-item basis. Use the _ttl_ property for setting the per-item time period. More on that [here](https://docs.microsoft.com/en-us/azure/cosmos-db/time-to-live). |
 
-Let's execute another query to determine the amount of documents stored in the _customer collection.
+Let's execute another query to determine the amount of documents stored in the _customer_ collection.
 
 ```sql
 SELECT COUNT(1) as numDocuments FROM c
@@ -472,7 +472,7 @@ SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE
 
 #### Can I do (relational) JOINs?
 
-One of the most discussed topics is how to model relations in Cosmos DB. You already saw one technique how to query related data: embedding. With embedding, you simply add the related data to the document as shown in the _customer_ object with _addresses_. When you read a customer document, the addresses will automatically be fetched as well, because the information is part of the object itself.
+One of the most discussed topics is how to model relations in Cosmos DB. You already saw one technique how to query related data: embedding. With embedding, you simply add the related data to the document as shown in the _customer_ object with _addresses_. When you read a customer document, addresses will automatically be fetched as well, because the information is part of the object itself.
 
 ```json
 {
@@ -495,27 +495,59 @@ One of the most discussed topics is how to model relations in Cosmos DB. You alr
 }
 ```
 
-This is a good practice, if you have 1:few relationships. If you have unbounded collections/relations, this is an anti-pattern, because storing and querying such a document is really expensive (and: you have an upper limit regarding the document size, which is currently set to _2MB_.).
+This is a good practice, if you have 1:few relationships. If you have unbounded collections/relations, this is considered an anti-pattern, because storing and querying such a document is becoming expensive (also consider: you have an upper limit regarding the document size, which is currently set to _2MB_.).
 
 Another technqiue is to place the related data in the same container, with the same partion key, so that you can query all data at once with a single command. Since all objects are placed in the same logical partition, commands consume the least amount of RUs possible and perform very well.
 
-Example:
+##### Example
 
-Consider having customers and orders objects in your application, that are placed in **separate containers**. To query a specific customer and all related orders, you would first issue a query that gets the customer and a second query that retrieves all order objects. In a relational database, you would just use one SQL query with a JOIN statement over these two tables.
+Consider having customers and order objects in your application, that are placed in **separate containers**. To query a specific customer and all related orders, you would first issue a query that gets the customer and a second query that retrieves all order objects. In a relational database, you would just use one SQL query with a JOIN statement over these two tables.
 
-#### Aggerations
+In Comsos DB, just put the objects in the same container and with the same partition key and fetch both object types with one single query. No need to have costly JOINs or multiple select statements.
 
-E.g. average price per category
+The current sample dataset `customer` is designed like that, so let's query for those objects.
 
+##### Query for a customer
+
+```sql
+SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
+  and c.type = "customer"
+```
+
+##### Query for the sales order of that customer
+
+```sql
+SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
+  and c.type = "salesOrder"
+```
+
+##### Query for the customer, as well as for the sales orders in one statement
+
+```sql
+SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+```
+
+#### Aggerations, Functions etc
+
+Of course, Cosmos DB also supports aggregations, functions, geo-spatial data, triggers, subqueries, and much more. To give you an impression, what is possible, here are a few queries you can try on the _product_ and _customer_ container.
+
+##### Get the average price of products by category
+
+```sql
 SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c group by c.categoryName
+```
 
-Partition-aware:
+##### Get the average price of products by category - within a category
 
+```sql
 SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c where c.categoryId = "75BF1ACB-168D-469C-9AA3-1FD26BB4EA4C" group by c.categoryName
+```
 
-TOP 10 Customers by Sales Order Count
+##### Get the top 10 customers by orders - _customer_ container
 
+```sql
 SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c WHERE c.type = 'customer' ORDER BY c.salesOrderCount DESC
+```
 
 ## Use the Cosmos DB Change Feed
 
