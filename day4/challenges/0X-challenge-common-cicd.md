@@ -22,4 +22,30 @@ Now it's time to come back to the Azure Developer College's sample application. 
 
 In this challenge we want to start preparing for deployment in two environments. After changes were pushed to the master branch we deploy these changes to the development environment. A deployment to the testing environment is only triggered, after a manual approval. In addition, we want to check within a pull request whether all application components can also be built. These are the status checks of a pull request that we addressed in the last challenge.
 
+The following graphic illustrates the wortkflow:
+
 ![CI/CD Workflow](./images/ci-cd-flow.png)
+
+The sample application is composed of various microservices. Each service belongs to a bounded context of the SCM domain. A bounded context defines its own domain model and it comprises the business logic for a specific technical area of the application. The SCM sample application consist of the following bounded contexts:
+
+![Domain Driven Design bounded contexts](./images/ddd-bounded-contexts.png)
+
+Each context provides an API which the frontend accesses and presents the domain to the user:
+
+![Frontend accesses APIs](./images/frontend-apis.png)
+
+A bounded context should be the responsibility of a single team. However, a team can also be responsible for several bounded contexts, but it is not recommended that several teams work on one bounded context. 
+
+What does this mean for our CI/CD workflow?
+
+Regardless of the teams, we should be able to roll out each bounded context independently. This way we reduce the time for deployment, as the complete application does not have to be deployed. We can implement independent release cycles and roll out targeted features and fixes. However, this approach also supports the development of an application by several teams.
+
+Later in the day we will create the following CI/CD workflows to deploy to a development and testing environment:
+- scm-contactsapi
+- scm-resourcesapi
+- scm-searchapi
+- scm-visitreportapi
+- scm-frontend
+
+
+
