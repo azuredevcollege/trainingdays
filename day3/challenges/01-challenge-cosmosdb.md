@@ -570,9 +570,6 @@ The change feed in Azure Cosmos DB enables you to build efficient and scalable s
 
 For event computing and notifications the Azure Cosmos DB change feed can simplify scenarios that need to trigger a notification or send a call to an API based on a certain event. Regarding Real-time stream processing the Azure Cosmos DB change feed can be used for real-time stream processing for IoT or real-time analytics processing on operational data. Data movement means that you can also read from the change feed for real-time purposes e.g. update a cache, perform zero down-time migrations or implement an application-level data tiering for example storing "hot data" in Azure Cosmos DB and aging out "cold data" to other storage systems as an Azure Blob Storage. You can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
 
-
-![Overview Change Feed](./images/cosmosdb/changefeedvisual.png)
-
 ### What does it support?
 
 Which APIs are supported:
