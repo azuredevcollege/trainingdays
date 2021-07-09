@@ -146,6 +146,55 @@ git checkout cicd/common
 git checkout -b cicd/common
 ```
 
+There is already a Visual Studio Code workspace prepared which we can simple open with:
+
+```shell
+cd day4
+code ./day4.code-workspace
+```
+
+All known application components are already available in this workspace. In addition, we see two more directories:
+
+- **workflows**, here we find all prepared GitHub Actions workflow for the Azure Developer College
+- **infrastructure**, here we find all bicep modules to deploy the needed Azure infrastructure for all components
+
+Take your time and have a look at the structure of the bicep files. Under the directory `infrastructure` we can find all the bounded contexts of the sample application:
+
+- **common** > the shared Azure resource
+- **contacts** > Contact Context
+- **resources** > Resource Context
+- **search** > Search Context
+- **visitreports** > VisitREport Context
+- **frontend** > Frontend
+
+Each bounded context describes its own infrastructure using code. Azure Bicep modules are used to make the Bicep code more maintainable. The shared Azure resources are referenced using the Azure naming conventions, which you can find [here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
+
+Here is an example:
+
+The `ContactsAPI` is deployed to an Azure WebApp, which needs an AppService Plan. The AppService Plan is deployed as a shared Azure resource, which means that the plan is used by multiple bounded contexts (remember, three plans are provided, as described above). To reference the plan in the `Contact Context` bicep files we use the `existing` keyword and the Azure naming conventions:
+
+```bicep
+// naming conventions helps us to reference resource by name
+var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
+
+// we can reference existing Azure resources by their type and name with the `existing` keyword ...
+resource appplan 'Microsoft.Web/serverfarms@2020-12-01' existing = {
+  name: planWindowsName
+}
+
+// .. and use the symbolic name to access properties
+resource webapp 'Microsoft.Web/sites@2020-12-01' = {
+  name: webAppName
+  location: location
+  tags: resourceTag
+  properties: {
+    serverFarmId: appplan.id
+    ...
+```
+
+
+
+
 
 
 
