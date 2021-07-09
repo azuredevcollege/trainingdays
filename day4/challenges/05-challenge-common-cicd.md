@@ -17,6 +17,9 @@ In this challenge you will learn how to:
 1. [Get started](#get-started)
 2. [Goal](#goal)
 3. [Plan your work](#plan-your-work)
+4. [Create Dev and Test environments](#create-dev-and-test-environments)
+5. [Create a service principal and store the secret](#create-a-service-principal-and-store-the-secret)
+6. [Activate the CI/CD workflow](#activate-the-cicd-workflow)
 
 ## Get started
 
@@ -24,7 +27,7 @@ Now it's time to come back to the Azure Developer College's sample application. 
 
 In this challenge we want to start preparing for deployment in two environments. After changes were pushed to the master branch we deploy these changes to the development environment. A deployment to the testing environment is only triggered, after a manual approval. In addition, we want to check within a pull request whether all application components can also be built. These are the status checks of a pull request that we addressed in the last challenge.
 
-The following graphic illustrates the wortkflow:
+The following graphic illustrates the workflow:
 
 ![CI/CD Workflow](./images/ci-cd-flow.png)
 
@@ -49,7 +52,7 @@ Later in the day we will create the following CI/CD workflows to deploy to a dev
 - scm-visitreportapi
 - scm-frontend
 
-In the SCM sample application's architecture no service within a bounded context communicates directly with services from another bounded context. Instead changes to a domain object within a bounded context are published through events, which describe that changes. Technically, a message bus is used to notify other bounded contexts about the changes. With this approach we can decouple the bounded contexts. Decoupling increases the availability of our application, because when a request is made to the API, not all services have to be addressed. A bounded context is informed of changes via the message bus. These changes can then be processed asynchronously and the own domain model can be updated. This approach is also used within a bounded context. The Resource Context for example, stores uploaded images in an Azure blob first an uses a message queue to notify the image resizer that a new image is available. The image resizer loads the image asynchronously in the background and creates a thumbnail of the image. 
+In the SCM sample application's architecture no service within a bounded context communicates directly with services from another bounded context. Instead changes to a domain object within a bounded context are published through events, which describe that changes. Technically, a message bus is used to notify other bounded contexts about the changes. With this approach we can decouple the bounded contexts. Decoupling increases the availability of our application, because when a request is made to the API, not all services have to be addressed. A bounded context is informed of changes via the message bus. These changes can then be processed asynchronously and the own domain model can be updated. This approach is also used within a bounded context. The Resource Context for example, stores uploaded images in an Azure blob first and uses a message queue to notify the image resizer that a new image is available. The image resizer loads the image asynchronously in the background and creates a thumbnail of the image. 
 
 ## Goal
 
@@ -65,4 +68,89 @@ The goal of this challenge is to create a CI/CD workflow for shared Azure resour
 
 ## Plan your work
 
-First we want to reflect our work for this challenge in the project board. 
+First we want to reflect our work for this challenge on the project board. We have already created a _Note_ on our project board, which says:
+_Deploy the sample application_
+
+To describe the outstanding work for this challenge, we create the following issue in the imported trainingdays repository, set the label `azdc-challenge` and link it to the _Note_:
+
+```Text
+Deploy SCM shared Azure resources
+
+Prepare GitHub Actions workflow to deploy shared Azure resources to your Azure subscription.
+```
+
+:::tip
+📝 We have already seen how to link an issue to a note in [challenge-boards](./01-challenge-boards.md#working-with-cards)
+:::
+
+Now drag and drop the note to the _In progess_ column. 
+
+Your board should now look like that:
+
+![GitHub board overview 05](./images/gh-board-overview-05.png)
+
+## Create Dev and Test environments
+
+Now it's time to prepare GitHub environments to deploy the sample application to a _Dev_ and _Test_ stage.
+A GitHub environment can be configured with protection rules and secrets. A workflow job can reference environments to use environment's protection rules and secrets. 
+
+### Dev environment
+
+Let us first create the environment for the Development stage.
+
+Navigate to the imported _trainigdays_ repository in your organisation and go to the repositoy's settings. Open the _Environments_ view and create the environment `day4-scm-dev`.
+As we only want to deploy the master branch to that environment, we limit what branches can deploy to that environment.
+
+We need to add a secret, because we will create an Azure SQL Database, later. Therefore we need a password, which we can securely store as an environment secret and access it later in the GitHub Actions workflow.
+
+![GitHub Dev environment config](./images/gh-env-dev-config.png)
+
+### Test environment
+
+Create another environment for the Test stage and name it `scm-day4-test`. As we want a manual approval, before a deployment is executed to that environment, we set _Environment protection rules_. Activate `Required reviewers` and add a reviewer.
+
+:::tip
+📝 Add yourself as a Reviewer, otherwise you will have to wait until the selected reviewer approves the deployment request.
+:::
+
+![GitHub test environment config](./images/gh-env-test-config.png)
+
+## Create a service principal and store the secret
+
+To allow GitHub to interact with our Azure Subscriptions we need to create a
+Service principal in our Azure Active Directory. We have already learned in [challenge 03](./03-challenge-bicep.md#programmatic-access-to-azure) how we can programmatically access an Azure subscription.
+
+If you don't remember your Service Principal's credentials, just create a new one and copy the credentials from the output of the following command:
+
+```shell
+# Change the name and set use your subscription-id to create a Service Principal.
+az ad sp create-for-rbac --name "{name}-github-actions-sp" --sdk-auth --role contributor --scopes /subscriptions/{subscription-id}
+```
+
+Now we need to store the Service Principal's credentials.
+Navigate to the _trainingdays_ repository `Settings > Secrets`page and add a new repository
+secret named `AZURE_CREDENTIALS`.
+
+## Activate the CI/CD workflow
+
+Now we have everything prepared to active the CI/CD workflow.
+First, clone the repository, create a new branch named `cicd/common`and check it out:
+
+``` shell
+git clone <your repository>
+
+git branch cicd/common
+git checkout cicd/common
+
+# or
+git checkout -b cicd/common
+```
+
+
+
+
+
+
+
+
+
