@@ -557,13 +557,43 @@ Which APIs are supported...
 
 ### Why to use it?
 
+The Azure Cosmos DB change feed enables efficient processing of large datasets with a high volume of writes. Change feed also offers an alternative to querying an entire dataset to identify what has changed. This document focuses on common change feed design patterns, design tradeoffs, and change feed limitations.
+
+Azure Cosmos DB is well-suited for IoT, gaming, retail, and operational logging applications. A common design pattern in these applications is to use changes to the data to trigger additional actions. Examples of additional actions include:
+
+Triggering a notification or a call to an API, when an item is inserted or updated.
+Real-time stream processing for IoT or real-time analytics processing on operational data.
+Data movement such as synchronizing with a cache, a search engine, a data warehouse, or cold storage.
+The change feed in Azure Cosmos DB enables you to build efficient and scalable solutions for each of these patterns, as shown in the following image:
+
+![Overview](./images/cosmosdb/changefeedoverview.png)
+
+For event computing and notifications the Azure Cosmos DB change feed can simplify scenarios that need to trigger a notification or send a call to an API based on a certain event. Regarding Real-time stream processing the Azure Cosmos DB change feed can be used for real-time stream processing for IoT or real-time analytics processing on operational data. Data movement means that you can also read from the change feed for real-time purposes e.g. update a cache, perform zero down-time migrations or implement an application-level data tiering for example storing "hot data" in Azure Cosmos DB and aging out "cold data" to other storage systems as an Azure Blob Storage. You can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
+
+
 ![Overview Change Feed](./images/cosmosdb/changefeedvisual.png)
 
 ### What does it support?
 
+Which APIs are supported:
+- SQL API
+- MongoDB API
+- Cassandra API
+- Gremlin API
+
 ### How to consume the Change Feed?
 
-Describe Azure Function and [ChangeFeed Processor](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
+In this challenge we will use the Azure Function which provides the simplest way to connect to the change feed. 
+You can create small reactive Azure Functions that will be automatically triggered on each new event in your Azure Cosmos container's change feed.
+
+As this is an introduction we will focus on the Azure Function sample. 
+If you are interested to read about the other options as the ChangeFeed Processor, you get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
+
+![Azure Function](./images/cosmosdb/functions.png)
+
+In the following sample we will create an Item in the *Customer Container* triggering a message to the change feed consumer e.g. in this case the Azure Function. In this sample the consumer replicates the message or the Item from the change feed to another container called *CustomerView*. 
+
+![Overview Change Feed](./images/cosmosdb/changefeedvisual.png)
 
 ### Sample: Create a CustomerView collection for query optimized access to Customer data
 
@@ -586,8 +616,7 @@ We have prepared a bicep file for you which lets you automatically deploy the Co
 We will go deeper into bicep files in the DevOps part on day 4.
 
 ```shell
-az group create -n rg-cosmos-challenge -l westeurope
-az deployment group create -g rg-cosmos-challenge --template-file cosmos.bicep
+az deployment group create -g rg-cosmos-challenge --template-file addcustomerviewcontainer.bicep
 ```
 
 #### Explanation: what is done in index.js
