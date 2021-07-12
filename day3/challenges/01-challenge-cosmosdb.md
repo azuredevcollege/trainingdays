@@ -571,6 +571,7 @@ For event computing and notifications the Azure Cosmos DB change feed can simpli
 ### What does it support?
 
 Which APIs are supported:
+
 - SQL API
 - MongoDB API
 - Cassandra API
@@ -578,26 +579,26 @@ Which APIs are supported:
 
 ### How to consume the Change Feed?
 
-In this challenge we will use the Azure Function which provides the simplest way to connect to the change feed. 
+In this challenge we will use the Azure Function which provides the simplest way to connect to the change feed.
 You can create small reactive Azure Functions that will be automatically triggered on each new event in your Azure Cosmos container's change feed.
 
-As this is an introduction we will focus on the Azure Function sample. 
+As this is an introduction we will focus on the Azure Function sample.
 If you are interested to read about the other options as the ChangeFeed Processor, you get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
 
 ![Azure Function](./images/cosmosdb/functions.png)
 
-In the following sample we will create an Item in the *Customer Container* triggering a message to the change feed consumer e.g. in this case the Azure Function. In this sample the consumer replicates the message or the Item from the change feed to another container called *CustomerView*. 
+In the following sample we will create an Item in the _Customer Container_ triggering a message to the change feed consumer e.g. in this case the Azure Function. In this sample the consumer replicates the message or the Item from the change feed to another container called `customerView`.
 
 ![Overview Change Feed](./images/cosmosdb/changefeedvisual.png)
 
-### Sample: Create a CustomerView collection for query optimized access to Customer data
+### Sample: Create a customerView collection for query optimized access to Customer data
 
 There are two options either to deploy the Cosmos DB via Portal or via _bicep_ file:
 
 #### Option 1: Deployment via Portal
 
 See the description of how to deploy a Cosmos DB via Portal from above or use the existing one.
-Create a collection "customerView" using as partition key '/area'.
+Create a collection `customerView` using as partition key '/area'.
 
 | Option Name     | Value                                                 |
 | --------------- | ----------------------------------------------------- |
@@ -607,18 +608,19 @@ Create a collection "customerView" using as partition key '/area'.
 
 #### Option 2: Deployment via Bicep File
 
-We have prepared a bicep file for you which lets you automatically deploy the Cosmos DB customer view container.
-We will go deeper into bicep files in the DevOps part on day 4.
+We have prepared a bicep file in the *cosmosdb folder* for you which lets you automatically deploy the Cosmos DB `customerView` container.
+We will go deeper into bicep files in the DevOps part on day4.
 Go ahead and open up your cloud shell and use the following command:
 
 ```shell
+cd trainingdays\day3\challenges\cosmosdb
 az deployment group create -g rg-cosmos-challenge --template-file addcustomerviewcontainer.bicep
 ```
 
 #### Explanation: what is done in index.js
 
 The function listens to every change on the customer collection and pushes customer documents that
-have Germany or France as their addresses to the customerView collection. 
+have Germany or France as their addresses to the `customerView` collection.
 Go ahead and open up your visual studio code in the function folder using the following folder path:
 
 ```shell
@@ -637,7 +639,7 @@ val.type == 'customer' &&
 
 Let's go ahead and start the function using the debug mode.
 
-Then we go into the portal and insert a *Customer Item* into the *Customer Container*:
+Then we go into the portal and insert a *customer item* into the *Customer Container*:
 
 ```json
 {
@@ -667,24 +669,27 @@ It should look like this:
 
 ![create a customer item](./images/cosmosdb/createcustomer.png)
 
-Once you created the *Customer Item* the Azure Function gets triggered and we will see the item in the break point which we set earlier:
+Once you created the *customer item* the Azure Function gets triggered and we will see the item in the break point which we set earlier:
 
 ![Breakpoint](./images/cosmosdb/Breakpointchangefeed.png)
 
-As final result we will see the *Customer Item* as the country is France in the *Customer View Container*:
+As final result we will see the *customer item* as the country is France in the `customerView` Container:
 
 ![CustomerView](./images/cosmosdb/customerviewresult.png)
 
-What have we learned so far?
-We either added a *Customer View* Container via Portal or via bicep file. In addition we ran the Azure Function Code (locally) to listen to every change on the customer collection where we added a *french Customer Item* and replicated the *Customer Item* to the customerView collection. 
+### What have we learned so far?
+
+We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track to the changes which occured in the CosmosDB. And in the handson part we either added a `customerView` Container via Portal or via bicep file. In addition we ran the Azure Function Code (locally) to listen to every change on the customer collection where we added a french *customer item* and replicated the *customer item* to the `customerView` collection.
 
 **Optional**:
 
-If you want more you can deploy the third bicep file using this command and use day2 as your *cheat sheet* of how to deploy the code towards the Azure Function Service.
+If you want more, you can deploy the third bicep *function.bicep* file using this command and use day2 as your *cheat sheet* of how to deploy the code towards the Azure Function Service.
 
 ```
 az deployment group create -g rg-cosmos-challenge --template-file function.bicep
 ```
+
+For using Cosmos DB in production monitoring is essential which will be focused on in the next section.
 
 ## Monitor Cosmos DB
 
