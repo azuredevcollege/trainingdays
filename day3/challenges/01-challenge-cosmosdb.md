@@ -565,13 +565,11 @@ Azure Cosmos DB is well-suited for IoT, gaming, retail, and operational logging
 applications. A common design pattern in these applications is to use changes to
 the data to trigger additional actions. Examples of additional actions include:
 
-Triggering a notification or a call to an API, when an item is inserted or
+- Triggering a notification or a call to an API, when an item is inserted or
 updated.
-
-Real-time stream processing for IoT or real-time analytics processing
+- Real-time stream processing for IoT or real-time analytics processing
 on operational data.
-
-Data movement such as synchronizing with a cache, a search engine, a data
+- Data movement such as synchronizing with a cache, a search engine, a data
 warehouse, or cold storage.
 
 The change feed in Azure Cosmos DB enables you to build efficient and scalable
@@ -594,12 +592,16 @@ as an Azure Blob Storage. You can read more details
 
 ### What does it support?
 
-Which APIs are supported:
+The following APIs are supported:
 
 - SQL API
 - MongoDB API
 - Cassandra API
 - Gremlin API
+
+What's not supported:
+
+- ...
 
 ### How to consume the Change Feed?
 
@@ -622,15 +624,17 @@ the change feed to another container called `customerView`.
 
 ![Overview Change Feed with multiple consumers](./images/cosmosdb/changefeedvisual.png)
 
-### Sample: Create a customerView collection for query optimized access to Customer data
+### Sample: Create a customerView collection for query-optimized access to Customer data
 
-There are two options either to deploy the Cosmos DB via Portal or via _bicep_
-template:
+Explain the use case...
+
+There are two options either to deploy the Cosmos DB via the Azure Portal or via a _bicep_
+template.
 
 #### Option 1: Deployment via Portal
 
 See the description of how to deploy a Cosmos DB via Portal from above or use the existing one.
-Create a collection `customerView` using as partition key '/area'.
+Create a collection `customerView` using as partition key `/area`.
 
 | Option Name     | Value                                                 |
 | --------------- | ----------------------------------------------------- |
@@ -643,9 +647,9 @@ Create a collection `customerView` using as partition key '/area'.
 We have prepared a bicep file in the `cosmosdb` folder for you which lets you
 automatically deploy the Cosmos DB `customerView` container to the existing
 Cosmos DB Account. We will go deeper into bicep files in the DevOps part on
-day4.
+_Day 4_.
 
-Go ahead and open up your cloud shell and use the following command:
+Go ahead and open up a commandline window and use the following command:
 
 ```shell
 cd trainingdays/day3/challenges/cosmosdb
@@ -655,7 +659,7 @@ az deployment group create -g rg-cosmos-challenge --template-file addcustomervie
 #### Explanation: what is done in index.js
 
 The function listens to every change on the `customer` collection and pushes
-customer documents that have Germany or France as their country code in their
+customer documents that have `Germany / DE` or `France / FR` as country code in their
 address to the `customerView` collection. Go ahead and open up your Visual
 Studio Code in the function folder using the following folder path:
 
@@ -664,20 +668,22 @@ cd trainingdays/day3/challenges/cosmosdb/func
 code .
 ```
 
-Adjust the connection string of the azure function under
+Adjust the connection string of the Azure Function under
 _day3/challenges/cosmosdb/func/local.settings.json_.
 
-Take a look at the function.json file in the CosmosTrigger1 folder. We set the
-StartFromBeginning CosmosDBTrigger attribute in your function.json to true:
-_"startFromBeginning": true"_ which lets the function listen to within the
-change feed list from the beginning on and not just from the point in time where
-the function starts, to read and process all changes to the change feed. Restart
-the Azure function. It will now read and process all changes from the beginning.
-Setting StartFromBeginning to true will tell the Azure function to start reading
-changes from the beginning of the history of the collection instead of the
-current time.
+Take a look at the `function.json` file in the `CosmosTrigger1` folder. We set the
+`StartFromBeginning` CosmosDBTrigger attribute in your function.json to true:
 
-We open up the index.js file and set a break point next to line 6:
+```json
+startFromBeginning": true
+```
+
+This lets the function read the
+change feed entries **from the beginning**  and not just from the point in time where
+the function starts - this gives you access to the history of your collection. Restart
+the function. It will now read and process all changes from the beginning.
+
+Now, open up the `index.js` file and set a break point next to line 6:
 
 ```javascript
 val.type == 'customer' &&
@@ -702,12 +708,7 @@ Then we go into the portal and insert an _item_ into the `customer` Container:
       "country": "FR",
       "zipCode": "3337"
     }
-  ],
-  "_rid": "9Sc9APZTq7QIAAAAAAAAAA==",
-  "_self": "dbs/9Sc9AA==/colls/9Sc9APZTq7Q=/docs/9Sc9APZTq7QIAAAAAAAAAA==/",
-  "_etag": "\"9b005fe9-0000-0d00-0000-60e866950000\"",
-  "_attachments": "attachments/",
-  "_ts": 1625843349
+  ]
 }
 ```
 
@@ -715,38 +716,32 @@ It should look like this:
 
 ![create a customer item](./images/cosmosdb/createcustomer.png)
 
-Once you created the _item_, the Azure Function gets triggered and we
+Once you create the _item_, the Azure Function gets triggered and we
 will see the item in the break point which we set earlier:
 
-![Breakpoint](./images/cosmosdb/Breakpointchangefeed.png)
+![Breakpoint](./images/cosmosdb/breakpointchangefeed.png)
 
-As final result we will see the _item_ as the country code matches France (FR)
-in the `customerView` Container:
+As final result we will see the _item_ - as the country code matches France (FR) - in the `customerView` Container:
 
 ![CustomerView](./images/cosmosdb/customerviewresult.png)
 
 ### What have we learned so far?
 
-We learned about the change feed, when to use it and what APIs are supported.
-Further Azure Function bindings are a simple way to track to the changes which
-occurred in the CosmosDB. And in the hands-on part, we either added a
-`customerView` Container via Portal or via bicep file. In addition we ran the
-Azure Function Code (locally) to listen to every change on the customer
+We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which
+occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` Container via Portal or via bicep file. In addition we ran the Azure Function Code (locally) to listen to every change on the customer
 collection where we added a french _customer item_ and replicated the _customer
 item_ to the `customerView` collection.
 
 **Optional**:
 
-If you want to do more, you can deploy the third bicep _function.bicep_ file using
-this command and use day2 as your _cheat sheet_ of how to deploy the code
+If you want to do more, you can deploy the third bicep _function.bicep_ file using this command and use _Day 2_ as your _cheat sheet_ of how to deploy the code
 towards the Azure Function Service.
 
 ```shell
 az deployment group create -g rg-cosmos-challenge --template-file function.bicep
 ```
 
-For using Cosmos DB in production monitoring is essential, which will be focused
-on in the next section.
+For using Cosmos DB in production monitoring is essential, which will be focused on in the next section.
 
 ## Monitor Cosmos DB
 
