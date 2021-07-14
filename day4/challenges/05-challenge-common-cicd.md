@@ -20,6 +20,7 @@ In this challenge you will learn how to:
 4. [Create Dev and Test environments](#create-dev-and-test-environments)
 5. [Create a service principal and store the secret](#create-a-service-principal-and-store-the-secret)
 6. [Activate the CI/CD workflow](#activate-the-cicd-workflow)
+7. [Summary](#summary)
 
 ## Get started
 
@@ -158,7 +159,9 @@ All known application components are already available in this workspace. In add
 - **workflows**, here we find all prepared GitHub Actions workflow for the Azure Developer College
 - **infrastructure**, here we find all bicep modules to deploy the needed Azure infrastructure for all components
 
-Take your time and have a look at the structure of the bicep files. Under the directory `infrastructure` we can find all the bounded contexts of the sample application:
+### Infrastructure as code
+
+Take your time and have a look at the structure of the bicep files. Under the directory `infrastructure` we can find all bounded contexts of the sample application:
 
 - **common** > the shared Azure resource
 - **contacts** > Contact Context
@@ -167,7 +170,15 @@ Take your time and have a look at the structure of the bicep files. Under the di
 - **visitreports** > VisitREport Context
 - **frontend** > Frontend
 
-Each bounded context describes its own infrastructure using code. Azure Bicep modules are used to make the Bicep code more maintainable. The shared Azure resources are referenced using the Azure naming conventions, which you can find [here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
+Each bounded context describes its own infrastructure using code. Azure Bicep modules are used to make the Bicep code more maintainable.
+
+In this challenge we will deploy the shared Azure resources used by all bounded contexts. You can find the needed Bicep code in the workspace folder `infrastructure/common`. There is one main Bicep module `commonmain.bicep` which references other Bicep modules to decribe the infrastructure. 
+
+![Common Bicep modules](./images/common-bicep-module.png)
+
+
+After the shared Azure resources are deployed, each bounded context references these resources using the Azure naming convention and the Bicep `existing` keyword.
+You can find the naming conventions here [here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
 
 Here is an example:
 
@@ -175,6 +186,7 @@ The `ContactsAPI` is deployed to an Azure WebApp, which needs an AppService Plan
 
 ```bicep
 // naming conventions helps us to reference resource by name
+// the resource group's id is joined as a unique string to make the resource name unique
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 
 // we can reference existing Azure resources by their type and name with the `existing` keyword ...
@@ -188,16 +200,144 @@ resource webapp 'Microsoft.Web/sites@2020-12-01' = {
   location: location
   tags: resourceTag
   properties: {
+    // use the plan's symbolic name
     serverFarmId: appplan.id
     ...
 ```
 
+You can find the code for the `Contact Context`in the workspace folder `infrastructure/contacts`. Again, there is a main module that references other modules to produce maintainable code.
+
+### GitHub Actions workflows
+
+Now it's time to have a look at the already prepared GitHub Actions workflows for Day4. You can find all workflows in the workspace folder `workflows`. 
+Today we focus on all workflows with the prefix `day4-`. First, we will prepare the workflow for the shared Azure resources. Open the workflow `workflows/day4-scm-common.yml`. This workflow, like all others, is triggered when a pull request is opened or changes were pushed to the master branch. In addition, filters are applied to individual files:
+
+```yaml
+name: day4-scm-common
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day4/apps/infrastructure/bicep/common/**
+      - .github/workflows/day4-scm-common.yml
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day4/apps/infrastructure/bicep/common/**
+      - .github/workflows/day4-scm-common.yml
+
+  workflow_dispatch:
+```
+
+With the trigger `workflow_dispatch`it is possible to trigger the workflow manually.
+
+The workflows consists of three jobs:
+
+```yaml
+jobs:
+  build: # to build all needed artifacts
+  ...
+  deploy-to-dev:
+    environment: day4-scm-dev # deploy to dev environment
+  ...
+  delpoy-to-test:
+    environment: day4-scm-test # deploy to test environment
+```
+
+As you see, first all artifacts, needed for the deployment, are created and validated. With the `build`job we can make sure that everything can be created, even if
+we only try to transpile Bicep code to Azure ARM templates. 
+
+If everything can be created the next job `deploy-to-dev`is executed, but only if the trigger event is of type `push`or `workflow_dispatch`. This means, that the deployment will only be executed, if changes were pushed to the master branch or the workflows is triggered manually. Within a pull request, only the step `build` is executed to get immediately feedback if everything can be built or not. If the build fails, the status check of a pull request would also fail and the pull request cannot be merged.
+
+An that is exactly what we want to achieve. Remember the goal of this challenge:
+
+![CI/CD Workflow](./images/ci-cd-flow.png)
 
 
+### Prepare the workflow and create a pull request
 
+Now it's time to prepare the workflow which rolls out the shared Azure resources for the Azure Developer College's sample application.
+We have already cloned the repository and created a new branch `cicd/common`. 
 
+Open the workflow `day4-scm-common.yml` and replace the organisation name in each job condition with your organisation's name:
 
+```yaml
+jobs:
+  build:
+    if: github.repository == '<your organisation name>/trainingdays'
+  ...
+  deploy-to-dev:
+    if: (github.repository == '<your organisation name>/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+  ...
+  delpoy-to-test:
+    if: (github.repository == '<your organisation name>/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+```
 
+Save the file, commit your changes and push the branch to the reomote repository:
+
+```Shell
+git add .
+git commit -m "changed org name in common workflow"
+git push --set-upstream origin cicd/common
+```
+
+Now, create a pull request to merge the branch `cicd/common` into the `master` branch.
+Set `Deploy shared Azure resources` as title and close the issue `Deploy SCM shared Azure resources` using the keyword `closes #<issue id>` in the pull requests body.
+
+:::tip
+📝 If you want, you can add a reviewer. But since you as the Administrator are excluded from the branch rules, you can merge the pull request. 
+:::
+
+Wait a few seconds, until the status checks are triggered: 
+
+![GitHub status checks](./images/gh-action-status-checks.png)
+
+If everything is configured correctly, the build job of the workflow should be successful:
+
+![GitHub status check successful](./images/gh-action-status-successful.png)
+
+Now merge the pull request and navigate to your repository' action page. You should see that the `day4-scm-common` workflow is triggered after a few seconds.
+
+![GitHub day4-scm-common triggered](./images/gh-day4-common-triggered.png)
+
+In the details page of the running workflow you see all jobs. 
+
+![GitHub Day4 common workflow details](./images/gh-day4-common-details.png)
+
+After the `dev` environment is deployed, go to the Azure portal an checkout the newly creates resource group and resources.
+The workflow is now in the `waiting `state, because a reviewer must approve the deployment to the `test` environment:
+
+![GitHub Day4 common waiting](./images/gh-day4-common-waiting.png)
+
+Review the pending deployment, leave a comment and `Approve and deploy`:
+
+![GitHUb day4 approve](./images/gh-day4-common-approve.png)
+
+Now the test environment will be deployed. After the deployment is finished, we have another resource group with all shared Azure resource in the test environment.
+
+Take your time and investigate the create resources. 
+
+Check your Project Board, it should look something like this:
+
+![GitHub Board overview 06](./images/gh-board-overview-06.png)
+
+## Summary
+
+We have seen how to create a CI/CD workflow where a reviewer has to approve a deployment in the test environment. This workflow can also be used to validate all artefacts within a pull request. This helps us avoid build breaks. Of course, there would be many other scenarios that can be implemented with the GitHub Actions workflow. Maybe it is a good idea to deploy directly to a development environment within a pull request to even validate the deployment before pushing changes to the master branch.
+
+We have so far only provided the shared Azure resources for the Azure Developer College's sample application. There is still some work to be done. We'll move straight into the breakout session where we'll deploy all the rest of the bounded contexts. We proceed step by step in the same way as in this Challenge:
+
+- create an issue to plan and track your work
+- pull changes from the master branch
+- create a feature branch `cicd/all`
+- prepare all workflows
+- commit and push changes
+- create a pull request
+- merge the pull request
+- wait until everything is deployed
 
 
 
