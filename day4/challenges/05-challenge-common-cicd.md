@@ -178,14 +178,14 @@ In this challenge we will deploy the shared Azure resources used by all bounded 
 
 
 After the shared Azure resources are deployed, each bounded context references these resources using the Azure naming convention and the Bicep `existing` keyword.
-You can find the naming conventions here [here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
+You can find the naming conventions [here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming). 
 
 Here is an example:
 
 The `ContactsAPI` is deployed to an Azure WebApp, which needs an AppService Plan. The AppService Plan is deployed as a shared Azure resource, which means that the plan is used by multiple bounded contexts (remember, three plans are provided, as described above). To reference the plan in the `Contact Context` bicep files we use the `existing` keyword and the Azure naming conventions:
 
 ```bicep
-// naming conventions helps us to reference resource by name
+// naming conventions helps us to reference a resource by name
 // the resource group's id is joined as a unique string to make the resource name unique
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 
