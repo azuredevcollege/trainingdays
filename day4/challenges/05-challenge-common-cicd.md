@@ -238,7 +238,7 @@ The workflows consists of three jobs:
 
 ```yaml
 jobs:
-  build: # to build all needed artifacts
+  build: # to build all needed artefacts
   ...
   deploy-to-dev:
     environment: day4-scm-dev # deploy to dev environment
@@ -247,12 +247,12 @@ jobs:
     environment: day4-scm-test # deploy to test environment
 ```
 
-As you see, first all artifacts, needed for the deployment, are created and validated. With the `build`job we can make sure that everything can be created, even if
+As you see, first all artefacts, needed for the deployment, are created and validated. With the `build`job we can make sure that everything can be created, even if
 we only try to transpile Bicep code to Azure ARM templates. 
 
 If everything can be created the next job `deploy-to-dev`is executed, but only if the trigger event is of type `push`or `workflow_dispatch`. This means, that the deployment will only be executed, if changes were pushed to the master branch or the workflows is triggered manually. Within a pull request, only the step `build` is executed to get immediately feedback if everything can be built or not. If the build fails, the status check of a pull request would also fail and the pull request cannot be merged.
 
-An that is exactly what we want to achieve. Remember the goal of this challenge:
+That is exactly what we want to achieve. Remember the goal of this challenge:
 
 ![CI/CD Workflow](./images/ci-cd-flow.png)
 
@@ -288,7 +288,7 @@ Now, create a pull request to merge the branch `cicd/common` into the `master` b
 Set `Deploy shared Azure resources` as title and close the issue `Deploy SCM shared Azure resources` using the keyword `closes #<issue id>` in the pull requests body.
 
 :::tip
-📝 If you want, you can add a reviewer. But since you as the Administrator are excluded from the branch rules, you can merge the pull request. 
+📝 If you want, you can add a reviewer. However, since you as the Administrator are excluded from the branch rules, you can merge the pull request without a review approval. 
 :::
 
 Wait a few seconds, until the status checks are triggered: 
@@ -307,7 +307,7 @@ In the details page of the running workflow you see all jobs.
 
 ![GitHub Day4 common workflow details](./images/gh-day4-common-details.png)
 
-After the `dev` environment is deployed, go to the Azure portal an checkout the newly creates resource group and resources.
+After the `dev` environment is deployed, go to the Azure portal an checkout the newly created resource group and resources.
 The workflow is now in the `waiting `state, because a reviewer must approve the deployment to the `test` environment:
 
 ![GitHub Day4 common waiting](./images/gh-day4-common-waiting.png)
@@ -316,9 +316,9 @@ Review the pending deployment, leave a comment and `Approve and deploy`:
 
 ![GitHUb day4 approve](./images/gh-day4-common-approve.png)
 
-Now the test environment will be deployed. After the deployment is finished, we have another resource group with all shared Azure resource in the test environment.
+Now the test environment will be deployed. After the deployment is finished, we have another resource group with all shared Azure resources in the test environment.
 
-Take your time and investigate the create resources. 
+Take your time and investigate the created resources. 
 
 Check your Project Board, it should look something like this:
 
@@ -326,7 +326,7 @@ Check your Project Board, it should look something like this:
 
 ## Summary
 
-We have seen how to create a CI/CD workflow where a reviewer has to approve a deployment in the test environment. This workflow can also be used to validate all artefacts within a pull request. This helps us avoid build breaks. Of course, there would be many other scenarios that can be implemented with the GitHub Actions workflow. Maybe it is a good idea to deploy directly to a development environment within a pull request to even validate the deployment before pushing changes to the master branch.
+We have seen how to create a CI/CD workflow where a reviewer has to approve a deployment to the test environment. This workflow can also be used to validate all artefacts within a pull request. This helps us to avoid build breaks. Of course, there would be many other scenarios that can be implemented with the GitHub Actions workflow. Maybe it is a good idea to deploy directly to a development environment within a pull request to even validate the deployment before pushing changes to the master branch.
 
 We have so far only provided the shared Azure resources for the Azure Developer College's sample application. There is still some work to be done. We'll move straight into the breakout session where we'll deploy all the rest of the bounded contexts. We proceed step by step in the same way as in this Challenge:
 
@@ -338,8 +338,3 @@ We have so far only provided the shared Azure resources for the Azure Developer 
 - create a pull request
 - merge the pull request
 - wait until everything is deployed
-
-
-
-
-
