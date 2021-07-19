@@ -6,7 +6,7 @@
 
 In this challenge you will learn how to:
 
-- Create a GitHub CI/CD workflow to deploy common used Azure resources of the
+- Create a GitHub CI/CD workflow to deploy shared Azure resources of the
   SCM sample application
 - Add approval reviewer to a pull request
 - See a pull requests status checks in action
@@ -30,11 +30,11 @@ We want to introduce a professional CI/CD workflow to continuously and constantl
 deploy changes and features to multiple environments. A best practice is to
 first deploy changes in a separate environment before those changes eventually
 go live. We can look for potential errors and ensure the quality of our
-application. Such an environment is usually referred to as the Testing stage.
+application. Such an environment is usually referred to as the _testing_ stage.
 But that is not enough, because it also makes sense to continuously provide the
 current development status in an environment during the development period. This
 gives us the opportunity to request feedback from the product owners within a
-sprint. Such an environment is called the development stage.
+sprint. Such an environment is called the _development_ stage.
 
 In this challenge we want to start preparing for deployment in two environments.
 After changes were pushed to the master branch we deploy these changes to the
@@ -84,7 +84,7 @@ development and testing environment:
 In the SCM sample application's architecture no service within a bounded context
 communicates directly with services from another bounded context. Instead
 changes to a domain object within a bounded context are published through
-events, which describe that changes. Technically, a message bus is used to
+events, which describe the changes. Technically, a message bus is used to
 notify other bounded contexts about the changes. With this approach we can
 decouple the bounded contexts. Decoupling increases the availability of our
 application, because when a request is made to the API, not all services have to
@@ -122,13 +122,13 @@ Each resource group contains the shared components:
 ## Plan your work
 
 First we want to reflect our work for this challenge on the project board. We
-have already created a _Note_ on our project board, which says:
+have already created a _note_ on our project board, which says:
 
 > Deploy the sample application
 
 To describe the outstanding work for this challenge, we create the following
 issue in the imported trainingdays repository, set the label `azdc-challenge`
-and link it to the _Note_:
+and link it to the _note_:
 
 ```Text
 Deploy SCM shared Azure resources
@@ -146,7 +146,7 @@ subscription.
 
 Now drag and drop the note to the _In progess_ column.
 
-Your board should now look like that:
+Your board should now look like this:
 
 ![GitHub board overview 05](./images/gh-board-overview-05.png)
 
@@ -166,15 +166,26 @@ the repository's settings. Open the _Environments_ view and create the
 environment `day4-scm-dev`. As we only want to deploy the master branch to that
 environment, we limit what branches can deploy to that environment.
 
-We need to add a secret, because we will create an Azure SQL Database, later.
-Therefore we need a password, which we can securely store as an environment
+Select the `Deployment branches` dropdown and choose the `Selected branches`
+option. Add the `master` branch as allowed branch.
+
+We need to add a secret, because we will create an Azure SQL Database and need
+to provide an initial password, which we can securely store as an environment
 secret and access it later in the GitHub Actions workflow.
+
+Use the `Add Secret` button to add a new secret named `SQL_PASSSWORD`.
+
+You can generate a strong password by using the following command:
+
+```shell
+pwgen -n 20 -y
+```
 
 ![GitHub Dev environment config](./images/gh-env-dev-config.png)
 
 ### Test environment
 
-Create another environment for the Test stage and name it `scm-day4-test`. As we
+Create another environment for the Test stage and name it `day4-scm-test`. As we
 want a manual approval, before a deployment is executed to that environment, we
 set _Environment protection rules_. Activate `Required reviewers` and add a
 reviewer.
@@ -186,20 +197,23 @@ selected reviewer approves the deployment request.
 
 :::
 
+Make sure to again configure the selected branches and the `SQL_PASSWORD`
+environment secret. The password should differ for each environment.
+
 ![GitHub test environment config](./images/gh-env-test-config.png)
 
 ## Create a service principal and store the secret
 
-To allow GitHub to interact with our Azure Subscriptions we need to create a
+To allow GitHub to interact with our Azure Subscription we need to create a
 Service principal in our Azure Active Directory. We have already learned in
-[challenge 03](./03-challenge-bicep.md#programmatic-access-to-azure) how we can
+[challenge 3](./03-challenge-bicep.md#programmatic-access-to-azure) how we can
 programmatically access an Azure subscription.
 
 If you don't remember your Service Principal's credentials, just create a new
 one and copy the credentials from the output of the following command:
 
 ```shell
-# Change the name and set use your subscription-id to create a Service Principal.
+# Change the name and use your subscription-id to create a Service Principal.
 az ad sp create-for-rbac --name "{name}-github-actions-sp" --sdk-auth --role contributor --scopes /subscriptions/{subscription-id}
 ```
 
