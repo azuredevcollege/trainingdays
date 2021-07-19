@@ -81,6 +81,7 @@ jobs:
       - name: Deploy to dev environment
         uses: azure/arm-deploy@v1
         with:
+          failOnStdErr: false
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
@@ -122,6 +123,7 @@ jobs:
       - name: Deploy to test environment
         uses: azure/arm-deploy@v1
         with:
+          failOnStdErr: false
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
