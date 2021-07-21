@@ -131,8 +131,8 @@ Click _Ok_ and when the operation has finished, go to the _Settings_ view of the
 | Option Name     | Value                                                 |
 | --------------- | ----------------------------------------------------- |
 | _Database id_   | Select the option _Use existing_ and select _AzDCdb_. |
-| _Container id_  | customer                                              |
-| _Partition key_ | /customerId                                           |
+| _Container id_  | product                                               |
+| _Partition key_ | /categoryId                                           |
 
 After you have created the database and the containers, the _Data Explorer_ should look like that:
 
@@ -555,40 +555,25 @@ SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c WHERE c.type = '
 
 ### Why to use it?
 
-The Azure Cosmos DB change feed enables efficient processing of large datasets
-with a high volume of writes. The change feed also offers an alternative to
-querying an entire dataset to identify what has changed. This section focuses on
-giving an overview of the Cosmos DB change feed, how to consume it and a sample
-where an Azure Function consumes the message from the change feed.
+From the documentation: The Azure Cosmos DB change feed enables efficient processing of large datasets with a high volume of writes. The change feed also offers an alternative to querying an entire dataset to identify what has changed. This section focuses on giving an overview of the Cosmos DB change feed, how to consume it and a sample where an Azure Function consumes the message from the change feed.
 
-Azure Cosmos DB is well-suited for IoT, gaming, retail, and operational logging
-applications. A common design pattern in these applications is to use changes to
-the data to trigger additional actions. Examples of additional actions include:
+Azure Cosmos DB is a service that is well-suited for streaming applications like IoT, gaming, but also retail and operational logging applications. It is often used in microservices-based application due to the features it offers with the change feed. A common design pattern in all these applications is to use changes to the data to trigger additional actions. Examples of additional actions include:
 
-- Triggering a notification or a call to an API, when an item is inserted or
-updated.
-- Real-time stream processing for IoT or real-time analytics processing
-on operational data.
+- Triggering a notification or a call to an API, when an item is inserted or updated.
+- Real-time stream processing for IoT or real-time analytics processing on operational data.
 - Data movement such as synchronizing with a cache, a search engine, a data
 warehouse, or cold storage.
 
 The change feed in Azure Cosmos DB enables you to build efficient and scalable
 solutions for each of these patterns, as shown in the following image:
 
-![Overview of event processing using Azure Cosmos DB Change Feed](./images/cosmosdb/changefeedoverview.png)
+![Overview of event processing using Azure Cosmos DB Change Feed](./images/cosmosdb/changefeedoverview.png "Event Processing with Comsos DB")
 
 For event processing and notifications the Azure Cosmos DB change feed can
 simplify scenarios that need to trigger a notification or send a call to an API
 based on a certain event.
 
-Regarding Real-time stream processing the Azure Cosmos DB change feed can be
-used for real-time stream processing for IoT or real-time analytics processing
-on operational data. Data movement means that you can also read from the change
-feed for real-time purposes e.g. update a cache, perform zero down-time
-migrations or implement an application-level data tiering for example storing
-"hot data" in Azure Cosmos DB and aging out "cold data" to other storage systems
-as an Azure Blob Storage. You can read more details
-[here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
+The Azure Cosmos DB change feed can be used for real-time stream processing for IoT or real-time analytics processing on operational data. Data movement means that you can also read from the change feed for real-time purposes e.g. update a cache, perform zero down-time migrations or implement an application-level data tiering for example storing "hot data" in Azure Cosmos DB and aging out "cold data" to other storage systems as an Azure Blob Storage. You can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
 
 ### What does it support?
 
@@ -601,28 +586,25 @@ The following APIs are supported:
 
 What's not supported:
 
-- ...
+- Table API
 
 ### How to consume the Change Feed?
 
 In this challenge we will use the Azure Function which provides the simplest way
-to connect to the change feed. You can create small reactive Azure Functions
+to connect to the change feed. You can create small reactive Azure Function
 that will be automatically triggered on each new event in your Azure Cosmos
 container's change feed.
 
-As this is an introduction we will focus on the Azure Function sample. If you
-are interested to read about the other options as the ChangeFeed Processor, you
-get more details
-[here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
+As this is an introduction we will focus on the Azure Function sample. If you are interested to read about the other options as the ChangeFeed Processor, you get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
 
-![Azure Function processing events from the Change Feed](./images/cosmosdb/functions.png)
+![Azure Function processing events from the Change Feed](./images/cosmosdb/functions.png "Change Feed Overview")
 
-In the following sample we will create an Item in the `customer` Container
+Let's assume the following scenario: Your application is used to query for customers based on the country it is located. Your sales colleagues are organized in areas, so it's a valid scenario for them. Unfortunately, the `customer` container is not prepared for such queries, because  In the following sample we will create an Item in the `customer` Container
 triggering a message to the change feed consumer e.g. in this case the Azure
 Function. In this sample the consumer replicates the message or the Item from
 the change feed to another container called `customerView`.
 
-![Overview Change Feed with multiple consumers](./images/cosmosdb/changefeedvisual.png)
+![Overview Change Feed with multiple consumers](./images/cosmosdb/changefeedvisual.png "Customer Container Change Feed")
 
 ### Sample: Create a customerView collection for query-optimized access to Customer data
 
@@ -644,10 +626,7 @@ Create a collection `customerView` using as partition key `/area`.
 
 #### Option 2: Deployment via Bicep File
 
-We have prepared a bicep file in the `cosmosdb` folder for you which lets you
-automatically deploy the Cosmos DB `customerView` container to the existing
-Cosmos DB Account. We will go deeper into bicep files in the DevOps part on
-_Day 4_.
+We have prepared a bicep file in the `cosmosdb` folder for you which lets you automatically deploy the Cosmos DB `customerView` container to the existing Cosmos DB Account. We will go deeper into bicep files in the DevOps part on _Day 4_.
 
 Go ahead and open up a commandline window and use the following command:
 
@@ -668,20 +647,27 @@ cd trainingdays/day3/challenges/cosmosdb/func
 code .
 ```
 
-Adjust the connection string of the Azure Function under
-_day3/challenges/cosmosdb/func/local.settings.json_.
+Create a file called `local.settings.json` in the folder _day3/challenges/cosmosdb/func_ with the following content and adjust the connection string to the CosmosDB account. Also, create a storage account in the Azure Portal and replace the storage account connection string in the settings file:
 
-Take a look at the `function.json` file in the `CosmosTrigger1` folder. We set the
-`StartFromBeginning` CosmosDBTrigger attribute in your function.json to true:
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "<ADD STORAGE ACCOUNT CONNECTION STRING>",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "myDB_DOCUMENTDB": "<ADD COSMOSDB CONNECTION STRING>"
+  }
+}
+
+```
+
+When finished, take a look at the `function.json` file in the `CosmosTrigger1` folder. We set the `StartFromBeginning` CosmosDBTrigger attribute in the `function.json` to true:
 
 ```json
 startFromBeginning": true
 ```
 
-This lets the function read the
-change feed entries **from the beginning**  and not just from the point in time where
-the function starts - this gives you access to the history of your collection. Restart
-the function. It will now read and process all changes from the beginning.
+This lets the function read the change feed entries **from the beginning**  and not just from the point in time where the function starts - this gives you access to the history of your collection. Running the function, will read and process all changes from the beginning of the change feed.
 
 Now, open up the `index.js` file and set a break point next to line 6:
 
@@ -689,53 +675,60 @@ Now, open up the `index.js` file and set a break point next to line 6:
 val.type == 'customer' &&
 ```
 
-Let's go ahead and start the function using the debug mode.
+Let's go ahead and start the function using the debug mode in VS Code. You will see the function process now all entries in the change feed in batches of 100 documents. As you can see in the `index.js` file, we only take care of entries where the address is in France or Germany (just to speed things a little bit up).
 
-Then we go into the portal and insert an _item_ into the `customer` Container:
+When processing has finished, take a look at the `customerView` collection. You'll see all customers that are located in Germany and France.
+
+To prove that this process works near real-time, let's go to the portal and insert a new _item_ into the `customer` container (if you want to, set a breakpoint again to see the change arriving at your function):
 
 ```json
 {
-  "id": "0015D555-C7DE-4C4B-B4A4-2E8A6B8E1161",
-  "type": "customer",
-  "customerId": "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161",
-  "creationDate": "2014-02-05T00:00:00",
-  "addresses": [
-    {
-      "addressLine1": "1796 Westbury Dr.",
-      "addressLine2": "",
-      "city": "Melton",
-      "state": "VIC",
-      "country": "FR",
-      "zipCode": "3337"
-    }
-  ]
+    "id": "034C5E4C-EE20-47E2-8637-5CCB02525EDE",
+    "type": "customer",
+    "customerId": "034C5E4C-EE20-47E2-8637-5CCB02525EDE",
+    "title": "",
+    "firstName": "Jackson",
+    "lastName": "Frieda",
+    "emailAddress": "f.jackson@adventure-works.com",
+    "phoneNumber": "1 (11) 500 555-0121",
+    "creationDate": "2013-04-12T00:00:00",
+    "addresses": [
+        {
+            "addressLine1": "Roemerplatz 90",
+            "addressLine2": "",
+            "city": "Remchingen",
+            "state": "BW",
+            "country": "DE",
+            "zipCode": "75196"
+        }
+    ],
+    "password": {
+        "hash": "ruT19z16403NBEe2S1WlSaA3dUmC4chHgTemAJMU6E4=",
+        "salt": "C554EA68"
+    },
+    "salesOrderCount": 0
 }
 ```
 
-It should look like this:
+After saving, it should look like this:
 
-![create a customer item](./images/cosmosdb/createcustomer.png)
+![Create a customer item](./images/cosmosdb/portal_create_customer.png "Create Customer")
 
-Once you create the _item_, the Azure Function gets triggered and we
-will see the item in the break point which we set earlier:
+Once the item has been created, the Azure Function gets triggered:
 
-![Breakpoint](./images/cosmosdb/breakpointchangefeed.png)
+![Set a breakpoint in VS Code](./images/cosmosdb/breakpointchangefeed.png "Breakpoint in VS Code")
 
-As final result we will see the _item_ - as the country code matches France (FR) - in the `customerView` Container:
+As final result we will see the customer - as the country code matches Germany (DE) - in the `customerView` Container:
 
-![CustomerView](./images/cosmosdb/customerviewresult.png)
+![CustomerView collection with result](./images/cosmosdb/portal_customerview_result.png "customerView collection")
 
 ### What have we learned so far?
 
-We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which
-occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` Container via Portal or via bicep file. In addition we ran the Azure Function Code (locally) to listen to every change on the customer
-collection where we added a french _customer item_ and replicated the _customer
-item_ to the `customerView` collection.
+We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` container via Portal or via bicep file. In addition we ran the Azure Function code (locally) to listen to every change on the `customer` collection where we added a german customer item and replicated the item to the `customerView` collection.
 
-**Optional**:
+#### Optional
 
-If you want to do more, you can deploy the third bicep _function.bicep_ file using this command and use _Day 2_ as your _cheat sheet_ of how to deploy the code
-towards the Azure Function Service.
+If you want to do more, you can deploy the third bicep _function.bicep_ file using this command and use _Day 2_ as your _cheat sheet_ of how to deploy the code towards the Azure Function Service.
 
 ```shell
 az deployment group create -g rg-cosmos-challenge --template-file function.bicep
@@ -745,7 +738,17 @@ For using Cosmos DB in production monitoring is essential, which will be focused
 
 ## Monitor Cosmos DB
 
-CosmosDB insights
+In order to monitor your CosmosDB account, the databases and collections for performance, failures, throtteling, operational health etc. the _CosmosDB Insights_ workbook is your friend.
+
+You can access the dashboards in the CosmosDB account view and click on _Insights_ in the context menu under "Monitoring".
+
+Here are a few sample dashboards that help you understand what's going on in your Cosmos DB account.
+
+When you have successfully finished the Change Feed challenge, you should see metrics like the following ones:
+
+![Monitoring Insights in Azure Portal](./images/cosmosdb/portal_insights1.png "Portal Insights 1")
+![Monitoring Insights in Azure Portal](./images/cosmosdb/portal_insights2.png "Portal Insights 2")
+![Monitoring Insights in Azure Portal](./images/cosmosdb/portal_insights3.png "Portal Insights 3")
 
 ## Azure Samples / Further Information
 
