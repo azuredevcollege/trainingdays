@@ -1,5 +1,8 @@
 var location = resourceGroup().location
-var cosmosDbAccountName = uniqueString(resourceGroup().name)
+@description('The name of the ComsosDB Account.')
+@minLength(3)
+@maxLength(44)
+param cosmosDbAccountName string
 
 resource cosmosDbAccount 'Microsoft.DocumentDB/databaseAccounts@2021-03-15' = {
   name: cosmosDbAccountName
@@ -115,6 +118,5 @@ resource containerProduct 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/co
     }
   }
 }
-
 
 output cosmosDbAccount string = cosmosDbAccount.name

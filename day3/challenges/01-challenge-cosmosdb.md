@@ -142,7 +142,7 @@ Now we are ready to add data. You can move on to [Add and query data](#add-and-q
 
 ### Option 2: Azure Bicep
 
-You can run the following commands on your local machine or in the Azure Cloud Shell. If Azure Bicep isn't installed already, simply add it via the Azure CLI:
+You can run the following commands on your local machine or in the Azure Cloud Shell. If Azure Bicep isn't installed already, simply add it via the Azure CLI (please choose a unique name for the account and replace `<REPLACE_WITH_ACCOUNT_NAME>` with it):
 
 ```shell
 $ az bicep install #only needed, if bicep isn't present in the environment
@@ -162,7 +162,7 @@ $ az group create --name rg-cosmos-challenge --location westeurope
   "type": "Microsoft.Resources/resourceGroups"
 }
 
-$ az deployment group create -f cosmos.bicep -g rg-cosmos-challenge
+$ az deployment group create -f cosmos.bicep -g rg-cosmos-challenge --parameters cosmosDbAccountName=<REPLACE_WITH_ACCOUNT_NAME>
 {
   "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-cosmos-challenge/providers/Microsoft.Resources/deployments/cosmos",
   "location": null,
@@ -610,10 +610,9 @@ With the change feed feature, you get a consistens, in-order stream changes with
 
 ### Sample: Create a customerView collection for query-optimized access to Customer data
 
-Let's assume the following scenario: Your application is used to query for customers based on the country the customer is located. Your sales colleagues are organized in sales areas (countries), so it's a valid scenario for them. Unfortunately, the `customer` container is not prepared for such queries, because these queries would result in cross-partition statements. As we learned, this will effect the performance and cost of our _customer_ container. In the following sample we will create an item in the `customer` container triggering a message to the change feed consumer e.g. in this case the Azure Function. In this sample the consumer replicates the item from the change feed to another container called `customerView`.
+Let's assume the following scenario: Your application is used to query for customers based on the country the customer is located. Your sales colleagues are organized in sales areas (countries), so it's a valid scenario for them. Unfortunately, the `customer` container is not prepared for such queries, because these queries would result in cross-partition statements. As we learned, this will effect the performance and cost of our `customer` container. In the following sample we will create an item in the `customer` container which is triggering a message to the change feed consumer - in this case an Azure Function. The consumer replicates the item from the change feed to another container called `customerView` which is partitioned by the country (`/area`) and is therefor optimized for the queries of the sales colleagues.
 
-There are two options either to deploy the Cosmos DB via the Azure Portal or via a _bicep_
-template.
+You have two options to deploy the collection: either via the Azure Portal or via a _bicep_ template.
 
 #### Option 1: Deployment via Portal
 
@@ -628,13 +627,13 @@ Create a collection `customerView` using as partition key `/area`.
 
 #### Option 2: Deployment via Bicep File
 
-We have prepared a bicep file in the `cosmosdb` folder for you which lets you automatically deploy the Cosmos DB `customerView` container to the existing Cosmos DB Account. We will go deeper into bicep files in the DevOps part on _Day 4_.
+There is a bicep file prepared for you in the `cosmosdb` folder which lets you automatically deploy the Cosmos DB `customerView` container to the existing Cosmos DB Account.
 
 Go ahead and open up a commandline window and use the following command:
 
 ```shell
 cd trainingdays/day3/challenges/cosmosdb
-az deployment group create -g rg-cosmos-challenge --template-file addcustomerviewcontainer.bicep
+az deployment group create -g rg-cosmos-challenge --template-file addcustomerviewcontainer.bicep --parameters cosmosDbAccountName=<REPLACE_WITH_ACCOUNT_NAME>
 ```
 
 #### Purpose of the Azure Function
