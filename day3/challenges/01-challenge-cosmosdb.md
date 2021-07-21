@@ -348,7 +348,7 @@ Therefor, go to the Data Explorer, open the _Items_ menu item of the _customer_ 
 In the newly created tab, enter the following SQL command and click _Execute_.
 
 ```sql
-SELECT * from c
+SELECT * FROM c
 ```
 
 As you can see in the _Results_ tab, Cosmos DB returns a set of documents, that live in the _customer_ container. It returns a paged resultset, showing documents in batches of 100 items.
@@ -422,7 +422,7 @@ You saw that limiting the amount of properties that get indexed is beneficial fo
 Let's demonstrate that. Open a new query tab for the _customer_ container, issue the following queries and have a look at the _Query Stats_ tab to see the amount of RUs consumed.
 
 ```SQL
-SELECT * FROM c where c.firstName = "Franklin"
+SELECT * FROM c WHERE c.firstName = "Franklin"
 ```
 
 The problem here is, that we are querying for a property that is not indexed **and** the query itself is a _cross-partition_ query. Azure Cosmos DB needs to fan-out the query to all physical partitions of the database. If you have a lot of data in the collection (e.g. 100GB), the cost for such a query will be a lot more expensive, because the amount of physical partitions will grow depending on how much data is stored in a container and thus the number of queries that need to be managed under the hood by the db engine.
@@ -430,7 +430,8 @@ The problem here is, that we are querying for a property that is not indexed **a
 Let's add the partition key to the query (means: Cosmos DB knows exactly to which physical partition to send the query to.).
 
 ```SQL
-SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+SELECT * FROM c WHERE c.firstName = "Franklin" 
+    AND c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
 This is __much_ better! Now, let's adjust the indexing policy so that all properties will be indexed. Go to the _Scale & Settings_ menu item of the _customer_ container and set the indexing policy to:
@@ -457,13 +458,14 @@ Comsos DB needs a few minutes to index the container - now for a query intensive
 Cross-partition:
 
 ```sql
-SELECT * FROM c where c.firstName = "Franklin"
+SELECT * FROM c WHERE c.firstName = "Franklin"
 ```
 
 With partition key:
 
 ```sql
-SELECT * FROM c where c.firstName = "Franklin" and c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+SELECT * FROM c WHERE c.firstName = "Franklin" 
+    AND c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
 :::tip
@@ -510,21 +512,21 @@ The current sample dataset `customer` is designed like that, so let's query for 
 ##### Query for a customer object
 
 ```sql
-SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
-  and c.type = "customer"
+SELECT * FROM c WHERE c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
+  AND c.type = "customer"
 ```
 
 ##### Query for the sales orders of that customer
 
 ```sql
-SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
-  and c.type = "salesOrder"
+SELECT * FROM c WHERE c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161" 
+  AND c.type = "salesOrder"
 ```
 
 ##### Query for the customer, as well as for the sales orders in one statement
 
 ```sql
-SELECT * FROM c where c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
+SELECT * FROM c WHERE c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
 #### Aggerations, Functions etc
@@ -534,13 +536,15 @@ Of course, Cosmos DB also supports aggregations, functions, geo-spatial data han
 ##### Get the average price of products by category
 
 ```sql
-SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c group by c.categoryName
+SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c GROUP BY c.categoryName
 ```
 
 ##### Get the average price of products by category - within a category
 
 ```sql
-SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c where c.categoryId = "75BF1ACB-168D-469C-9AA3-1FD26BB4EA4C" group by c.categoryName
+SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c 
+    WHERE c.categoryId = "75BF1ACB-168D-469C-9AA3-1FD26BB4EA4C" 
+    GROUP BY c.categoryName
 ```
 
 Bottom line, Cosmos DB supports the ...
@@ -548,7 +552,8 @@ Bottom line, Cosmos DB supports the ...
 ##### Get the top 10 customers by orders - _customer_ container
 
 ```sql
-SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c WHERE c.type = 'customer' ORDER BY c.salesOrderCount DESC
+SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c
+    WHERE c.type = 'customer' ORDER BY c.salesOrderCount DESC
 ```
 
 ## Use the Cosmos DB Change Feed
