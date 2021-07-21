@@ -604,16 +604,13 @@ As this is an introduction we will focus on the Azure Function sample. If you ar
 
 ![Azure Function processing events from the Change Feed](./images/cosmosdb/functions.png "Change Feed Overview")
 
-Let's assume the following scenario: Your application is used to query for customers based on the country it is located. Your sales colleagues are organized in areas, so it's a valid scenario for them. Unfortunately, the `customer` container is not prepared for such queries, because  In the following sample we will create an Item in the `customer` Container
-triggering a message to the change feed consumer e.g. in this case the Azure
-Function. In this sample the consumer replicates the message or the Item from
-the change feed to another container called `customerView`.
+With the change feed feature, you get a consistens, in-order stream changes within the logical partitions from your containers.
 
 ![Overview Change Feed with multiple consumers](./images/cosmosdb/changefeedvisual.png "Customer Container Change Feed")
 
 ### Sample: Create a customerView collection for query-optimized access to Customer data
 
-Explain the use case...
+Let's assume the following scenario: Your application is used to query for customers based on the country the customer is located. Your sales colleagues are organized in sales areas (countries), so it's a valid scenario for them. Unfortunately, the `customer` container is not prepared for such queries, because these queries would result in cross-partition statements. As we learned, this will effect the performance and cost of our _customer_ container. In the following sample we will create an item in the `customer` container triggering a message to the change feed consumer e.g. in this case the Azure Function. In this sample the consumer replicates the item from the change feed to another container called `customerView`.
 
 There are two options either to deploy the Cosmos DB via the Azure Portal or via a _bicep_
 template.
@@ -640,12 +637,9 @@ cd trainingdays/day3/challenges/cosmosdb
 az deployment group create -g rg-cosmos-challenge --template-file addcustomerviewcontainer.bicep
 ```
 
-#### Explanation: what is done in index.js
+#### Purpose of the Azure Function
 
-The function listens to every change on the `customer` collection and pushes
-customer documents that have `Germany / DE` or `France / FR` as country code in their
-address to the `customerView` collection. Go ahead and open up your Visual
-Studio Code in the function folder using the following folder path:
+The function listens to every change on the `customer` collection and pushes customer documents that have `Germany / DE` or `France / FR` as country code in their address to the `customerView` collection. Go ahead and open up your Visual Studio Code in the function folder using the following folder path:
 
 ```shell
 cd trainingdays/day3/challenges/cosmosdb/func
