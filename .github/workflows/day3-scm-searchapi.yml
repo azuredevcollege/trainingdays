@@ -143,7 +143,7 @@ jobs:
     environment: day3-scm-dev
     needs: [build-bicep, build-api, build-indexer]
     outputs:
-      resourceGroupName: $ {{ steps.createResourceGroupName.outputs.name }}
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
