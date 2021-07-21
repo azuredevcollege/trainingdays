@@ -500,13 +500,14 @@ _Add some links to Azure samples that might be of interest, e.g.:_
 Azure AppService code samples:
 
 - https://github.com/Azure-Samples/cognitive-services-quickstart-code
+- For more Details on Cognitive Services or Azure Machine Learning Services visit the **AI Developer College:** https://github.com/aidevcollege/aidevcollege
 
 ## Cleanup
 
 Remove the sample resource group.
 
 ```shell
-az group delete -n adc-cognitive-rg
+az group delete -n azdc-cognitive-rg
 ```
 
 [◀ Previous challenge](./04-challenge-bo-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./06-challenge-bo-2.md)
