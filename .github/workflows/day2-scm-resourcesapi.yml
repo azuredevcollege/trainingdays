@@ -179,6 +179,11 @@ jobs:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
           package: ./${{ env.RESIZER_PACKAGE_NAME }}
 
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ steps.createResourceGroupName.outputs.name }}/providers/Microsoft.Web/sites/${{ steps.infrastructure.outputs.imageResizerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
+
   deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
@@ -233,3 +238,8 @@ jobs:
         with:
           app-name: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
           package: ./${{ env.RESIZER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ steps.createResourceGroupName.outputs.name }}/providers/Microsoft.Web/sites/${{ steps.infrastructure.outputs.imageResizerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
