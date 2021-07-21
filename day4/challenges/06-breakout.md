@@ -15,6 +15,9 @@ In this challenge you will learn how to:
 ## Table of contents
 
 1. [Plan your work](#plan-your-work)
+2. [Prepare the workflows](#prepare-the-workflows)
+3. [Create and merge the Pull Request](#create-and-merge-the-pull-request)
+4. [Add data to the sample application and inspect ApplicationInsights](#add-data-to-the-sample-application-and-inspect-applicationinsights)
 
 ## Plan your work
 
@@ -97,4 +100,17 @@ After the pull request is created, wait for all status checks and merge the pull
 
 After the pull request is merged, nativate to the `Àctions` page and observe the workflows.
 
-## Add data to the sample application
+## Add data to the sample application and inspect ApplicationInsights
+
+After everything is deployed, we want to add some data to the application in the development environment. Navigate to the Azure portal and go to the resource group for the development environment. The name of the resource group starts with `rg-scm-devday4-` and end with your GitHub organization name `rg-scm-devday4-<your organization name>`. We need to find the storage account where the frontend is hosted in a static website. The deployment created some Azure `Tags` to group the used Azure resources regarding their bounded context. Within the resource group you can set filters in the `Resources` details view. 
+
+Apply the following filter:
+
+![Azure resource group filter](./images/az-frontend-tag-filter.png)
+
+As a result we see one storage account. Open the storage account and go to the section `Static website`. Here you can find the primary endpoint of the frontend in the development environment. Copy the URL and open the frontend in your browser.
+
+Now add some test data: 
+- add some contacts with images
+- add VisitReports
+- add VisitResults
