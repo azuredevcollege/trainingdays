@@ -143,6 +143,7 @@ jobs:
     environment: day3-scm-dev
     needs: [build-bicep, build-api, build-indexer]
     outputs:
+      resourceGroupName: $ {{ steps.createResourceGroupName.outputs.name }}
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
@@ -226,12 +227,18 @@ jobs:
           app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
 
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-dev.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
+
   deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-test
     needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
     outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
@@ -326,3 +333,8 @@ jobs:
         with:
           app-name: ${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-test.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01

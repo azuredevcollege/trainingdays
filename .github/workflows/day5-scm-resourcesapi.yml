@@ -143,6 +143,7 @@ jobs:
     environment: day5-scm-dev
     needs: [build-bicep, build-api, build-resizer]
     outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       resourceApiWebAppName: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
       imageResizerFunctionName: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
 
@@ -232,12 +233,18 @@ jobs:
           app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.imageResizerFunctionName }}
           package: ./${{ env.RESIZER_PACKAGE_NAME }}
 
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-dev.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-dev.outputs.imageResizerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
+
   deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day5-scm-test
     needs: [deploy-resourceapi-to-dev, deploy-resizer-to-dev]
     outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       resourceApiWebAppName: ${{ steps.infrastructure.outputs.resourceApiWebAppName }}
       imageResizerFunctionName: ${{ steps.infrastructure.outputs.imageResizerFunctionName }}
 
@@ -326,3 +333,8 @@ jobs:
         with:
           app-name: ${{ needs.deploy-infrastructure-to-test.outputs.imageResizerFunctionName }}
           package: ./${{ env.RESIZER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-test.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-test.outputs.imageResizerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
