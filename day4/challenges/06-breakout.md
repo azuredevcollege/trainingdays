@@ -114,3 +114,37 @@ Now add some test data:
 - add some contacts with images
 - add VisitReports
 - add VisitResults
+
+After adding the data, let's have a look at ApplicationInsights. Back in the Azure portal, open the ApplicationInsights instance of your development environment `rg-scm-devday4-<your organization name>`. In the `overview` page we can already see some useful information about our application in the following diagrams:
+- Failed requests
+- Server response time
+- Server requests
+- Availability (if we had added Availability test)
+
+We can click on a diagram to drill down and get more detailed information. Let's see what details we get, when we cklick on the `Server response time` diagram.
+Take some time and investigate which metrics are provided in the Performance View of ApplicationInsights.
+
+Check the metrics for:
+- Operations
+- Dependencies
+- Roles
+
+![ApplicationInsights Performance Filter](./images/appinsights-perf-filter.png)
+
+Now, let's check the samples for the server operation `GET/contacts`. Select the `Operations` metrics and the `GET/contacts` opreation in the list.
+Drill into the provided samples:
+
+![ApplicationInsight operation samples](./images/appinsights-op-samples.png)
+
+Select a sample and look at the dependency calls:
+
+![ApplicationInsights operation dependencies](./images/appinsights-op-dependency.png)
+
+Here you can see all calls to external services, such as SQL Database. 
+If you want to learn more about corss-component transaction, have a look at the documentation [here](https://docs.microsoft.com/azure/azure-monitor/app/transaction-diagnostics)
+
+Now, navigate to the `Application Map` of your ApplicationInsights instance. Here you can see the full application topology across multiple levels of related application components.
+
+![ApplicationInsights application map](./images/appinsights-applicationmap.png)
+
+If you want to learn more about the `Application Map` have a look at the documentation [here](https://docs.microsoft.com/azure/azure-monitor/app/app-map?tabs=net)
