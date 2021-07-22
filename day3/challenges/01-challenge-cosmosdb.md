@@ -721,6 +721,10 @@ As final result we will see the customer - as the country code matches Germany (
 
 ![CustomerView collection with result](./images/cosmosdb/portal_customerview_result.png "customerView collection")
 
+:::tip
+📝 When using an Azure Function to connect to the Cosmos DB change feed, you'll see a `leases` container appear in your database. This is used to track the progress of the Azure Function when processing the feed.
+:::
+
 ### What have we learned so far?
 
 We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` container via Portal or via bicep file. In addition we ran the Azure Function code (locally) to listen to every change on the `customer` collection where we added a German customer item and replicated the item to the `customerView` collection for query-optimized access.
@@ -761,6 +765,6 @@ When you have successfully finished the Change Feed challenge, you should see me
 ## Cleanup
 
 No clean-up needed this time. We will reuse the Cosmos DB account in the Azure
-Cognitive Search challenge. So please, don't delete any of the resources yet.
+Cognitive Search challenge. So please, **don't delete any of the resources yet**.
 
 [◀ Previous challenge](./00-challenge-baseline.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./02-challenge-sql.md)
