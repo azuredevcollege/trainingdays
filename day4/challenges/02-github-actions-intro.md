@@ -499,3 +499,6 @@ first CI/CD pipeline creating a static website.
 - [Introduction to YAML](https://dev.to/paulasantamaria/introduction-to-yaml-125f)
 - [VuePress](https://vuepress.vuejs.org/)
 - [Netlify CMS](https://www.netlifycms.org/)
+
+
+[◀ Previous challenge](./01-challenge-boards.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./03-challenge-bicep.md)

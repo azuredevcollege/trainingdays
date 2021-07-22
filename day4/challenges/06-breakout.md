@@ -148,3 +148,9 @@ Now, navigate to the `Application Map` of your ApplicationInsights instance. Her
 ![ApplicationInsights application map](./images/appinsights-applicationmap.png)
 
 If you want to learn more about the `Application Map` have a look at the documentation [here](https://docs.microsoft.com/azure/azure-monitor/app/app-map?tabs=net)
+
+## Congratulation
+
+🥳 **Congratulation** - You've done it! 🥳
+
+[◀ Previous challenge](./05-challenge-common-cicd.md) | [🔼 Day 4](../README.md) |
