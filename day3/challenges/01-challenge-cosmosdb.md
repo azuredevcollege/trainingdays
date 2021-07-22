@@ -128,11 +128,15 @@ Click _Ok_ and when the operation has finished, go to the _Settings_ view of the
 
 #### Container: Product
 
+Create a `product` container similar to the one previously created. Here are the attributes:
+
 | Option Name     | Value                                                 |
 | --------------- | ----------------------------------------------------- |
 | _Database id_   | Select the option _Use existing_ and select _AzDCdb_. |
 | _Container id_  | product                                               |
 | _Partition key_ | /categoryId                                           |
+
+For this container, there is no need to adjust the indexing policy - just leave the default settings.
 
 After you have created the database and the containers, the _Data Explorer_ should look like that:
 
@@ -190,25 +194,9 @@ The _customer_ dataset contains of two types of objects that we put in the same 
 
 Yes, you are right - in a relational environment. But here, we are working with a NoSQL database and things are a little bit different. Mixing object types in one container is totally fine (and even a best practice in terms of performance). In this non-relational world, you also tend to follow the "de-normalization" principle. That means that data duplication, embedding etc. is not only possible, but encouraged. You optimize data models to make sure that all the required data is ready to be served by queries.
 
-You can download the customer dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
-
 #### Customer Data
 
-A customer document has a property ```type``` set to _customer_ and contains several properties like ```firstName```, ```lastName```, ```emailAddress``` etc. You can see, that it also uses document embedding for ```addresses``` - the property is an array, so you can add multiple addresses to one customer.
-
-:::tip When to use embedding? When to use referencing?
-📝 To model relations in a document-oriented database, you have two choices: embedding and referencing. But which should you choose when?
-
-| Embedding                                     | Referencing                                        |
-| --------------------------------------------- | -------------------------------------------------- |
-| 1:1 relationship                              | 1:many relationship (especially if unbounded)      |
-| 1:few relationship                            | Many:many relationship                             |
-| Related items are queried or updated together | Related items are queried or updated independently |
-:::
-
-The partition key of the container has been set to ```/customerId```, so each customer is placed in its own logical partition. With that approach, we achive the best distribution of data in terms of horizontal scaling and will never hit any storage limits - so we are prepared for massive growth of the data/application. On the other hand, this is not the best way when we want to search within our customer base, because we will definitely have cross-partition queries and they will consume more and more RUs as the data grows. How to deal with such a situation is discussed later in the challenge.
-
-Here's a sample object from the container:
+Sample object from the container:
 
 ```json
 {
@@ -239,13 +227,23 @@ Here's a sample object from the container:
 }
 ```
 
+A customer document has a property ```type``` set to _customer_ and contains several properties like ```firstName```, ```lastName```, ```emailAddress``` etc. You can see, that it also uses document embedding for ```addresses``` - the property is an array, so you can add multiple addresses to one customer.
+
+:::tip When to use embedding? When to use referencing?
+📝 To model relations in a document-oriented database, you have two choices: embedding and referencing. But which should you choose when?
+
+| Embedding                                     | Referencing                                        |
+| --------------------------------------------- | -------------------------------------------------- |
+| 1:1 relationship                              | 1:many relationship (especially if unbounded)      |
+| 1:few relationship                            | Many:many relationship                             |
+| Related items are queried or updated together | Related items are queried or updated independently |
+:::
+
+The partition key of the container has been set to ```/customerId```, so each customer is placed in its own logical partition. With that approach, we achive the best distribution of data in terms of horizontal scaling and will never hit any storage limits - so we are prepared for massive growth of the data/application. On the other hand, this is not the best way when we want to search within our customer base, because we will definitely have cross-partition queries and they will consume more and more RUs as the data grows. How to deal with such a situation is discussed later in the challenge.
+
 #### SalesOrder Data
 
-The salesorder object is similar to the customer object (```type``` is set to _salesOrder_). It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
-
-As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
-
-Here's a sample object from the container:
+Sample object from the container:
 
 ```json
 {
@@ -277,11 +275,15 @@ Here's a sample object from the container:
 }
 ```
 
+The salesorder object is similar to the customer object (```type``` is set to _salesOrder_). It has properties that you would expect for a sales order like ```orderDate```, ```shipDate```, ```customerId``` etc. Also, embedding is used to save the line items of the order.
+
+As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
+
+Download the whole customer dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
+
 ### Product Dataset
 
 The product dataset contains just one object type: ```product```. It simply stores the information for each product like ```name```, ```price```, ```categoryName```. The collection is partitioned by ```/categoryId```, so products are logically grouped by and can be queried via category.
-
-You can download the product dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
 
 #### Product Data
 
@@ -316,6 +318,8 @@ Here's a sample object from the container:
     ]
 }
 ```
+
+Download the product dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
 
 ### Upload the datasets
 
@@ -409,7 +413,7 @@ In Azure Cosmos DB, documents are automatically indexed without having to define
 
 E.g., you can access the _city_ property of the first address of a customer object via ```/addresses/0/city```.
 
-Adding an index can significantly reduce the query time and consumed RUs, but can also be expensive when adding or updating a document, because after each action, the index has to be recalculated/recreated for the document data. So, if you have write-intensive workloads, it better to tweak the indexing policy.
+Adding an index can significantly reduce the query time and consumed RUs, but can also be expensive when adding or updating a document, because after each action, the index has to be recalculated/recreated for the document data. So, if you have write-intensive workloads, it is better to tweak the indexing policy.
 
 Let's have a look at the _customer_ document. The indexing policy has been adjusted to NOT(!) index fields like _firstName_, _title_, _addresses_ etc. Adding or updating a customer consumes ~ 8.5 RUs. Using the standard indexing policy (which means all properties will be indexed), the same operation consumes ~13.2 RUs. That's about 150% "the price".
 
@@ -434,7 +438,7 @@ SELECT * FROM c WHERE c.firstName = "Franklin"
     AND c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
-This is __much_ better! Now, let's adjust the indexing policy so that all properties will be indexed. Go to the _Scale & Settings_ menu item of the _customer_ container and set the indexing policy to:
+This is _much_ better! Now, let's adjust the indexing policy so that all properties will be indexed. Go to the _Scale & Settings_ menu item of the _customer_ container and set the indexing policy to:
 
 ```json
 {
@@ -529,6 +533,8 @@ SELECT * FROM c WHERE c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 SELECT * FROM c WHERE c.customerId = "0012D555-C7DE-4C4B-B4A4-2E8A6B8E1161"
 ```
 
+As you can see in the query stats: it's fast and cheap in terms of RUs cost.
+
 #### Aggerations, Functions etc
 
 Of course, Cosmos DB also supports aggregations, functions, geo-spatial data handling, triggers, subqueries, and much more. To give you an impression, what is possible, here are a few queries you can try on the _product_ and _customer_ container.
@@ -547,8 +553,6 @@ SELECT c.categoryName as Category, AVG(c.price) as avgPrice FROM c
     GROUP BY c.categoryName
 ```
 
-Bottom line, Cosmos DB supports the ...
-
 ##### Get the top 10 customers by orders - _customer_ container
 
 ```sql
@@ -560,7 +564,7 @@ SELECT TOP 10 c.firstName, c.lastName, c.salesOrderCount FROM c
 
 ### Why to use it?
 
-From the documentation: The Azure Cosmos DB change feed enables efficient processing of large datasets with a high volume of writes. The change feed also offers an alternative to querying an entire dataset to identify what has changed. This section focuses on giving an overview of the Cosmos DB change feed, how to consume it and a sample where an Azure Function consumes the message from the change feed.
+The Azure Cosmos DB change feed enables efficient processing of large datasets with a high volume of writes. The change feed also offers an alternative to querying an entire dataset to identify what has changed. This section focuses on giving an overview of the Cosmos DB change feed, how to consume it and a sample where an Azure Function consumes the message from the change feed.
 
 Azure Cosmos DB is a service that is well-suited for streaming applications like IoT, gaming, but also retail and operational logging applications. It is often used in microservices-based application due to the features it offers with the change feed. A common design pattern in all these applications is to use changes to the data to trigger additional actions. Examples of additional actions include:
 
@@ -569,16 +573,15 @@ Azure Cosmos DB is a service that is well-suited for streaming applications like
 - Data movement such as synchronizing with a cache, a search engine, a data
 warehouse, or cold storage.
 
-The change feed in Azure Cosmos DB enables you to build efficient and scalable
-solutions for each of these patterns, as shown in the following image:
+The change feed in Azure Cosmos DB enables you to build efficient and scalable solutions for each of these patterns, as shown in the following image:
 
 ![Overview of event processing using Azure Cosmos DB Change Feed](./images/cosmosdb/changefeedoverview.png "Event Processing with Comsos DB")
 
-For event processing and notifications the Azure Cosmos DB change feed can
-simplify scenarios that need to trigger a notification or send a call to an API
-based on a certain event.
+For event processing and notifications the Azure Cosmos DB change feed can simplify scenarios that need to trigger a notification or send a call to an API based on a certain event.
 
-The Azure Cosmos DB change feed can be used for real-time stream processing for IoT or real-time analytics processing on operational data. Data movement means that you can also read from the change feed for real-time purposes e.g. update a cache, perform zero down-time migrations or implement an application-level data tiering for example storing "hot data" in Azure Cosmos DB and aging out "cold data" to other storage systems as an Azure Blob Storage. You can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
+:::tip
+📝 Reagarding some patterns and best practices for change feed, you can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
+:::
 
 ### What does it support?
 
@@ -595,16 +598,14 @@ What's not supported:
 
 ### How to consume the Change Feed?
 
-In this challenge we will use the Azure Function which provides the simplest way
-to connect to the change feed. You can create small reactive Azure Function
-that will be automatically triggered on each new event in your Azure Cosmos
+In this challenge we will use an Azure Function hence providing the simplest way to connect to the change feed. You can create small reactive Azure Function that will be automatically triggered on each new event in your Azure Cosmos
 container's change feed.
 
-As this is an introduction we will focus on the Azure Function sample. If you are interested to read about the other options as the ChangeFeed Processor, you get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
+As this is an introduction, we will focus on the Azure Function sample. If you are interested to read about other options like the ChangeFeed Processor, you can get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
 
 ![Azure Function processing events from the Change Feed](./images/cosmosdb/functions.png "Change Feed Overview")
 
-With the change feed feature, you get a consistens, in-order stream changes within the logical partitions from your containers.
+With the change feed feature, you get a consistent, in-order stream of changes within the logical partitions of your container.
 
 ![Overview Change Feed with multiple consumers](./images/cosmosdb/changefeedvisual.png "Customer Container Change Feed")
 
@@ -659,13 +660,13 @@ Create a file called `local.settings.json` in the folder _day3/challenges/cosmos
 
 ```
 
-When finished, take a look at the `function.json` file in the `CosmosTrigger1` folder. We set the `StartFromBeginning` CosmosDBTrigger attribute in the `function.json` to true:
+When created, take a look at the `function.json` file in the _CosmosTrigger1_ folder. We set the `StartFromBeginning` CosmosDBTrigger attribute in the `function.json` to true:
 
 ```json
 startFromBeginning": true
 ```
 
-This lets the function read the change feed entries **from the beginning**  and not just from the point in time where the function starts - this gives you access to the history of your collection. Running the function, will read and process all changes from the beginning of the change feed.
+This setting tells the function to read the change feed entries **from the beginning** and not just from the point in time where it connects to the change feed - this gives you access to the history of your collection. Running the function, will read and process all changes from the beginning of the change feed.
 
 Now, open up the `index.js` file and set a break point next to line 6:
 
@@ -673,9 +674,9 @@ Now, open up the `index.js` file and set a break point next to line 6:
 val.type == 'customer' &&
 ```
 
-Let's go ahead and start the function using the debug mode in VS Code. You will see the function process now all entries in the change feed in batches of 100 documents. As you can see in the `index.js` file, we only take care of entries where the address is in France or Germany (just to speed things a little bit up).
+Let's move on and start the function using the debug mode in VS Code. You will see the function process all entries in the change feed in batches of 100 documents. As you can see in the `index.js` file, we only take care of entries where the address is in France or Germany (just to speed things a little bit up).
 
-When processing has finished, take a look at the `customerView` collection. You'll see all customers that are located in Germany and France.
+When the processing has finished, take a look at the `customerView` collection. You'll see all customers that are located in Germany and France.
 
 To prove that this process works near real-time, let's go to the portal and insert a new _item_ into the `customer` container (if you want to, set a breakpoint again to see the change arriving at your function):
 
@@ -722,11 +723,11 @@ As final result we will see the customer - as the country code matches Germany (
 
 ### What have we learned so far?
 
-We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` container via Portal or via bicep file. In addition we ran the Azure Function code (locally) to listen to every change on the `customer` collection where we added a german customer item and replicated the item to the `customerView` collection.
+We learned about the change feed, when to use it and what APIs are supported. Further Azure Function bindings are a simple way to track the changes which occurred in the CosmosDB. And in the hands-on part, we also added a `customerView` container via Portal or via bicep file. In addition we ran the Azure Function code (locally) to listen to every change on the `customer` collection where we added a German customer item and replicated the item to the `customerView` collection for query-optimized access.
 
 #### Optional
 
-If you want to do more, you can deploy the third bicep _function.bicep_ file using this command and use _Day 2_ as your _cheat sheet_ of how to deploy the code towards the Azure Function Service.
+If you want to do more, you can deploy the bicep file _function.bicep_ using this command and use _Day 2_ as your _cheat sheet_ of how to deploy the code towards the Azure Function service.
 
 ```shell
 az deployment group create -g rg-cosmos-challenge --template-file function.bicep
