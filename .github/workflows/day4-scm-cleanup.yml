@@ -5,6 +5,7 @@ on:
 
 jobs:
   destroy:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
       RG_DEV: rg-scm-devday4
@@ -30,5 +31,5 @@ jobs:
         with:
           inlineScript: |
             #!/bin/bash
-            az group delete -n ${{ steps.createResourceGroupName.outputs.dev }} -y
-            az group delete -n ${{ steps.createResourceGroupName.outputs.test }} -y
+            az group delete -n ${{ steps.createResourceGroupNames.outputs.dev }} -y
+            az group delete -n ${{ steps.createResourceGroupNames.outputs.test }} -y

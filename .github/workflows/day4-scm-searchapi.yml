@@ -7,7 +7,7 @@ on:
     paths:
       - day4/apps/infrastructure/bicep/search/**
       - day4/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day4-scm-search.yml
+      - .github/workflows/day4-scm-searchapi.yml
 
   pull_request:
     branches:
@@ -15,7 +15,7 @@ on:
     paths:
       - day4/apps/infrastructure/bicep/search/**
       - day4/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day4-scm-search.yml
+      - .github/workflows/day4-scm-searchapi.yml
 
   workflow_dispatch:
 
@@ -143,6 +143,7 @@ jobs:
     environment: day4-scm-dev
     needs: [build-bicep, build-api, build-indexer]
     outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
@@ -179,6 +180,7 @@ jobs:
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
+          failOnStdErr: false
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
@@ -225,12 +227,18 @@ jobs:
           app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
 
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-dev.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
+
   deploy-infrastructure-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day4-scm-test
     needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
     outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
       searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
       indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
 
@@ -267,6 +275,7 @@ jobs:
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
+          failOnStdErr: false
           resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
           template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
@@ -312,3 +321,8 @@ jobs:
         with:
           app-name: ${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-test.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
