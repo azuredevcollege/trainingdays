@@ -292,7 +292,7 @@ A successful response is returned in JSON, as shown in the following example:
 
 #### Identify linked entities
 
-The [Entities API](https://docs.microsoft.com/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking) identifies well-known entities in a text document, using the [Entities method](https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-V2-1/operations/5ac4251d5b4ccd1554da7634). It extracts words from text, like "United States", then give you the type and/or Wikipedia link for this word(s). The type for "United States" would be `location`, while the link to Wikipedia is `https://en.wikipedia.org/wiki/United_States`. The following example identifies entities for English documents.
+The [Entities API](https://docs.microsoft.com/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking) identifies well-known entities in a text document, using the [Entities Recognition method](https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-V3-1/operations/EntitiesRecognitionGeneral) and [Entities Linking method](https://westus.dev.cognitive.microsoft.com/docs/services/TextAnalytics-V3-1/operations/EntitiesLinking). It extracts words from text, like "United States", then give you the type and/or Wikipedia link for this word(s). The type for "United States" would be `location`, while the link to Wikipedia is `https://en.wikipedia.org/wiki/United_States`. The following example identifies entities for English documents.
 
 - Go back to Visual Studio Code.
 - Add the code provided below to a new `entities.js` file.
@@ -304,8 +304,8 @@ let https = require('https');
 
 let subscription_key = '<paste-your-text-analytics-key-here>';
 let endpoint = '<paste-your-text-analytics-endpoint-here>';
-
-let path = '/text/analytics/v3.1/entities';
+let path_linking = '/text/analytics/v3.1/entities/linking';
+let path_recognition = '/text/analytics/v3.1/entities/recognition/general';
 
 let response_handler = function (response) {
     let body = '';
@@ -322,13 +322,30 @@ let response_handler = function (response) {
     });
 };
 
-let get_entities = function (documents) {
+let get_entities_linking = function (documents) {
     let body = JSON.stringify(documents);
 
     let request_params = {
         method: 'POST',
         hostname: new URL(endpoint).hostname,
-        path: path,
+        path: path_linking,
+        headers: {
+            'Ocp-Apim-Subscription-Key': subscription_key,
+        },
+    };
+
+    let req = https.request(request_params, response_handler);
+    req.write(body);
+    req.end();
+};
+
+let get_entities_recognition = function (documents) {
+    let body = JSON.stringify(documents);
+
+    let request_params = {
+        method: 'POST',
+        hostname: new URL(endpoint).hostname,
+        path: path_recognition,
         headers: {
             'Ocp-Apim-Subscription-Key': subscription_key,
         },
@@ -343,14 +360,15 @@ let documents = {
     documents: [{ id: '1', language: 'en', text: 'Microsoft is an It company.' }],
 };
 
-get_entities(documents);
+get_entities_linking(documents);
+get_entities_recognition(documents);
 ```
 
 - Copy your Cognitive Services Account key and endpoint into the code - as done before.
 
 You are all set. Now run the program from a terminal, change into the directory where the code is and run `node entities.js`.
 
-A successful response is returned in JSON, as shown in the following example:
+A successful response is returned in JSON (for _lining_ and _recognition_ endpoints), as shown in the following example:
 
 ```json
 {
@@ -359,41 +377,63 @@ A successful response is returned in JSON, as shown in the following example:
       "id": "1",
       "entities": [
         {
+          "bingId": "a093e9b9-90f5-a3d5-c4b8-5855e1b01f85",
           "name": "Microsoft",
           "matches": [
             {
-              "wikipediaScore": 0.20872054383103444,
-              "entityTypeScore": 0.99996185302734375,
               "text": "Microsoft",
               "offset": 0,
-              "length": 9
+              "length": 9,
+              "confidenceScore": 0.26
             }
           ],
-          "wikipediaLanguage": "en",
-          "wikipediaId": "Microsoft",
-          "wikipediaUrl": "https://en.wikipedia.org/wiki/Microsoft",
-          "bingId": "a093e9b9-90f5-a3d5-c4b8-5855e1b01f85",
-          "type": "Organization"
+          "language": "en",
+          "id": "Microsoft",
+          "url": "https://en.wikipedia.org/wiki/Microsoft",
+          "dataSource": "Wikipedia"
         },
         {
+          "bingId": "bc30426e-22ae-7a35-f24b-454722a47d8f",
           "name": "Technology company",
           "matches": [
             {
-              "wikipediaScore": 0.82123868042800585,
               "text": "It company",
               "offset": 16,
-              "length": 10
+              "length": 10,
+              "confidenceScore": 0.84
             }
           ],
-          "wikipediaLanguage": "en",
-          "wikipediaId": "Technology company",
-          "wikipediaUrl": "https://en.wikipedia.org/wiki/Technology_company",
-          "bingId": "bc30426e-22ae-7a35-f24b-454722a47d8f"
+          "language": "en",
+          "id": "Technology company",
+          "url": "https://en.wikipedia.org/wiki/Technology_company",
+          "dataSource": "Wikipedia"
         }
-      ]
+      ],
+      "warnings": []
     }
   ],
-  "errors": []
+  "errors": [],
+  "modelVersion": "2021-06-01"
+}
+
+{
+  "documents": [
+    {
+      "id": "1",
+      "entities": [
+        {
+          "text": "Microsoft",
+          "category": "Organization",
+          "offset": 0,
+          "length": 9,
+          "confidenceScore": 1
+        }
+      ],
+      "warnings": []
+    }
+  ],
+  "errors": [],
+  "modelVersion": "2021-06-01"
 }
 ```
 
