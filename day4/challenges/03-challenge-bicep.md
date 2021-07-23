@@ -325,7 +325,7 @@ In this section we will use
 a small nodejs express app and make sure we can run it locally.
 
 ```shell
-npx express-generator ./ --view pug --git
+npx express-generator@v4.16.1 ./ --view pug --git
 npm install
 npm start
 ```
