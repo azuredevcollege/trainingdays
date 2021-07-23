@@ -8,7 +8,7 @@ on:
       - day4/apps/infrastructure/bicep/visitreports/**
       - day4/apps/nodejs/visitreport/**
       - day4/apps/nodejs/textanalytics/**
-      - .github/workflows/day4-scm-visitreportsapi.yml
+      - .github/workflows/day4-scm-visitreports.yml
 
   pull_request:
     branches:
@@ -17,7 +17,7 @@ on:
       - day4/apps/infrastructure/bicep/visitreports/**
       - day4/apps/nodejs/visitreport/**
       - day4/apps/nodejs/textanalytics/**
-      - .github/workflows/day4-scm-visitreportsapi.yml
+      - .github/workflows/day4-scm-visitreports.yml
 
   workflow_dispatch:
 

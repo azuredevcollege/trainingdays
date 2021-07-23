@@ -19,7 +19,7 @@ Today we are going to focus on the topic _DevOps_. Therefore we take a closer lo
 - [Challenge 03: Deploy to Azure using GitHub Actions](challenges/03-challenge-bicep.md) _(30 min.)_
 - [Challenge 04: Import the Azure Developer College's repository](challenges/04-challenge-azdc-repo.md) _(15 min.)_
 - [Challenge 05: Create a CI/CD workflow to deploy the shared Azure resources of the SCM sample application](challenges/05-challenge-common-cicd.md) _(30 min.)_
-- 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/challenge-bo-1.md)_ 💎
+- 💎 _[Breakout 1: Deploy the sample application with GitHub workflows](challenges/06-breakout.md)_ 💎
 
 ## Day 4 - Goal
 
