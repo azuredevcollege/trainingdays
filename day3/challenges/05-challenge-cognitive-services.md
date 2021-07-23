@@ -495,7 +495,7 @@ A successful response is returned in JSON, as shown in the following example:
 
 ## Azure Samples
 
-Azure AppService code samples:
+Cognitive Services code samples:
 
 - <https://github.com/Azure-Samples/cognitive-services-quickstart-code>
 - For more Details on Cognitive Services or Azure Machine Learning Services visit the **AI Developer College:** <https://github.com/aidevcollege/aidevcollege>
