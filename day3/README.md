@@ -16,7 +16,7 @@ This day is about getting your hands dirty with data and AI in Azure. We will di
 - [Challenge 02: Azure SQL DB](challenges/02-challenge-sql.md)
 - [Challenge 03: Azure Cognitive Search](challenges/03-challenge-search.md)
 - 💎 *[Breakout 01: Add data storage services to our sample application](challenges/04-challenge-bo-1.md)* 💎 *(~90 min.)*
-- [Challenge 04: Cognitive Services](challenges/05-challenge-cognitive-services.md)
+- [Challenge 04: Cognitive Services](challenges/05-challenge-cognitive-services.md) *(~30 min.)*
 - 💎 *[Breakout 02: Add Cognitive Services](challenges/06-challenge-bo-2.md)* 💎 *(~30 min.)*
 
 ## Day 3 - Goal
