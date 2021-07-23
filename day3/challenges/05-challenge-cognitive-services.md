@@ -1,4 +1,4 @@
-# Challenge 4: Cognitive Services
+# Challenge 04: Cognitive Services
 
 ⏲️ _Est. time to complete: 45 min._ ⏲️
 
@@ -40,7 +40,7 @@ You can solve these tasks in a programming language of your choice. For the sake
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | [Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) | <https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
 
-We will now leverage the _Text Analytics API_ for extracting language, sentiment, key phrases, and entities from text. Please use a new resource group, e.g. **azdc-cognitive-rg**. As a **Pricing Tier**, select the smallest possible in the chosen region. You can chose as a name for the resource **cog-textanalytics-westeurope-001** as we learned on day1.
+We will now leverage the _Text Analytics API_ for extracting language, sentiment, key phrases, and entities from text. Please use a new resource group, e.g. **rg-azdc-cognitive**. As a **Pricing Tier**, select the smallest possible in the chosen region. You can chose as a name for the resource **cog-textanalytics-westeurope-001** as we learned on day1.
 
 Go to the Azure Portal, create a Text Analytics Service (in the `West Europe` region):
 
@@ -66,55 +66,55 @@ So, let's create a sample application:
 - Add the code provided below to a new `detect.js` file.
 
 ```javascript
-'use strict'
+'use strict';
 
-let https = require('https')
-let subscription_key = '<paste-your-text-analytics-key-here>'
-let endpoint = '<paste-your-text-analytics-endpoint-here>'
+let https = require('https');
+let subscription_key = '<paste-your-text-analytics-key-here>';
+let endpoint = '<paste-your-text-analytics-endpoint-here>';
 
-let path = '/text/analytics/v3.1/languages'
+let path = '/text/analytics/v3.1/languages';
 
 let response_handler = function (response) {
-  let body = ''
-  response.on('data', function (d) {
-    body += d
-  })
-  response.on('end', function () {
-    let body_ = JSON.parse(body)
-    let body__ = JSON.stringify(body_, null, '  ')
-    console.log(body__)
-  })
-  response.on('error', function (e) {
-    console.log('Error: ' + e.message)
-  })
-}
+    let body = '';
+    response.on('data', function (d) {
+        body += d;
+    });
+    response.on('end', function () {
+        let body_ = JSON.parse(body);
+        let body__ = JSON.stringify(body_, null, '  ');
+        console.log(body__);
+    });
+    response.on('error', function (e) {
+        console.log('Error: ' + e.message);
+    });
+};
 
 let get_language = function (documents) {
-  let body = JSON.stringify(documents)
+    let body = JSON.stringify(documents);
 
-  let request_params = {
-    method: 'POST',
-    hostname: new URL(endpoint).hostname,
-    path: path,
-    headers: {
-      'Ocp-Apim-Subscription-Key': subscription_key,
-    },
-  }
+    let request_params = {
+        method: 'POST',
+        hostname: new URL(endpoint).hostname,
+        path: path,
+        headers: {
+            'Ocp-Apim-Subscription-Key': subscription_key,
+        },
+    };
 
-  let req = https.request(request_params, response_handler)
-  req.write(body)
-  req.end()
-}
+    let req = https.request(request_params, response_handler);
+    req.write(body);
+    req.end();
+};
 
 let documents = {
-  documents: [
-    { id: '1', text: 'This is a document written in English.' },
-    { id: '2', text: 'Este es un document escrito en Español.' },
-    { id: '3', text: '这是一个用中文写的文件' },
-  ],
-}
+    documents: [
+        { id: '1', text: 'This is a document written in English.' },
+        { id: '2', text: 'Este es un document escrito en Español.' },
+        { id: '3', text: '这是一个用中文写的文件' },
+    ],
+};
 
-get_language(documents)
+get_language(documents);
 ```
 
 - Copy your Azure Cognitive Services Account **key and endpoint** into the code. You can find both on the _Overview_ or _Quickstart_ view in the Cognitive Services Account
@@ -169,63 +169,63 @@ The Sentiment Analysis API detects the sentiment of a set of text records, using
 - Add the code provided below to a new `sentiment.js` file.
 
 ```javascript
-'use strict'
+'use strict';
 
-let https = require('https')
+let https = require('https');
 
-let subscription_key = '<paste-your-text-analytics-key-here>'
-let endpoint = '<paste-your-text-analytics-endpoint-here>'
+let subscription_key = '<paste-your-text-analytics-key-here>';
+let endpoint = '<paste-your-text-analytics-endpoint-here>';
 
-let path = '/text/analytics/v3.1/sentiment'
+let path = '/text/analytics/v3.1/sentiment';
 
 let response_handler = function (response) {
-  let body = ''
-  response.on('data', function (d) {
-    body += d
-  })
-  response.on('end', function () {
-    let body_ = JSON.parse(body)
-    let body__ = JSON.stringify(body_, null, '  ')
-    console.log(body__)
-  })
-  response.on('error', function (e) {
-    console.log('Error: ' + e.message)
-  })
-}
+    let body = '';
+    response.on('data', function (d) {
+        body += d;
+    });
+    response.on('end', function () {
+        let body_ = JSON.parse(body);
+        let body__ = JSON.stringify(body_, null, '  ');
+        console.log(body__);
+    });
+    response.on('error', function (e) {
+        console.log('Error: ' + e.message);
+    });
+};
 
 let get_sentiments = function (documents) {
-  let body = JSON.stringify(documents)
+    let body = JSON.stringify(documents);
 
-  let request_params = {
-    method: 'POST',
-    hostname: new URL(endpoint).hostname,
-    path: path,
-    headers: {
-      'Ocp-Apim-Subscription-Key': subscription_key,
-    },
-  }
+    let request_params = {
+        method: 'POST',
+        hostname: new URL(endpoint).hostname,
+        path: path,
+        headers: {
+            'Ocp-Apim-Subscription-Key': subscription_key,
+        },
+    };
 
-  let req = https.request(request_params, response_handler)
-  req.write(body)
-  req.end()
-}
+    let req = https.request(request_params, response_handler);
+    req.write(body);
+    req.end();
+};
 
 let documents = {
-  documents: [
-    {
-      id: '1',
-      language: 'en',
-      text: 'I really enjoy the new XBox One S. It has a clean look, it has 4K/HDR resolution and it is affordable.',
-    },
-    {
-      id: '2',
-      language: 'es',
-      text: 'Este ha sido un dia terrible, llegué tarde al trabajo debido a un accidente automobilistico.',
-    },
-  ],
-}
+    documents: [
+        {
+            id: '1',
+            language: 'en',
+            text: 'I really enjoy the new XBox One S. It has a clean look, it has 4K/HDR resolution and it is affordable.',
+        },
+        {
+            id: '2',
+            language: 'es',
+            text: 'Este ha sido un dia terrible, llegué tarde al trabajo debido a un accidente automobilistico.',
+        },
+    ],
+};
 
-get_sentiments(documents)
+get_sentiments(documents);
 ```
 
 - Copy your Cognitive Services Account key and endpoint into the code - as done before.
@@ -298,52 +298,52 @@ The [Entities API](https://docs.microsoft.com/azure/cognitive-services/text-anal
 - Add the code provided below to a new `entities.js` file.
 
 ```javascript
-'use strict'
+'use strict';
 
-let https = require('https')
+let https = require('https');
 
-let subscription_key = '<paste-your-text-analytics-key-here>'
-let endpoint = '<paste-your-text-analytics-endpoint-here>'
+let subscription_key = '<paste-your-text-analytics-key-here>';
+let endpoint = '<paste-your-text-analytics-endpoint-here>';
 
-let path = '/text/analytics/v3.1/entities'
+let path = '/text/analytics/v3.1/entities';
 
 let response_handler = function (response) {
-  let body = ''
-  response.on('data', function (d) {
-    body += d
-  })
-  response.on('end', function () {
-    let body_ = JSON.parse(body)
-    let body__ = JSON.stringify(body_, null, '  ')
-    console.log(body__)
-  })
-  response.on('error', function (e) {
-    console.log('Error: ' + e.message)
-  })
-}
+    let body = '';
+    response.on('data', function (d) {
+        body += d;
+    });
+    response.on('end', function () {
+        let body_ = JSON.parse(body);
+        let body__ = JSON.stringify(body_, null, '  ');
+        console.log(body__);
+    });
+    response.on('error', function (e) {
+        console.log('Error: ' + e.message);
+    });
+};
 
 let get_entities = function (documents) {
-  let body = JSON.stringify(documents)
+    let body = JSON.stringify(documents);
 
-  let request_params = {
-    method: 'POST',
-    hostname: new URL(endpoint).hostname,
-    path: path,
-    headers: {
-      'Ocp-Apim-Subscription-Key': subscription_key,
-    },
-  }
+    let request_params = {
+        method: 'POST',
+        hostname: new URL(endpoint).hostname,
+        path: path,
+        headers: {
+            'Ocp-Apim-Subscription-Key': subscription_key,
+        },
+    };
 
-  let req = https.request(request_params, response_handler)
-  req.write(body)
-  req.end()
-}
+    let req = https.request(request_params, response_handler);
+    req.write(body);
+    req.end();
+};
 
 let documents = {
-  documents: [{ id: '1', language: 'en', text: 'Microsoft is an It company.' }],
-}
+    documents: [{ id: '1', language: 'en', text: 'Microsoft is an It company.' }],
+};
 
-get_entities(documents)
+get_entities(documents);
 ```
 
 - Copy your Cognitive Services Account key and endpoint into the code - as done before.
@@ -410,56 +410,56 @@ There is also a Cognitive Service that let's you translate text "on-the-fly" wit
   - Add the code provided below:
 
   ```javascript
-  'use strict'
+  'use strict';
 
-  let https = require('https')
+  let https = require('https');
 
-  let subscription_key = '<paste-your-text-translator-key-here>'
-  let endpoint = 'https://api.cognitive.microsofttranslator.com'
-  let region = '<paste-your-text-translator-service-region here>'
-  let path = '/translate?api-version=3.0&to=es&to=it'
+  let subscription_key = '<paste-your-text-translator-key-here>';
+  let endpoint = 'https://api.cognitive.microsofttranslator.com';
+  let region = '<paste-your-text-translator-service-region here>';
+  let path = '/translate?api-version=3.0&to=es&to=it';
 
   let response_handler = function (response) {
-    let body = ''
-    response.on('data', function (d) {
-      body += d
-    })
-    response.on('end', function () {
-      let body_ = JSON.parse(body)
-      let body__ = JSON.stringify(body_, null, '  ')
-      console.log(body__)
-    })
-    response.on('error', function (e) {
-      console.log('Error: ' + e.message)
-    })
-  }
+      let body = '';
+      response.on('data', function (d) {
+          body += d;
+      });
+      response.on('end', function () {
+          let body_ = JSON.parse(body);
+          let body__ = JSON.stringify(body_, null, '  ');
+          console.log(body__);
+      });
+      response.on('error', function (e) {
+          console.log('Error: ' + e.message);
+      });
+  };
 
   let translate_text = function (documents) {
-    let body = JSON.stringify(documents)
+      let body = JSON.stringify(documents);
 
-    let request_params = {
-      method: 'POST',
-      hostname: new URL(endpoint).hostname,
-      path: path,
-      headers: {
-        'Ocp-Apim-Subscription-Key': subscription_key,
-        'Ocp-Apim-Subscription-Region': region,
-        'Content-type': 'application/json',
-      },
-    }
+      let request_params = {
+          method: 'POST',
+          hostname: new URL(endpoint).hostname,
+          path: path,
+          headers: {
+              'Ocp-Apim-Subscription-Key': subscription_key,
+              'Ocp-Apim-Subscription-Region': region,
+              'Content-type': 'application/json',
+          },
+      };
 
-    let req = https.request(request_params, response_handler)
-    req.write(body)
-    req.end()
-  }
+      let req = https.request(request_params, response_handler);
+      req.write(body);
+      req.end();
+  };
 
   let documents = [
-    {
-      text: 'Hello World! We hope you enjoy your day here at the Microsoft office in Munich!',
-    },
-  ]
+      {
+          text: 'Hello World! We hope you enjoy your day here at the Microsoft office in Munich!',
+      },
+  ];
 
-  translate_text(documents)
+  translate_text(documents);
   ```
 
 - Copy your Text Translator Account **key** into the code - as done before.
@@ -495,19 +495,17 @@ A successful response is returned in JSON, as shown in the following example:
 
 ## Azure Samples
 
-_Add some links to Azure samples that might be of interest, e.g.:_
-
 Azure AppService code samples:
 
-- https://github.com/Azure-Samples/cognitive-services-quickstart-code
-- For more Details on Cognitive Services or Azure Machine Learning Services visit the **AI Developer College:** https://github.com/aidevcollege/aidevcollege
+- <https://github.com/Azure-Samples/cognitive-services-quickstart-code>
+- For more Details on Cognitive Services or Azure Machine Learning Services visit the **AI Developer College:** <https://github.com/aidevcollege/aidevcollege>
 
 ## Cleanup
 
 Remove the sample resource group.
 
 ```shell
-az group delete -n azdc-cognitive-rg
+az group delete -n rg-azdc-cognitive
 ```
 
 [◀ Previous challenge](./04-challenge-bo-1.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./06-challenge-bo-2.md)
