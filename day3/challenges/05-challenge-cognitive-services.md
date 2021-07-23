@@ -1,6 +1,6 @@
 # Challenge 04: Cognitive Services
 
-⏲️ _Est. time to complete: 45 min._ ⏲️
+⏲️ _Est. time to complete: 30 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
