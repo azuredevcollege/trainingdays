@@ -5,13 +5,13 @@
 		}
 	],
 	"settings": {
-		"markdown.extension.toc.updateOnSave": false,
 		"files.insertFinalNewline": true,
 		"files.trimFinalNewlines": true,
 		"editor.formatOnSave": true,
 		"editor.codeActionsOnSave": {
 			"source.fixAll.markdownlint": true
-		}
+		},
+		"markdown.extension.toc.updateOnSave": false
 	},
 	"launch": {
 		"version": "0.2.0",
