@@ -1,4 +1,4 @@
-# Deploy to Azure WebApp using GitHub Actions
+# Challenge 03: Deploy to Azure WebApp using GitHub Actions
 
 ⏲️ _est. time to complete: 30 min._ ⏲️
 

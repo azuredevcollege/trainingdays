@@ -480,4 +480,4 @@ bounded contexts. We proceed step by step in the same way as in this Challenge:
 - merge the pull request
 - wait until everything is deployed
 
-[◀ Previous challenge](./04-challenge-azdc-repo) | [🔼 Day 4](../README.md) | [Next challenge ▶](./06-breakout.md)
+[◀ Previous challenge](./04-challenge-azdc-repo.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./06-breakout.md)
