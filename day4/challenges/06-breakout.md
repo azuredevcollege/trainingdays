@@ -1,4 +1,4 @@
-# 💎 Breakout 1:  Deploy the sample application with GitHub workflows💎
+# 💎 Breakout 1:  Deploy the sample application with GitHub workflows 💎
 
 ⏲️ *Est. time to complete: 60 min.* ⏲️
 
@@ -21,11 +21,11 @@ In this challenge you will learn how to:
 
 ## Plan your work
 
-As in the previous challanges we want to reflect our work for the breakout session on the project board.
-We have already created a _Note_ on our project board, which says:
+As in the previous challenges we want to reflect our work for the breakout session on the project board.
+We have already created a _note_ on our project board, which says:
 _Deploy the sample application_
 
-To describe the outstanding work for this breakout session, we create the following issue in the imported trainingdays repository, assign the label `azdc-breakout` and link it to the _Note_:
+To describe the outstanding work for this breakout session, we create the following issue in the imported trainingdays repository, assign the label `azdc-breakout` and link it to the _note_:
 
 ```text
 Deploy all SCM bounded contexts
@@ -40,7 +40,7 @@ After this is done, the project board should look like this:
 
 ## Prepare the workflows 
 
-Now we have to prepare all extsing workflows. As we pushed changes to the master branch in the previous challenge, wee need to pull these changes first:
+Now we have to prepare all extsing workflows. As we pushed changes to the master branch in the previous challenge, we need to pull these changes first:
 
 ```shell
 git checkout master
@@ -98,7 +98,7 @@ git push --set-upstream origin cicd/all
 Create a pull request to push the changes to the master branch. Close the issue _Deploy all SCM bounded contexts_ with the pull request.
 After the pull request is created, wait for all status checks and merge the pull request.
 
-After the pull request is merged, nativate to the `Àctions` page and observe the workflows.
+After the pull request is merged, navigate to the `Àctions` page and observe the workflows.
 
 ## Add data to the sample application and inspect ApplicationInsights
 
@@ -141,7 +141,7 @@ Select a sample and look at the dependency calls:
 ![ApplicationInsights operation dependencies](./images/appinsights-op-dependency.png)
 
 Here you can see all calls to external services, such as SQL Database. 
-If you want to learn more about corss-component transaction, have a look at the documentation [here](https://docs.microsoft.com/azure/azure-monitor/app/transaction-diagnostics)
+If you want to learn more about cross-component transaction, have a look at the documentation [here](https://docs.microsoft.com/azure/azure-monitor/app/transaction-diagnostics)
 
 Now, navigate to the `Application Map` of your ApplicationInsights instance. Here you can see the full application topology across multiple levels of related application components.
 

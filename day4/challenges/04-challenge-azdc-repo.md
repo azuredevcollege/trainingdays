@@ -1,4 +1,4 @@
-# Challenge 04: Import the Azure Developer College's repository and set branch rules
+# 💎 Challenge 04: Import the Azure Developer College's repository and set branch rules 💎
 
 ⏲️ _Est. time to complete: 15 min._ ⏲️
 

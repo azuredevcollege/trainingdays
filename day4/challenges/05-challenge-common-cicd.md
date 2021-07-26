@@ -1,4 +1,4 @@
-# Challenge 05: Create a CI/CD workflow to deploy the shared Azure resources of the SCM sample application
+# 💎 Challenge 05: Create a CI/CD workflow to deploy the shared Azure resources of the SCM sample application 💎
 
 ⏲️ _Est. time to complete: 30 min._ ⏲️
 
