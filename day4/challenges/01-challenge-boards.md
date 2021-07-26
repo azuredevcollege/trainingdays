@@ -379,4 +379,4 @@ If you've already worked with Azure Boards, you can also connect Azure Boards to
 GitHub: [Azure Boards &
 GitHub](https://docs.microsoft.com/en-us/azure/devops/boards/github/?view=azure-devops)
 
-[◀ Previous challenge](./01-challenge-boards.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./02-github-action-intro.md)
+[◀ Previous challenge](./00-challenge-org.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./02-github-actions-intro.md)

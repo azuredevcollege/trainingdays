@@ -1,4 +1,4 @@
-# Github Actions in Action
+# Challenge: 02 GitHub Actions in Action
 
 ⏲️ _est. time to complete: 30 min._ ⏲️
 

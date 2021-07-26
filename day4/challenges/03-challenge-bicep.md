@@ -1,4 +1,4 @@
-# Deploy to Azure WebApp using GitHub Actions
+# Challenge 03: Deploy to Azure WebApp using GitHub Actions
 
 ⏲️ _est. time to complete: 30 min._ ⏲️
 
@@ -449,4 +449,4 @@ Congratulations! You've just deployed your first infrastructure and webapp using
 Feel free to make a few minor changes to the webapp and see how the updates to
 your repository trigger a new deployment updating the WebApp in place.
 
-[◀ Previous challenge](./02-challenge-github-actions-intro.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./04-challenge-azdc-repo.md)
+[◀ Previous challenge](./02-github-actions-intro.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./04-challenge-azdc-repo.md)
