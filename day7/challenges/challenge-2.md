@@ -1034,7 +1034,7 @@ Traffic is managed by the ingress controller and dynamically routed to the `cont
 
 As you can see in the ingress definition, we also added a few annotations to influence how the underlying NGINX server is dealing with requests:
 
-- We enabled [Cross-Origin-Resource-Sharing (CORS)](<https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#:~:text=Cross%2DOrigin%20Resource%20Sharing%20(CORS)%20is%20a%20mechanism%20that,resources%20from%20a%20different%20origin.>) (`nginx.ingress.kubernetes.io/enable-cors`).
+- We enabled [Cross-Origin-Resource-Sharing (CORS)](<https://developer.mozilla.org/docs/Web/HTTP/CORS>) (`nginx.ingress.kubernetes.io/enable-cors`).
 - We defined which headers are allowed (`nginx.ingress.kubernetes.io/cors-allow-headers`).
 - We defined how long the CORS response is valid until the next CORS request will be sent by the browser (`nginx.ingress.kubernetes.io/cors-max-age`).
 
