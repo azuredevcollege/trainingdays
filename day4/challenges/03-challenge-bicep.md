@@ -83,7 +83,7 @@ To allow GitHub to interact with our Azure Subscriptions we need to create a
 Service Account in our Azure Active Directory. This account represents not a
 user but a service, machine or digital agent. These accounts are called
 [**Service
-Principal**](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object).
+Principal**](https://docs.microsoft.com/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object).
 
 Having read the documentation on the `Azure/login` you might already have seen
 the following line to create a Service Principal for role based access control.

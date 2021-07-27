@@ -377,6 +377,6 @@ Project planning for developers](https://github.com/features/issues).
 
 If you've already worked with Azure Boards, you can also connect Azure Boards to
 GitHub: [Azure Boards &
-GitHub](https://docs.microsoft.com/en-us/azure/devops/boards/github/?view=azure-devops)
+GitHub](https://docs.microsoft.com/azure/devops/boards/github/?view=azure-devops)
 
 [◀ Previous challenge](./00-challenge-org.md) | [🔼 Day 4](../README.md) | [Next challenge ▶](./02-github-actions-intro.md)

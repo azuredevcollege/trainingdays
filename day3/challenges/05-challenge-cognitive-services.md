@@ -38,7 +38,7 @@ You can solve these tasks in a programming language of your choice. For the sake
 
 | Azure Cognitive Services                                                                            | Information                                                                                   |
 | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| [Text Analytics API](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) | <https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
+| [Text Analytics API](https://azure.microsoft.com/services/cognitive-services/text-analytics/) | <https://docs.microsoft.com/azure/cognitive-services/text-analytics/quickstarts/nodejs> |
 
 We will now leverage the _Text Analytics API_ for extracting language, sentiment, key phrases, and entities from text. When creating the service, please use a new resource group, e.g. **rg-azdc-cognitive**. As a **Pricing Tier**, select the smallest possible in the chosen region. You can choose as a name for the resource **cog-textanalytics-westeurope-001** as we learned on day1.
 

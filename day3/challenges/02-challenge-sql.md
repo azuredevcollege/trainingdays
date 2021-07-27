@@ -26,7 +26,7 @@ In this challenge you will learn how to:
 
 Azure SQL Database is a general-purpose relational database, provided as a managed service. It's based on the latest stable version of [Microsoft SQL Server database engine](https://docs.microsoft.com/sql/sql-server/sql-server-technical-documentation?toc=/azure/sql-database/toc.json). In fact, the newest capabilities of SQL Server are released first to SQL Database, and then to SQL Server itself. You get the newest SQL Server capabilities with no overhead for patching or upgrading, tested across millions of databases.
 
-To get started with SQL Database consult the documentation [here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-technical-overview).
+To get started with SQL Database consult the documentation [here](https://docs.microsoft.com/azure/sql-database/sql-database-technical-overview).
 
 ## Deployment models
 
@@ -34,9 +34,9 @@ Let us have a look at the different deployment models of SQL Database first:
 
 ![SQL database Deployment options](./images/sql-database-deployment-options.png)
 
-- [Single database](https://docs.microsoft.com/en-us/azure/azure-sql/database/single-database-overview) represents a fully managed, isolated database. You might use this option if you have modern cloud applications and microservices that need a single reliable data source. A single database is similar to a contained database in Microsoft SQL Server Database Engine.
-- [Managed instance](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview) is a fully managed instance of the Microsoft SQL Server Database Engine. It contains a set of databases that can be used together. Use this option for easy migration of on-premises SQL Server databases to the Azure cloud, and for applications that need to use the database features that SQL Server Database Engine provides.
-- [Elastic pool](https://docs.microsoft.com/en-us/azure/azure-sql/database/elastic-pool-overview) is a collection of single databases with a shared set of resources, such as CPU or memory. Single databases can be moved into and out of an elastic pool.
+- [Single database](https://docs.microsoft.com/azure/azure-sql/database/single-database-overview) represents a fully managed, isolated database. You might use this option if you have modern cloud applications and microservices that need a single reliable data source. A single database is similar to a contained database in Microsoft SQL Server Database Engine.
+- [Managed instance](https://docs.microsoft.com/azure/azure-sql/managed-instance/sql-managed-instance-paas-overview) is a fully managed instance of the Microsoft SQL Server Database Engine. It contains a set of databases that can be used together. Use this option for easy migration of on-premises SQL Server databases to the Azure cloud, and for applications that need to use the database features that SQL Server Database Engine provides.
+- [Elastic pool](https://docs.microsoft.com/azure/azure-sql/database/elastic-pool-overview) is a collection of single databases with a shared set of resources, such as CPU or memory. Single databases can be moved into and out of an elastic pool.
 
 ## Purchasing models
 
@@ -77,7 +77,7 @@ Navigate to the azure portal and open the cloud shell. We use the Azure CLI to c
    az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip>
    ```
 
-4. Create the SQL Database with vCore-based purchasing Gen5, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
+4. Create the SQL Database with vCore-based purchasing Gen5, 1 vCore and max 32GB in size. [Here](https://docs.microsoft.com/azure/sql-database/sql-database-service-tiers-vcore) you will find a good overview of the vCore model.
 
    ```shell
    az sql db create --name MSFTEmployees --resource-group adc-sql-db-rg --server <name of your server> --edition GeneralPurpose --family Gen5 --capacity 2 --max-size 32GB --zone-redundant false
@@ -208,7 +208,7 @@ Next we want to create our first table in the MSFTEmployee. Navigate to the MSFT
 
 ## Setup Dynamic Data Masking
 
-Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/en-us/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
+Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
 
 ![Dynamic Data Masking](./images/dynamic-data-masking.png)
 

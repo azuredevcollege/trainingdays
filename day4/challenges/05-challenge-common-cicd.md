@@ -278,7 +278,7 @@ references other Bicep modules to describe the infrastructure.
 After the shared Azure resources are deployed, each bounded context references
 these resources using the Azure naming convention and the Bicep `existing`
 keyword. You can find the naming conventions
-[here](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming).
+[here](https://docs.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming).
 
 Here is an example:
 

@@ -89,7 +89,7 @@ Account Properties:
 | _Capacity mode_  | **OPTIONAL** - if you want to, you can choose Serverless |
 
 :::tip
-📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the deployment option here: <https://docs.microsoft.com/en-us/azure/cosmos-db/throughput-serverless>
+📝 The `Serverless` option is a perfect fit for development environments and small applications. You can find out more about the deployment option here: <https://docs.microsoft.com/azure/cosmos-db/throughput-serverless>
 :::
 
 Leave all other settings as proposed by Azure.
@@ -182,7 +182,7 @@ Subscription for Search Service / indexing of contacts:
 | _Enable Sessions_    | true (in this sample, we will be using Service Bus sessions!) |
 
 :::tip
-📝 `Sessions` enable the first-in, first out (FIFO) pattern within Azure Service Bus. If you want to know more about it, have a look at the official docs: <https://docs.microsoft.com/en-us/azure/service-bus-messaging/message-sessions>
+📝 `Sessions` enable the first-in, first out (FIFO) pattern within Azure Service Bus. If you want to know more about it, have a look at the official docs: <https://docs.microsoft.com/azure/service-bus-messaging/message-sessions>
 :::
 
 Subscription for Visit Reports Service
@@ -498,10 +498,10 @@ We now have one more challenge to complete (Cognitive Services), until the appli
 
 In this Breakout Challenge, you made use of:
 
-- [Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/)
-- [Azure CosmosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
-- [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
-- [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
-- [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
+- [Azure SQL DB](https://docs.microsoft.com/azure/azure-sql/)
+- [Azure CosmosDB](https://docs.microsoft.com/azure/cosmos-db/)
+- [Azure Service Bus](https://docs.microsoft.com/azure/service-bus-messaging/)
+- [Azure Cognitive Search](https://docs.microsoft.com/azure/search/)
+- [Azure AppServices on Linux](https://docs.microsoft.com/azure/app-service/)
 
 [◀ Previous challenge](./03-challenge-search.md) | [🔼 Day 3](../README.md) | [Next challenge ▶](./05-challenge-cognitive-services.md)

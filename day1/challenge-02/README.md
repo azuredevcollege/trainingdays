@@ -81,7 +81,7 @@ And don't forget the **SAVE** button!
   - have 256GiB disk size and support **1100 IOPS disk**  
 
    ::: tip
-   📝 Reference: [What disk types are available in Azure?](https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-types)
+   📝 Reference: [What disk types are available in Azure?](https://docs.microsoft.com/azure/virtual-machines/windows/disks-types)
    :::
 
 - Attach disk back to VM. Once done it'll show up in the VMs like:

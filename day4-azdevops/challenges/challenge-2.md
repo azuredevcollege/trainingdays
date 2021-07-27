@@ -30,14 +30,14 @@ Go to your Azure DevOps project import the repository and name it _azuredevcolle
 
 SSH public key authentication works with an asymmetric pair of generated encryption keys. The public key is shared with Azure DevOps and used to verify the initial ssh connection. The private key is kept safe and secure on your system.
 
-If you haven't already created an SSH key on your system, please follow these steps [here](https://docs.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-1-create-your-ssh-keys).
+If you haven't already created an SSH key on your system, please follow these steps [here](https://docs.microsoft.com/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-1-create-your-ssh-keys).
 
 After you have created the SSH key for your system, add the public key to Azure DevOps services.
-Follow these steps described [here](https://docs.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-2--add-the-public-key-to-azure-devops-servicestfs).
+Follow these steps described [here](https://docs.microsoft.com/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-2--add-the-public-key-to-azure-devops-servicestfs).
 
 Now that you have added your SSH public key to Azure DevOps, you are ready to clone the Azure Developer College's repository to your local machine.
 
-Open a shell and go to your project's folder and clone the repository as described [here](https://docs.microsoft.com/en-us/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-3-clone-the-git-repository-with-ssh) to your local machine. Go to Azure Boards and set the story "S1" to completed.
+Open a shell and go to your project's folder and clone the repository as described [here](https://docs.microsoft.com/azure/devops/repos/git/use-ssh-keys-to-authenticate?view=azure-devops&tabs=current-page#step-3-clone-the-git-repository-with-ssh) to your local machine. Go to Azure Boards and set the story "S1" to completed.
 
 🥳 **Congratulations** - You have completed your first User Story. 🥳  
 
@@ -47,11 +47,11 @@ Now it's time to start to work on User Story "S2". Go to Azure Boards and move t
 
 ### Setup Master Branch's Policies to require a Pull Request and Work Items
 
-To protect your branch you need to configure _branch policies_. [Here](https://docs.microsoft.com/en-us/azure/devops/repos/git/branch-policies?view=azure-devops) you can find a description of how to setup policies for your master branch to require a _Pull Request_ and a link to a _Work Item_.
+To protect your branch you need to configure _branch policies_. [Here](https://docs.microsoft.com/azure/devops/repos/git/branch-policies?view=azure-devops) you can find a description of how to setup policies for your master branch to require a _Pull Request_ and a link to a _Work Item_.
 
 ### Create a Feature Branch to complete User Story S2
 
-There are several ways to create a feature branch. You can either use the command line and the git command or you can use VS Code. [Here](https://docs.microsoft.com/en-us/azure/devops/repos/git/branches?view=azure-devops&tabs=command-line) you can find a description to get more details about it.
+There are several ways to create a feature branch. You can either use the command line and the git command or you can use VS Code. [Here](https://docs.microsoft.com/azure/devops/repos/git/branches?view=azure-devops&tabs=command-line) you can find a description to get more details about it.
 
 #### Command line
 
@@ -113,7 +113,7 @@ Navigate to your Azure Repo and have a look at the branches. Your branch is now 
 
 ### Create a Pull Request to apply your changes to the master branch
 
-To create a _Pull Request_ follow the instructions [here](https://docs.microsoft.com/en-us/azure/devops/repos/git/pullrequest?view=azure-devops#create-a-pull-request-1). Select the branch `"features/changetitle"` to be merged into the master and link the User Story _S2_ to the Pull Request.
+To create a _Pull Request_ follow the instructions [here](https://docs.microsoft.com/azure/devops/repos/git/pullrequest?view=azure-devops#create-a-pull-request-1). Select the branch `"features/changetitle"` to be merged into the master and link the User Story _S2_ to the Pull Request.
 
 After you have completed the _Pull Request_ you have completed the User Story "S2". Go to Azure Boards and set the story to the state _completed_. Maybe it is already set to completed depending on the choice you made during the completion of the Pull Request. Have a look at the story. You will see that the User Story was linked to the code changes and to the Pull Request:
 

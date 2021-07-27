@@ -70,10 +70,10 @@ _Describe what has been done so far and also give an outlook on what's next. Fur
 
 In this Breakout Challenge, you made use of:
 
-- [Azure SQL DB](https://docs.microsoft.com/en-us/azure/azure-sql/)
-- [Azure CosmosDB](https://docs.microsoft.com/en-us/azure/cosmos-db/)
-- [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/)
-- [Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/)
-- [Azure AppServices on Linux](https://docs.microsoft.com/en-us/azure/app-service/)
+- [Azure SQL DB](https://docs.microsoft.com/azure/azure-sql/)
+- [Azure CosmosDB](https://docs.microsoft.com/azure/cosmos-db/)
+- [Azure Service Bus](https://docs.microsoft.com/azure/service-bus-messaging/)
+- [Azure Cognitive Search](https://docs.microsoft.com/azure/search/)
+- [Azure AppServices on Linux](https://docs.microsoft.com/azure/app-service/)
 
 [◀ Previous challenge](./challenge-n.md) | [🔼 Day x](../README.md) | [Next challenge ▶](./challenge-n+1.md)
