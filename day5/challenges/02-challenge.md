@@ -143,4 +143,4 @@ az ad app delete --id <applicationid>
 az ad app delete --id $API_APP_ID
 ```
 
-[◀ Previous challenge](./challenge-1.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./challenge-3.md)
+[◀ Previous challenge](./01-challenge.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./03-challenge.md)

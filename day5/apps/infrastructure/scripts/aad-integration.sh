@@ -3,7 +3,7 @@
 API_APP_NAME=$1
 API_APP_URI=$2
 UI_APP_NAME=$3
-UI_APP_REPLYURL=$4
+UI_APP_REPLYURL=https://localhost
 
 # create the API app
 API_APP=$(az ad app create --display-name $API_APP_NAME --identifier-uris $API_APP_URI --available-to-other-tenants false)
@@ -37,5 +37,5 @@ az rest --method PATCH \
  --headers "Content-Type=application/json" \
  --body "{\"spa\":{\"redirectUris\":[\"$UI_APP_REPLYURL\"]}}"
 
-echo "UI AppId: $UI_APP_ID"
-echo "API AppId: $API_APP_ID"
+echo "UI AppId for app $UI_APP_NAME: $UI_APP_ID"
+echo "API AppId for app $API_APP_NAME: $API_APP_ID"

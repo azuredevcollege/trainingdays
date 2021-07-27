@@ -20,7 +20,7 @@ In the previous challenges you have learned some basics about the OpenID Connect
 
 In [Challenge 2](./challenge-2.md) you have already seen how to create an Azure AD client application to sign in users and how to create an API application that exposes OAuth2 permissions. We have to do the same for the sample application.
 
-There is already a script available in the repository to create both applications for you. It is located here  you will need to run it in a bash/Shell environment): [day5/apps/infrastructure/scripts/aad-integration.sh](../apps/infrastructure/scripts/aad-integration.sh).
+There is already a script available in the repository to create both applications for you. It is located here: [day5/apps/infrastructure/scripts/aad-integration.sh](../apps/infrastructure/scripts/aad-integration.sh). You need to run it in a bash/Shell environment)
 
 The script creates the server application first and then the client application for the sample application. It also uses a [oauth2-permissions.json](../apps/infrastructure/scripts/oauth2-permissions.json) file where all needed OAuth2 permission are defined.
 
@@ -39,21 +39,19 @@ You must run the script twice:
 
 Use the following parameters to run the script for the `Development` stage:
 
-| Parameter          | Value                                                                                                                                                   |
-| -------------------| ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| _API-APP-NAME_     | scmapi-dev                                                                                                                                              |
-| _API-APP-URI_      | <http://scmapi-dev>                                                                                                                                     |
-| _UI-APP-NAME_      | scmfe-dev                                                                                                                                               |
-| _UI-APP-REPLY-URL_ | the url of your SCM Frontend deployment of stage `Development` (This is the Url to the static website e.g. `https://scmfedev.z20.web.core.windows.net`) |
+| Parameter | Value|
+| ------------------ | --------------|
+| _API-APP-NAME_     | scmapi-dev |
+| _API-APP-URI_      | http://scmapi-dev |
+| _UI-APP-NAME_      | scmfe-dev |
 
 Use the following parameter for the `Testing` stage:
 
-| Parameter          | Value                                                                                                                                                |
-| -------------------| ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| _API-APP-NAME_     | scmapi-test                                                                                                                                          |
-| _API-APP-URI_      | <http://scmapi-test>                                                                                                                                 |
-| _UI-APP-NAME_      | scmfe-test                                                                                                                                           |
-| _UI-APP-REPLY-URL_ | the url of your SCM Frontend deployment of stage `Testing`(This is the Url to the static website e.g. `https://scmfetest.z20.web.core.windows.net`)  |
+| Parameter          | Value |
+| ------------------ | --------------------- |
+| _API-APP-NAME_     | scmapi-test|
+| _API-APP-URI_      | http://scmapi-test |
+| _UI-APP-NAME_      | scmfe-test|
 
 Navigate to the directory [day5/apps/infrastructure/scripts](../apps/infrastructure/scripts) which contains the script and the `oauth2-permissions.json` configuration file.
 
@@ -67,7 +65,7 @@ Run the script twice:
 :::
 
 ```shell
-/scripts> ./aad-integration.sh <API-APP-NAME> <API-APP-URI> <UI-APP-NAME> <UI-APP-REPLY-URL>
+./aad-integration.sh <API-APP-NAME> <API-APP-URI> <UI-APP-NAME>
 ```
 
 The output:
