@@ -585,21 +585,16 @@ For event processing and notifications the Azure Cosmos DB change feed can simpl
 
 ### What does it support?
 
-The following APIs are supported:
+Not all Cosmos DB APIs support the change feed feature with Azure Function integration and/or Change Feed Processor library. Here's a brief overview what is supported and how:
 
-- SQL API
-- MongoDB API
-- Cassandra API
-- Gremlin API
-
-What's not supported:
-
-- Table API
+- SQL API is fully supported
+- In a MongoDB database, you’ll need to use the “watch” statement (standard Mongo API) to consume the change stream of a collection (see [MongoDB Change Streams](https://docs.microsoft.com/azure/cosmos-db/mongodb-change-streams))
+- To get the changes in a Cassandra database/table, you need to use query predicates in CQL (see [query predicates in the Cassandra Query Language (CQL)](https://docs.microsoft.com/azure/cosmos-db/cassandra-change-feed))
+- Table + Gremlin APIs don’t offer any type of cahnge data capture, change stream/feed etc.
 
 ### How to consume the Change Feed?
 
-In this challenge we will use an Azure Function hence providing the simplest way to connect to the change feed. You can create small reactive Azure Function that will be automatically triggered on each new event in your Azure Cosmos
-container's change feed.
+In this challenge we will use an Azure Function (as we are using the SQL API) hence using the simplest way to connect to the change feed. You can create small reactive Azure Function that will be automatically triggered on each new event in your Azure Cosmos container's change feed.
 
 As this is an introduction, we will focus on the Azure Function sample. If you are interested to read about other options like the ChangeFeed Processor, you can get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
 
