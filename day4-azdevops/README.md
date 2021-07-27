@@ -2,7 +2,7 @@
 
 ## Welcome
 
-Today we are going to focus on the topic of _DevOps_. Therefore we wil take a closer look at [Azure DevOps](https://azure.microsoft.com/en-us/services/devops/) and its components:
+Today we are going to focus on the topic of _DevOps_. Therefore we wil take a closer look at [Azure DevOps](https://azure.microsoft.com/services/devops/) and its components:
 
 - Azure Boards
 - Azure Pipelines

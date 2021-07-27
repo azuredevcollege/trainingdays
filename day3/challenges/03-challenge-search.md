@@ -30,8 +30,8 @@ Regarding your application, your code issues query requests and handles response
 
 | Core Search           | Features                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Free-form text search | [**Full-text search**](https://docs.microsoft.com/en-us/azure/search/search-lucene-query-architecture) is a primary use case for most search-based apps. Queries can be formulated using a supported syntax. <br/><br/>[**Simple query syntax**](https://docs.microsoft.com/en-us/rest/api/searchservice/simple-query-syntax-in-azure-search) provides logical operators, phrase search operators, suffix operators, precedence operators.<br/><br/>[**Lucene query syntax**](https://docs.microsoft.com/en-us/rest/api/searchservice/lucene-query-syntax-in-azure-search) includes all operations in simple syntax, with extensions for fuzzy search, proximity search, term boosting, and regular expressions. |
-| Filters and facets    | [**Faceted navigation**](https://docs.microsoft.com/en-us/azure/search/search-faceted-navigation) is enabled through a single query parameter. Azure Cognitive Search returns a faceted navigation structure you can use as the code behind a categories list, for self-directed filtering (for example, to filter catalog items by price-range or brand). <br/><br/> [**Filters**](https://docs.microsoft.com/en-us/azure/search/search-filters-facets) can be used to incorporate faceted navigation into your application's UI, enhance query formulation, and filter based on user- or developer-specified criteria. Create filters using the OData syntax.                                                  |
+| Free-form text search | [**Full-text search**](https://docs.microsoft.com/azure/search/search-lucene-query-architecture) is a primary use case for most search-based apps. Queries can be formulated using a supported syntax. <br/><br/>[**Simple query syntax**](https://docs.microsoft.com/rest/api/searchservice/simple-query-syntax-in-azure-search) provides logical operators, phrase search operators, suffix operators, precedence operators.<br/><br/>[**Lucene query syntax**](https://docs.microsoft.com/rest/api/searchservice/lucene-query-syntax-in-azure-search) includes all operations in simple syntax, with extensions for fuzzy search, proximity search, term boosting, and regular expressions. |
+| Filters and facets    | [**Faceted navigation**](https://docs.microsoft.com/azure/search/search-faceted-navigation) is enabled through a single query parameter. Azure Cognitive Search returns a faceted navigation structure you can use as the code behind a categories list, for self-directed filtering (for example, to filter catalog items by price-range or brand). <br/><br/> [**Filters**](https://docs.microsoft.com/azure/search/search-filters-facets) can be used to incorporate faceted navigation into your application's UI, enhance query formulation, and filter based on user- or developer-specified criteria. Create filters using the OData syntax.                                                  |
 
 ### Facet Filters in a Search App
 
@@ -55,13 +55,13 @@ This example builds a request that creates facet navigation based on the busines
 _Facets_ are dynamic and returned on a query. Search responses bring with them the facet categories used to navigate the results.
 
 :::tip
-📝You can find more details here: [Search-Filters-Facets](https://docs.microsoft.com/en-us/azure/search/search-filters-facets)
+📝You can find more details here: [Search-Filters-Facets](https://docs.microsoft.com/azure/search/search-filters-facets)
 :::
 
-In the SCM Application, we are using the _Lucene_ query syntax ([Lucene Query Syntax Examples](https://docs.microsoft.com/en-us/azure/search/search-query-lucene-examples)).
+In the SCM Application, we are using the _Lucene_ query syntax ([Lucene Query Syntax Examples](https://docs.microsoft.com/azure/search/search-query-lucene-examples)).
 
 :::tip
-📝 View the full Azure Cognitive Search Feature list here: [Azure Cognitive Search Feature list](https://docs.microsoft.com/en-us/azure/search/search-what-is-azure-search#feature-descriptions)
+📝 View the full Azure Cognitive Search Feature list here: [Azure Cognitive Search Feature list](https://docs.microsoft.com/azure/search/search-what-is-azure-search#feature-descriptions)
 :::
 
 ## Create an Azure Search Service in the Portal
@@ -82,7 +82,7 @@ View the Details of Creating an Azure Search Service in the Portal:
 
 Once provisioned, our service will be reachable via `https://xxxxxxx.search.windows.net`
 
-Azure Search [can index](https://docs.microsoft.com/en-us/azure/search/search-indexer-overview) data from a variety of sources:
+Azure Search [can index](https://docs.microsoft.com/azure/search/search-indexer-overview) data from a variety of sources:
 
 - Azure SQL Database or SQL Server on an Azure virtual machine
 - Azure Cosmos DB
@@ -91,7 +91,7 @@ Azure Search [can index](https://docs.microsoft.com/en-us/azure/search/search-in
 - Indexing CSV blobs using the Azure Search Blob indexer
 - Indexing JSON blobs with Azure Search Blob indexer
 
-In general, you can upload your data to one of the sources and let Azure Search index it from there. You can do this completely through the Azure Portal, use [Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) or use the API/CLI.
+In general, you can upload your data to one of the sources and let Azure Search index it from there. You can do this completely through the Azure Portal, use [Storage Explorer](https://azure.microsoft.com/features/storage-explorer/) or use the API/CLI.
 
 In our case, we'll choose a sample dataset called **hotel-sample**
 
@@ -207,9 +207,9 @@ When **queryType** is unspecified, the default **simple query parser** is used. 
 
 ## Add Cognitive Skills to Azure Search - to index unstructured content (e.g. images, audio, etc.)
 
-[Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/cognitive-search-concept-intro) allows us to also index unstructured data. More precisely, it add capabilities for _data extraction_, _natural language processing_ (NLP), and _image processing_ to Azure Search indexing pipeline (for more see [here](https://docs.microsoft.com/en-us/azure/search/cognitive-search-concept-intro#key-features-and-concepts)). In Azure Cognitive Search, a skill set is responsible for the pipeline of the data and consists of multiple skills. Some skills have been pre-included, but it is also possible for us to write our own skills.
+[Azure Cognitive Search](https://docs.microsoft.com/azure/search/cognitive-search-concept-intro) allows us to also index unstructured data. More precisely, it add capabilities for _data extraction_, _natural language processing_ (NLP), and _image processing_ to Azure Search indexing pipeline (for more see [here](https://docs.microsoft.com/azure/search/cognitive-search-concept-intro#key-features-and-concepts)). In Azure Cognitive Search, a skill set is responsible for the pipeline of the data and consists of multiple skills. Some skills have been pre-included, but it is also possible for us to write our own skills.
 
-[Azure Cognitive Search](https://docs.microsoft.com/en-us/azure/search/cognitive-search-quickstart-blob)
+[Azure Cognitive Search](https://docs.microsoft.com/azure/search/cognitive-search-quickstart-blob)
 
 Let's see it in action. As before, let's choose a sample dataset and choose the SQL DB `realestate-us-sample`. Go to the Azure Search Service an click on **Import Data**.
 
@@ -234,8 +234,8 @@ When you select the Indexes Tab on the Overview Page (in the Azure Portal) and s
 :::tip
 📝 Here you find more information about the query syntax:
   
-- [Simple Query Syntax](https://docs.microsoft.com/en-us/rest/api/searchservice/simple-query-syntax-in-azure-search)
-- [Lucene Query Syntax](https://docs.microsoft.com/en-us/rest/api/searchservice/lucene-query-syntax-in-azure-search)
+- [Simple Query Syntax](https://docs.microsoft.com/rest/api/searchservice/simple-query-syntax-in-azure-search)
+- [Lucene Query Syntax](https://docs.microsoft.com/rest/api/searchservice/lucene-query-syntax-in-azure-search)
 
 :::
 
@@ -243,9 +243,9 @@ When you select the Indexes Tab on the Overview Page (in the Azure Portal) and s
 
 We've been lazy and did everything through the portal - obviously not the way we want to work in the real world. Especially data ingestion and search should (and most likely needs) to be performed through the API:
 
-- [Create an index](https://docs.microsoft.com/en-us/azure/search/search-create-index-rest-api)
-- [Import Data](https://docs.microsoft.com/en-us/azure/search/search-import-data-rest-api)
-- [Search](https://docs.microsoft.com/en-us/azure/search/search-query-rest-api)
+- [Create an index](https://docs.microsoft.com/azure/search/search-create-index-rest-api)
+- [Import Data](https://docs.microsoft.com/azure/search/search-import-data-rest-api)
+- [Search](https://docs.microsoft.com/azure/search/search-query-rest-api)
 
 ## Integrate Azure Search in an Node.js Application
 

@@ -64,7 +64,7 @@ Create one ARM template (plus parameters file) that contains all resources we ne
 ## References / Links
 
 - You can access/see the current template/JSON of running resources via <https://resources.azure.com>. This is a good starting point, when you want to know what UI setting influences which JSON parameter.
-- Azure Resource Manager Template Reference: <https://docs.microsoft.com/en-us/azure/templates/>
+- Azure Resource Manager Template Reference: <https://docs.microsoft.com/azure/templates/>
   - find documentation for all available properties of a service/resource
 - Azure Quickstart Templates: <https://github.com/Azure/azure-quickstart-templates>
   - Azure Function App (Consumption Plan): <https://github.com/Azure/azure-quickstart-templates/tree/master/101-function-app-create-dynamic>

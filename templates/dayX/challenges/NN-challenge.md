@@ -161,7 +161,7 @@ _Add some links to Azure samples that might be of interest, e.g.:_
 
 Azure AppService code samples:
 
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
+- <https://docs.microsoft.com/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
 
 ## Cleanup
 

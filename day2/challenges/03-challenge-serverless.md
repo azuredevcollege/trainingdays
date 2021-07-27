@@ -151,7 +151,7 @@ namespace AzDevCollege.Function
 
 What has been added to the **Run** method:
 
-- The parameter `[Blob("processed/proc_{name}", FileAccess.Write)] Stream outStream` to automatically write the results of the image manipulation to a blob in the container **processed** having the same file name, prefixed with "proc". This is called an _Output Binding_. You simply write data to these kind of annotated variables and Azure takes care of storing to the configured data store. For more information on that, see <https://docs.microsoft.com/en-us/azure/azure-functions/functions-bindings-storage-blob?tabs=csharp#output>
+- The parameter `[Blob("processed/proc_{name}", FileAccess.Write)] Stream outStream` to automatically write the results of the image manipulation to a blob in the container **processed** having the same file name, prefixed with "proc". This is called an _Output Binding_. You simply write data to these kind of annotated variables and Azure takes care of storing to the configured data store. For more information on that, see <https://docs.microsoft.com/azure/azure-functions/functions-bindings-storage-blob?tabs=csharp#output>
 - The code needed to manipulate the input image in the `using` statement
 
 Now restart the local Azure Function and when the function is ready to accept calls, go to the Storage Explorer and drag an image (**!use an image!**) to the folder **originals**. A few seconds later, you will see that the Azure Function has been triggered.
@@ -208,7 +208,7 @@ Test again (upload images) and check, if the Function App is running correctly i
 
 Azure Functions code samples:
 
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-functions>
+- <https://docs.microsoft.com/samples/browse/?expanded=azure&products=azure-functions>
 
 ## Cleanup
 

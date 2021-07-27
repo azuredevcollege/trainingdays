@@ -140,7 +140,7 @@ Tomorrow, we will show you how to deploy the application including the Azure inf
 
 In this Breakout Challenge, you made use of:
 
-- [Azure Cognitive Services / Text Analytics](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/)
-- [Azure Functions on Linux](https://docs.microsoft.com/en-us/azure/azure-functions/create-function-app-linux-app-service-plan)
+- [Azure Cognitive Services / Text Analytics](https://docs.microsoft.com/azure/cognitive-services/text-analytics/)
+- [Azure Functions on Linux](https://docs.microsoft.com/azure/azure-functions/create-function-app-linux-app-service-plan)
 
 [◀ Previous challenge](./05-challenge-cognitive-services.md) | [🔼 Day 3](../README.md)

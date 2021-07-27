@@ -184,11 +184,11 @@ You have seen how many connectors Azure Logic Apps has "under the hood". Take th
 
 Azure LogicApps code samples:
 
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-logic-apps>
+- <https://docs.microsoft.com/samples/browse/?expanded=azure&products=azure-logic-apps>
 
 Azure Service Bus code samples:
 
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&filter-products=service%20b&products=azure-service-bus>
+- <https://docs.microsoft.com/samples/browse/?expanded=azure&filter-products=service%20b&products=azure-service-bus>
 
 ## Cleanup
 

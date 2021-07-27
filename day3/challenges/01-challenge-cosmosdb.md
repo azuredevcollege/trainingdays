@@ -52,7 +52,7 @@ In the Azure Portal, click on _Create Resource_ and select _Azure Cosmos DB_. Wh
 ![Cosmos DB API](./images/cosmosdb/portal_create_api_option.png "Cosmos DB API options")
 
 :::tip
-📝 As you might already know, Comsos DB supports a variety of APIs that you can use, depending on your use case. You can e.g. use the _MongoDB_ API - as the _Cosmos DB Core API_ - for storing documents, take the _Cassandra_ API, if you have to deal with timeseries oriented data or _Gremlin_, if you want to store the data in a graph with _vertices_ and _edges_. You can find out more about all the options (and when to choose which API) in the official documentation: <https://docs.microsoft.com/en-us/azure/cosmos-db/choose-api>.
+📝 As you might already know, Comsos DB supports a variety of APIs that you can use, depending on your use case. You can e.g. use the _MongoDB_ API - as the _Cosmos DB Core API_ - for storing documents, take the _Cassandra_ API, if you have to deal with timeseries oriented data or _Gremlin_, if you want to store the data in a graph with _vertices_ and _edges_. You can find out more about all the options (and when to choose which API) in the official documentation: <https://docs.microsoft.com/azure/cosmos-db/choose-api>.
 :::
 
 On the wizard, please choose/enter the following parameters:
@@ -371,9 +371,9 @@ As you can see in the result document, there is a bunch of properties, that have
 | __rid_         | It is a system generated property. The resource ID (_rid) is a unique identifier that is also hierarchical per the resource stack on the resource model. It is used internally for placement and navigation of the document resource.                                                                                                                                                |
 | __ts_          | It is a system generated property. It specifies the last updated timestamp of the resource. The value is a timestamp.                                                                                                                                                                                                                                                                |
 | __self_        | It is a system generated property. It is the unique addressable URI for the resource.                                                                                                                                                                                                                                                                                                |
-| __etag_        | It is a system generated property that specifies the resource etag required for [optimistic concurrency control](https://docs.microsoft.com/en-us/azure/cosmos-db/database-transactions-optimistic-concurrency#optimistic-concurrency-control).                                                                                                                                      |
+| __etag_        | It is a system generated property that specifies the resource etag required for [optimistic concurrency control](https://docs.microsoft.com/azure/cosmos-db/database-transactions-optimistic-concurrency#optimistic-concurrency-control).                                                                                                                                      |
 | __attachments_ | It is a system generated property that specifies the addressable path for the attachments resource.                                                                                                                                                                                                                                                                                  |
-| _ttl_          | Azure Cosmos DB provides the ability to delete items automatically from a container after a certain time period. By default, you can set _time to live_ or _TTL_ at the container level and override the value on a per-item basis. Use the _ttl_ property for setting the per-item time period. More on that [here](https://docs.microsoft.com/en-us/azure/cosmos-db/time-to-live). |
+| _ttl_          | Azure Cosmos DB provides the ability to delete items automatically from a container after a certain time period. By default, you can set _time to live_ or _TTL_ at the container level and override the value on a per-item basis. Use the _ttl_ property for setting the per-item time period. More on that [here](https://docs.microsoft.com/azure/cosmos-db/time-to-live). |
 
 Let's execute another query to determine the amount of documents stored in the _customer_ collection.
 
@@ -418,7 +418,7 @@ Adding an index can significantly reduce the query time and consumed RUs, but ca
 Let's have a look at the _customer_ document. The indexing policy has been adjusted to NOT(!) index fields like _firstName_, _title_, _addresses_ etc. Adding or updating a customer consumes ~ 8.5 RUs. Using the standard indexing policy (which means all properties will be indexed), the same operation consumes ~13.2 RUs. That's about 150% "the price".
 
 :::tip Index Types
-📝 Cosmos DB supports several index types like _range_, _spatial_ (for geo-data) and _composite indexes_. To learn more about when to use what kind of index, refer to the official documentation: <https://docs.microsoft.com/en-us/azure/cosmos-db/index-overview>.
+📝 Cosmos DB supports several index types like _range_, _spatial_ (for geo-data) and _composite indexes_. To learn more about when to use what kind of index, refer to the official documentation: <https://docs.microsoft.com/azure/cosmos-db/index-overview>.
 :::
 
 You saw that limiting the amount of properties that get indexed is beneficial for storing data. RU cost is significantly reduced. But it has impact on querying data. If you want to use the collection to give users of your application to search and query for any properties, it has the opposite impact. A lot of RUs will be consumed.
@@ -580,7 +580,7 @@ The change feed in Azure Cosmos DB enables you to build efficient and scalable s
 For event processing and notifications the Azure Cosmos DB change feed can simplify scenarios that need to trigger a notification or send a call to an API based on a certain event.
 
 :::tip
-📝 Reagarding some patterns and best practices for change feed, you can read more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-design-patterns).
+📝 Reagarding some patterns and best practices for change feed, you can read more details [here](https://docs.microsoft.com/azure/cosmos-db/change-feed-design-patterns).
 :::
 
 ### What does it support?
@@ -601,7 +601,7 @@ What's not supported:
 In this challenge we will use an Azure Function hence providing the simplest way to connect to the change feed. You can create small reactive Azure Function that will be automatically triggered on each new event in your Azure Cosmos
 container's change feed.
 
-As this is an introduction, we will focus on the Azure Function sample. If you are interested to read about other options like the ChangeFeed Processor, you can get more details [here](https://docs.microsoft.com/en-us/azure/cosmos-db/change-feed-processor).
+As this is an introduction, we will focus on the Azure Function sample. If you are interested to read about other options like the ChangeFeed Processor, you can get more details [here](https://docs.microsoft.com/azure/cosmos-db/change-feed-processor).
 
 ![Azure Function processing events from the Change Feed](./images/cosmosdb/functions.png "Change Feed Overview")
 
@@ -755,12 +755,12 @@ When you have successfully finished the Change Feed challenge, you should see me
 
 ## Azure Samples / Further Information
 
-- <https://docs.microsoft.com/en-us/azure/cosmos-db/modeling-data> - Modelling data
-- <https://docs.microsoft.com/en-us/azure/cosmos-db/sql-query-getting-started> - SQL API Queries
+- <https://docs.microsoft.com/azure/cosmos-db/modeling-data> - Modelling data
+- <https://docs.microsoft.com/azure/cosmos-db/sql-query-getting-started> - SQL API Queries
 - <https://aka.ms/PracticalCosmosDB> - model a blog platform
 - <https://youtube.com/azurecosmosdb> - videos on CosmosDB
 - <https://devblogs.microsoft.com/cosmosdb/> - official CosmosDB blog
-- <https://docs.microsoft.com/en-us/azure/cosmos-db/concepts-limits> - Service limits
+- <https://docs.microsoft.com/azure/cosmos-db/concepts-limits> - Service limits
 
 ## Cleanup
 
