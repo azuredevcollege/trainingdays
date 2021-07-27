@@ -1,4 +1,4 @@
-# 💎 Challenge 3: Azure AD applications and deploment to GitHub environments 💎
+# 💎 Challenge 3: Azure AD applications and deployment to GitHub environments 💎
 
 ## Here is what you will learn 🎯
 

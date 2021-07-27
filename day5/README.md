@@ -9,7 +9,7 @@ This day is focusing of implementing authentication and authorization into the A
 - [Challenge 0: Request an ID Token from Azure AD](./challenges/00-challenge.md)
 - [Challenge 1: Receive an ID Token in a Fragment URL](./challenges/01-challenge.md)
 - [Challenge 2: OAuth2 Implicit Flow](./challenges/02-challenge.md)
-- [Challenge 3: Azure AD applications and deploment to GitHub environments](./challenges/03-challenge.md)
+- 💎 [Challenge 3: Azure AD applications and deployment to GitHub environments](./challenges/03-challenge.md) 💎
 - 💎 *[Breakout: Integrate the sample application into Azure AD](./challenges/04-breakout.md)* 💎
 
 :::tip
