@@ -1,4 +1,4 @@
-# 💎 Challenge 3: Create Azure AD applications and prepare GitHub environments 💎
+# 💎 Challenge 3: Azure AD applications and deploment to GitHub environments 💎
 
 ## Here is what you will learn 🎯
 
@@ -372,7 +372,7 @@ As a result we see one storage account. Open the storage account and go to the s
 
 Next, navigate to `Azure Active Directory > App registrations`, select `All applications` and search for `scmfe-dev`. Open the application and go to `Authentication`. Add the `Reply Url` you copied to your clipboard and save the changes:
 
-![Azure AD adjust Reply Url](./images/ad-adjust-reply-url.png)
+![Azure AD adjust Reply Url](./images/aad-adjust-reply-url.png)
 
 Please repeat these steps for the application in the `test` environment to adjust the Reply url, too.
 
