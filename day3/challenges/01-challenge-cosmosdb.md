@@ -590,7 +590,7 @@ Not all Cosmos DB APIs support the change feed feature with Azure Function integ
 - SQL API is fully supported
 - In a MongoDB database, you’ll need to use the “watch” statement (standard Mongo API) to consume the change stream of a collection (see [MongoDB Change Streams](https://docs.microsoft.com/azure/cosmos-db/mongodb-change-streams))
 - To get the changes in a Cassandra database/table, you need to use query predicates in CQL (see [query predicates in the Cassandra Query Language (CQL)](https://docs.microsoft.com/azure/cosmos-db/cassandra-change-feed))
-- Table + Gremlin APIs don’t offer any type of cahnge data capture, change stream/feed etc.
+- Table + Gremlin APIs don’t offer any type of change data capture, change stream/feed etc.
 
 ### How to consume the Change Feed?
 
