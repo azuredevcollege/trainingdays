@@ -7,7 +7,7 @@
 - Create Azure AD's client and server applications to integrate Azure AD into the sample application
 - Configure GitHub envrionement's to deploy to a development and testing stage
 - Deploy the shared Azure resources of the sample application
-- Deploy the front end and adjust Reply Urls
+- Deploy the frontend and adjust Reply Urls
 
 ## Table of content
 
@@ -19,13 +19,13 @@
 
 ## Goal
 
-In the previous challenges you have learned some basics about the OpenID Connect and OAuth2 flows. You have seen how you can sign in users and how to acquire an access token for an Azure AD's protected resource. In this challenge we will integrate Azure AD into the sample application step by step. We will use GitHub Actions workflows to deploy the sample application to Azure. Don't worry, the needed GitHub Actions workflows are already implemented, but we need to take few steps to activeate them.
+In the previous challenges you have learned some basics about the OpenID Connect and OAuth2 flows. You have seen how you can sign in users and how to acquire an access token for an Azure AD's protected resource. In this challenge we will integrate Azure AD into the sample application step by step. We will use GitHub Actions workflows to deploy the sample application to Azure. Don't worry, the needed GitHub Actions workflows are already implemented, but we need to take some steps to activeate them.
 
 ## Create Azure AD applications
 
-In [Challenge 2](./challenge-2.md) you have already seen how to create an Azure AD client application to sign in users and how to create an API application that exposes OAuth2 permissions. We have to do the same for the sample application.
+In [Challenge 2](./02-challenge.md) you have already seen how to create an Azure AD client application to sign in users and how to create an API application that exposes OAuth2 permissions. We have to do the same for the sample application.
 
-There is already a script available in the repository to create both applications for you. It is located here: [day5/apps/infrastructure/scripts/aad-integration.sh](../apps/infrastructure/scripts/aad-integration.sh). You need to run it in a bash/Shell environment)
+There is already a script available in the repository to create both applications for you. It is located here: [day5/apps/infrastructure/scripts/aad-integration.sh](../apps/infrastructure/scripts/aad-integration.sh). You need to run it in a bash/Shell environment.
 
 The script creates the server application first and then the client application for the sample application. It also uses a [oauth2-permissions.json](../apps/infrastructure/scripts/oauth2-permissions.json) file where all needed OAuth2 permission are defined.
 
@@ -251,8 +251,6 @@ on:
 With the trigger `workflow_dispatch`it is possible to trigger the workflow
 manually.
 
-The workflows consists of three jobs:
-
 ### Prepare the workflow and create a pull request
 
 Now it's time to prepare the workflow which rolls out the shared Azure resources
@@ -309,9 +307,9 @@ Now the test environment will be deployed. After the deployment is finished, we
 have another resource group with all shared Azure resources in the test
 environment.
 
-## Deploy the front end and adjust Reply Urls
+## Deploy the frontend and adjust the Redirect URIs
 
-Now it's time to deploy the front end and adjust the needed Reply Urls for the registered Azure AD applications. Azure AD issues tokens to known endpoints, only. The front end is hosted as a `Static website` in an Azure storage account. As the storage account is created with the front end deployment, we don't know the front end's url at the moment. First we need to deploy the front end to each environment and then adjust the reply urls in the Azure AD's application registration for each environment. 
+Now it's time to deploy the frontend and adjust the needed Redirect URIs for the registered Azure AD applications. Azure AD issues tokens to known endpoints, only. The frontend is hosted as a `Static website` in an Azure storage account. As the storage account is created with the frontend deployment, we don't know the frontend's url at the moment. First we need to deploy the frontend to each environment and then adjust the Redirect URIss in the Azure AD's application registration for each environment. 
 
 ### Activate the workflow
 
@@ -346,7 +344,7 @@ git push --set-upstream origin cicd/aad-frontend
 ```
 
 Now, create a pull request to merge the branch `cicd/aad-frontend` into the `master`
-branch. Set `Deploy front end for AAD integration` as title.
+branch. Set `Deploy frontend for AAD integration` as title.
 
 Wait a few seconds, until the status checks are triggered and successful.
 
@@ -358,9 +356,9 @@ environment:
 
 Review the pending deployment, leave a comment and `Approve and deploy`:
 
-### Adjust the reply url in the Azure AD's application registrations
+### Adjust the Redirect URIs in the Azure AD's application registrations
 
-Now the test environment will be deployed. After the deployment is finished, we need to adjust reply urls in the Azure AD applications for each environment.
+After the deployment is finished, we need to adjust the Redirect URIs in the Azure AD applications for each environment.
 
 Navigate to the Azure portal and go to the resource group for the development environment. The name of the resource group starts with `rg-scm-devday5-` and end with your GitHub organization name `rg-scm-devday5-<your organization name>`. We need to find the storage account where the frontend is hosted in a static website. The deployment created some Azure `Tags` to group the used Azure resources regarding their bounded context. Within the resource group you can set filters in the `Resources` details view. 
 
@@ -368,17 +366,17 @@ Apply the following filter:
 
 ![Azure resource group filter](./images/az-frontend-tag-filter.png)
 
-As a result we see one storage account. Open the storage account and go to the section `Static website`. Here you can find the primary endpoint of the frontend in the development environment. Copy the URL and open the frontend in your browser.
+As a result we see one storage account. Open the storage account and go to the section `Static website`. Here you can find the primary endpoint of the frontend in the development environment. Copy the url.
 
-Next, navigate to `Azure Active Directory > App registrations`, select `All applications` and search for `scmfe-dev`. Open the application and go to `Authentication`. Add the `Reply Url` you copied to your clipboard and save the changes:
+Next, navigate to `Azure Active Directory > App registrations`, select `All applications` and search for `scmfe-dev`. Open the application and go to `Authentication`. Add the `Redirect URIs` you copied to your clipboard and save the changes:
 
-![Azure AD adjust Reply Url](./images/aad-adjust-reply-url.png)
+![Azure AD adjust Redirect URIs](./images/aad-adjust-reply-url.png)
 
-Please repeat these steps for the application in the `test` environment to adjust the Reply url, too.
+Please repeat these steps for the application in the `test` environment to adjust the Redirect URIs, too.
 
 ### Browse the application
 
-Open a private browser window and navigate to the front end of the development environment. If everything is configured correctly, you are redirected to Azure AD. Log in and give the app the necessary OAuth2 permissions to access your data on your behalf:
+Open a private browser window and navigate to the frontend of the development environment. If everything is configured correctly, you are redirected to Azure AD. Log in and give the app the necessary OAuth2 permissions to access your data on your behalf:
 
 ![Scm Frontend consent](./images/aad-scmfe-consent.png)
 
@@ -388,8 +386,8 @@ Back in the application, you see your principal name in the right upper corner:
 
 ## Summary
 
-In this challenge we have registered four applications in Azure AD. Two applications for the front end and two applications for the back end. Each front end and backend application is assigned to one environment. We have prepared two GitHub environments and set the necessary secrets to integrate into Azure AD.
-The shared Azure resources and the front end are already deployed to the `dev`and `test`environment. Next, we go into the breakout session and roll out the complete application.
+In this challenge we have registered four applications in Azure AD. Two applications for the frontend and two applications for the back end. Each frontend and backend application is assigned to one environment. We have prepared two GitHub environments and set the necessary secrets to integrate into Azure AD.
+The shared Azure resources and the frontend are already deployed to the `dev`and `test`environment. Next, we go into the breakout session and roll out the complete application.
 
 [◀ Previous challenge](./02-challenge.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./04-challenge.md)
 
