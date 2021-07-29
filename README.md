@@ -2,17 +2,15 @@
   <h1>Welcome to the Azure Developer College!</h1>
   <p>The Azure Developer College is a multi-days training for developers.</p>
   
-![ADC](./images/ADC_Back.png)
+![ADC](./images/azdc.png)
 
   <p>
-    <sub>Built with ❤︎ by the
+    <sub>Built with ❤️ by the
       <a href="https://github.com/CSA-OCP-GER">Microsoft Cloud Solution Architects from Germany</a>
     </sub>
   </p>
 
 </div>
-
-<hr>
 
 ## Training Days
 
@@ -21,13 +19,12 @@ This workshop consists of multiple challenges, you have to complete. Your traine
 Here's the overview of the training week. Happy hacking!
   
 - [Day 1 - Azure Fundamentals](day1/README.md)
-- [Day 2 - Application Development ](day2/README.md)
+- [Day 2 - Application Development](day2/README.md)
 - [Day 3 - Data and AI](day3/README.md)
 - [Day 4 - DevOps and Monitoring](day4-azdevops/README.md)
 - [Day 5 - Identity and Architectures](day5/README.md)
 - [Day 6 - Containerization](day6/README.md)
 - [Day 7 - Kubernetes](day7/README.md)
-
 
 ## Contributing ##
 
