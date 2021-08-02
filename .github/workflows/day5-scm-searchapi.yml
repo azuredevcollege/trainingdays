@@ -7,7 +7,7 @@ on:
     paths:
       - day5/apps/infrastructure/bicep/search/**
       - day5/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day5-scm-search.yml
+      - .github/workflows/day5-scm-searchapi.yml
 
   pull_request:
     branches:
@@ -15,7 +15,7 @@ on:
     paths:
       - day5/apps/infrastructure/bicep/search/**
       - day5/apps/dotnetcore/Scm.Search/**
-      - .github/workflows/day5-scm-search.yml
+      - .github/workflows/day5-scm-searchapi.yml
 
   workflow_dispatch:
 
