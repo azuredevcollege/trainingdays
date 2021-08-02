@@ -2,6 +2,8 @@
 
 ## Here is what you will learn 🎯
 
+⏲️ _Est. time to complete: 30 min._ ⏲️
+
 In [Challenge 3](./03-challenge.md) we already created the needed Azure AD applications to integrate the sample application into Azure AD. 
 The frontend is already deployed to a `dev` and `test` environment on Azure. In this breakout session we will deploy the backend services in the `dev` and `test` environment.
 
