@@ -6,7 +6,7 @@
 
 Time for our second "Break-Out" session!
 
-We now will deploy _all required services_ of our SCM Contacts Management app to Azure, including the _Vue.js Single Page Application_. To host the SPA, which is basically a static website, we make use of the [Static Website Hosting](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal) option of Azure Storage Accounts. This is the cheapest option to host applications built e.g. with Angular, React or like in our case Vue.JS.
+We now will deploy _all required services_ of our SCM Contacts Management app to Azure, including the _Vue.js Single Page Application_. To host the SPA, which is basically a static website, we make use of the [Static Website Hosting](https://docs.microsoft.com/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal) option of Azure Storage Accounts. This is the cheapest option to host applications built e.g. with Angular, React or like in our case Vue.JS.
 
 We also add a second service, that allows us to save images for our contacts. The service will be implemented in .NET Core and will use _Azure Storage Queues_ (to make you familiar with a messaging service option in Azure) to notify an Azure Function that in turn creates thumbnails of the images. The results will then be saved in an Azure Storage Account.
 
@@ -172,7 +172,7 @@ It's very simple to use:
 ![portal_static_website](./images/portal_static_website.png "portal_static_website")
 
 :::tip
-📝 When you save the settings, Azure will create a new container called **\$web** where you can copy static (web) files to. Azure will serve the contents of this containers as "Static Website". See more on the [official documentation](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal).
+📝 When you save the settings, Azure will create a new container called **\$web** where you can copy static (web) files to. Azure will serve the contents of this containers as "Static Website". See more on the [official documentation](https://docs.microsoft.com/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal).
 :::
 
 Now open a command-line for the folder `Frontend`. Right-click on it and choose "Open in Integrated Terminal":
@@ -208,11 +208,11 @@ When the deployment to Azure has finished, VS Code will show a popup where you c
 
 You have just created your first modern, multi-service Azure-backed application. You made use of:
 
-- [Azure AppServices](https://docs.microsoft.com/en-us/azure/app-service/)
-- [Storage Accounts](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview)
-- [Messaging (Azure Storage Queues)](https://docs.microsoft.com/en-us/azure/storage/queues/)
-- [Serverless aka Azure Function Apps](https://docs.microsoft.com/en-us/azure/azure-functions/)
-- [Static website hosting](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal)
+- [Azure AppServices](https://docs.microsoft.com/azure/app-service/)
+- [Storage Accounts](https://docs.microsoft.com/azure/storage/common/storage-account-overview)
+- [Messaging (Azure Storage Queues)](https://docs.microsoft.com/azure/storage/queues/)
+- [Serverless aka Azure Function Apps](https://docs.microsoft.com/azure/azure-functions/)
+- [Static website hosting](https://docs.microsoft.com/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal)
 
 All in combination with a modern Vue.JS frontend that is also working on mobile devices!
 

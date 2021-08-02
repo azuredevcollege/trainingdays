@@ -83,7 +83,7 @@ To allow GitHub to interact with our Azure Subscriptions we need to create a
 Service Account in our Azure Active Directory. This account represents not a
 user but a service, machine or digital agent. These accounts are called
 [**Service
-Principal**](https://docs.microsoft.com/en-us/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object).
+Principal**](https://docs.microsoft.com/azure/active-directory/develop/app-objects-and-service-principals#service-principal-object).
 
 Having read the documentation on the `Azure/login` you might already have seen
 the following line to create a Service Principal for role based access control.
@@ -441,6 +441,64 @@ in graphical overview on your workflows summary page.
 
 Wait for the deployment to complete and access your webapps endpoint again from your browser.
 You should see the deployed express app running on your App Service.
+
+## Enable Dependabot security updates - Optional
+
+Now that we have our app up and running, let's take a look at dependency
+management.
+
+The application we've generated is a simple nodejs express app. As such it comes
+with quite a few _npm_ dependencies. Every single software dependency can introduce
+possible security vulnerabilities into our application. For large projects,
+managing and updating all these dependencies can be quite a challenge.
+
+GitHub has a build-in feature to help you manage your software dependencies
+called _Dependabot_. Dependabot should already be enabled by default on your
+repository and have created a first security report of your software
+dependencies by now. Take a look at the `Security > Dependabot alerts` tab of
+your repository now.
+
+You should see something like this:
+
+![Dependabot alerts displayed on the security tab of your
+repository](./images/dependabot-alerts.png)
+
+In this sample we can see two dependencies with _high severity_ vulnerabilities
+detected. They are related to remote code execution for applications running the
+`pug` template engine. Since we only deploy our application as a static website
+we are not directly affected by this vulnerability but still might want to fix it.
+
+We can also see `clean-css` dependency marked as _low severity_ where untrusted
+input might lead to a compute heavy operation that opens your application to
+denial of service attacks. This also does not affect our static compiled
+website.
+
+Now let's see how we can use GitHub to help us fix these issues.
+
+We have to options. We can manually try to generate a fix for a security
+vulnerability by using the `Create Dependabot security update` button on the
+vulnerabilities detail page.
+
+![Vulnerability details page with button to create security
+update](./images/dependabot-create-security-update.png)
+
+The second option is to enable automatic creation of _Dependabot security
+updates_ on your repositories `Settings > Security & analysis` page.
+
+![Closeup of the Settings, Security and analysis
+page](./images/dependabot-enable-updates.png)
+
+Enabling this option will automatically open pull requests for security
+vulnerabilities on your dependencies. I highly recommend you to enable this
+option, especially if you have a strong CI and testing setup in place, as it
+allows you to fix some of these dependencies in an easy and fast manner.
+
+Having opted for one of the mentioned steps you should see a pull request appear
+on your repositories `Pull requests` tab. Go ahead and merge it then take a look
+at the Dependabot alerts again. They should have disappeared.
+
+![Pull request that was opened automatically by
+Dependabot](./images/dependabot-pr.png)
 
 ## Finish
 

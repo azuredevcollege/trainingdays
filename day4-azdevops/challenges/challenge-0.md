@@ -50,20 +50,20 @@ For on-premises deployments Active Directory is recommended.
 1. Navigate to [Azure DevOps](https://azure.microsoft.com/services/devops/)
 2. Click "Start for free >", if you don't see a login page, please open a private browser window to make sure that you use the right account (either an Azure AD, MSA or GitHub account).
 3. Give your new project a name and select a country/region.
-4. Create an organization. Instructions can be found [here](https://docs.microsoft.com/en-us/azure/devops/organizations/accounts/create-organization?toc=%2Fazure%2Fdevops%2Fget-started%2Ftoc.json&bc=%2Fazure%2Fdevops%2Fget-started%2Fbreadcrumb%2Ftoc.json&view=azure-devops)
+4. Create an organization. Instructions can be found [here](https://docs.microsoft.com/azure/devops/organizations/accounts/create-organization?toc=%2Fazure%2Fdevops%2Fget-started%2Ftoc.json&bc=%2Fazure%2Fdevops%2Fget-started%2Fbreadcrumb%2Ftoc.json&view=azure-devops)
 
 ## Create a new Project
 
 Create a new project, name it "College" and use the "Agile" process template.
-Instructions can be found [here](https://docs.microsoft.com/en-us/azure/devops/organizations/projects/create-project?view=azure-devops).
+Instructions can be found [here](https://docs.microsoft.com/azure/devops/organizations/projects/create-project?view=azure-devops).
 
 ## Create a new Team within the Project
 
-Create a new team, name it "College Team" and set it as your default team. Instructions can be found [here](https://docs.microsoft.com/en-us/azure/devops/organizations/settings/add-teams?view=azure-devops)
+Create a new team, name it "College Team" and set it as your default team. Instructions can be found [here](https://docs.microsoft.com/azure/devops/organizations/settings/add-teams?view=azure-devops)
 
 ## Add your Colleagues to the "College Team"
 
 Now it's time to give your colleagues access to the project and to add them to the "College Team".
-Instructions can be found [here](https://docs.microsoft.com/en-us/azure/devops/organizations/security/add-users-team-project?view=azure-devops)
+Instructions can be found [here](https://docs.microsoft.com/azure/devops/organizations/security/add-users-team-project?view=azure-devops)
 
 [🔼 Day 4](../README.md) | [Next challenge ▶](./challenge-1.md)

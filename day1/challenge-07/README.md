@@ -173,7 +173,7 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
 ```
 
 :::tip
-📝 As you can see, we are able to use functions to do dynamic stuff within a template, e.g. reading keys (`listKeys()`) or using parameter (`parameters()`). There are, of course, other functions e.g. for string manipulation (_concatenate_, _padLeft_, _split_...), numeric functions, comparison functions, conditionals etc. You can find all available template functions and their documentation here: [ARM template functions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions). Please make yourself familiar with the list!
+📝 As you can see, we are able to use functions to do dynamic stuff within a template, e.g. reading keys (`listKeys()`) or using parameter (`parameters()`). There are, of course, other functions e.g. for string manipulation (_concatenate_, _padLeft_, _split_...), numeric functions, comparison functions, conditionals etc. You can find all available template functions and their documentation here: [ARM template functions](https://docs.microsoft.com/azure/azure-resource-manager/templates/template-functions). Please make yourself familiar with the list!
 :::
 ### Let's deploy the template
 
@@ -222,7 +222,7 @@ We will try each of these to learn its haptic.
 ## ARM with Parameter File
 
 You have noticed that you have been asked to enter a value for the parameter  `storageAccountName`. In a fully automated deployment, this is not really acceptable.  
-Using e.g. the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/group/deployment?view=azure-cli-latest#az_group_deployment_create) you can specify an `answer` parameter file that goes along with the deployment file.
+Using e.g. the [Azure CLI](https://docs.microsoft.com/cli/azure/group/deployment?view=azure-cli-latest#az_group_deployment_create) you can specify an `answer` parameter file that goes along with the deployment file.
 
 ```shell
 az deployment group create -g basicarm-rg -n firsttemplate --template-file=./azuredeploy.json --parameters=@azuredeploy.params.json
@@ -272,7 +272,7 @@ The corresponding parameter file would look like this.
 
 ## Create your first ARM Template
 
-Now I want you to create your first ARM Template. A speed course - based on the [Tutorial: Create and deploy your first ARM template](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-create-first-template?tabs=azure-powershell)
+Now I want you to create your first ARM Template. A speed course - based on the [Tutorial: Create and deploy your first ARM template](https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-create-first-template?tabs=azure-powershell)
 
 You will:
 
@@ -311,8 +311,8 @@ You will:
 
   You need to replace the _"usefulstring"_ with meaningful data. See the following links as reference:  
   
-- [Microsoft.Network publicIPAddresses](https://docs.microsoft.com/en-us/azure/templates/microsoft.network/publicipaddresses#template-format)
-- All Azure resources are listed in the [ARM Templates Reference](https://docs.microsoft.com/en-us/azure/templates/). e.g. Public IP is in the network resource provider.
+- [Microsoft.Network publicIPAddresses](https://docs.microsoft.com/azure/templates/microsoft.network/publicipaddresses#template-format)
+- All Azure resources are listed in the [ARM Templates Reference](https://docs.microsoft.com/azure/templates/). e.g. Public IP is in the network resource provider.
 
 3. Use an ARM functio. Concentrate on:  
   

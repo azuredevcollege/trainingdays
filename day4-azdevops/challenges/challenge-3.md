@@ -94,7 +94,7 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
    We specified to copy the needed ARM template to our artifact's drop location named *"drop"*.
    First we use a copy task to copy the ARM Template to the build agent's *"ArtifactStagingDirectory"*. This directory is a temp directory on the build agent. After that we publish the build agent's artifact directory to link the created artifacts to the build. In addition we specified to use a build agent that uses the latest Ubuntu version.
   :::tip
-  📝 You can find a list of supported build agent images [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent).
+  📝 You can find a list of supported build agent images [here](https://docs.microsoft.com/azure/devops/pipelines/agents/hosted?view=azure-devops#use-a-microsoft-hosted-agent).
   :::
 6. Commit your changes and push the branch to your remote repository.
 7. Navigate to your Azure DevOps project
@@ -113,7 +113,7 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
 Now that we have created the build artifact, we can create a _Release build_ to deploy the common component's Azure infrastructure for the sample application to a Development and Testing stage.
 
 :::tip
-📝 You find a detailed documentation about Release pipelines [here](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/?view=azure-devops).
+📝 You find a detailed documentation about Release pipelines [here](https://docs.microsoft.com/azure/devops/pipelines/release/?view=azure-devops).
 :::
 
 ![SC-Common-Pipeline](./images/scm-common-pipeline.png)

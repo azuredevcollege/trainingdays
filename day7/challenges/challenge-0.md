@@ -23,7 +23,7 @@ The repository is located at GitHub, so - obviously - we'll need a local _Git cl
 
 We will be using the _Azure command line interface_ to create and interact with resources running in Azure.
 
-To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
+To install it, go to <https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
 When finished, login to your Azure account from the command line:
 

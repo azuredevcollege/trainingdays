@@ -39,7 +39,7 @@ _Authorization_ is the act of granting an authenticated security principal permi
 
 ## OpenID Connect and OAuth 2.0
 
-[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer built on top of the OAuth 2.0 protocol. OAuth 2.0 defines mechanisms to obtain and use [access tokens](https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens) to access protected resources, but they do not define standard methods to provide identity information. OpenID Connect implements authentication as an extension to the OAuth 2.0 authorization process. It provides information about the end user in the form of an [id_token](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens) that verifies the identity of the user and provides basic profile information about the user.
+[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer built on top of the OAuth 2.0 protocol. OAuth 2.0 defines mechanisms to obtain and use [access tokens](https://docs.microsoft.com/azure/active-directory/develop/access-tokens) to access protected resources, but they do not define standard methods to provide identity information. OpenID Connect implements authentication as an extension to the OAuth 2.0 authorization process. It provides information about the end user in the form of an [id_token](https://docs.microsoft.com/azure/active-directory/develop/id-tokens) that verifies the identity of the user and provides basic profile information about the user.
 
 ## Protect APIs with Azure AD
 

@@ -83,12 +83,12 @@ For explanation:
 Copy the `id_token` value from your browser output, go to [https://jwt.ms](https://jwt.ms) and paste the token. Take a minute and have a look at the decoded token.
 
 :::tip
-📝 If you need further information about the issued claims take a look [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens#header-claims).
+📝 If you need further information about the issued claims take a look [here](https://docs.microsoft.com/azure/active-directory/develop/id-tokens#header-claims).
 :::
 
 ## Wrap-Up
 
-This challenge showed how to create a new application in AAD and how user can be authenticated using the Open ID Connect protocol. The full process is described [here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-protocols-oidc).
+This challenge showed how to create a new application in AAD and how user can be authenticated using the Open ID Connect protocol. The full process is described [here](https://docs.microsoft.com/azure/active-directory/develop/v2-protocols-oidc).
 
 ## Cleanup
 
