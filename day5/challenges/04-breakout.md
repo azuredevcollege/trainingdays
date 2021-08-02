@@ -51,7 +51,7 @@ git push --set-upstream origin cicd/backend-day5
 
 Next, do the following:
 
-1. Next, create a Pull request to merge the changes into the master branch
+1. Create a Pull request to merge the changes into the master branch
 2. Wait until all status checks are successful
 3. Merge the Pull request
 4. Wait until all services are deployed to the `dev` environment
