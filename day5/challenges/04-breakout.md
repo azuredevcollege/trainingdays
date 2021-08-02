@@ -2,10 +2,15 @@
 
 ## Here is what you will learn 🎯
 
-In [Challenge 3](./challenge-3.md) we already created the needed Azure AD applications to integrate the sample application into Azure AD. 
+In [Challenge 3](./03-challenge.md) we already created the needed Azure AD applications to integrate the sample application into Azure AD. 
 The frontend is already deployed to a `dev` and `test` environment on Azure. In this breakout session we will deploy the backend services in the `dev` and `test` environment.
 
 ## Table of content 
+
+1. [Pull latest changes and create a new branch](#pull-latest-changes-and-create-a-new-branch)
+2. [Prepare the workflows](#prepare-the-workflows)
+3. [Start the deployments](#start-the-deployments)
+4. [Wrap-Up](#wrap-up)
 
 ## Pull latest changes and create a new branch
 
@@ -41,6 +46,8 @@ git add .
 git commit -m "deploy backend services"
 git push --set-upstream origin cicd/backend-day5
 ```
+
+## Start the deployments
 
 Next, do the following:
 
