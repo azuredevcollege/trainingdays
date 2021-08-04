@@ -20,15 +20,15 @@ on:
   workflow_dispatch:
 
 env:
-  BICEP_FILE_NAME: "frontendmain.bicep"
+  BICEP_FILE_NAME: 'frontendmain.bicep'
 
 jobs:
   build-bicep:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'azdc-training/trainingdays-cw'
     runs-on: ubuntu-latest
     env:
-      BICEP_FILE_PATH: "./day5/apps/infrastructure/bicep/frontend/frontendmain.bicep"
-      BICEP_MODULE_PATH: "./day5/apps/infrastructure/bicep/frontend/"
+      BICEP_FILE_PATH: './day5/apps/infrastructure/bicep/frontend/frontendmain.bicep'
+      BICEP_MODULE_PATH: './day5/apps/infrastructure/bicep/frontend/'
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -48,12 +48,12 @@ jobs:
           retention-days: 30
 
   build-frontend:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'azdc-training/trainingdays-cw'
     runs-on: ubuntu-latest
     env:
-      FRONTEND_PROJECT_PATH: "./day5/apps/frontend/scmfe"
-      FRONTEND_DIST_PATH: "./day5/apps/frontend/scmfe/dist/"
-      NODE_VERSION: "14.x"
+      FRONTEND_PROJECT_PATH: './day5/apps/frontend/scmfe'
+      FRONTEND_DIST_PATH: './day5/apps/frontend/scmfe/dist/'
+      NODE_VERSION: '14.x'
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -86,7 +86,7 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azdc-training/trainingdays-cw') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day5-scm-dev
     needs: [build-bicep, build-frontend]
@@ -166,7 +166,7 @@ jobs:
           -s ./scmfe
 
   deploy-to-test:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'azdc-training/trainingdays-cw') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day5-scm-test
     needs: deploy-to-dev
