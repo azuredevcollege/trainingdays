@@ -4,10 +4,12 @@
 
 ⏲️ _Est. time to complete: 30 min._ ⏲️
 
-In [Challenge 3](./03-challenge.md) we already created the needed Azure AD applications to integrate the sample application into Azure AD. 
-The frontend is already deployed to a `dev` and `test` environment on Azure. In this breakout session we will deploy the backend services in the `dev` and `test` environment.
+In [Challenge 3](./03-challenge.md) we already created the needed Azure AD
+applications to integrate the sample application into Azure AD. The frontend is
+already deployed to a `dev` and `test` environment on Azure. In this breakout
+session we will deploy the backend services in the `dev` and `test` environment.
 
-## Table of content 
+## Table of content
 
 1. [Pull latest changes and create a new branch](#pull-latest-changes-and-create-a-new-branch)
 2. [Prepare the workflows](#prepare-the-workflows)
@@ -23,7 +25,8 @@ git checkout master
 git pull
 ```
 
-Next, we create a new feature branch to prepare the needed changes in the workflows for the backend services:
+Next, we create a new feature branch to prepare the needed changes in the
+workflows for the backend services:
 
 ```Shell
 git checkout -b cicd/backend-day5
@@ -31,10 +34,10 @@ git checkout -b cicd/backend-day5
 
 ## Prepare the workflows
 
-Open the VS Code workspace `day5.code-workspace` for day5. 
+Open the VS Code workspace `day5.code-workspace` for day5.
 
-Open the following workflows and replace the organization name in
-each job condition with your organization's name:
+Open the following workflows and replace the organization name in each job
+condition with your organization's name:
 
 - day5-scm-contactsapi.yml
 - day5-scm-resourcesapi.yml
