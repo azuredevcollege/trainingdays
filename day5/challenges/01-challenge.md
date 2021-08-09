@@ -72,4 +72,4 @@ Remove the created resources via the Azure CLI:
 az ad app delete --id <applicationid>
 ```
 
-[◀ Previous challenge](./challenge-0.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./challenge-2.md)
+[◀ Previous challenge](./00-challenge.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./02-challenge.md)
