@@ -311,7 +311,7 @@ Save the file, commit your changes and push the branch to the remote repository:
 
 ```Shell
 git add .
-git commit -m "changed org name in common workflow"
+git commit -m "Change org name in common workflow"
 git push --set-upstream origin cicd/aad-common
 ```
 
@@ -381,7 +381,7 @@ Save the file, commit your changes and push the branch to the remote repository:
 
 ```Shell
 git add .
-git commit -m "changed org name in frontend workflow"
+git commit -m "Change org name in frontend workflow"
 git push --set-upstream origin cicd/aad-frontend
 ```
 
