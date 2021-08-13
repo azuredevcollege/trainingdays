@@ -1,0 +1,316 @@
+name: day4-scm-vistreportsapi
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day4/apps/infrastructure/bicep/visitreports/**
+      - day4/apps/nodejs/visitreport/**
+      - day4/apps/nodejs/textanalytics/**
+      - .github/workflows/day4-scm-visitreports.yml
+
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day4/apps/infrastructure/bicep/visitreports/**
+      - day4/apps/nodejs/visitreport/**
+      - day4/apps/nodejs/textanalytics/**
+      - .github/workflows/day4-scm-visitreports.yml
+
+  workflow_dispatch:
+
+env:
+  API_PACKAGE_NAME: "scmvisitreportsapi.zip"
+  TA_PACKAGE_NAME: "textanalytics.zip"
+  BICEP_FILE_NAME: "visitreportsmain.bicep"
+
+jobs:
+  build-bicep:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      BICEP_FILE_PATH: "./day4/apps/infrastructure/bicep/visitreports/visitreportsmain.bicep"
+      BICEP_MODULE_PATH: "./day4/apps/infrastructure/bicep/visitreports/"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
+
+      - name: Archive bicep artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
+          retention-days: 30
+
+  build-api:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      API_PROJECT_PATH: "./day4/apps/nodejs/visitreport"
+      NODE_VERSION: "12.x"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache npm dependencies to speed up deployment
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./day4/apps/nodejs/visitreport/package-lock.json') }}
+
+      - name: npm install VisitReport
+        working-directory: ${{ env.API_PROJECT_PATH }}
+        run: |
+          npm install
+
+      - name: zip VisitReport
+        working-directory: ${{ env.API_PROJECT_PATH }}
+        run: |
+          zip -r ${{ env.API_PACKAGE_NAME }} ./*
+
+      - name: Archive VisitReports
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_NAME }}"
+          if-no-files-found: error
+          retention-days: 30
+
+  build-ta:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      TA_PROJECT_PATH: "./day4/apps/nodejs/textanalytics"
+      NODE_VERSION: "12.x"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache npm dependencies to speed up deployment
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('./day4/apps/nodejs/textanalytics/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: npm install TextAnalytics
+        working-directory: ${{ env.TA_PROJECT_PATH }}
+        run: |
+          npm install
+
+      - name: zip TextAnalytics
+        working-directory: ${{ env.TA_PROJECT_PATH }}
+        run: |
+          zip -r ${{ env.TA_PACKAGE_NAME }} ./*
+
+      - name: Archive TextAnalytics
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: "${{ env.TA_PROJECT_PATH }}/${{ env.TA_PACKAGE_NAME }}"
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy-infrastructure-to-dev:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day4-scm-dev
+    needs: [build-bicep, build-api, build-ta]
+    outputs:
+      visitreportsWebAppName: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
+      textanalyticsFunctionName: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday4
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd4
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Deploy infrastructure to dev environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }}
+
+  deploy-visitreportapi-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy SCM Visitreports API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.visitreportsWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-textanalytics-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Textanalytics
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.textanalyticsFunctionName }}
+          package: ./${{ env.TA_PACKAGE_NAME }}
+
+  deploy-infrastructure-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day4-scm-test
+    needs: [deploy-visitreportapi-to-dev, deploy-textanalytics-to-dev]
+    outputs:
+      visitreportsWebAppName: ${{ steps.infrastructure.outputs.visitreportsWebAppName }}
+      textanalyticsFunctionName: ${{ steps.infrastructure.outputs.textanalyticsFunctionName }}
+
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-testday4
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd4
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Deploy infrastructure to test environment
+        uses: azure/arm-deploy@v1
+        id: infrastructure
+        with:
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }}
+
+  deploy-visitreportapi-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy SCM Visitreports API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.visitreportsWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-textanalytics-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Textanalytics
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.textanalyticsFunctionName }}
+          package: ./${{ env.TA_PACKAGE_NAME }}

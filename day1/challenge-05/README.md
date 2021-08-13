@@ -27,7 +27,7 @@ While it is also possible to use PowerShell on your local PC to administer Azure
 Using the Cloud Shell saves you time as:
 
 - you do not need to explicitly code the Azure logon within the script - you are already authenticated to Azure via the browser
-- you do not need anything to be installed on your PC. So no more asking [which version of PowerShell and what modules](https://docs.microsoft.com/en-us/powershell/azure) are necessary
+- you do not need anything to be installed on your PC. So no more asking [which version of PowerShell and what modules](https://docs.microsoft.com/powershell/azure) are necessary
 
 ## Create an Azure Cloud Shell
 
@@ -43,7 +43,7 @@ Using the Cloud Shell saves you time as:
 - The Azure Cloud Shell comes in 2 flavors: PowerShell or Bash. When being asked choose PowerShell this time.
   ![Bash or PowerShell](./images/2variations.png)
 
-- The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)
+- The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. [See](https://docs.microsoft.com/azure/cloud-shell/persisting-shell-storage)
 
 ```
 [Azure Portal] -> Click 'Show advanced settings'

@@ -6,11 +6,11 @@ This day is focusing of implementing authentication and authorization into the A
 
 ## Challenges
 
-- [Challenge 0: Request an ID Token from Azure AD](./challenges/challenge-0.md)
-- [Challenge 1: Receive an ID Token in a Fragment URL](./challenges/challenge-1.md)
-- [Challenge 2: OAuth2 Implicit Flow](./challenges/challenge-2.md)
-- [Challenge 3: Integrate Azure AD into the SCM Contacts API](./challenges/challenge-3.md)
-- 💎 *[Breakout: Integrate the sample application into Azure AD](./challenges/challenge-bo-1.md)* 💎
+- [Challenge 0: Request an ID Token from Azure AD](./challenges/00-challenge.md)
+- [Challenge 1: Receive an ID Token in a Fragment URL](./challenges/01-challenge.md)
+- [Challenge 2: OAuth2 Implicit Flow](./challenges/02-challenge.md)
+- 💎 [Challenge 3: Azure AD applications and deployment to GitHub environments](./challenges/03-challenge.md) 💎
+- 💎 *[Breakout: Integrate the sample application into Azure AD](./challenges/04-breakout.md)* 💎
 
 :::tip
 📝 Please take a look at the _restore checkpoint_, if you were unable to complete day 4: [Checkpoint - Restore from day4 to continue the breakout session (optional)](./apps/checkpoint/README.md)
@@ -39,7 +39,7 @@ _Authorization_ is the act of granting an authenticated security principal permi
 
 ## OpenID Connect and OAuth 2.0
 
-[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer built on top of the OAuth 2.0 protocol. OAuth 2.0 defines mechanisms to obtain and use [access tokens](https://docs.microsoft.com/en-us/azure/active-directory/develop/access-tokens) to access protected resources, but they do not define standard methods to provide identity information. OpenID Connect implements authentication as an extension to the OAuth 2.0 authorization process. It provides information about the end user in the form of an [id_token](https://docs.microsoft.com/en-us/azure/active-directory/develop/id-tokens) that verifies the identity of the user and provides basic profile information about the user.
+[OpenID Connect](https://openid.net/specs/openid-connect-core-1_0.html) is a simple identity layer built on top of the OAuth 2.0 protocol. OAuth 2.0 defines mechanisms to obtain and use [access tokens](https://docs.microsoft.com/azure/active-directory/develop/access-tokens) to access protected resources, but they do not define standard methods to provide identity information. OpenID Connect implements authentication as an extension to the OAuth 2.0 authorization process. It provides information about the end user in the form of an [id_token](https://docs.microsoft.com/azure/active-directory/develop/id-tokens) that verifies the identity of the user and provides basic profile information about the user.
 
 ## Protect APIs with Azure AD
 

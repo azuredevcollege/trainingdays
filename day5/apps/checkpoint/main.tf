@@ -264,7 +264,7 @@ resource "azuredevops_build_definition" "search-api" {
 
 resource "azuredevops_build_definition" "visitreports" {
   project_id = azuredevops_project.project.id
-  name       = "SCM Vistreports CI"
+  name       = "SCM Visitreports CI"
 
   ci_trigger {
     use_yaml = true

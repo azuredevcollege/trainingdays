@@ -16,26 +16,32 @@ on:
 
   workflow_dispatch:
 
+env:
+  BICEP_FILE_NAME: "commonmain.bicep"
+
 jobs:
   build:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
+      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/common/commonmain.bicep"
+      BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/common/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
-  
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Transpile bicep files
-        run: az bicep build -f ./day3/apps/infrastructure/bicep/common/commonmain.bicep
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
 
       - name: Archive artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
           name: drop
-          path: ./day3/apps/infrastructure/bicep/common/commonmain.json
+          path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
           retention-days: 30
 
   deploy-to-dev:
@@ -49,6 +55,13 @@ jobs:
       ENV_NAME: devd3
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
@@ -59,23 +72,18 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
       - name: Deploy to dev environment
         uses: azure/arm-deploy@v1
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./commonmain.json
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
@@ -89,6 +97,13 @@ jobs:
       ENV_NAME: testd3
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
@@ -99,21 +114,16 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
-      - name: Deploy to dev environment
+      - name: Deploy to test environment
         uses: azure/arm-deploy@v1
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./commonmain.json
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}

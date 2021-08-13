@@ -20,7 +20,7 @@ To speed things up  you will first deploy the _start point_ and then you will ad
 
 ## Introduction Traffic Manager
 
-The [Traffic Manager](https://docs.microsoft.com/en-us/azure/traffic-manager/traffic-manager-overview) uses DNS to load balance traffic to endpoints across Azure regions. It can help you to:
+The [Traffic Manager](https://docs.microsoft.com/azure/traffic-manager/traffic-manager-overview) uses DNS to load balance traffic to endpoints across Azure regions. It can help you to:
 
 - **provide optimal latency** by serving clients from the nearest location.
 - **increase availability** as it monitors its endpoints and provides failover.
@@ -41,7 +41,7 @@ Now let's create some VMs using the 'Cloud Shell' in the Azure Portal. When bein
 📝 The 'Cloud Shell' is an in-browser-accessible shell for managing Azure resources. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
 :::  
 
-The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. See the [documentation](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage) formore details. 
+The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. See the [documentation](https://docs.microsoft.com/azure/cloud-shell/persisting-shell-storage) formore details. 
 
 ```
 [Azure Portal] -> Click 'Show advanced settings'
@@ -100,7 +100,7 @@ get-job -State Running | wait-job
 
 ## Deploy a Traffic Manager Instance
 
-Add the [Traffic Manager Profile](https://docs.microsoft.com/en-us/azure/traffic-manager/quickstart-create-traffic-manager-profile#add-traffic-manager-endpoints) in resource group `rg-wwwlb` with a routing method based on e.g. performance. 
+Add the [Traffic Manager Profile](https://docs.microsoft.com/azure/traffic-manager/quickstart-create-traffic-manager-profile#add-traffic-manager-endpoints) in resource group `rg-wwwlb` with a routing method based on e.g. performance. 
   
 Add 2 endpoints to the traffic manager.
 

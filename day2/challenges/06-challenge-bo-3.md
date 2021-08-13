@@ -52,12 +52,12 @@ When the CDN and the corresponding endpoint for your application have been creat
 
 You now get the following benefits:
 
-- Global distribution of the web app by using the correspondig [point-of-presence (POP) / edge datacenters](https://docs.microsoft.com/de-de/azure/cdn/cdn-pop-locations). E.g. Microsoft CDN has over 130 locations worldwide.
+- Global distribution of the web app by using the correspondig [point-of-presence (POP) / edge datacenters](https://docs.microsoft.com/azure/cdn/cdn-pop-locations). E.g. Microsoft CDN has over 130 locations worldwide.
 - Compression for html, text, js, json etc. files (with gzip / [Brotli](https://en.wikipedia.org/wiki/Brotli))
 - HTTP/2 support
-- Caching at the CDN level. You can also customize [how Azure CDN will cache your content](https://docs.microsoft.com/en-us/azure/cdn/cdn-how-caching-works)
+- Caching at the CDN level. You can also customize [how Azure CDN will cache your content](https://docs.microsoft.com/azure/cdn/cdn-how-caching-works)
 - Geo-filtering (if you want to)
-- A [rules engine](https://docs.microsoft.com/en-us/azure/cdn/cdn-standard-rules-engine-reference) for URL redirecting, rewriting, caching etc.
+- A [rules engine](https://docs.microsoft.com/azure/cdn/cdn-standard-rules-engine-reference) for URL redirecting, rewriting, caching etc.
 
 If you open the developer tools in your browser (F12), you can see the difference in performance, e.g. regarding the TTFB (time-to-first-byte) numbers:
 
@@ -77,6 +77,6 @@ You could also leverage another CDN endpoint e.g. for the contact images. But in
 
 In this Breakout Challenge, you made use of:
 
-- [Azure CDN](https://docs.microsoft.com/de-de/azure/cdn/)
+- [Azure CDN](https://docs.microsoft.com/azure/cdn/)
 
 [◀ Previous challenge](./05-challenge-bo-2.md) | [🔼 Day 2](../README.md) | [Next challenge ▶](./07-challenge-bo-4.md)

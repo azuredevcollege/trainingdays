@@ -109,7 +109,7 @@ $ vue --version
 
 ## Azure CLI
 
-We will also be using the Azure command-line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
+We will also be using the Azure command-line interface to create and interact with resources running in Azure. To install it, go to <https://docs.microsoft.com/cli/azure/install-azure-cli?view=azure-cli-latest> and choose your platform.
 
 When finished, login to your Azure account from the command-line:
 
@@ -190,7 +190,7 @@ Search and install the following extensions:
 
 ## Azure Storage Explorer
 
-In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer. Go to <https://azure.microsoft.com/en-us/features/storage-explorer/>, download and install the tool.
+In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer. Go to <https://azure.microsoft.com/features/storage-explorer/>, download and install the tool.
 
 ![Azure Storage Explorer](./images/storage_explorer.png "Azure Storage Explorer")
 
@@ -200,7 +200,7 @@ In order to work with Azure Storage Accounts, we will use the Azure Storage Expl
 
 We will also work with Azure SQL Databases. You can, of course, use SQL Server Management Studio if you are on a Windows machine. If you want to work cross-platform, use Azure Data Studio.
 
-Go to <https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio>, download and install the tool.
+Go to <https://docs.microsoft.com/sql/azure-data-studio/download-azure-data-studio>, download and install the tool.
 
 ![Azure Data Studio](./images/azure_data_studio.png "Azure Data Studio")
 

@@ -20,15 +20,17 @@ on:
   workflow_dispatch:
 
 env:
-  API_PACKAGE_NAME: 'scmsearchapi.zip'
-  INDEXER_PACKAGE_NAME: 'indexer.zip'
+  API_PACKAGE_NAME: "scmsearchapi.zip"
+  INDEXER_PACKAGE_NAME: "indexer.zip"
+  BICEP_FILE_NAME: "searchmain.bicep"
 
 jobs:
-  build:
+  build-bicep:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      API_PACKAGE_PATH: 'publish/scmsearchapi'
-      INDEXER_PACKAGE_PATH: 'publish/indexer'
+      BICEP_FILE_PATH: "./day3/apps/infrastructure/bicep/search/searchmain.bicep"
+      BICEP_MODULE_PATH: "./day3/apps/infrastructure/bicep/search/"
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -36,30 +38,49 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Transpile bicep files
-        run: az bicep build -f ./day3/apps/infrastructure/bicep/search/searchmain.bicep
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
 
-      - name: Archive ARM Templates artifacts
+      - name: Archive artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
-          name: bicep
-          path: ./day3/apps/infrastructure/bicep/search/searchmain.json
+          name: drop
+          path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
           retention-days: 30
+
+  build-api:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      API_PROJECT_PATH: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
+      API_PACKAGE_PATH: "publish/scmsearchapi"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.x
 
+      - name: Use Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.nuget/packages"
+          key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/packages.lock.json') }}
+
       - name: Build and publish SCM Search API
-        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api
+        working-directory: ${{ env.API_PROJECT_PATH }}
         run: |
-          dotnet restore
+          dotnet restore --locked-mode
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.API_PACKAGE_PATH }}'
 
       - name: Zip SCM Search API
-        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}
+        working-directory: ${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}
         run: |
           zip -r ${{ env.API_PACKAGE_NAME }} ./*
 
@@ -67,102 +88,106 @@ jobs:
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
-          name: scmsearchapi
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}'
+          name: drop
+          path: "${{ env.API_PROJECT_PATH }}/${{ env.API_PACKAGE_PATH }}/${{ env.API_PACKAGE_NAME }}"
+          if-no-files-found: error
           retention-days: 30
 
-      - name: Build and publish SCM SearchIndexer
-        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer
+  build-indexer:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      INDEXER_PROJECT_PATH: "./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"
+      INDEXER_PACKAGE_PATH: "publish/indexer"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Use Cache
+        uses: actions/cache@v2
+        with:
+          path: "~/.nuget/packages"
+          key: ${{ runner.os }}-nuget-${{ hashFiles('./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/packages.lock.json') }}
+
+      - name: Build and publish Indexer
+        working-directory: ${{ env.INDEXER_PROJECT_PATH }}
         run: |
-          dotnet restore
+          dotnet restore --locked-mode
           dotnet build --configuration Release
           dotnet publish -c Release -o './${{ env.INDEXER_PACKAGE_PATH }}'
 
-      - name: Zip SCM SearchIndexer
-        working-directory: ./day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}
+      - name: Zip Indexer
+        working-directory: ${{ env.INDEXER_PROJECT_PATH }}/${{ env.INDEXER_PACKAGE_PATH }}
         run: |
           zip -r ${{ env.INDEXER_PACKAGE_NAME }} ./*
 
-      - name: Archive SearchIndexer dotnetcore package artifacts
+      - name: Archive indexer artifacts
         uses: actions/upload-artifact@v2
         if: env.NEED_DEPLOY == 'true'
         with:
-          name: indexer
-          path: './day3/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/${{ env.INDEXER_PACKAGE_PATH }}/${{ env.INDEXER_PACKAGE_NAME }}'
+          name: drop
+          path: "${{ env.INDEXER_PROJECT_PATH }}/${{ env.INDEXER_PACKAGE_PATH }}/${{ env.INDEXER_PACKAGE_NAME }}"
+          if-no-files-found: error
           retention-days: 30
 
-  deploy-to-dev:
+  deploy-infrastructure-to-dev:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day3-scm-dev
-    needs: build
+    needs: [build-bicep, build-api, build-indexer]
+    outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+      searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
+      indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday3
       RESOURCE_GROUP_LOCATION: westeurope
       ENV_NAME: devd3
 
     steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
       - name: Login via Azure CLI
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
 
-      - name: Download bicep artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: bicep
+          name: drop
 
       - name: Deploy infrastructure to dev environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./searchmain.json
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
 
-      - name: Download scmsearchapi artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: scmsearchapi
-
-      - name: Deploy SCM Search API
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
-          package: ./${{ env.API_PACKAGE_NAME }}
-
-      - name: Download SearchIndexer artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: indexer
-
-      - name: Deploy ImageResizer Function
-        uses: Azure/functions-action@v1
-        with:
-          app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
-          package: ./${{ env.INDEXER_PACKAGE_NAME }}
-
-  deploy-to-test:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+  deploy-searchapi-to-dev:
     runs-on: ubuntu-latest
-    environment: day3-scm-test
-    needs: deploy-to-dev
-    env:
-      RESOURCE_GROUP_NAME: rg-scm-testday3
-      RESOURCE_GROUP_LOCATION: westeurope
-      ENV_NAME: testd3
+    needs: deploy-infrastructure-to-dev
 
     steps:
       - name: Login via Azure CLI
@@ -170,35 +195,90 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Create ResourceGroup if it does not exist
-        uses: Azure/CLI@v1
-        with:
-          inlineScript: |
-            #!/bin/bash
-            if $(az group exists --name ${{ env.RESOURCE_GROUP_NAME }}) ; then
-              echo "Azure resource group already exists, skipping creation..."
-            else
-              az group create --name ${{ env.RESOURCE_GROUP_NAME }} --location ${{ env.RESOURCE_GROUP_LOCATION }}
-              echo "Azure resource group created"
-            fi
-
-      - name: Download bicep artifacts
+      - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: bicep
+          name: drop
 
-      - name: Deploy infrastructure to dev environment
+      - name: Deploy SCM Search API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.searchApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-indexer-to-dev:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-dev
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Indexer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}
+          package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-dev.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
+
+  deploy-infrastructure-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day3-scm-test
+    needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
+    outputs:
+      resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+      searchApiWebAppName: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
+      indexerFunctionName: ${{ steps.infrastructure.outputs.indexerFunctionName }}
+
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-testday3
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd3
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy infrastructure to test environment
         uses: azure/arm-deploy@v1
         id: infrastructure
         with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: ./searchmain.json
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
           parameters: env=${{ env.ENV_NAME }}
-
-      - name: Download scmsearchapi artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: scmsearchapi
 
       - name: Deploy SCM Search API
         uses: azure/webapps-deploy@v2
@@ -206,13 +286,55 @@ jobs:
           app-name: ${{ steps.infrastructure.outputs.searchApiWebAppName }}
           package: ./${{ env.API_PACKAGE_NAME }}
 
-      - name: Download SearchIndexer artifacts
-        uses: actions/download-artifact@v2
-        with:
-          name: indexer
-
-      - name: Deploy ImageResizer Function
+      - name: Deploy Indexer Function
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ steps.infrastructure.outputs.indexerFunctionName }}
           package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+  deploy-searchapi-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy SCM Search API
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.searchApiWebAppName }}
+          package: ./${{ env.API_PACKAGE_NAME }}
+
+  deploy-indexer-to-test:
+    runs-on: ubuntu-latest
+    needs: deploy-infrastructure-to-test
+
+    steps:
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Deploy Indexer Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}
+          package: ./${{ env.INDEXER_PACKAGE_NAME }}
+
+      - name: Sync function triggers
+        run: >
+          az rest --method POST 
+          --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-test.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-test.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01

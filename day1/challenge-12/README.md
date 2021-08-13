@@ -189,7 +189,7 @@ To do this you need to upload a price sheet with your specific Azure rates. The 
 :::  
 
 :::tip
-📝 Price information for Azure resources is accessible through the [RateCard API](https://docs.microsoft.com/en-us/azure/cost-management-billing/manage/usage-rate-card-overview#azure-resource-ratecard-api-preview). If you want to dig into some details go [here for a sample](https://github.com/bfrankMS/myAzureCost/tree/master/SetupChallenges/GenerateAPriceSheet)
+📝 Price information for Azure resources is accessible through the [RateCard API](https://docs.microsoft.com/azure/cost-management-billing/manage/usage-rate-card-overview#azure-resource-ratecard-api-preview). If you want to dig into some details go [here for a sample](https://github.com/bfrankMS/myAzureCost/tree/master/SetupChallenges/GenerateAPriceSheet)
 :::
 
 1. You find a sample price list in this directory:

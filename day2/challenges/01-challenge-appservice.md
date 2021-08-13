@@ -406,7 +406,7 @@ Now check, that the production slot serves the new version of the website.
 
 Azure AppService code samples:
 
-- <https://docs.microsoft.com/en-us/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
+- <https://docs.microsoft.com/samples/browse/?expanded=azure&products=azure-app-service%2Cazure-app-service-web>
 
 ## Cleanup
 

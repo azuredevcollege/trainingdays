@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
 
     steps:
@@ -20,12 +21,15 @@ jobs:
         with:
           node-version: "12"
 
-      - run: npx vuepress build
+      - run: npm init -y
+      - run: npm install vuepress vuepress-plugin-code-copy
+      - run: node_modules/.bin/vuepress build
       - name: Upload result of vuepress build
         uses: actions/upload-artifact@v2
         with:
           name: static-website
           path: .vuepress/dist
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest

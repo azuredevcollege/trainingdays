@@ -1,6 +1,14 @@
 {
 	"folders": [
 		{
+			"name": "workflows",
+			"path": "../.github/workflows"
+		},
+		{
+			"name": "infrastructure",
+			"path": "apps/infrastructure/bicep"
+		},
+		{
 			"name": "Contacts API",
 			"path": "apps/dotnetcore/Scm/Adc.Scm.Api"
 		},

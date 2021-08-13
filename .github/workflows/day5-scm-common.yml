@@ -1,0 +1,129 @@
+name: day5-scm-common
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - day5/apps/infrastructure/bicep/common/**
+      - .github/workflows/day5-scm-common.yml
+  pull_request:
+    branches:
+      - master
+    paths:
+      - day5/apps/infrastructure/bicep/common/**
+      - .github/workflows/day5-scm-common.yml
+
+  workflow_dispatch:
+
+env:
+  BICEP_FILE_NAME: "commonmain.bicep"
+
+jobs:
+  build:
+    if: github.repository == 'azuredevcollege/trainingdays'
+    runs-on: ubuntu-latest
+    env:
+      BICEP_FILE_PATH: "./day5/apps/infrastructure/bicep/common/commonmain.bicep"
+      BICEP_MODULE_PATH: "./day5/apps/infrastructure/bicep/common/"
+      NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Transpile bicep files
+        run: az bicep build -f ${{ env.BICEP_FILE_PATH }}
+
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        if: env.NEED_DEPLOY == 'true'
+        with:
+          name: drop
+          path: ${{ env.BICEP_MODULE_PATH }}
+          if-no-files-found: error
+          retention-days: 30
+
+  deploy-to-dev:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day5-scm-dev
+    needs: build
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-devday5
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: devd5
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Deploy to dev environment
+        uses: azure/arm-deploy@v1
+        with:
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }}
+
+  deploy-to-test:
+    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    environment: day5-scm-test
+    needs: deploy-to-dev
+    env:
+      RESOURCE_GROUP_NAME: rg-scm-testday5
+      RESOURCE_GROUP_LOCATION: westeurope
+      ENV_NAME: testd5
+
+    steps:
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v3.x
+
+      - name: Create ResourceGroup name
+        id: createResourceGroupName
+        run: echo "::set-output name=name::${{ env.RESOURCE_GROUP_NAME }}-${{ env.GITHUB_REPOSITORY_OWNER_PART }}"
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+
+      - name: Login via Azure CLI
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create ResourceGroup
+        run: >
+          az group create
+          -l ${{ env.RESOURCE_GROUP_LOCATION }}
+          -n ${{ steps.createResourceGroupName.outputs.name }}
+
+      - name: Deploy to test environment
+        uses: azure/arm-deploy@v1
+        with:
+          failOnStdErr: false
+          resourceGroupName: ${{ steps.createResourceGroupName.outputs.name }}
+          template: ./${{ env.BICEP_FILE_NAME }}
+          parameters: env=${{ env.ENV_NAME }}

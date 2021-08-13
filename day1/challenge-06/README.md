@@ -34,7 +34,7 @@
   | _Access tier_  |  Hot |
 
   :::tip
-  📝 Find some use cases for [SAS](https://docs.microsoft.com/en-us/azure/storage/common/storage-sas-overview#when-to-use-a-shared-access-signature)
+  📝 Find some use cases for [SAS](https://docs.microsoft.com/azure/storage/common/storage-sas-overview#when-to-use-a-shared-access-signature)
   :::
 
 3. Once the storage account is created,  generate a new container within the storage account:  
@@ -135,7 +135,7 @@
   :::
 
 2. Create a SAS URL that is using this access policy using Azure Storage Explorer
-2.1 Open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
+2.1 Open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/features/storage-explorer/) [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
 2.2 Navigate to your storage account and container.  
 2.3 Right click and do 'Get Shared Access Signature' based on our policy.
 
@@ -173,7 +173,7 @@
   
 ## Authorize access to blobs using AAD (optional)  
 
-You can also authorize access to storage accounts using Azure Active Directory (AAD) credentials ([documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json)) which means you assign users RBAC permissions to e.g. a  container. This is in fact the _recommended way_.
+You can also authorize access to storage accounts using Azure Active Directory (AAD) credentials ([documentation](https://docs.microsoft.com/azure/storage/common/storage-auth-aad?toc=%2fazure%2fstorage%2fblobs%2ftoc.json)) which means you assign users RBAC permissions to e.g. a  container. This is in fact the _recommended way_.
 
 However, apps might want to use 'service accounts' as users (aka Service Principals) in Azure. The following PowerShell code creates a Service Principal in AAD. Run this in your cloud shell (How? See [challenge 5](../challenge-05/README.md)):  
 

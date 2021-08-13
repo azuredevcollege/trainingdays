@@ -93,7 +93,11 @@ $ docker image ls
 ```
 Output will be something like:
 ```shell
+
+REPOSITORY                TAG                 IMAGE ID            CREATED             SIZE
+=======
 REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
+
 your_dockerhub_id/mysql   v1                  2dfc8038fc98        13 hours ago        448MB
 your_dockerhub_id/php     v1                  53959f571f38        13 hours ago        484MB
 ```
@@ -111,11 +115,12 @@ $ docker image ls
 ```
 Output will be something like:
 ```shell
-REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
-your_dockerhub_id/mysql   v1                  2dfc8038fc98        13 hours ago        448MB
-your_dockerhub_id/php     v1                  53959f571f38        13 hours ago        484MB
-acr_login_url/mysql:v1   v1                  2dfc8038fc98        13 hours ago        448MB
-acr_login_url/php:v1    v1                  53959f571f38        13 hours ago        484MB
+
+REPOSITORY              TAG                 IMAGE ID            CREATED             SIZE
+your_dockerhub_id/mysql v1                  2dfc8038fc98        13 hours ago        448MB
+your_dockerhub_id/php   v1                  53959f571f38        13 hours ago        484MB
+acr_login_url/mysql     v1                  2dfc8038fc98        13 hours ago        448MB
+acr_login_url/php       v1                  53959f571f38        13 hours ago        484MB
 ```
 
 <img src="./img/acr9.png">
@@ -352,4 +357,4 @@ When you complete the challenge, please don't forget to delete the resources tha
 
 __Congratulations__ you have completed the Azure Container Services challenge. You have created your first ACR instance and AKS cluster and deploy an application. 
 
-*** Reference: https://docs.microsoft.com/en-us/azure/aks/ https://docs.microsoft.com/en-us/azure/container-registry/
+*** Reference: https://docs.microsoft.com/azure/aks/ https://docs.microsoft.com/azure/container-registry/
