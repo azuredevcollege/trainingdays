@@ -1,4 +1,4 @@
-# Azure SQL DB
+# Challenge 2: Azure SQL DB (optional)
 
 ## Here is what you will learn 🎯
 
@@ -113,14 +113,14 @@ Now that your SQL Database is up and running it's time to add some data. First w
 az sql db show-connection-string --name MSFTEmployees --server <name of your server> --client sqlcmd
 ```
 
-For the next part to work you either have the `sqlcmd` extension or go on using the Azure Cloud Shell. Copy the `sqlcmd` command and enter your admin name and password. The command should look something like this:
+For the next part to work you either have the `sqlcmd` extension or go on using the Azure Cloud Shell (PowerShell). Copy the `sqlcmd` command and enter your admin name and password. The command should look something like this:
 
 ```shell
 sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
 ```
 
 :::tip
- 📝 You might need to renew the firewall-rule at this point:
+ 📝 You might need to renew the firewall-rule at this point. The error output includes the needed IP address.
 
 ```shell
 az sql server firewall-rule create --server <name of your server> --resource-group adc-sql-db-rg --name AllowYourIp --start-ip-address <your public ip> --end-ip-address <your public Ip>
@@ -158,11 +158,122 @@ After running this you should see a `1>`. Now you can run SQL Queries. If you ar
   GO
   ```
 
-5. Add the other CEOs Microsoft has had to the list as well (the ID is fictional). To exit the sqlcmd utility program enter `exit`.
 
-## Add Data to SQL DB using the Azure Data Studio
+## Setup Dynamic Data Masking
 
-Another, more simple approach is using the Azure Data Studio. Azure Data Studio is a cross-platform database tool for data professionals using the Microsoft family of on-premises and cloud data platforms on Windows, MacOS, and Linux.
+Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
+
+![Dynamic Data Masking](./images/dynamic-data-masking.png)
+
+To see Dynamic Data Masking in action we first add a column to the CEOs table with a Data Masking Rule.
+
+If you have exited the sqlcmd utility program, reconnect as follows:
+
+```shell
+sqlcmd -S tcp:[Name of your Server].database.windows.net,1433 -d MSFTEmployees -U <name of your admin> -P <pwd> -N -l 30
+```
+
+Run the following after `1>`:
+
+1. Add the column email and mask it.
+
+  ```sql
+  ALTER TABLE [dbo].[CEOs]
+  ADD Email varchar(256) MASKED WITH (FUNCTION = 'EMAIL()');
+  GO
+  ```
+
+2. Run another query to add more information to the table:
+
+  ```sql
+  INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (1, 'Gates', 'Bill', 65, 1975, 'bgates@microsoft.com');
+  UPDATE CEOs SET Email='snadella@microsoft.com' WHERE EmployerID=42;
+  GO
+  ```
+
+When we select the top 1000 rows of the Contacts table we still see the email's actual value.
+
+![Not Masked](./images/sqlunmasked.png)
+
+The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on CEOs. 
+
+3. Run the following:
+
+  ```sql
+  CREATE USER TestUser WITHOUT LOGIN;
+  GRANT SELECT ON CEOs TO TestUser;
+  GO
+
+  EXECUTE AS USER = 'TestUser';
+  SELECT * FROM CEOs;
+  GO
+  ```
+![Masked](./images/sqlmasked.png)
+
+4. To exit the sqlcmd utility program enter `exit`.
+
+
+## SQL Database backup and retention policies
+
+You make the choice between configuring your server for either locally redundant backups or geographically redundant backups at server creation.
+After a server is created, the kind of redundancy it has, geographically redundant vs locally redundant, can't be switched.
+While creating a server via the `az sql server create` command, the `--geo-redundant-backup` parameter decides your Backup Redundancy Option. If `Enabled`, geo redundant backups are taken. Or if `Disabled` locally redundant backups are taken.
+In our current database geo redundant backups therefore are not possible.
+
+- Go to the Azure portal and navigate to your SQL server
+- Under Manage Backups you will find the retention policies
+- Change the retention policy for MicrosoftEmployees to Monthly Backups that should be kept for 8 weeks.
+- On the Available backups tab, you will find backups from which you can restore a specific database.
+
+As a declarative abstraction on top of the existing active geo-replication feature, Auto-failover groups are a SQL Database feature that allows you to manage replication and failover of a group of databases on a SQL Database server or all databases in a managed instance to another region.
+They are designed to simplify deployment and management of geo-replicated databases at scale.
+
+When you are using auto-failover groups with automatic failover policy, any outage that impacts one or several of the databases in the group results in automatic failover. Typically these are incidents that cannot be self-mitigated by the built-in automatic high availability operations. The examples of failover triggers include an incident caused by a SQL tenant ring or control ring being down due to an OS kernel memory leak on several compute nodes, or an incident caused by one or more tenant rings being down because a wrong network cable was cut during routine hardware decommissioning. For more information, see SQL Database High Availability.
+
+1. Create another Azure SQL Server in another azure region
+
+  ```shell
+  az sql server create --name <name of your second server> --resource-group adc-sql-db-rg --location northeurope --admin-user <name of your admin> --admin-password <pwd>
+  ```
+
+2. Create a failover group between the servers and add the database
+
+  ```shell
+  az sql failover-group create --name <name of your fg> --partner-server <name of your second server> --resource-group adc-sql-db-rg --server <name of your server> --add-db MSFTEmployees --failover-policy Automatic
+  ```
+
+3. Verify which server is secondary
+
+  ```shell
+  az sql failover-group list --server <name of your server> --resource-group adc-sql-db-rg
+  ```
+
+4. Failover to the secondary server
+
+  ```shell
+  az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your second server>
+  ```
+
+5. Revert failover group back to the primary server
+
+  ```shell
+  az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your server>
+  ```
+
+Take a look at the failover group in the Azure portal. Find your SQL server. Under Data management select Failover groups. Select your failover group. You will see something like this:
+
+![Failover Group in the Azure portal](./images/sqlfailovergroup.png)
+
+6. Delete the resources you created in this challenge if you do not want to go through the optional content
+
+  ```shell
+  az group delete --resource-group adc-sql-db-rg
+  ```
+
+
+## Add Data to SQL DB using the Azure Data Studio (optional)
+
+Another, more simple approach to add data to your Azure SQL database is using the Azure Data Studio. Azure Data Studio is a cross-platform database tool for data professionals using the Microsoft family of on-premises and cloud data platforms on Windows, MacOS, and Linux.
 
 Azure Data Studio offers a modern editor experience with IntelliSense, code snippets, source control integration, and an integrated terminal. It's engineered with the data platform user in mind, with built-in charting of query result sets and customizable dashboards.
 
@@ -206,41 +317,7 @@ Next we want to create our first table in the MSFTEmployee. Navigate to the MSFT
   SELECT * FROM CEOs;
   ```
 
-## Setup Dynamic Data Masking
-
-Dynamic data masking (DDM) limits sensitive data exposure by masking it to non-privileged users. It can be used to greatly simplify the design and coding of security in your application. Take a look at the documentation [here](https://docs.microsoft.com/sql/relational-databases/security/dynamic-data-masking?view=sql-server-ver15) to get more information about Dynamic Data Masking.
-
-![Dynamic Data Masking](./images/dynamic-data-masking.png)
-
-To see Dynamic Data Masking in action we first add a column to the CEOs table with a Data Masking Rule.
-Back in Azure Data Studio create a new query and run a command as follows:
-
-```sql
-ALTER TABLE [dbo].[CEOs]
-ADD Email varchar(256) MASKED WITH (FUNCTION = 'EMAIL()');
-```
-
-Run another query to add another row:
-
-```sql
-INSERT INTO CEOs (EmployerID, LastName, FirstName, Age, StartYear, Email) VALUES (43, 'Nadella', 'Satya', 52, 2014, 'snad@microsoft.com');
-```
-
-When we select the top 1000 rows of the Contacts table we still see the email's actual value.
-
-![Not Masked](./images/not-masked-result.png)
-
-The reason behind this is that the account we have used has elevated privileges. To show you how Dynamic Data Masking works we create a user and grant select on CEOs. Create a new query in the Azure Data Studio and run the commands as follows:
-
-```sql
-CREATE USER TestUser WITHOUT LOGIN;
-GRANT SELECT ON CEOs TO TestUser;
-
-EXECUTE AS USER = 'TestUser';
-SELECT * FROM CEOs;
-```
-
-## Access Management for Azure SQL DB
+## Access Management for Azure SQL DB (optional)
 
 Under Access Management we are taking a look at authentication and authorization. _Authentication_ is the process of proving the users are who they claim to be. _Authorization_ refers to the permissions assigned to a user within an Azure SQL Database, and determines what the user is allowed to do.
 
@@ -261,53 +338,6 @@ ALTER ROLE  db_backupoperator ADD MEMBER Marvin;
 ```
 
 ![Fixed Rules](./images/permissions-of-database-roles.png)
-
-## SQL Database backup and retention policies (optional)
-
-You make the choice between configuring your server for either locally redundant backups or geographically redundant backups at server creation.
-After a server is created, the kind of redundancy it has, geographically redundant vs locally redundant, can't be switched.
-While creating a server via the `az sql server create` command, the `--geo-redundant-backup` parameter decides your Backup Redundancy Option. If `Enabled`, geo redundant backups are taken. Or if `Disabled` locally redundant backups are taken.
-In our current database geo redundant backups therefore are not possible.
-
-- Go to the Azure portal and navigate to your SQL server
-- Under Manage Backups you will find the retention policies
-- Change the retention policy for MicrosoftEmployees to Monthly Backups that should be kept for 8 weeks.
-- On the Available backups tab, you will find backups from which you can restore a specific database.
-
-As a declarative abstraction on top of the existing active geo-replication feature, Auto-failover groups are a SQL Database feature that allows you to manage replication and failover of a group of databases on a SQL Database server or all databases in a managed instance to another region.
-They are designed to simplify deployment and management of geo-replicated databases at scale.
-
-When you are using auto-failover groups with automatic failover policy, any outage that impacts one or several of the databases in the group results in automatic failover. Typically these are incidents that cannot be self-mitigated by the built-in automatic high availability operations. The examples of failover triggers include an incident caused by a SQL tenant ring or control ring being down due to an OS kernel memory leak on several compute nodes, or an incident caused by one or more tenant rings being down because a wrong network cable was cut during routine hardware decommissioning. For more information, see SQL Database High Availability.
-
-1. Create another Azure SQL Server in another azure region
-
-  ```shell
-  az sql server create --name <name of your second server> --resource-group adc-sql-db-rg --location <a different Azure region> --admin-user <name of your admin> --admin-password <pwd>
-  ```
-
-2. Create a failover group between the servers and add the database
-
-  ```shell
-  az sql failover-group create --name <name of your fg> --partner-server <name of your second server> --resource-group adc-sql-db-rg --server <name of your server> --add-db MSFTEmployees --failover-policy Automatic
-  ```
-
-3. Verify which server is secondary
-
-  ```shell
-  az sql failover-group list --server <name of your server> --resource-group adc-sql-db-rg
-  ```
-
-4. Failover to the secondary server
-
-  ```shell
-  az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your second server>
-  ```
-
-5. Revert failover group back to the primary server
-
-  ```shell
-  az sql failover-group set-primary --name <name of your fg> --resource-group adc-sql-db-rg --server <name of your server>
-  ```
 
 ## Connect the Azure SQL DB to a Web Application (optional)
 
