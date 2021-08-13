@@ -6,10 +6,9 @@ What it takes to implement a VPN tunnel between your onprem firewall <---VPN S2S
 ![Hybrid Network with Azure](./images/goal.png)
 
 An Azure S2S VPN requires:
-| onprem                                | Azure                                                                                                                                                                                                                                  |
+| onprem | Azure |
 | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | A supported device Azure can talk to. | <ul><li>VPN Gateway in its own subnet.</li><li>VPN GWay requires a dynamic Public IP</li><li>Settings how the onprem VPN / FWall is to be contacted (aka LocalNetworkGateway)</li><li>Connection Object with e.g. shared key</li></ul> |
-
 
 ## Table of Contents
 
@@ -26,7 +25,7 @@ An Azure S2S VPN requires:
 
 ## Starting Point
 
-Your instructor has setup for you the onprem part - _ask him for the details_:  
+Your instructor has setup for you the onprem part - _ask him for the details_:
 
 ![Onpremise](./images/onpremise.png)
 
@@ -34,25 +33,20 @@ Your instructor has setup for you the onprem part - _ask him for the details_:
 button to get the Azure resources to start with:  
 ![azure vpn starting point](./images/vpnLabAzureStart.png)
 
-| Name             | Value                                     |
-| ---------------- | ----------------------------------------- |
-| _Resource group_ | **(new)** rg-vpn                          |
-| _Location_       | North Europe                              |
-| _Admin user_     | demouser                                  |
-| _Admin password_ | %some complex value%                      |
-| _Vm Size_        | Standard_B2s  or try e.g. Standard_F2s_v2 |
-| _Disk Sku_       | StandardSSD_LRS                           |
+| Name             | Value                                    |
+| ---------------- | ---------------------------------------- |
+| _Resource group_ | **(new)** rg-vpn                         |
+| _Location_       | North Europe                             |
+| _Admin user_     | demouser                                 |
+| _Admin password_ | %some complex value%                     |
+| _Vm Size_        | Standard_B2s or try e.g. Standard_F2s_v2 |
+| _Disk Sku_       | StandardSSD_LRS                          |
 
 ## Create a VPN Gateway and a Public IP using the Azure portal
 
-```
-[Azure Portal] 
--> '+ Create a resource' 
--> type "Virtual network gateway"
--> Create
-```
+`[Azure Portal] -> '+ Create a resource' -> type "Virtual network gateway" -> Create`
 
-Use the following parameter values:  
+Use the following parameter values:
 
 | Parameter Name                 | Values               |
 | ------------------------------ | -------------------- |
@@ -79,12 +73,7 @@ When your GW has been assigned a _public IP address_ then you know it is online.
 
 The purpose of this task is to tell Azure how to contact the onpremise firewall:
 
-```
-[Azure Portal] 
--> '+ Add' 
--> type 'Local network gateway' 
--> Create
-```
+`[Azure Portal] -> '+ Add' -> type 'Local network gateway' -> Create`
 
 | Parameter Name   | Values                                          |
 | ---------------- | ----------------------------------------------- |
@@ -96,13 +85,7 @@ The purpose of this task is to tell Azure how to contact the onpremise firewall:
 
 ## Create a connection object with shared key in Azure
 
-```
-[Azure Portal] 
--> Resource Groups 
--> rg-vpn 
--> myAzVPNGWay
--> Connections
-```  
+`[Azure Portal] -> Resource Groups -> rg-vpn -> myAzVPNGWay -> Connections`
 
 | Parameter Name            | Values               |
 | ------------------------- | -------------------- |
@@ -117,89 +100,78 @@ The purpose of this task is to tell Azure how to contact the onpremise firewall:
 
 ## Configure your onpremise VPN counterpart
 
-We now need to configure the other end of the vpn tunnel: the onpremise firewall in our case a linux FW called _IPFire_.  
+We now need to configure the other end of the vpn tunnel: the onpremise firewall in our case a linux FW called _IPFire_.
 
-1. For this use the remote desktop client to RDP into your onpremise environment (_ask your instructor for connection details_):  
-  
-  ```
-  Internet -- 1st RDP 
-  -> onprem Lab (HyperV Host) -- 2nd RDP
-  -> cmW2k19 (192.168.0.11) --https 
-  ->IPFire (192.168.0.100)  
-  ```
+1. For this use the remote desktop client to RDP into your onpremise environment (_ask your instructor for connection details_):
 
-  ![Connection Flow](./images/connectionFlow.png)
+`Internet -- 1st RDP -> onprem Lab (HyperV Host) -- 2nd RDP -> cmW2k19 (192.168.0.11) --https -> IPFire (192.168.0.100)`
 
-  | Parameter Name                                                       | Values                                                                                                                           |
-  | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-  | _connect to 1st RDP_                                                 | <ul><li><b>IP</b>: %ask instructor%</li><li><b>username</b>: demouser</li><li><b>password</b>: %ask instructor%</li></ul>        |
-  | _within this session connect to 2nd RDP_                             | <ul><li><b>IP</b>: 192.168.0.11</li><li><b>username</b>: administrator</li><li><b>password</b>: %ask instructor%</li></ul>       |
-  | _open browser and do https_ ( ignore certificate warning -> proceed) | <ul><li><b>URI</b>: https://192.168.0.100:444</li><li><b>username</b>: admin</li><li><b>password</b>: %ask instructor%</li></ul> |
-  
+![Connection Flow](./images/connectionFlow.png)
+
+| Parameter Name                                                       | Values                                                                                                                             |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| _connect to 1st RDP_                                                 | <ul><li><b>IP</b>: %ask instructor%</li><li><b>username</b>: demouser</li><li><b>password</b>: %ask instructor%</li></ul>          |
+| _within this session connect to 2nd RDP_                             | <ul><li><b>IP</b>: 192.168.0.11</li><li><b>username</b>: administrator</li><li><b>password</b>: %ask instructor%</li></ul>         |
+| _open browser and do https_ ( ignore certificate warning -> proceed) | <ul><li><b>URI</b>: <https://192.168.0.100:444></li><li><b>username</b>: admin</li><li><b>password</b>: %ask instructor%</li></ul> |
+
 2. Add the VPN details and save
 
-  ```
-  IPFire 
-  -> Services 
-  -> IPSec 
-  -> 'Connection Status and -Control' 
-  -> Add
-  ```
+`IPFire -> Services -> IPSec -> 'Connection Status and -Control' -> Add`
 
-  ![IPFire: Add a connection](./images/vpn0.png)
+![IPFire: Add a connection](./images/vpn0.png)
 
-  ```
-  "Net-to-Net Virtual Private Network" -> Add
-  ```
+```
+"Net-to-Net Virtual Private Network" -> Add
+```
 
-  ![IPFire: add Net-to-Net connection](./images/vpn1.png)
+![IPFire: add Net-to-Net connection](./images/vpn1.png)
 
-  | Parameter Name         | Values                                                                                 |
-  | ---------------------- | -------------------------------------------------------------------------------------- |
-  | _Name_                 | azure                                                                                  |
-  | _Local subnet_         | 192.168.0.0/255.255.255.0                                                              |
-  | _Remote Host/IP_       | %myAzVPNGWay IP Address%  (Azure Portal -> VPN Gateway -> Public IP address)           |
-  | _Remote subnet_        | %Address Range of the virtual network in azure% (in our case 10.1.0.0/255.255.0.0)     |
-  | _Use a pre-shared key_ | %Shared Key you used above% (Azure Portal -> VPN Gateway -> Connections -> Shared Key) |
+| Parameter Name         | Values                                                                                 |
+| ---------------------- | -------------------------------------------------------------------------------------- |
+| _Name_                 | azure                                                                                  |
+| _Local subnet_         | 192.168.0.0/255.255.255.0                                                              |
+| _Remote Host/IP_       | %myAzVPNGWay IP Address% (Azure Portal -> VPN Gateway -> Public IP address)            |
+| _Remote subnet_        | %Address Range of the virtual network in azure% (in our case 10.1.0.0/255.255.0.0)     |
+| _Use a pre-shared key_ | %Shared Key you used above% (Azure Portal -> VPN Gateway -> Connections -> Shared Key) |
 
-  ![IPFire: connection settings](./images/vpn2.png)
-  
+![IPFire: connection settings](./images/vpn2.png)
+
 3. Modify the algorithms used for the connection. Click on the pencil symbol and choose 'Advanced':
 
-  ![IPFire: Advanced cipher settings](./images/vpn3.png)
+![IPFire: Advanced cipher settings](./images/vpn3.png)
 
-3.1 You _must_ select the following algorithms/suites for the connection:  
+3.1 You _must_ select the following algorithms/suites for the connection:
 
-  ![IPFire: connection settings](./images/vpn4.png)  
+![IPFire: connection settings](./images/vpn4.png)
 
 3.2 Select `Always on`, then save
 
 3.3 Tick checkbox to enable connection. The connection status should go to green:
 
-  ![IPFire: connection settings](./images/vpn5.png) 
+![IPFire: connection settings](./images/vpn5.png)
 
 4. Now let's ping your Azure VM (e.g. vmazure) under its private ip (probably: 10.1.0.4) from onpremise:
 
-  ![Successful Ping](./images/successfulPing.png)
-  Do you receive a response?  
+![Successful Ping](./images/successfulPing.png)
+Do you receive a response?
 
 ## Apply a more secure cipher for the VPN tunnel (optional)
 
 The following ARM Template ([VPNMoreSecureConnPolicy.json](./scripts/VPNMoreSecureConnPolicy.json)) defines a more secure cipher / algorithm to use for the VPN tunnel:  
-| Parameter Name    | Values    |
+| Parameter Name | Values |
 | ----------------- | --------- |
-| _ipsecEncryption_ | AES256    |
-| _ipsecIntegrity_  | SHA256    |
-| _ikeEncryption_   | AES256    |
-| _ikeIntegrity_    | SHA384    |
-| _dhGroup_         | DHGroup14 |
-| _pfsGroup_        | PFS2048   |
+| _ipsecEncryption_ | AES256 |
+| _ipsecIntegrity_ | SHA256 |
+| _ikeEncryption_ | AES256 |
+| _ikeIntegrity_ | SHA384 |
+| _dhGroup_ | DHGroup14 |
+| _pfsGroup_ | PFS2048 |
 
 To deploy it, **click** the
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="./challengestart/deploytoazure.png"/></a> button and select correct parameters to apply new ciphers to your current connection.  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenges%2FChallenge8%2FVPNMoreSecureConnPolicy.json"><img src="./challengestart/deploytoazure.png"/></a> button and select correct parameters to apply new ciphers to your current connection.
 
 However, you also need to apply this to the onprem firewall:
-  
+
 ![VPN more secure cipher](./images/vpn6-moresecure.png)
 
 ## Cleanup
