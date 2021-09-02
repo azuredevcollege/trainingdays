@@ -106,7 +106,7 @@ az storage blob service-properties update --account-name $BASE_STORAGEACCOUNT_FE
 aiKey=( `az resource show -g $BASE_RG_COMMON_NAME -n $BASE_AI_NAME --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv` )
 
 echo "Building frontend..."
-cd ../../../day2/apps/frontend/scmfe && npm install && npm run build && cd ../../../../day3/scripts/baseline
+cd ../../../day2/apps/frontend/scmfe && npm install && npm install --only=dev && npm install @vue/cli -g --prefix ./cli-bin && npm install @vue/cli-service -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
 
 echo "var uisettings = { \"endpoint\": \"https://$BASE_API_WEBAPP_NAME.azurewebsites.net\", \"resourcesEndpoint\": \"https://$BASE_RES_WEBAPP_NAME.azurewebsites.net\", \"aiKey\": \"$aiKey\" };" > ../../../day2/apps/frontend/scmfe/dist/settings/settings.js
 az storage blob upload-batch -d '$web' --account-name $BASE_STORAGEACCOUNT_FE_NAME -s ../../../day2/apps/frontend/scmfe/dist
