@@ -12,10 +12,6 @@ This day is focusing of implementing authentication and authorization into the A
 - 💎 [Challenge 3: Azure AD applications and deployment to GitHub environments](./challenges/03-challenge.md) 💎
 - 💎 *[Breakout: Integrate the sample application into Azure AD](./challenges/04-breakout.md)* 💎
 
-:::tip
-📝 Please take a look at the _restore checkpoint_, if you were unable to complete day 4: [Checkpoint - Restore from day4 to continue the breakout session (optional)](./apps/checkpoint/README.md)
-:::
-
 ## Day5 - Goal
 
 You already have deployed the Azure Developer College's sample application to your Azure subscription. Although the application is up and running we can not use different user accounts to create Contacts and VisitReports per user. The current deployed application does not support any user authentication.
