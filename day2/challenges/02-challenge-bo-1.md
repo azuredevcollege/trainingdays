@@ -133,8 +133,8 @@ So, first of all, let's deploy the backend to Azure. You already know how to do 
   | _Size_         | S1                       |
   | _AppInsights_  | Not needed at the moment |
 
-3. Deploy the _Contacts API_ to Azure (see the hints below)
-4. After deployment, check whether the API is running by open the Swagger UI
+3. Deploy the _Contacts API_ to Azure (see the tips below)
+4. After deployment, check whether the API is running by opening the Swagger UI
 
 :::tip
 You can right-click on the folder `Contacts API` and deploy it to the Azure App Service (via "Deploy to Web App..." in the context menu). VS Code will automatically build the project to a folder called `publish` and deploy its contents to Azure for you. The configuration for all these steps is located in the files `.vscode/settings.json` and `.vscode/tasks.json`.
