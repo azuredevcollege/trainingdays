@@ -53,13 +53,26 @@ free tier. After all values are set, we can start the import.
 
 ![GitHub import repository view](./images/gh-import-repo-view.png)
 
-It may take some time until the repository is imported.
+It may take some time (several minutes) until the repository is imported.
 
 After the import was successful, we can get started and take a look at the
 repository. Don't worry if there are still some branches that not yet merged
 into the master. When importing a repository, all branches are imported. The
 college is continuously being developed in branches, but we can ignore these for
 now.
+
+::: tip
+
+📝 You can also clone the original repository, change the url of the _origin_ remote, and push into a new empty repository.
+
+```shell
+git clone git@github.com:azuredevcollege/trainingdays.git
+cd trainingdays
+git remote set-url origin git@github.com:<your_org>/trainingdays.git
+git push
+```
+
+:::
 
 ## Set branch rules
 
