@@ -61,7 +61,7 @@ else
     echo "FuncApp RES env name is: $BASE_RES_FUNCAPP_NAME"
 fi
 
-rgCommon=( `az group exists -n $BASE_RG_COMMON_NAME` )
+rgCommon=( `az group exists -o json -n $BASE_RG_COMMON_NAME` )
 
 if [ "$rgCommon" = "false" ]; then
     echo "Creating COMMON resource group."
