@@ -135,7 +135,7 @@
   :::
 
 2. Create a SAS URL that is using this access policy using Azure Storage Explorer
-2.1 Open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/features/storage-explorer/) [See Also Day 2: Challenge 0 - Setup your System](./day2/challenges/challenge-0.md)
+2.1 Open [Microsoft Azure Storage Explorer](https://azure.microsoft.com/features/storage-explorer/) [See Also Day 2: Challenge 0 - Setup your System](https://github.com/azuredevcollege/trainingdays/blob/master/day2/challenges/00-challenge-setup.md)
 2.2 Navigate to your storage account and container.  
 2.3 Right click and do 'Get Shared Access Signature' based on our policy.
 
