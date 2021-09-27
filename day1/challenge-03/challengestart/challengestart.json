@@ -108,7 +108,7 @@
                         "vmName": "vmweb01",
                         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
                         "VMSubnet": "[concat('snet-vm-',variables('vmNamePrefix'))]",
-                        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(subscription().subscriptionId),0,4)))]",
+                        "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
                         "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]",
                         "PIPName": "[concat(variables('vmName'),'-pip')]"
                     },
