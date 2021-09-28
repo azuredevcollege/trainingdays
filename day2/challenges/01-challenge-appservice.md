@@ -295,12 +295,21 @@ After the wizard has finished, `cd` into the new folder `myFirstCoreApp` and ope
 cd myFirstCoreApp
 code .
 ```
+::warning
+
+⚠️ If you just installed the .NET Core SDK please make sure to restart VSCode. If you've already created a `.vscode/launch.json` delete it. Pay attention to the select boxes in the top middle of your screen that appear when vscode detects the .Net project aswell as the bottom right corner where it should ask you to restore the dotnet dependencies.
+
+:::
 
 ![vscode](./images/vscode_start.png "vscode")
 
 :::tip
 📝 Get familiar with the environment and have a look at the controller `HomeController`.
 :::
+
+
+
+
 
 Set a breakpoint (**F9**) on method `public IActionResult Index()` in `Controllers/HomeController.cs`.
 
