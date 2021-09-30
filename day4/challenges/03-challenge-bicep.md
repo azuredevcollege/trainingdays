@@ -130,7 +130,7 @@ Now that we have created the Service Principal and have acquired the necessary
 access credentials we can store them in our repository in GitHub.
 
 Navigate to your repositories `Settings > Secrets` page and add a new secret
-named `AZURE_CREDENTIALS`. The value should look like this: `"clientId":"xxx","clientSecret":"xxx","subscriptionId":"xxx", "tenantId":"xxx"}`.
+named `AZURE_CREDENTIALS`. The value should look like this: `{"clientId":"xxx","clientSecret":"xxx","subscriptionId":"xxx", "tenantId":"xxx"}`.
 
 ::: v-pre
 
