@@ -23,7 +23,7 @@ group and and create our Kubernetes cluster within it:
 
 ```shell
 az group create --name adc-aks-rg --location westeurope
-az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.19.7
+az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.20.9
 ```
 
 Let's inspect the created resources:
@@ -81,7 +81,7 @@ for us there is a one-liner to quickly install the dashboard into our
 cluster:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
 ```
 
 Now, accessing the dashboard requires us to create a `ServiceAccount` with the
