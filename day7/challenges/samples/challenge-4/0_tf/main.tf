@@ -86,125 +86,95 @@ module "messaging" {
 
 output "appinsights" {
   value = module.common.ai_instrumentation_key
+  sensitive = true
 }
 output "appinsights_base64" {
   value = base64encode(module.common.ai_instrumentation_key)
+  sensitive = true
 }
 
-# # Data
+# Data
 
-# output "cosmos_endpoint" {
-#   value = module.data.cosmos_endpoint
-# }
 output "cosmos_endpoint_base64" {
   value = base64encode(module.data.cosmos_endpoint)
+  sensitive = true
 }
 
-# output "cosmos_primary_master_key" {
-#   value = module.data.cosmos_primary_master_key
-# }
 output "cosmos_primary_master_key_base64" {
   value = base64encode(module.data.cosmos_primary_master_key)
+  sensitive = true
 }
 
-# output "sqldb_connectionstring" {
-#   value = module.data.sqldb_connectionstring
-# }
 output "sqldb_connectionstring_base64" {
   value = base64encode(module.data.sqldb_connectionstring)
+  sensitive = true
 }
 
-# output "search_primary_key" {
-#   value = module.data.search_primary_key
-# }
 output "search_primary_key_base64" {
   value = base64encode(module.data.search_primary_key)
+  sensitive = true
 }
 
-# output "search_name" {
-#   value = module.data.search_name
-# }
 output "search_name_base64" {
   value = base64encode(module.data.search_name)
+  sensitive = true
 }
 
-# output "textanalytics_endpoint" {
-#   value = module.data.textanalytics_endpoint
-# }
 output "textanalytics_endpoint_base64" {
   value = base64encode(module.data.textanalytics_endpoint)
+  sensitive = true
 }
 
-# output "textanalytics_key" {
-#   value = module.data.textanalytics_key
-# }
 output "textanalytics_key_base64" {
   value = base64encode(module.data.textanalytics_key)
+  sensitive = true
 }
 
-# # Storage
+# Storage
 
-# output "resources_primary_connection_string" {
-#   value = module.storage.resources_primary_connection_string
-# }
 output "resources_primary_connection_string_base64" {
   value = base64encode(module.storage.resources_primary_connection_string)
+  sensitive = true
 }
 
-# output "funcs_primary_connection_string" {
-#   value = module.storage.funcs_primary_connection_string
-# }
 output "funcs_primary_connection_string_base64" {
   value = base64encode(module.storage.funcs_primary_connection_string)
+  sensitive = true
 }
 
-# # Messaging
+# Messaging
 
-# output "thumbnail_listen_connectionstring" {
-#   value = module.messaging.thumbnail_listen_connectionstring
-# }
 output "thumbnail_listen_connectionstring_base64" {
   value = base64encode(module.messaging.thumbnail_listen_connectionstring)
+  sensitive = true
 }
 
-# output "thumbnail_send_connectionstring" {
-#   value = module.messaging.thumbnail_send_connectionstring
-# }
 output "thumbnail_send_connectionstring_base64" {
   value = base64encode(module.messaging.thumbnail_send_connectionstring)
+  sensitive = true
 }
 
-# output "contacts_listen_connectionstring" {
-#   value = module.messaging.contacts_listen_connectionstring
-# }
 output "contacts_listen_connectionstring_base64" {
   value = base64encode(module.messaging.contacts_listen_connectionstring)
+  sensitive = true
 }
 
-# output "contacts_listen_with_entity_connectionstring" {
-#   value = module.messaging.contacts_listen_with_entity_connectionstring
-# }
 output "contacts_listen_with_entity_connectionstring_base64" {
   value = base64encode(module.messaging.contacts_listen_with_entity_connectionstring)
+  sensitive = true
 }
 
-# output "contacts_send_connectionstring" {
-#   value = module.messaging.contacts_send_connectionstring
-# }
 output "contacts_send_connectionstring_base64" {
   value = base64encode(module.messaging.contacts_send_connectionstring)
+  sensitive = true
 }
 
-# output "visitreports_listen_connectionstring" {
-#   value = module.messaging.visitreports_listen_connectionstring
-# }
 output "visitreports_listen_connectionstring_base64" {
   value = base64encode(module.messaging.visitreports_listen_connectionstring)
+  sensitive = true
 }
 
-# output "visitreports_send_connectionstring" {
-#   value = module.messaging.visitreports_send_connectionstring
-# }
 output "visitreports_send_connectionstring_base64" {
   value = base64encode(module.messaging.visitreports_send_connectionstring)
+  sensitive = true
 }
