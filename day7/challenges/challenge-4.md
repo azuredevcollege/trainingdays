@@ -117,7 +117,7 @@ $ terraform apply
 After the script has successfully finished, save the variables/secrets from Azure to a file:
 
 ```shell
-terraform output > azure_output.txt
+terraform output -json > azure_output.json
 ```
 
 ## Create a new Kubernetes Namespace
@@ -148,6 +148,8 @@ Go to `day7/challenges/samples/challenge-4/1_config` and replace the placeholder
 
 ::: tip
 📝 There is a bash script called `replace_variables.sh` in the same directory that you can use to automatically create the `ConfigMap` and `Secret` file for you.
+
+**Prerequisite:** You need the [jq](https://stedolan.github.io/jq/) tool installed in the environment you are running the script. If you are using Azure Shell, you are good to go.
 
 Just run it and it will produce two files called `local-configmap.yaml` and `local-secrets.yaml` (the script will keep the original files untouched). Use the `local` versions for deployment:
 :::
