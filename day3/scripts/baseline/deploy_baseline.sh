@@ -4,7 +4,7 @@
 
 PREFIX="azdc${RANDOM}"
 echo "Prefix is $PREFIX."
-
+EXECUTIONDIR=$PWD
 if [ -z $BASE_REGION_NAME ]; then
     BASE_REGION_NAME="westeurope"
     echo "Region env name (BASE_REGION_NAME) is empty. Using $BASE_REGION_NAME."
@@ -73,20 +73,20 @@ fi
 echo "Deploying Common Resources."
 
 az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-common.json --parameters applicationInsightsName=$BASE_AI_NAME
-
+cd ${EXECUTIONDIR}
 echo "Deploying SCM API Resources."
 
 az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_API_WEBAPP_NAME
-
+cd ${EXECUTIONDIR}
 echo "Building and publishing SCM API Resources."
 
 dotnet publish ../../../day2/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj --configuration=Release -o ./publishContacts /property:GenerateFullPaths=true /property:PublishProfile=Release
 cd publishContacts && zip -r package.zip . && az webapp deployment source config-zip --resource-group $BASE_RG_COMMON_NAME --name $BASE_API_WEBAPP_NAME --src ./package.zip && cd ..
-
+cd ${EXECUTIONDIR}
 echo "Deploying SCM Res Resources."
 
 az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-resources-api-dotnetcore.json --parameters applicationInsightsName=$BASE_AI_NAME sku=S1 use32bitworker=true alwaysOn=true webAppName=$BASE_RES_WEBAPP_NAME storageAccountName=$BASE_STORAGEACCOUNT_RES_NAME functionAppName=$BASE_RES_FUNCAPP_NAME
-
+cd ${EXECUTIONDIR}
 echo "Building and publishing SCM Res Resources."
 
 dotnet publish ../../../day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/Adc.Scm.Resources.Api.csproj --configuration=Release -o ./publishRes /property:GenerateFullPaths=true /property:PublishProfile=Release
@@ -94,26 +94,26 @@ cd publishRes && zip -r package.zip . && az webapp deployment source config-zip 
 
 dotnet publish ../../../day2/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/Adc.Scm.Resources.ImageResizer.csproj --configuration=Release -o ./publishFunc /property:GenerateFullPaths=true /property:PublishProfile=Release
 cd publishFunc && zip -r package.zip . && az webapp deployment source config-zip --resource-group $BASE_RG_COMMON_NAME --name $BASE_RES_FUNCAPP_NAME --src ./package.zip && cd ..
-
+cd ${EXECUTIONDIR}
 echo "Deploying SCM Frontend Resources."
 
 az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-fe.json --parameters storageAccountName=$BASE_STORAGEACCOUNT_FE_NAME
-
+cd ${EXECUTIONDIR}
 echo "Activating Static Web site option in storage account."
 
 az storage blob service-properties update --account-name $BASE_STORAGEACCOUNT_FE_NAME --static-website  --index-document index.html --404-document index.html
 
 aiKey=( `az resource show -g $BASE_RG_COMMON_NAME -n $BASE_AI_NAME --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv` )
-
+cd ${EXECUTIONDIR}
 echo "Building frontend..."
 cd ../../../day2/apps/frontend/scmfe && npm install && npm install --only=dev && npm install @vue/cli -g --prefix ./cli-bin && npm install @vue/cli-service -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
-
+cd ${EXECUTIONDIR}
 echo "var uisettings = { \"endpoint\": \"https://$BASE_API_WEBAPP_NAME.azurewebsites.net\", \"resourcesEndpoint\": \"https://$BASE_RES_WEBAPP_NAME.azurewebsites.net\", \"aiKey\": \"$aiKey\" };" > ../../../day2/apps/frontend/scmfe/dist/settings/settings.js
 az storage blob upload-batch -d '$web' --account-name $BASE_STORAGEACCOUNT_FE_NAME -s ../../../day2/apps/frontend/scmfe/dist
 
 echo "Cleaning up publish folders..."
 rm -rf publish*
-
+cd ${EXECUTIONDIR}
 echo "Done. Resources have been deployed in resource group $BASE_RG_COMMON_NAME."
 echo ""
 echo "Website can be accessed via:"
