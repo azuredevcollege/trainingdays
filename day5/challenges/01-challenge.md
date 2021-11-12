@@ -23,9 +23,9 @@ Before you can authenticate an user you have to register an application in your 
 ### Azure CLI
 
 ```shell
-az ad app create --display-name challengeidtokenfragment --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://challengeidtokenfragment
+az ad app create --display-name challengeidtokenfragment --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeidtokenfragment
 ```
-
+Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
 Retrieve and note the ID of your current AAD tenant via:
 
 ```shell

@@ -31,9 +31,9 @@ First, create a new Azure AD Application, this time with
 `oauth2-allow-implicit-flow` enabled:
 
 ```shell
-az ad app create --display-name challengeimplicitgrant --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://challengeimplicitgrantflow --oauth2-allow-implicit-flow true
+az ad app create --display-name challengeimplicitgrant --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeimplicitgrantflow --oauth2-allow-implicit-flow true
 ```
-
+Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
 As before, note down the `appId`. Next, retrieve and note the ID of your current
 Azure AD tenant via:
 
@@ -55,8 +55,9 @@ In this sample we create an API that exposes four OAuth2 permissions:
 First, create a new Azure AD application and write the output to a variable:
 
 ```shell
-API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://challengeimplicitgrantapi)
+API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeimplicitgrantapi)
 ```
+Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
 
 :::tip
 
@@ -129,7 +130,7 @@ token for.
 
 Replace `TENANT_ID` with your AAD Tenant Id and `APPLICATION_ID` with your
 Application Id (this is the id that you received when you created the first
-application). Open a browser and paste the request:
+application). Replace `TENANT_DOMAIN` with the name of your Azure AD instance and make sure not to temper with the masking. Open a browser and paste the request:
 
 ```http
 https://login.microsoftonline.com/TENANT_ID/oauth2/v2.0/authorize?
@@ -137,10 +138,9 @@ client_id=APPLICATION_ID
 &response_type=id_token+token
 &redirect_uri=http%3A%2F%2Flocalhost%3A5001%2Fapi%2Ftokenechofragment
 &response_mode=fragment
-&scope=openid%20profile%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Read%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Create%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Update%20https%3A%2F%2Fchallengeimplicitgrantapi%2FContacts.Delete
+&scope=openid%20profile%20https%3A%2F%2FTENANT_DOMAIN.onmicrosoft.com%2Fchallengeimplicitgrantapi%2FContacts.Read%20https%3A%2F%2FTENANT_DOMAIN.onmicrosoft.com%2Fchallengeimplicitgrantapi%2FContacts.Create%20https%3A%2F%2FTENANT_DOMAIN.onmicrosoft.com%2Fchallengeimplicitgrantapi%2FContacts.Update%20https%3A%2F%2FTENANT_DOMAIN.onmicrosoft.com%2Fchallengeimplicitgrantapi%2FContacts.Delete
 &nonce=1234
 ```
-
 After executing the request and you have signed in, Azure AD shows you a consent
 page and you have to grant access for the requested API permissions. After
 giving consent, have a look at your browser's address bar. The `access_token` is
