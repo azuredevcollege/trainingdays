@@ -32,11 +32,11 @@ Before we can authenticate a user we have to register an application in our Azur
 ### Azure CLI
 
 ```shell
-az ad app create --display-name challengeidtokencli --reply-urls http://localhost:5001/api/tokenecho --identifier-uris https://challengeidtoken
+az ad app create --display-name challengeidtokencli --reply-urls http://localhost:5001/api/tokenecho --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeidtoken
 ```
 
 :::tip
-📝 The `IdentifierUri` needs to be unique within an instance of AAD.
+📝 The `IdentifierUri` needs to be unique within an instance of AAD. Replace `TENANT_DOMAIN` with the name of your Azure AD instance.
 :::
 
 Retrieve the ID of your current Azure AD tenant via:

@@ -67,12 +67,12 @@ You must run the script twice:
 - once for creating the applications for the `Development` stage
 - once for creating the applications for the `Testing` stage
 
-Use the following parameters to run the script for the `Development` stage:
+Use the following parameters to run the script for the `Development` stage and don't forget to replace the `TENANT_DOMAIN`:
 
 | Parameter      | Value               |
 | -------------- | ------------------- |
 | _API-APP-NAME_ | scmapi-dev          |
-| _API-APP-URI_  | <http://scmapi-dev> |
+| _API-APP-URI_  | <http://TENANT_DOMAIN.onmicrosoft.com/scmapi-dev> |
 | _UI-APP-NAME_  | scmfe-dev           |
 
 Use the following parameter for the `Testing` stage:
@@ -80,7 +80,7 @@ Use the following parameter for the `Testing` stage:
 | Parameter      | Value                |
 | -------------- | -------------------- |
 | _API-APP-NAME_ | scmapi-test          |
-| _API-APP-URI_  | <http://scmapi-test> |
+| _API-APP-URI_  | <http://TENANT_DOMAIN.onmicrosoft.com/scmapi-test> |
 | _UI-APP-NAME_  | scmfe-test           |
 
 Navigate to the directory
@@ -100,6 +100,11 @@ Run the script twice:
 
 ```shell
 ./aad-integration.sh <API-APP-NAME> <API-APP-URI> <UI-APP-NAME>
+```
+
+If your bash does not find jq this could help:
+```shell
+sudo apt-get install jq
 ```
 
 The output:
@@ -138,7 +143,7 @@ option. Add the `master` branch as allowed branch.
 We need to add some secrets, which are accessed later in the GitHub Actions
 workflow.
 
-Use the `Add Secret` button to add a new secret named `SQL_PASSSWORD`.
+Use the `Add Secret` button to add a new secret named `SQL_PASSWORD`.
 
 You can generate a strong password by using the following command:
 

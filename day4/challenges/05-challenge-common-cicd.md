@@ -173,7 +173,7 @@ We need to add a secret, because we will create an Azure SQL Database and need
 to provide an initial password, which we can securely store as an environment
 secret and access it later in the GitHub Actions workflow.
 
-Use the `Add Secret` button to add a new secret named `SQL_PASSSWORD`.
+Use the `Add Secret` button to add a new secret named `SQL_PASSWORD`.
 
 You can generate a strong password by using the following command:
 
