@@ -321,7 +321,7 @@
                 "typeHandlerVersion": "2.73",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-09/EnablePingConfig.zip",
+                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-09/scripts/EnablePingConfig.zip",
                     "configurationFunction": "EnablePingConfig.ps1\\AllowPing"
                 },
                 "protectedSettings": {
