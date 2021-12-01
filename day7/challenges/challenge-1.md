@@ -182,6 +182,11 @@ The process keeps running until you interrupt it using `Ctrl-C`. Let's keep it r
 [Access the dashboard](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/)
 and login using the token you've acquired for the _admin-user_ `ServiceAccount`.
 
+::: warning
+⚠️ Please note that the dashboard is proxied under a path containing the namespace and deployment path like this: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+:::
+
+
 ![Dashboard Login](./images/dashboard-login.png)
 
 Take your time to explore the dashboard. Make use of the `Namespace` selector to navigate the
