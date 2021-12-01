@@ -81,7 +81,7 @@ for us there is a one-liner to quickly install the dashboard into our
 cluster:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.3.1/aio/deploy/recommended.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
 ```
 
 Now, accessing the dashboard requires us to create a `ServiceAccount` with the
