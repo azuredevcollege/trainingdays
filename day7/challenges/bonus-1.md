@@ -108,7 +108,7 @@ To define our `ClusterIssuer` we again use a YAML file that we will apply to our
 
 ```yaml
 # letsencrypt-prod-cluster-issuer.yaml
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: letsencrypt-prod
