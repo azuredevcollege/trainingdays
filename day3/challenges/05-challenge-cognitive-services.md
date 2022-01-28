@@ -44,7 +44,8 @@ We are going to start off by creating an Azure Cognitive Service using the Azure
     ```shell
     az group create -n rg-azdc-cognitive -l westeurope
     ```
-1. When creating the Cognitive Service itself you have two choices. You can either create a multi-service resource or a single-service resource. The multi-service resource gives you access to multiple Azure Cognitive Services with a single key and endpoint. The Single-service resource will allow you to access a single Azure Cognitive Service with a unique key and endpoint. Since we will only work with one feature in this challenge we will go with the single-service resource.
+1. When creating the Cognitive Service itself you have two choices. You can either create a multi-service resource or a single-service resource. The multi-service resource gives you access to multiple Azure Cognitive Services with a single key and endpoint. The Single-service resource will allow you to access a single Azure Cognitive Service with a unique key and endpoint.
+Since we will only use the Cognitive Service for Language in this challenge we will create a single-service resource.
     ```shell
     az cognitiveservices account create --name cog-textanalytics-westeurope-001 --resource-group rg-azdc-cognitive --kind TextAnalytics --sku S --location westeurope --yes
     ```
@@ -272,7 +273,7 @@ In the next part we integrate the API into a Node.js web app. This is optional.
 1. Finally replace the code in the `routes/index.js` file with the following Node.js code:
     ```javascript
     const apikey = '<Text Analytics API Key>';
-    const endpoint = 'https://<Resource Name>.cognitiveservices.azure.com/';
+    const endpoint = 'https://westeurope.api.cognitive.microsoft.com/';
 
     var express = require('express');
     var bodyParser = require('body-parser');
@@ -313,7 +314,7 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     module.exports = router;
     ```
 
-1. Replace the `<Text Analytics API Key>` in line 1 of the index.js file and the `<Resource Name>` in line 2 with the details for your Cognitive Service.
+1. Replace the `<Text Analytics API Key>` in line 1 of the index.js file awith the API Key of your Cognitive Service.
     Save the changes.
 
 1. Some additional NPM packages need to be installed:
@@ -330,6 +331,42 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     npm start
     ```
     You can have a look at it in your browser `http://localhost:3000`.
+
+
+## (OPTIONAL) Use Postman to understand all features
+
+As shown before the Azure Cognitive Services consist of a wide range of REST APIs. There are multiple options to explore these APIs. Let's have a look at two prominent ones.
+
+### Option 1: Microsoft Test Console
+
+On [this website](https://westeurope.dev.cognitive.microsoft.com/docs/services/) Microsoft offers a detailed description of the Azure Cognitive Services and the APIs that can be used. 
+
+[Here](https://westeurope.dev.cognitive.microsoft.com/docs/services/TextAnalytics-v3-1/operations/sentiment) is a detailed overview of the **Text Analytics API (v3.1)** and its **Sentiment** POST request. This shows all the details, the request URL, parameters, headers, body and what responses will be returned. 
+
+Try out the [console](https://westeurope.dev.cognitive.microsoft.com/docs/services/TextAnalytics-v3-1/operations/Sentiment/console) with the key of the existing Azure Cognitive Service `cog-textanalytics-westeurope-001`. If you have not stored it somewhere, here is the needed command again:
+    ```shell
+    az cognitiveservices account keys list --name cog-textanalytics-westeurope-001 --resource-group rg-azdc-cognitive
+    ```
+For Host Name choose `westeurope.api.cognitive.microsoft.com`.
+Delete all Query parameters except of opinionMining and there enter `true`.
+Leave the Header as is.
+The Ocp-Apim-Subscription-Key is the key mentioned above.
+In the Request body cou can change the language and the text you want to be analyzed.
+Finally hit `Send`. In the Response content you will find the returned results.
+
+### Option 2: Postman
+
+You will need [Postman](https://www.postman.com/downloads/) for this part. Postman is an API platform which allows you to develop and test different APIs. Since the Azure Cloud Platform consists out of many APIs this tool is perfect to get a deeper understanding of its functionalities.
+We have created a Postman collection for you. Upload the collection you find in the `./postman` folder of this repository to the desktop application by selecting `Import`.
+
+![Screenshot of the Postman application showing the Collections tab and highlighting the Import button.](./images/postman_collection.png)
+
+Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service, or replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key.
+
+![Screenshot of the Postman application showing the environment tab and the created api_key variable.](./images/postman_environmet_variable.png)
+![Screenshot of the Postman application showing Sentiment request and its Headers, highlighting the Ocp-Apim-Subscription-Key.](./images/postman_api_key.png)
+
+Now just hit `Send` right next to the request URL and you will receive a response. Feel free to change the text within the `Body` and try again.
 
 
 ## Cleanup
