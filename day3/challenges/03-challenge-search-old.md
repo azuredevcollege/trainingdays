@@ -1,12 +1,12 @@
-# Azure Cognitive Search
+# Azure (Cognitive) Search
 
 ## Here is what you will learn 🎯
 
 In this challenge you will learn how to:
 
-- create an Azure Cognitive Search Service in the Portal
-- add Cognitive Skills to Azure Cognitive Search
-- integrate Azure Cognitive Search in an Node.js application
+- create an Azure Search Service in the Portal
+- add Cognitive Skills to Azure Search
+- integrate Azure Search in an Node.js application
 
 ## Table Of Contents
 
@@ -22,7 +22,7 @@ In this challenge you will learn how to:
 
 Azure Cognitive Search is a search-as-a-service cloud solution that gives developers APIs and tools for adding a rich search experience over private, heterogeneous content in web, mobile and enterprise applications. Your code or a tool invokes data ingestion (indexing) to create and load an index. Optionally, you can add cognitive skills to apply Artificial Intelligence processes during indexing. Doing so, you can add new information and structures useful for search and other scenarios.
 
-Regarding your application, your code issues query requests and handles responses from Azure Cognitive Search. The search experience is defined in your client using functionality from Azure Cognitive Search, with query execution over a persisted index that you create, own, and store in your service.
+Regarding your application, your code issues query requests and handles responses from Azure Search. The search experience is defined in your client using functionality from Azure Cognitive Search, with query execution over a persisted index that you create, own, and store in your service.
 
 ![Azure Cognitive Search Architecture](./images/AzureSearchArchitecture.png)
 
@@ -33,6 +33,27 @@ Regarding your application, your code issues query requests and handles response
 | Free-form text search | [**Full-text search**](https://docs.microsoft.com/azure/search/search-lucene-query-architecture) is a primary use case for most search-based apps. Queries can be formulated using a supported syntax. <br/><br/>[**Simple query syntax**](https://docs.microsoft.com/rest/api/searchservice/simple-query-syntax-in-azure-search) provides logical operators, phrase search operators, suffix operators, precedence operators.<br/><br/>[**Lucene query syntax**](https://docs.microsoft.com/rest/api/searchservice/lucene-query-syntax-in-azure-search) includes all operations in simple syntax, with extensions for fuzzy search, proximity search, term boosting, and regular expressions. |
 | Filters and facets    | [**Faceted navigation**](https://docs.microsoft.com/azure/search/search-faceted-navigation) is enabled through a single query parameter. Azure Cognitive Search returns a faceted navigation structure you can use as the code behind a categories list, for self-directed filtering (for example, to filter catalog items by price-range or brand). <br/><br/> [**Filters**](https://docs.microsoft.com/azure/search/search-filters-facets) can be used to incorporate faceted navigation into your application's UI, enhance query formulation, and filter based on user- or developer-specified criteria. Create filters using the OData syntax.                                                  |
 
+### Facet Filters in a Search App
+
+Faceted navigation is used for self-directed filtering on query results in a search app, where your application offers UI controls for scoping search to groups of documents (for example, categories or brands), and Azure Cognitive Search provides the data structure to back the experience.
+
+In code, a query that specifies all parts of a valid query, including search expressions, facets, filters, scoring profiles– anything used to formulate a request, can look like the following example:
+
+```csharp
+var sp = new SearchParameters()
+{
+    ...
+    // Add facets
+    Facets = new[] { "businessTitle" }.ToList()
+};
+```
+
+This example builds a request that creates facet navigation based on the business title information.
+
+![Facet Filters](./images/FacetFilter.png)
+
+_Facets_ are dynamic and returned on a query. Search responses bring with them the facet categories used to navigate the results.
+
 :::tip
 📝You can find more details here: [Search-Filters-Facets](https://docs.microsoft.com/azure/search/search-filters-facets)
 :::
@@ -40,31 +61,24 @@ Regarding your application, your code issues query requests and handles response
 In the SCM Application, we are using the _Lucene_ query syntax ([Lucene Query Syntax Examples](https://docs.microsoft.com/azure/search/search-query-lucene-examples)).
 
 :::tip
-📝 View the full Azure Cognitive Search Feature list here: [Azure Cognitive Search Feature list](https://docs.microsoft.com/en-us/azure/search/search-features-list)
+📝 View the full Azure Cognitive Search Feature list here: [Azure Cognitive Search Feature list](https://docs.microsoft.com/azure/search/search-what-is-azure-search#feature-descriptions)
 :::
 
 ## Create an Azure Search Service in the Portal
 
-In this first demonstration, we are going to create a new Azure Cognitive Search instance and index the data on "product" container that we have created during the Cosmos DB challenge.
+1. Create a new resource group, e.g. **adc-azsearch-db-rg** and add a service of type **Azure Cognitive Search**
 
-1. Let's use the same resource group that we have created for Cosmos DB challenge **rg-cosmos-challenge** and add a service of type **Azure Cognitive Search**
+1. First, create a `Azure Search` instance in the Azure Portal
 
-![Create Azure Search 1](./images/azcgsearch1.png)
+1. For our purposes, the `Free Tier` is sufficient
 
-![Create Azure Search 2](./images/azcgsearch2.png)
+However, the `Free Tier` does not support additional replicas, scaling and is only able to index documents with up to 32000 characters/document. If we want to index larger documents, we need to go to a bigger tier (64000 for `Basic`, 4m for `Standard` and above).
 
-![Create Azure Search 3](./images/azcgsearch3.png)
+![Create Azure Search](./images/AzureSearchCreate.png)
 
-2. Type **azdc-cgsearch-yoursuffix** as "Service name" and select **West Europe** as "Location". For our purposes, the `Free Tier` would be sufficient.
+View the Details of Creating an Azure Search Service in the Portal:
 
-![Create Azure Search 4](./images/azcgsearch4.png)
-
-:::tip
-📝 However, the `Free Tier` does not support additional replicas, scaling and is only able to index documents with up to 32000 characters/document. If we want to index larger documents, we need to go to a bigger tier (64000 for `Basic`, 4m for `Standard` and above).:::
-
-Click **Create** and in a few minutes your "Azure Cognitive Service" will be ready.
-
-![Create Azure Search 5](./images/azcgsearch5.png)
+![Create Azure Search Details](./images/AzureSearchCreateDetails.png)
 
 Once provisioned, our service will be reachable via `https://xxxxxxx.search.windows.net`
 
