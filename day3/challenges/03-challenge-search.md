@@ -8,27 +8,16 @@ In this challenge you will learn how to:
 - add Cognitive Skills to Azure Cognitive Search
 - integrate Azure Cognitive Search in an Node.js application
 
+
 ## Table Of Contents
 
-- [Azure Cognitive Search](#azure-cognitive-search)
-  - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
-  - [Table Of Contents](#table-of-contents)
-  - [What is Azure Cognitive Search?](#what-is-azure-cognitive-search)
-  - [What are the Features of Azure Cognitive Search?](#what-are-the-features-of-azure-cognitive-search)
-  - [Create an Azure Search Service in the Portal](#create-an-azure-search-service-in-the-portal)
-  - [Querying Content](#querying-content)
-    - [Simple query with top N results](#simple-query-with-top-n-results)
-      - [String Query: `search=blue`](#string-query-searchblue)
-      - [Parameterized Query: `search=blue&$count=true&$top=3`](#parameterized-query-searchbluecounttruetop3)
-    - [Filter the query](#filter-the-query)
-      - [Filtered Query: `search=blue&$filter=price lt 1000&$orderby=price desc&$top=10`](#filtered-query-searchbluefilterprice-lt-1000orderbyprice-desctop10)
-      - [Linguistic Analysis Query: `search=blue&highlight=description`](#linguistic-analysis-query-searchbluehighlightdescription)
-    - [Try fuzzy search](#try-fuzzy-search)
-      - [Example (misspelled term, unhandled): `search=bleu`](#example-misspelled-term-unhandled-searchbleu)
-      - [Example (misspelled term, handled): `search=bleu~&queryType=full`](#example-misspelled-term-handled-searchbleuquerytypefull)
-  - [Create a Demo App](#create-a-demo-app)
-  - [Add Cognitive Skills to Azure Search - to index unstructured content (e.g. images, audio, etc.)](#add-cognitive-skills-to-azure-search---to-index-unstructured-content-eg-images-audio-etc)
-  - [Cleanup](#cleanup)
+1. [What is Azure Cognitive Search?](#what-is-azure-cognitive-search)
+2. [What are the Features of Azure Cognitive Search?](#what-are-the-features-of-azure-cognitive-search)
+3. [Create an Azure Search Service in the Portal](#create-an-azure-search-service-in-the-portal)
+4.  [Querying Content](#querying-content)
+5.  [Create a Demo App](#create-a-demo-app)
+6.  [Add Cognitive Skills to Azure Search - to index unstructured content (e.g. images, audio, etc.)](#add-cognitive-skills-to-azure-search---to-index-unstructured-content-eg-images-audio-etc)
+7.  [Cleanup](#cleanup)
 
 ## What is Azure Cognitive Search?
 
