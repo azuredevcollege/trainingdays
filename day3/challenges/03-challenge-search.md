@@ -279,7 +279,7 @@ Let's see it in action. This time we're going to use Sample data provided by Azu
 
 ## Cleanup
 
-Remove the sample resource group:
+Remove the resource group:
 
 ```shell
 az group delete -n rg-cosmos-challenge
