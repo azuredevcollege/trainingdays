@@ -30,7 +30,7 @@ Azure Cognitive Services:
 The goal of Azure Cognitive Services is to help developers create applications that can see, hear, speak, understand and even begin to reason.
 These services can be categorized into six main pillars - _Vision_, _Speech_, _Language_, _Web Search_, _Decision_ and _Open AI_.
 
-We offer a separate training that will go into greater depth. Today we will focus on one Feature of the Azure Cognitive Service for Language to consolidate the understanding of these services. The Azure Cognitive Service for Language has many more features that work very similarly.
+We offer a separate training that will go into greater depth also covering Azure Machine Learning Services and MLOps - reach out to us if you are interested. Today we will focus on one Feature of the Azure Cognitive Service for Language to consolidate the understanding of these services. The Azure Cognitive Service for Language has many more features that work very similarly and other Azure Cognitive Services work with the same concepts.
 
 | Service Name                                                                                           | Service Description                                                                                                                     | Feature Name                                                                                           | Feature Description                                                                                                                     |
 | :----------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------- |
@@ -208,7 +208,7 @@ ID: 0
 
 ## (OPTIONAL) Containerize the Cognitive Service
 
-Most Cognitive Services can be run from a container. In this case the sentiment analysis container is available. The advantage of containerization of Cognitive Services usually lie in security or data governance requirements. This way you can run the service on your own infrastructure and only billing information will be send against the Cognitive Service. An Azure Cognitive Service needs to reside in your Subscription to take this billing information. Since we already deployed one in the previous steps we can go ahead. 
+Most Cognitive Services can be run from a container. In this case the sentiment analysis container is available. The advantage of containerization of Cognitive Services usually lie in security or data governance requirements. This way you can run the service on your own infrastructure and only billing information will be sent against the Cognitive Service. An Azure Cognitive Service needs to reside in your Subscription to take this billing information. Since we already deployed one in the previous steps we can go ahead. 
 Should you not have **Docker Desktop** installed don't worry, this part of the challenge is optional.
 
 1. If you have Docker Desktop installed and running download the English container:
@@ -227,7 +227,18 @@ Should you not have **Docker Desktop** installed don't worry, this part of the c
     `http://localhost:5000/swagger`
 
 1. For example select the `POST /text/analytics/v3.0/sentiment`, press `Try it out` and add the same sentence as before to the body:
-    `The food and service were unacceptable, but the concierge were nice`
+    ```JSON
+    {
+	    "documents": [
+            {
+                "id": "1",
+                "language": "en",
+                "text": "The food and service were unacceptable, but the concierge were nice."
+            }
+        ]
+    }
+    ```
+    Beneath select `application/json` for the `Parameter content type`. Press `Execute`. You should get a server response with the code 200 and the sentiment in the response body.
     Try out more options if you feel like it.
 
 
@@ -254,21 +265,22 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     extends layout
 
     block content
-    h1 Azure Cognitive Service
-    p Get the Sentiment of the Sentences you type in using the Azure Cognitive Service.
-    form(action='/', method='POST') 
-        input(type="text", name="sentence", placeholder="I really like the new XBox but I just don't have enough time to use it.")
-        input(type="submit", value="Analyze")
-    
-    div(style="width: 100%")
-        p= sentence 
-        div(style=`background-color: red; width:${negative1}`)
-        p(style="color: white;")= negative1
-        div(style=`background-color: orange; width:${neutral1}`)
-        p(style="color: white;")= neutral1
-        div(style=`background-color: green; width:${positive1}`)
-        p(style="color: white;")= positive1
+        h1 Azure Cognitive Service
+        p Get the Sentiment of the Sentences you type in using the Azure Cognitive Service.
+        form(action='/', method='POST') 
+            input(type="text", name="sentence", placeholder="I really like the new XBox but I just don't have enough time to use it.")
+            input(type="submit", value="Analyze")
+        
+        div(style="width: 100%")
+            p= sentence 
+            div(style=`background-color: red; width:${negative1}`)
+                p(style="color: white;")= negative1
+            div(style=`background-color: orange; width:${neutral1}`)
+                p(style="color: white;")= neutral1
+            div(style=`background-color: green; width:${positive1}`)
+                p(style="color: white;")= positive1
     ```
+    Watch out for the indentation since the application will through an error otherwise.
 
 1. Finally replace the code in the `routes/index.js` file with the following Node.js code:
     ```javascript
@@ -315,6 +327,10 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     ```
 
 1. Replace the `<Text Analytics API Key>` in line 1 of the index.js file awith the API Key of your Cognitive Service.
+    If you need to get it again:
+    ```shell
+    az cognitiveservices account keys list --name cog-textanalytics-westeurope-001 --resource-group rg-azdc-cognitive
+    ```
     Save the changes.
 
 1. Some additional NPM packages need to be installed:
@@ -357,11 +373,11 @@ Finally hit `Send`. In the Response content you will find the returned results.
 ### Option 2: Postman
 
 You will need [Postman](https://www.postman.com/downloads/) for this part. Postman is an API platform which allows you to develop and test different APIs. Since the Azure Cloud Platform consists out of many APIs this tool is perfect to get a deeper understanding of its functionalities.
-We have created a Postman collection for you. Upload the collection you find in the `./postman` folder of this repository to the desktop application by selecting `Import`.
+We have created a Postman collection for you. Upload the collection you find in the [./postman](./postman) folder of this repository to the desktop application by selecting `Import`.
 
 ![Screenshot of the Postman application showing the Collections tab and highlighting the Import button.](./images/postman_collection.png)
 
-Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service, or replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key.
+Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service, or replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key. Select the `POST Sentiment` API for a first try.
 
 ![Screenshot of the Postman application showing the environment tab and the created api_key variable.](./images/postman_environmet_variable.png)
 ![Screenshot of the Postman application showing Sentiment request and its Headers, highlighting the Ocp-Apim-Subscription-Key.](./images/postman_api_key.png)
