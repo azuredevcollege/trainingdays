@@ -1,0 +1,497 @@
+{
+	"info": {
+		"name": "Text Analytics API (v3.1)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Detect Language",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"documents\": [\r\n    {\r\n      \"countryHint\": \"US\",\r\n      \"id\": \"1\",\r\n      \"text\": \"Hello world\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"text\": \"Bonjour tout le monde\"\r\n    },\r\n    {\r\n      \"id\": \"3\",\r\n      \"text\": \"La carretera estaba atascada. Había mucho tráfico el día de ayer.\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/languages",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"languages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Entities containing personal information",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"documents\": [\r\n\t\t{\r\n\t\t\t\"id\": \"1\",\r\n\t\t\t\"language\": \"en\",\r\n\t\t\t\"text\": \"My SSN is 859-98-0987\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"id\": \"2\",\r\n\t\t\t\"language\": \"en\",\r\n\t\t\t\"text\": \"Your ABA number - 111000025 - is the first 9 digits in the lower left hand corner of your personal check.\"\r\n\t\t},\r\n\t\t{\r\n\t\t\t\"id\": \"3\",\r\n\t\t\t\"language\": \"en\",\r\n\t\t\t\"text\": \"Is 998.214.865-68 your Brazilian CPF number?\"\r\n\t\t}\r\n\t]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/recognition/pii",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"recognition",
+						"pii"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Key Phrases",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"documents\": [\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"1\",\r\n      \"text\": \"Hello world. This is some input text that I love.\"\r\n    },\r\n    {\r\n      \"language\": \"fr\",\r\n      \"id\": \"2\",\r\n      \"text\": \"Bonjour tout le monde\"\r\n    },\r\n    {\r\n      \"language\": \"es\",\r\n      \"id\": \"3\",\r\n      \"text\": \"La carretera estaba atascada. Había mucho tráfico el día de ayer.\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/keyPhrases",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"keyPhrases"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Linked entities from a well known knowledge base",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"documents\": [\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"1\",\r\n      \"text\": \"I had a wonderful trip to Seattle last week.\"\r\n    },\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"2\",\r\n      \"text\": \"I work at Microsoft.\"\r\n    },\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"3\",\r\n      \"text\": \"I visited Space Needle 2 times.\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/linking?stringIndexType=TextElement_v8",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"linking"
+					],
+					"query": [
+						{
+							"key": "stringIndexType",
+							"value": "TextElement_v8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Named Entity Recognition",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"documents\": [\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"1\",\r\n      \"text\": \"I had a wonderful trip to Seattle last week.\"\r\n    },\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"2\",\r\n      \"text\": \"I work at Microsoft.\"\r\n    },\r\n    {\r\n      \"language\": \"en\",\r\n      \"id\": \"3\",\r\n      \"text\": \"I visited Space Needle 2 times.\"\r\n    }\r\n  ]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/recognition/general?stringIndexType=TextElement_v8",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"recognition",
+						"general"
+					],
+					"query": [
+						{
+							"key": "stringIndexType",
+							"value": "TextElement_v8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sentiment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"documents\": [\r\n\t\t{\r\n\t\t\t\"id\": \"1\",\r\n\t\t\t\"language\": \"en\",\r\n\t\t\t\"text\": \"Great atmosphere. Close to plenty of restaurants, hotels, and transit! Staff are friendly and helpful.\"\r\n\t\t}\r\n\t]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/sentiment?stringIndexType=TextElement_v8",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"sentiment"
+					],
+					"query": [
+						{
+							"key": "stringIndexType",
+							"value": "TextElement_v8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit analysis job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"displayName\": \"Extracting Location & US Region\",\r\n\t\"analysisInput\": {\r\n\t\t\"documents\": [\r\n\t\t\t{\r\n\t\t\t\t\"id\": \"1\",\r\n\t\t\t\t\"language\": \"en\",\r\n\t\t\t\t\"text\": \"I had a wonderful trip to Seattle last week.\"\r\n\t\t\t},\r\n\t\t\t{\r\n\t\t\t\t\"id\": \"2\",\r\n\t\t\t\t\"language\": \"en\",\r\n\t\t\t\t\"text\": \"I'm flying to NYC tomorrow. See you there.\"\r\n\t\t\t}\r\n\t\t]\r\n\t},\r\n\t\"tasks\": {\r\n\t\t\"entityRecognitionTasks\": [\r\n\t\t\t{\r\n\t\t\t\t\"parameters\": {\r\n\t\t\t\t\t\"model-version\": \"latest\"\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"entityLinkingTasks\": [\r\n\t\t\t{\r\n\t\t\t\t\"parameters\": {\r\n\t\t\t\t\t\"model-version\": \"latest\"\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"keyPhraseExtractionTasks\": [\r\n\t\t\t{\r\n\t\t\t\t\"parameters\": {\r\n\t\t\t\t\t\"model-version\": \"latest\"\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"entityRecognitionPiiTasks\": [\r\n\t\t\t{\r\n\t\t\t\t\"parameters\": {\r\n\t\t\t\t\t\"model-version\": \"latest\"\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t],\r\n\t\t\"SentimentAnalysisTasks\": [\r\n\t\t\t{\r\n\t\t\t\t\"parameters\": {\r\n\t\t\t\t\t\"model-version\": \"latest\"\r\n\t\t\t\t}\r\n\t\t\t}\r\n\t\t]\r\n\t}\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/analyze",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"analyze"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit healthcare analysis job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"documents\": [\r\n\t\t{\r\n\t\t\t\"id\": \"1\",\r\n\t\t\t\"language\": \"en\",\r\n\t\t\t\"text\": \"Subject is taking 100mg of ibuprofen twice daily.\"\r\n\t\t}\r\n\t]\r\n}"
+				},
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/health/jobs?stringIndexType=TextElement_v8",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"health",
+						"jobs"
+					],
+					"query": [
+						{
+							"key": "stringIndexType",
+							"value": "TextElement_v8"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel healthcare prediction job",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/health/jobs/?jobId=<job ID>",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"health",
+						"jobs",
+						""
+					],
+					"query": [
+						{
+							"key": "jobId",
+							"value": "<job ID>",
+							"description": "ID of the Job that should be stopped - returned by the POST Submit healthcare analysis job"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get analysis status and results",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/analyze/jobs/?$top=20&$skip=0&jobId=<job ID>",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"analyze",
+						"jobs",
+						""
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "20"
+						},
+						{
+							"key": "$skip",
+							"value": "0"
+						},
+						{
+							"key": "jobId",
+							"value": "<job ID>",
+							"description": "ID of the Job that should be stopped - returned by the POST Submit analysis job"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get healthcare analysis job status and results",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Ocp-Apim-Subscription-Key",
+						"value": "{{api_key}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "https://westeurope.api.cognitive.microsoft.com/text/analytics/v3.1/entities/health/jobs/?$top=20&$skip=0&jobId=<job ID>",
+					"protocol": "https",
+					"host": [
+						"westeurope",
+						"api",
+						"cognitive",
+						"microsoft",
+						"com"
+					],
+					"path": [
+						"text",
+						"analytics",
+						"v3.1",
+						"entities",
+						"health",
+						"jobs",
+						""
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "20"
+						},
+						{
+							"key": "$skip",
+							"value": "0"
+						},
+						{
+							"key": "jobId",
+							"value": "<job ID>",
+							"description": "ID of the Job that should be stopped - returned by the POST Submit analysis job"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
