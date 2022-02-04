@@ -18,6 +18,7 @@ In this challenge you will learn how to:
 1. [Analyze Sentiment](#analyze-sentiment-and-opinions)
 1. [(OPTIONAL) Containerize the Cognitive Service](#(optional)-containerize-the-cognitive-service)
 1. [(OPTIONAL) Use Azure Text Analytics in a Web Application](#(optional)-use-azure-text-analytics-in-a-web-application)
+1. [(OPTIONAL) Use Postman to understand all features](#(optional)-use-postman-to-understand-all-features)
 1. [Cleanup](#cleanup)
 
 ## What are Azure Cognitive Services?
