@@ -184,7 +184,7 @@ $servicePrincipalName = "myADCServicePrincipal$(get-random -min 100 -max 999)"  
 $jsonResult = &az ad sp create-for-rbac --name $servicePrincipalName 
 
 $SPPassword = ($jsonResult | convertfrom-json).password
-$SPName = ($jsonResult | convertfrom-json).name
+$SPName = ($jsonResult | convertfrom-json).appId
 
 #Get your AAD ID
 $tenantID = $((Get-AzContext).Tenant.Id)  #e.g. '72f988bf-8.....'
