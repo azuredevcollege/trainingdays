@@ -279,7 +279,7 @@ The salesorder object is similar to the customer object (```type``` is set to _s
 
 As these objects are stored in the same collection as the customers (```customer``` collection), the partition key is also set to ```customerId```. This has a huge advantage over storing the sales orders in a separate collection: you can query both customer and the corresponding sales orders in one query - and all items queried lie in the same logical thus physical partition. Queries are super fast and - from a relational standpoint - you avoid costly JOINs over several tables or multiple queries at all.
 
-Download the whole customer dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/customer.json>
+[Download the whole customer dataset here.](https://github.com/azuredevcollege/trainingdays/tree/master/day3/challenges/fixtures/)
 
 ### Product Dataset
 
@@ -319,7 +319,7 @@ Here's a sample object from the container:
 }
 ```
 
-Download the product dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
+[Download the product dataset here](https://github.com/azuredevcollege/trainingdays/tree/master/day3/challenges/fixtures/cosmosdb/product.json)
 
 ### Upload the datasets
 
