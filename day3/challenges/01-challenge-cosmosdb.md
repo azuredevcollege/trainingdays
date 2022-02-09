@@ -319,7 +319,7 @@ Here's a sample object from the container:
 }
 ```
 
-Download the product dataset here: <https://azuredevcollegesa.blob.core.windows.net/cosmosdata/product.json>
+[Download the product dataset here](https://github.com/azuredevcollege/trainingdays/tree/master/day3/challenges/fixtures/cosmosdb/product.json)
 
 ### Upload the datasets
 
