@@ -232,7 +232,7 @@ defaults_ and add the following labels:
 
 | Name            | Description              | Color         |
 | --------------- | ------------------------ | ------------- |
-| azdc-challenege | An AzDC-Challenge        | _your choice_ |
+| azdc-challenge | An AzDC-Challenge        | _your choice_ |
 | azdc-breakout   | An AzDC-Breakout session | _your choice_ |
 
 We have to add these labels to the _myfirst-repo_ manually,
