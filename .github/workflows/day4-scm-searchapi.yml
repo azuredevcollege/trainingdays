@@ -138,7 +138,7 @@ jobs:
           retention-days: 30
 
   deploy-infrastructure-to-dev:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'waeltken/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day4-scm-dev
     needs: [build-bicep, build-api, build-indexer]
@@ -233,7 +233,7 @@ jobs:
           --url https://management.azure.com/subscriptions/${{fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId}}/resourceGroups/${{ needs.deploy-infrastructure-to-dev.outputs.resourceGroupName }}/providers/Microsoft.Web/sites/${{ needs.deploy-infrastructure-to-dev.outputs.indexerFunctionName }}/syncfunctiontriggers?api-version=2020-12-01
 
   deploy-infrastructure-to-test:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'waeltken/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day4-scm-test
     needs: [deploy-searchapi-to-dev, deploy-indexer-to-dev]
