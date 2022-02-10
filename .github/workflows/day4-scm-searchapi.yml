@@ -26,7 +26,7 @@ env:
 
 jobs:
   build-bicep:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day4/apps/infrastructure/bicep/search/searchmain.bicep"
@@ -50,7 +50,7 @@ jobs:
           retention-days: 30
 
   build-api:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       API_PROJECT_PATH: "./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api"
@@ -94,7 +94,7 @@ jobs:
           retention-days: 30
 
   build-indexer:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       INDEXER_PROJECT_PATH: "./day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer"

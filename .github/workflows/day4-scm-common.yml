@@ -21,7 +21,7 @@ env:
 
 jobs:
   build:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day4/apps/infrastructure/bicep/common/commonmain.bicep"

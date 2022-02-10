@@ -26,7 +26,7 @@ env:
 
 jobs:
   build-bicep:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day4/apps/infrastructure/bicep/resources/resourcesmain.bicep"
@@ -50,7 +50,7 @@ jobs:
           retention-days: 30
 
   build-api:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       API_PACKAGE_PATH: "publish/scmresourcesapi"
@@ -94,7 +94,7 @@ jobs:
           retention-days: 30
 
   build-resizer:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'waeltken/trainingdays'
     runs-on: ubuntu-latest
     env:
       RESIZER_PACKAGE_PATH: "publish/resizer"
