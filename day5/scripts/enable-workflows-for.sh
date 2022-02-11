@@ -1,3 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+shopt -s inherit_errexit
+
 if [ $# -eq 0 ]
   then
     echo "Please provide your GitHub username as argument"
