@@ -15,6 +15,7 @@ if [ "$REMOTE_ORIGIN" != "git@github.com:azuredevcollege/trainingdays.git" ]
 fi
 echo "Reseting master to trainer repo"
 git fetch origin
+git checkout master
 git reset origin/master --hard
 for i in .github/workflows/day4-scm-*; do
     sed -i "s/'azuredevcollege\/trainingdays'/'$1\/trainingdays'/g" $i
