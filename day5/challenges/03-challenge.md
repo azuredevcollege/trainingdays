@@ -5,7 +5,7 @@
 ⏲️ _Est. time to complete: 30 min._ ⏲️
 
 - Create Azure AD's client and server applications to integrate Azure AD into the sample application
-- Configure GitHub envrionement's to deploy to a development and testing stage
+- Configure GitHub envrironment's to deploy to a development and testing stage
 - Deploy the shared Azure resources of the sample application
 - Deploy the frontend and adjust Reply Urls
 
