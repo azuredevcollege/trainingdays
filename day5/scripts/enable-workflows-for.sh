@@ -9,8 +9,9 @@ echo "Asuming GitHub user repo to be: $1/trainingdays"
 echo "Asuming origin to point to: azuredevcollege/trainingdays"
 if [ "$REMOTE_ORIGIN" != "git@github.com:azuredevcollege/trainingdays.git" ]
   then
-    echo "Remote origin not pointing to trainer repo!"
+    echo "Remote 'origin' not pointing to trainer repo!"
     echo "Please run: git remote set-url origin git@github.com:azuredevcollege/trainingdays.git"
+    exit
 fi
 echo "Reseting master to trainer repo"
 git fetch origin
