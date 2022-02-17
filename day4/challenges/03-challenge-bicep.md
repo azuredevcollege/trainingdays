@@ -172,7 +172,7 @@ param resourceTag object = {
   Environment: env
   Application: 'Webapp'
 }
-var location = resourceGroup().location
+param location string = resourceGroup().location
 
 var webAppName = 'app-webapp-${env}-${uniqueString(resourceGroup().id)}'
 var planName = 'plan-webapp-${env}-${uniqueString(resourceGroup().id)}'
