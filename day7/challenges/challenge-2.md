@@ -919,16 +919,11 @@ By the way, you are already using namespaces! Every time you were deploying pods
 Let's install the ingress controller:
 
 ```shell
-# create ingress namespace
-$ kubectl create namespace ingress
-
-namespace/ingress created
-
 $ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 "ingress-nginx" has been added to your repositories
 
-$ helm install my-ingress ingress-nginx/ingress-nginx --version 3.7.1 --set controller.service.externalTrafficPolicy=Local --namespace ingress
+$ helm upgrade my-ingress --install ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress --set controller.service.externalTrafficPolicy=Local --create-namespace
 
 NAME: my-ingress
 LAST DEPLOYED: Thu Oct 29 08:11:35 2020
