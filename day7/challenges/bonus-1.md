@@ -186,12 +186,11 @@ Just like we did for the frontend, we also add the `kubernetes.io/tls-acme: 'tru
 Here is the example from the contacts API:
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ing-contacts
   annotations:
-    kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/enable-cors: 'true'
     nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
     nginx.ingress.kubernetes.io/cors-max-age: '600'
@@ -201,6 +200,7 @@ metadata:
     kubernetes.io/tls-acme: 'true'
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
@@ -210,16 +210,24 @@ spec:
       http:
         paths:
           - path: /api/contacts(\/|$)(.*)
+            pathType: Prefix
             backend:
-              serviceName: contactsapi
-              servicePort: 8080
+              service:
+                name: contactsapi
+                port:
+                  number: 8080
 ```
+
+::: warning
+⚠️ Adjust all Ingress definitions!
 
 You also need to adjust (and apply) **all other ingress definitions**, for:
 
 - Search Service
 - Visit Reports Service
 - Resources Service
+
+:::
 
 ## Check
 
