@@ -148,12 +148,11 @@ Additionally, we also tell NGINX to always redirect unencrypted traffic to use S
 The following shows how your `Ingress` section for the frontend deployment should look like. Make sure you don't forget to update your domain names. Usually you'll want your TLS host to match the hostname for the ingress rule you have configured:
 
 ```yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ing-frontend
   annotations:
-    kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/enable-cors: 'true'
     nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
     nginx.ingress.kubernetes.io/cors-max-age: '600'
@@ -161,6 +160,7 @@ metadata:
     kubernetes.io/tls-acme: 'true'
     nginx.ingress.kubernetes.io/ssl-redirect: 'true'
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
@@ -170,9 +170,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: frontend
-              servicePort: 8080
+              service:
+                name: frontend
+                port:
+                  number: 8080
 ```
 
 If you access you website again you'll notice that after a few moments it's already being served through https and that your browser is redirected to the safe endpoint automatically.
