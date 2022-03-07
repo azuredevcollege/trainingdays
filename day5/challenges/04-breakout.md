@@ -70,4 +70,4 @@ Next, do the following:
 
 You've done it. There is nothing more to add, just test the application and enjoy your success 🥳
 
-[◀ Previous challenge](./challenge-3.md) | [🔼 Day 5](../README.md) |
+[◀ Previous challenge](./03-challenge.md) | [🔼 Day 5](../README.md) |
