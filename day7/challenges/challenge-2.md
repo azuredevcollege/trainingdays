@@ -749,7 +749,7 @@ In addition, the connection from an API pod to the database via the `Service` is
 
 So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called `NodePort`.
 
-A _NodePort_`_ service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP address. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
+A _NodePort_ service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP address. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.
 
 To demonstrate the behavior, we'll create a new service called `nodeport-contactsapi` that will select all of the API pods currently running in the cluster. Basically this is the same behavior as the ClusterIP service, but accessible via \<NodeIp>:\<NodePort>:
 
@@ -919,16 +919,11 @@ By the way, you are already using namespaces! Every time you were deploying pods
 Let's install the ingress controller:
 
 ```shell
-# create ingress namespace
-$ kubectl create namespace ingress
-
-namespace/ingress created
-
 $ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 "ingress-nginx" has been added to your repositories
 
-$ helm install my-ingress ingress-nginx/ingress-nginx --version 3.7.1 --set controller.service.externalTrafficPolicy=Local --namespace ingress
+$ helm upgrade my-ingress --install ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress --set controller.service.externalTrafficPolicy=Local --create-namespace
 
 NAME: my-ingress
 LAST DEPLOYED: Thu Oct 29 08:11:35 2020
@@ -997,12 +992,11 @@ To access the service, we want to be able to call an endpoint like that: <http:/
 
 ```yaml
 # Content of file api-ingress.yaml
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ing-contacts
   annotations:
-    kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/enable-cors: 'true'
     nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
     nginx.ingress.kubernetes.io/cors-max-age: '600'
@@ -1010,14 +1004,18 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: '/contacts/$2'
     nginx.ingress.kubernetes.io/use-regex: 'true'
 spec:
+  ingressClassName: nginx
   rules:
     - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
       http:
         paths:
           - path: /api/contacts(\/|$)(.*)
+            pathType: Prefix
             backend:
-              serviceName: contactsapi
-              servicePort: 8080
+              service:
+                name: contactsapi
+                port:
+                  number: 8080
 ```
 
 Create the file `api-ingress.yaml` and apply it:
@@ -1034,7 +1032,7 @@ Traffic is managed by the ingress controller and dynamically routed to the `cont
 
 As you can see in the ingress definition, we also added a few annotations to influence how the underlying NGINX server is dealing with requests:
 
-- We enabled [Cross-Origin-Resource-Sharing (CORS)](<https://developer.mozilla.org/docs/Web/HTTP/CORS>) (`nginx.ingress.kubernetes.io/enable-cors`).
+- We enabled [Cross-Origin-Resource-Sharing (CORS)](https://developer.mozilla.org/docs/Web/HTTP/CORS) (`nginx.ingress.kubernetes.io/enable-cors`).
 - We defined which headers are allowed (`nginx.ingress.kubernetes.io/cors-allow-headers`).
 - We defined how long the CORS response is valid until the next CORS request will be sent by the browser (`nginx.ingress.kubernetes.io/cors-max-age`).
 
@@ -1055,7 +1053,7 @@ var uisettings = {
   endpoint: 'http://<YOUR_NIP_DOMAIN>/api/contacts/',
   enableStats: false,
   aiKey: '',
-}
+};
 ```
 
 In the current sample, the file looks like this:
@@ -1065,23 +1063,23 @@ var uisettings = {
   endpoint: 'http://20-67-122-249.nip.io/api/contacts/',
   enableStats: false,
   aiKey: '',
-}
+};
 ```
 
 Save the file and go to the folder `day7/apps/frontend/scmfe` and build/publish the Docker image:
 
 - Alternative 1: Build locally
 
-   ```shell
-   docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
-   docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
-   ```
+  ```shell
+  docker build -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
+  docker push <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0
+  ```
 
 - Alternative 2: Use your Azure Container Registry
 
-   ```shell
-   az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
-   ```
+  ```shell
+  az acr build -r <ACR_NAME> -t <ACR_NAME>.azurecr.io/adc-frontend-ui:1.0 .
+  ```
 
 As soon as the image is present in your registry, deploy it to the cluster.
 
@@ -1129,25 +1127,28 @@ spec:
     - port: 8080
       targetPort: 80
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ing-frontend
   annotations:
-    kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/enable-cors: 'true'
     nginx.ingress.kubernetes.io/cors-allow-headers: 'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'
     nginx.ingress.kubernetes.io/cors-max-age: '600'
     nginx.ingress.kubernetes.io/proxy-body-size: '12m'
 spec:
+  ingressClassName: nginx
   rules:
     - host: 20-67-122-249.nip.io # this should be replaced with YOUR OWN DOMAIN
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: frontend
-              servicePort: 8080
+              service:
+                name: frontend
+                port:
+                  number: 8080
 ```
 
 Create a file called `frontend.yaml` with the content above and apply it:

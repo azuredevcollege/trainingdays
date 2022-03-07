@@ -23,7 +23,7 @@ group and and create our Kubernetes cluster within it:
 
 ```shell
 az group create --name adc-aks-rg --location westeurope
-az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.20.9
+az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.22.6
 ```
 
 Let's inspect the created resources:
@@ -183,9 +183,8 @@ The process keeps running until you interrupt it using `Ctrl-C`. Let's keep it r
 and login using the token you've acquired for the _admin-user_ `ServiceAccount`.
 
 ::: warning
-⚠️ Please note that the dashboard is proxied under a path containing the namespace and deployment path like this: http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+⚠️ Please note that the dashboard is proxied under a path containing the namespace and deployment path like this: <http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/>
 :::
-
 
 ![Dashboard Login](./images/dashboard-login.png)
 
