@@ -47,7 +47,7 @@ Before we can start to deploy Azure resources we need to create a _Service Conne
 Go to Azure Boards and set the User Story S3 to active. We create a new build definition that copies the needed ARM Template to an artifact location that is managed by Azure DevOps. An artifact location is a storage location where Azure Pipelines copies all files that are needed for a successful deployment of an application. The artifact location is linked to your build. Every build gets its own unique build number and therefore your artifact is versioned, too.
 
 1. Create a feature branch `"features/scmcommcicd"` and check it out
-2. Create a folder named `"pipelines"` in the directory `day4/apps`
+2. Create a folder named `"pipelines"` in the directory `day4-azdevops/apps`
 3. Add a file named `scm-common-ci.yaml`
 4. Add the following yaml snippet that defines the _build trigger_:
 
@@ -59,12 +59,12 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
          - master
      paths:
        include:
-         - day4/apps/infrastructure/templates/scm-common.json
-         - day4/apps/pipelines/cd-scm-common.yaml
+         - day4-azdevops/apps/infrastructure/templates/scm-common.json
+         - day4-azdevops/apps/pipelines/cd-scm-common.yaml
 
    ```
 
-   Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `*day4/apps/infrastructure/templates/scm-common.json*` or `*day4/apps/pipelines/cd-scm-common.yaml*`
+   Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `*day4/apps/infrastructure/templates/scm-common.json*` or `*day4-azdevops/apps/pipelines/cd-scm-common.yaml*`
 5. Add the following yaml snippet that defines the _build steps_:
 
    ```yaml
@@ -81,7 +81,7 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
              version: 3.1.x
          - task: CopyFiles@2
            inputs:
-             sourceFolder: day4/apps/infrastructure/templates
+             sourceFolder: day4-azdevops/apps/infrastructure/templates
              contents: |
               scm-common.json
              targetFolder: $(Build.ArtifactStagingDirectory)
@@ -102,7 +102,7 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
 9. Walk through the steps of the wizard by first selecting Azure Repos Git as the location of your source code
 10. Select your college repository
 11. Select *"Existing Azure Pipelines YAML file"*
-12. Select your feature branch and specify the path: *"/day4/apps/pipelines/scm-common-ci.yaml"*
+12. Select your feature branch and specify the path: *"/day4-azdevops/apps/pipelines/scm-common-ci.yaml"*
 13. Run your CI Build by clicking the action *"Run"*
 14. Rename your pipeline to *"SCM-Common-CI"*
 15. Navigate to the Pipelines page and open the last run of the build *"SCM-Common-CI"*. You see that the artifact is linked to your build.
