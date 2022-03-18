@@ -54,7 +54,7 @@ This section covers the User Stories **S6** and **S7**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4/apps/infrastructure/templates/scm-resources-api-dotnetcore.json` <br> <br> `day4/apps/dotnetcore/Scm.Resources/\*`
+| _Build trigger path filters_ | `day4-azdevops/apps/infrastructure/templates/scm-resources-api-dotnetcore.json` <br> <br> `day4-azdevops/apps/dotnetcore/Scm.Resources/\*`
 |_CI Build name_               | SCM-Resources-CI
 |_PR Build name_               | SCM-Resource-PR
 |_CD Build name_               | SCM-Resources-CD
