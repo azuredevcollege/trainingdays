@@ -77,7 +77,7 @@ You see the information on which branch you are working on in the status bar of 
 
 #### Change the title of the sample application
 
-Open the file `day4/apps/frontend/scmfe/src/components/home/Home.vue`, change the title and save the file.
+Open the file `day4-azdevops/apps/frontend/scmfe/src/components/home/Home.vue`, change the title and save the file.
 
 #### Commit the changes to your local branch
 

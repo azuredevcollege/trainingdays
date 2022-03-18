@@ -27,7 +27,7 @@ Go to Azure Boards and set the User Story S4 and S5 to _active_. We create a new
 - Publish the artifacts
 
 1. Create a feature branch _"features/scmcontactscicd"_ and check it out
-2. Add a file named `scm-contacts-ci.yaml` in the directory `day4/apps/pipelines`
+2. Add a file named `scm-contacts-ci.yaml` in the directory `day4-azdevops/apps/pipelines`
 3. Add the following yaml snippet that defines the build Trigger:
 
 ```yaml
@@ -38,11 +38,11 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/infrastructure/templates/scm-api-dotnetcore.json
-      - day4/apps/dotnetcore/Scm/*
+      - day4-azdevops/apps/infrastructure/templates/scm-api-dotnetcore.json
+      - day4-azdevops/apps/dotnetcore/Scm/*
 ```
 
-Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `_day4/apps/infrastructure/templates/scm-api-dotnetcore.json_` or to any files under directory `\*day4/apps/dotnetcore/Scm/\*\*`
+Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `_day4-azdevops/apps/infrastructure/templates/scm-api-dotnetcore.json_` or to any files under directory `\*day4-azdevops/apps/dotnetcore/Scm/\*\*`
 
 4. Add the following yaml snippet to define the needed build steps:
 
@@ -57,23 +57,23 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
         inputs:
           command: publish
           publishWebProjects: false
-          projects: day4/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj
+          projects: day4-azdevops/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
       - task: CopyFiles@2
         inputs:
-          sourceFolder: day4/apps/infrastructure/templates
+          sourceFolder: day4-azdevops/apps/infrastructure/templates
           contents: |
             scm-api-dotnetcore.json
           targetFolder: $(Build.ArtifactStagingDirectory)
@@ -89,7 +89,7 @@ jobs:
 8. Walk through the steps of the wizard by first selecting Azure Repos Git as the location of your source code
 9. Select your college repository
 10. Select _"Existing Azure Pipelines YAML file"_
-11. Select your feature branch and specify the path: _"/day4/apps/pipelines/scm-contacts-ci.yaml"_
+11. Select your feature branch and specify the path: _"/day4-azdevops/apps/pipelines/scm-contacts-ci.yaml"_
 12. Run your CI Build by clicking the action _"Run"_
 13. Rename your CI Build to _"SCM-Contacts-CI"_
 14. Navigate to the Pipelines page and open the last run of the build _"SCM-Contacts-CI"_. You see that the artifact is linked to your build.
@@ -99,7 +99,7 @@ jobs:
 In [Challenge 2](./challenge-2.md) we configured the master branch's policies to require a _Pull Request_ before changes are merged into the master.
 With Azure Pipelines you can define a build that is executed whenever a Pull Request is created in order to validate a merge into the master branch.
 
-1. Add a file named `scm-contacts-pr.yaml` in the directory `day4/apps/pipelines`
+1. Add a file named `scm-contacts-pr.yaml` in the directory `day4-azdevops/apps/pipelines`
 2. Add the following yaml snippet:
 
 ```yaml
@@ -119,18 +119,18 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: 'day4/apps/dotnetcore/Scm/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
         inputs:
           command: publish
           publishWebProjects: false
-          projects: day4/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj
+          projects: day4-azdevops/apps/dotnetcore/Scm/Adc.Scm.Api/Adc.Scm.Api.csproj
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
 ```
@@ -141,7 +141,7 @@ jobs:
 6. Walk through the steps of the wizard by first selecting Azure Repos Git as the location of your source code
 7. Select your repository
 8. Select _"Existing Azure Pipelines YAML file"_
-9. Select your feature branch and specify the path: _"/day4/apps/pipelines/scm-contacts-pr.yaml"_
+9. Select your feature branch and specify the path: _"/day4-azdevops/apps/pipelines/scm-contacts-pr.yaml"_
 10. Run your PR Build by clicking the action _"Run"_
 11. Rename your PR Build to _"SCM-Contacts-PR"_
 
@@ -225,7 +225,7 @@ Now we have to enable the PR-Build to be triggered whenever a Pull Request is cr
 3. Set the path filter as follow:
 
    ```shell
-   /day4/apps/infrastructure/templates/scm-api-dotnetcore.json;/day4/apps/dotnetcore/Scm/*
+   /day4-azdevops/apps/infrastructure/templates/scm-api-dotnetcore.json;/day4-azdevops/apps/dotnetcore/Scm/*
    ```
 
    With this filter the PR build is only triggered when files were changed that belongs to the SCM Contacts API
@@ -237,7 +237,7 @@ Now it's time to see the whole build flow in action.
 
 1. Checkout the master branch and pull the latest changes
 2. Create and checkout a new feature branch _features/scmcontactsflow_
-3. Open the file [day4/apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs](../apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs) and change the name of the API in the Swagger configurations:
+3. Open the file [day4-azdevops/apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs](../apps/dotnetcore/Scm/Adc.Scm.Api/Startup.cs) and change the name of the API in the Swagger configurations:
 
    ```csharp
    // here
