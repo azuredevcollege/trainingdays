@@ -27,7 +27,7 @@ Go to Azure Boards and set the User Story S14 and S15 to active. We create a new
 - Publish the artifacts
 
 1. Create a feature branch _"features/scmfrontendcicd"_ and check it out
-2. Add a file named `scm-frontend-ci.yaml` in the directory `day4/apps/pipelines`
+2. Add a file named `scm-frontend-ci.yaml` in the directory `day4-azdevops/apps/pipelines`
 3. Add the following yaml snippet that defines the build trigger:
 
 ```yaml
