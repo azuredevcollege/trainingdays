@@ -64,7 +64,7 @@ Go to Azure Boards and set the User Story S3 to active. We create a new build de
 
    ```
 
-   Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `*day4/apps/infrastructure/templates/scm-common.json*` or `*day4-azdevops/apps/pipelines/cd-scm-common.yaml*`
+   Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `*day4-azdevops/apps/infrastructure/templates/scm-common.json*` or `*day4-azdevops/apps/pipelines/cd-scm-common.yaml*`
 5. Add the following yaml snippet that defines the _build steps_:
 
    ```yaml
