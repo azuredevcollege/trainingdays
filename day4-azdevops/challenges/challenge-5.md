@@ -38,11 +38,11 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/frontend/*
-      - day4/apps/infrastructure/templates/scm-fe.json
+      - day4-azdevops/apps/frontend/*
+      - day4-azdevops/apps/infrastructure/templates/scm-fe.json
 ```
 
-Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `_day4/apps/infrastructure/templates/scm-fe.json_` or to any files in the directory `_day4/apps/frontend/\*_`
+Here we specified when the build must be triggered. The build is triggered only if changes were made to the master branch and when the changes were made to either `_day4-azdevops/apps/infrastructure/templates/scm-fe.json_` or to any files in the directory `_day4-azdevops/apps/frontend/\*_`
 
 4. Add the following yaml snippet to define the needed build steps:
 
@@ -51,20 +51,20 @@ steps:
   - task: Npm@1
     inputs:
       command: 'install'
-      workingDir: 'day4/apps/frontend/scmfe'
+      workingDir: 'day4-azdevops/apps/frontend/scmfe'
   - task: Npm@1
     inputs:
       command: 'custom'
-      workingDir: 'day4/apps/frontend/scmfe'
+      workingDir: 'day4-azdevops/apps/frontend/scmfe'
       customCommand: 'run build'
   - task: CopyFiles@2
     inputs:
-      SourceFolder: 'day4/apps/frontend/scmfe/dist'
+      SourceFolder: 'day4-azdevops/apps/frontend/scmfe/dist'
       Contents: '**'
       TargetFolder: '$(Build.ArtifactStagingDirectory)/dist'
   - task: CopyFiles@2
     inputs:
-      sourceFolder: day4/apps/infrastructure/templates
+      sourceFolder: day4-azdevops/apps/infrastructure/templates
       contents: |
         scm-fe.json
       targetFolder: $(Build.ArtifactStagingDirectory)/templates
@@ -99,11 +99,11 @@ steps:
   - task: Npm@1
     inputs:
       command: 'install'
-      workingDir: 'day4/apps/frontend/scmfe'
+      workingDir: 'day4-azdevops/apps/frontend/scmfe'
   - task: Npm@1
     inputs:
       command: 'custom'
-      workingDir: 'day4/apps/frontend/scmfe'
+      workingDir: 'day4-azdevops/apps/frontend/scmfe'
       customCommand: 'run build'
 ```
 
@@ -113,7 +113,7 @@ steps:
 6. Walk through the steps of the wizard by first selecting Azure Repos Git as the location of your source code
 7. Select your college repository
 8. Select _"Existing Azure Pipelines YAML file"_
-9. Select your feature branch and specify the path: _"/day4/apps/pipelines/scm-frontend-pr.yaml"_
+9. Select your feature branch and specify the path: _"/day4-azdevops/apps/pipelines/scm-frontend-pr.yaml"_
 10. Run your PR Build by clicking the action _"Run"_
 11. Rename your PR Build to _"SCM-Frontend-PR"_
 
@@ -201,7 +201,7 @@ Now we have to enable the PR-Build to be triggered whenever a Pull Request is cr
 3. Set the path filter as follow:
 
    ```shell
-   /day4/apps/infrastructure/templates/scm-fe.json;/day4/apps/frontend/*
+   /day4-azdevops/apps/infrastructure/templates/scm-fe.json;/day4-azdevops/apps/frontend/*
    ```
 
    With this filter the PR build is only triggered when files were changed that belongs to the SCM Frontend
