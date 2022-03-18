@@ -89,7 +89,7 @@ jobs:
 8. Walk through the steps of the wizard by first selecting Azure Repos Git as the location of your source code
 9. Select your college repository
 10. Select _"Existing Azure Pipelines YAML file"_
-11. Select your feature branch and specify the path: _"/day4/apps/pipelines/scm-contacts-ci.yaml"_
+11. Select your feature branch and specify the path: _"/day4-azdevops/apps/pipelines/scm-contacts-ci.yaml"_
 12. Run your CI Build by clicking the action _"Run"_
 13. Rename your CI Build to _"SCM-Contacts-CI"_
 14. Navigate to the Pipelines page and open the last run of the build _"SCM-Contacts-CI"_. You see that the artifact is linked to your build.
