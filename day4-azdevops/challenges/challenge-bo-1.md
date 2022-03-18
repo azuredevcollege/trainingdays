@@ -327,7 +327,7 @@ This section covers the User Stories **S10** and **S11**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/visitreport/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-db.json`  <br> <br> `day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json`
+| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/visitreport/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-db.json`  <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json`
 |_CI Build name_               | SCM-Visitreports-CI
 |_PR Build name_               | SCM-Visitreports-PR
 |_CD Build name_               | SCM-Visitreports-CD
@@ -418,14 +418,14 @@ steps:
     displayName: 'Install Node.js'
   - task: Bash@3
     inputs:
-      workingDirectory: '$(Build.SourcesDirectory)/day4/apps/nodejs/visitreport'
+      workingDirectory: '$(Build.SourcesDirectory)/day4-azdevops/apps/nodejs/visitreport'
       targetType: 'inline'
       displayName: 'npm install'
       script: npm install
   - task: ArchiveFiles@2
     displayName: 'Archive build files'
     inputs:
-      rootFolderOrFile: '$(Build.SourcesDirectory)/day4/apps/nodejs/visitreport'
+      rootFolderOrFile: '$(Build.SourcesDirectory)/day4-azdevops/apps/nodejs/visitreport'
       includeRootFolder: false
       archiveType: zip
       archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.VisitReports.zip
@@ -485,7 +485,7 @@ This section covers the User Stories **S12** and **S13**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/textanalytics/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json`  <br> <br> `day4/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json`
+| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/textanalytics/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json`  <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json`
 |_CI Build name_               | SCM-Textanalytics-CI
 |_PR Build name_               | SCM-Textanalytics-PR
 |_CD Build name_               | SCM-Textanalytics-CD
