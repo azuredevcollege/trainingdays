@@ -111,8 +111,8 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
-      - day4/apps/dotnetcore/Scm.Resources/*
+      - day4-azdevops/apps/infrastructure/templates/scm-resources-api-dotnetcore.json
+      - day4-azdevops/apps/dotnetcore/Scm.Resources/*
 jobs:
   - job: Build
     displayName: Build Scm Contacts
@@ -128,18 +128,18 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: 'day4/apps/dotnetcore/Scm.Resources/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Resources/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: 'day4/apps/dotnetcore/Scm.Resources/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Resources/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
         inputs:
           command: publish
           publishWebProjects: false
-          projects: 'day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/Adc.Scm.Resources.Api.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.Api/Adc.Scm.Resources.Api.csproj'
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
       - task: DotNetCoreCLI@2
@@ -147,12 +147,12 @@ jobs:
         inputs:
           command: publish
           publishWebProjects: false
-          projects: 'day4/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/Adc.Scm.Resources.ImageResizer.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Resources/Adc.Scm.Resources.ImageResizer/Adc.Scm.Resources.ImageResizer.csproj'
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
       - task: CopyFiles@2
         inputs:
-          sourceFolder: day4/apps/infrastructure/templates
+          sourceFolder: day4-azdevops/apps/infrastructure/templates
           contents: |
             scm-resources-api-dotnetcore.json
           targetFolder: $(Build.ArtifactStagingDirectory)
@@ -185,7 +185,7 @@ This section covers the User Stories **S8** and **S9**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json` <br> <br> `day4/apps/dotnetcore/Scm.Search/\*`
+| _Build trigger path filters_ | `day4-azdevops/apps/infrastructure/templates/scm-search-api-dotnetcore.json` <br> <br> `day4-azdevops/apps/dotnetcore/Scm.Search/\*`
 |_CI Build name_               | SCM-Search-CI
 |_PR Build name_               | SCM-Search-PR
 |_CD Build name_               | SCM-Search-CD
@@ -249,8 +249,8 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/infrastructure/templates/scm-search-api-dotnetcore.json
-      - day4/apps/dotnetcore/Scm.Search/*
+      - day4-azdevops/apps/infrastructure/templates/scm-search-api-dotnetcore.json
+      - day4-azdevops/apps/dotnetcore/Scm.Search/*
 jobs:
   - job: Build
     displayName: Build Scm Search
@@ -266,18 +266,18 @@ jobs:
         displayName: Restore
         inputs:
           command: restore
-          projects: 'day4/apps/dotnetcore/Scm.Search/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Search/**/*.csproj'
       - task: DotNetCoreCLI@2
         displayName: Build
         inputs:
-          projects: 'day4/apps/dotnetcore/Scm.Search/**/*.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Search/**/*.csproj'
           arguments: --configuration Release
       - task: DotNetCoreCLI@2
         displayName: Publish
         inputs:
           command: publish
           publishWebProjects: false
-          projects: 'day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Adc.Scm.Search.Api.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Api/Adc.Scm.Search.Api.csproj'
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
       - task: DotNetCoreCLI@2
@@ -285,12 +285,12 @@ jobs:
         inputs:
           command: publish
           publishWebProjects: false
-          projects: 'day4/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/Adc.Scm.Search.Indexer.csproj'
+          projects: 'day4-azdevops/apps/dotnetcore/Scm.Search/Adc.Scm.Search.Indexer/Adc.Scm.Search.Indexer.csproj'
           arguments: --configuration Release --output $(build.artifactstagingdirectory)
           zipAfterPublish: True
       - task: CopyFiles@2
         inputs:
-          sourceFolder: day4/apps/infrastructure/templates
+          sourceFolder: day4-azdevops/apps/infrastructure/templates
           contents: |
             scm-search-api-dotnetcore.json
           targetFolder: $(Build.ArtifactStagingDirectory)
@@ -327,7 +327,7 @@ This section covers the User Stories **S10** and **S11**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4/apps/nodejs/visitreport/\*` <br> <br> `day4/apps/infrastructure/templates/scm-visitreport-nodejs-db.json`  <br> <br> `day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json`
+| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/visitreport/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-db.json`  <br> <br> `day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json`
 |_CI Build name_               | SCM-Visitreports-CI
 |_PR Build name_               | SCM-Visitreports-PR
 |_CD Build name_               | SCM-Visitreports-CD
@@ -408,9 +408,9 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/nodejs/visitreport/*
-      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
-      - day4/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
+      - day4-azdevops/apps/nodejs/visitreport/*
+      - day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-db.json
+      - day4-azdevops/apps/infrastructure/templates/scm-visitreport-nodejs-infra.json
 steps:
   - task: NodeTool@0
     inputs:
@@ -432,7 +432,7 @@ steps:
       replaceExistingArchive: true
   - task: CopyFiles@2
     inputs:
-      sourceFolder: day4/apps/infrastructure/templates
+      sourceFolder: day4-azdevops/apps/infrastructure/templates
       contents: |
         scm-visitreport-nodejs-db.json
         scm-visitreport-nodejs-infra.json
@@ -485,7 +485,7 @@ This section covers the User Stories **S12** and **S13**.
 
 |Name                          | Value |
 |---                           | --- |
-| _Build trigger path filters_ | `day4/apps/nodejs/textanalytics/\*` <br> <br> `day4/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json`  <br> <br> `day4/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json`
+| _Build trigger path filters_ | `day4-azdevops/apps/nodejs/textanalytics/\*` <br> <br> `day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json`  <br> <br> `day4/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json`
 |_CI Build name_               | SCM-Textanalytics-CI
 |_PR Build name_               | SCM-Textanalytics-PR
 |_CD Build name_               | SCM-Textanalytics-CD
@@ -564,9 +564,9 @@ trigger:
       - master
   paths:
     include:
-      - day4/apps/nodejs/textanalytics/*
-      - day4/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
-      - day4/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
+      - day4-azdevops/apps/nodejs/textanalytics/*
+      - day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-common.json
+      - day4-azdevops/apps/infrastructure/templates/scm-textanalytics-nodejs-infra.json
 steps:
   - task: NodeTool@0
     inputs:
@@ -574,14 +574,14 @@ steps:
     displayName: 'Install Node.js'
   - task: Bash@3
     inputs:
-      workingDirectory: '$(Build.SourcesDirectory)/day4/apps/nodejs/textanalytics'
+      workingDirectory: '$(Build.SourcesDirectory)/day4-azdevops/apps/nodejs/textanalytics'
       targetType: 'inline'
       displayName: 'npm install'
       script: npm install
   - task: ArchiveFiles@2
     displayName: 'Archive build files'
     inputs:
-      rootFolderOrFile: '$(Build.SourcesDirectory)/day4/apps/nodejs/textanalytics'
+      rootFolderOrFile: '$(Build.SourcesDirectory)/day4-azdevops/apps/nodejs/textanalytics'
       includeRootFolder: false
       archiveType: zip
       archiveFile: $(Build.ArtifactStagingDirectory)/Adc.Scm.Textanalytics.zip
