@@ -41,7 +41,7 @@ jobs:
           dotnet-version: 3.1.x
 
       - name: Use Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: "~/.nuget/packages"
           key: ${{ runner.os }}-nuget-${{ hashFiles('./day4/apps/dotnetcore/Scm/Adc.Scm.Api/packages.lock.json') }}
