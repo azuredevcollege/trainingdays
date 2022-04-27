@@ -28,10 +28,11 @@ param alwaysOn bool = true
 @description('Name of environment')
 param env string = 'devd2'
 
+param location string = resourceGroup().location
+
 var webAppName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var appPlanName = 'plan-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-var location = resourceGroup().location
 var resourceTag = {
   Environment: env
   Application: 'SCM'
