@@ -3,8 +3,9 @@
 @description('Name of environment')
 param env string = 'devd2'
 
+param location string = resourceGroup().location
+
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-var location = resourceGroup().location
 var resourceTag = {
   Environment: env
   Application: 'SCM'

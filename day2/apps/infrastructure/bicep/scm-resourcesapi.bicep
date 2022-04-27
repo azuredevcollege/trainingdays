@@ -28,13 +28,14 @@ param alwaysOn bool = true
 @description('Name of environment')
 param env string = 'devd2'
 
+param location string = resourceGroup().location
+
 var webAppName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var appPlanResourceApiName = 'plan-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var functionName = 'func-imageresizer-${env}-${uniqueString(resourceGroup().id)}'
 var appPlanImageResizerName = 'plan-imageresizer-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var storageAccountName = 'strs${env}${take(uniqueString(resourceGroup().id), 11)}'
-var location = resourceGroup().location
 
 var resourceTag = {
   Environment: env

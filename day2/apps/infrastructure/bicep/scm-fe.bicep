@@ -2,9 +2,9 @@
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd2'
+param location string = resourceGroup().location
 
 var storageAccountName = 'stfe${env}${take(uniqueString(resourceGroup().id), 11)}'
-var location = resourceGroup().location
 
 var resourceTag = {
   Environment: env
