@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Queue;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Azure.Storage.Queues;
 
 namespace Adc.Scm.Resources.Api.Services
 {
@@ -29,14 +28,12 @@ namespace Adc.Scm.Resources.Api.Services
 
             var payload = JsonConvert.SerializeObject(msg);
 
-            await queue.AddMessageAsync(new CloudQueueMessage(payload));
+            await queue.SendMessageAsync(payload);
         }
         
-        private CloudQueue GetQueue()
+        private QueueClient GetQueue()
         {
-            var account = CloudStorageAccount.Parse(_options.StorageAccountConnectionString);
-            var queueClient = account.CreateCloudQueueClient();
-            var queue = queueClient.GetQueueReference(_options.Queue);
+            var queueClient = new QueueClient(_options.StorageAccountConnectionString, _options.Queue);
 
             if (!_queueCreated)
             {
@@ -44,13 +41,13 @@ namespace Adc.Scm.Resources.Api.Services
                 {
                     if (!_queueCreated)
                     {
-                        queue.CreateIfNotExistsAsync().GetAwaiter().GetResult();
+                        queueClient.CreateIfNotExistsAsync().GetAwaiter().GetResult();
                         _queueCreated = true;
                     }
                 }
             }
 
-            return queue;
+            return queueClient;
         }
     }
 }
