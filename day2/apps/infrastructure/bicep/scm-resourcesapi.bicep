@@ -57,6 +57,9 @@ resource stg 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   sku: {
     name:'Standard_LRS'
   }
+  properties: {
+    allowBlobPublicAccess: true
+  }
 }
 
 resource appplanapi 'Microsoft.Web/serverfarms@2020-12-01' = {
