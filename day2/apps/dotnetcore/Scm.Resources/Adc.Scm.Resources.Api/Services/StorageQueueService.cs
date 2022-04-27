@@ -19,6 +19,7 @@ namespace Adc.Scm.Resources.Api.Services
         public async Task NotifyImageCreated(string image)
         {
             var queue = GetQueue();
+
             var msg = new ImageCreatedMsg
             {
                 Image = image,
@@ -27,10 +28,11 @@ namespace Adc.Scm.Resources.Api.Services
             };
 
             var payload = JsonConvert.SerializeObject(msg);
+            var b64payload = System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(payload));
 
-            await queue.SendMessageAsync(payload);
+            await queue.SendMessageAsync(b64payload);
         }
-        
+
         private QueueClient GetQueue()
         {
             var queueClient = new QueueClient(_options.StorageAccountConnectionString, _options.Queue);

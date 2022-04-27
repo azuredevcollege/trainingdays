@@ -8,6 +8,6 @@
   },
   "ImageProcessorOptions": {
     "StorageAccountConnectionString": "UseDevelopmentStorage=true",
-    "ImageWidth" :  "100"
+    "ImageWidth": "100"
   }
 }
