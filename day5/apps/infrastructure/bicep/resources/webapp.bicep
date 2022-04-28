@@ -14,13 +14,13 @@ param aadTenantId string = ''
 param aadClientId string = ''
 param aadDomain string = ''
 param aadClientIdUri string = ''
+param location string = resourceGroup().location
 
 var webAppName = 'app-resourcesapi-${env}-${uniqueString(resourceGroup().id)}'
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbqThumbnailsName = 'sbq-scm-thumbnails'
-var location = resourceGroup().location
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName

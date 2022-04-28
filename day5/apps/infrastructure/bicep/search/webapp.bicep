@@ -14,6 +14,7 @@ param aadTenantId string = ''
 param aadClientId string = ''
 param aadDomain string = ''
 param aadClientIdUri string = ''
+param location string = resourceGroup().location
 
 // ContactsAPI WebApp
 var webAppName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
@@ -21,8 +22,7 @@ var webAppName = 'app-searchapi-${env}-${uniqueString(resourceGroup().id)}'
 var planWindowsName = 'plan-scm-win-${env}-${uniqueString(resourceGroup().id)}'
 // ApplicationInsights name
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-// RG
-var location = resourceGroup().location
+
 // Search
 var indexerName = 'scmcontacts'
 

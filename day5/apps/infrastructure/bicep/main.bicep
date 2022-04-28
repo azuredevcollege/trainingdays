@@ -41,6 +41,8 @@ param planLinuxSku string = 'B1'
 @description('Sql server\'s admin password')
 param sqlUserPwd string
 
+param location string = resourceGroup().location
+
 module common 'common/commonmain.bicep' = {
   name: 'deployCommon'
   params: {
@@ -55,6 +57,7 @@ module contacts 'contacts/contactsmain.bicep' = {
   params: {
     env: env
     sqlUserPwd: sqlUserPwd
+    location: location
   }
   dependsOn: [
     common
@@ -67,6 +70,7 @@ module resources 'resources/resourcesmain.bicep' = {
   name: 'deployResources'
   params: {
     env: env
+    location: location
   }
   dependsOn: [
     common
@@ -87,6 +91,7 @@ module search 'search/searchmain.bicep' = {
   name: 'deploySearch'
   params: {
     env: env
+    location: location
   }
 
   dependsOn: [
