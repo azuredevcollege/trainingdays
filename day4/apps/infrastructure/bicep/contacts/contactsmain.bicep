@@ -6,6 +6,7 @@ param env string = 'devd4'
 @secure()
 @description('Sql server\'s admin password')
 param sqlUserPwd string
+param location string = resourceGroup().location
 
 var sqlUserName = uniqueString(resourceGroup().id, env, sqlUserPwd)
 
@@ -22,6 +23,7 @@ module database 'databases.bicep' = {
     resourceTag: resourceTag
     sqlUserName: sqlUserName
     sqlUserPwd: sqlUserPwd
+    location: location
   }
 }
 
@@ -31,6 +33,7 @@ module webapp 'webapp.bicep' = {
     env: env
     resourceTag: resourceTag
     sqlConnectionString: database.outputs.connectionString
+    location: location
   }
 }
 

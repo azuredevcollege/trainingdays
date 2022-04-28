@@ -5,6 +5,7 @@ param env string = 'devd4'
 
 @description('Resource tags object to use')
 param resourceTag object
+param location string = resourceGroup().location
 
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbqThumbnail = 'sbq-scm-thumbnails'
@@ -13,7 +14,6 @@ var sbtContactsSearchSubscription = 'contactsearch'
 var sbtContactsVisitReportsSubscription = 'visitreports'
 var sbtVisitReportsName = 'sbt-visitreports'
 var sbtVisitReportsTextAnalyticsSubscription = 'textanalytics'
-var location = resourceGroup().location
 
 // ServiceBus
 resource sb 'Microsoft.ServiceBus/namespaces@2017-04-01' = {

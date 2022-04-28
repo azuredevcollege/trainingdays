@@ -6,8 +6,9 @@ param env string = 'devd4'
 @description('Resource tags object to use')
 param resourceTag object
 
+param location string = resourceGroup().location
+
 var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
-var location = resourceGroup().location
 
 // ApplicationInsights
 resource appi 'Microsoft.Insights/components@2015-05-01' = {

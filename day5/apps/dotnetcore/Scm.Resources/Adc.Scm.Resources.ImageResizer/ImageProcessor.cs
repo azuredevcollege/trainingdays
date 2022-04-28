@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
+using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats;
 using SixLabors.ImageSharp.Formats.Gif;
@@ -8,9 +8,7 @@ using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Adc.Scm.Resources.ImageResizer
@@ -33,8 +31,8 @@ namespace Adc.Scm.Resources.ImageResizer
             var inputContainer = GetInputContainer(msg);
             var outputContainer = GetOutputContainer(msg);
 
-            var inputBlob = inputContainer.GetBlockBlobReference(msg.Image);
-            var outputBlob = outputContainer.GetBlockBlobReference(msg.Image);
+            var inputBlob = await inputContainer.GetBlobClient(msg.Image).DownloadContentAsync();
+            var outputBlob = outputContainer.GetBlobClient(msg.Image);
             var encoder = GetEncoder(msg.Image);
 
             if (null == encoder)
@@ -42,10 +40,10 @@ namespace Adc.Scm.Resources.ImageResizer
                 throw new NotSupportedException($"No encoder supported for {msg.Image}");
             }
 
-            using (var inputStream = new MemoryStream())
+
             using (var outputStream = new MemoryStream())
             {
-                await inputBlob.DownloadToStreamAsync(inputStream);
+                var inputStream = inputBlob.Value.Content.ToStream();
                 inputStream.Position = 0;
 
                 using (var image = Image.Load(inputStream))
@@ -57,16 +55,13 @@ namespace Adc.Scm.Resources.ImageResizer
                     outputStream.Position = 0;
                 }
 
-                await outputBlob.UploadFromStreamAsync(outputStream);
+                await outputBlob.UploadAsync(outputStream, overwrite: true);
             }
         }
 
-        private CloudBlobContainer GetInputContainer(ResizeMessage msg)
+        private BlobContainerClient GetInputContainer(ResizeMessage msg)
         {
-            var account = CloudStorageAccount.Parse(_options.StorageAccountConnectionString);
-            var blobClient = account.CreateCloudBlobClient();
-
-            var container = blobClient.GetContainerReference(msg.ImageContainer);
+            var blobClient = new BlobContainerClient(_options.StorageAccountConnectionString, msg.ImageContainer);
 
             if (!_inputContainerCreated)
             {
@@ -74,21 +69,18 @@ namespace Adc.Scm.Resources.ImageResizer
                 {
                     if (!_inputContainerCreated)
                     {
-                        container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null).GetAwaiter().GetResult();
+                        blobClient.CreateIfNotExistsAsync(PublicAccessType.Blob, null, null).GetAwaiter().GetResult();
                         _inputContainerCreated = true;
                     }
                 }
             }
 
-            return container;
+            return blobClient;
         }
 
-        private CloudBlobContainer GetOutputContainer(ResizeMessage msg)
+        private BlobContainerClient GetOutputContainer(ResizeMessage msg)
         {
-            var account = CloudStorageAccount.Parse(_options.StorageAccountConnectionString);
-            var blobClient = account.CreateCloudBlobClient();
-
-            var container = blobClient.GetContainerReference(msg.ThumbnailContainer);
+            var blobClient = new BlobContainerClient(_options.StorageAccountConnectionString, msg.ThumbnailContainer);
 
             if (!_outputContainerCreated)
             {
@@ -96,13 +88,13 @@ namespace Adc.Scm.Resources.ImageResizer
                 {
                     if (!_outputContainerCreated)
                     {
-                        container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null).GetAwaiter().GetResult();
+                        blobClient.CreateIfNotExistsAsync(PublicAccessType.Blob, null, null).GetAwaiter().GetResult();
                         _outputContainerCreated = true;
                     }
                 }
             }
 
-            return container;
+            return blobClient;
         }
 
         private IImageEncoder GetEncoder(string image)
