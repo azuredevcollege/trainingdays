@@ -79,7 +79,6 @@ namespace Adc.Scm.Search.Indexer
             {
                 IndexDocumentsBatch<Contact> batch = IndexDocumentsBatch.Create(action);
                 IndexDocumentsOptions options = new IndexDocumentsOptions { ThrowOnAnyError = true };
-                //client.DeserializationSettings.ContractResolver = new DefaultContractResolver() { NamingStrategy = new JsonLowercaseNamingStrategy() };
                 await client.IndexDocumentsAsync(batch,options);
             }
             catch (RequestFailedException)
