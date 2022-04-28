@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.0/token-echo-server.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/token-echo-server.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

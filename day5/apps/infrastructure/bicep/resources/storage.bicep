@@ -17,6 +17,9 @@ resource stgResources 'Microsoft.Storage/storageAccounts@2021-02-01' = {
   sku: {
     name: 'Standard_LRS'
   }
+  properties: {
+    allowBlobPublicAccess: true
+  }
 }
 
 output storageConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${stgResources.name};AccountKey=${listKeys(stgResources.id, stgResources.apiVersion).keys[0].value}'
