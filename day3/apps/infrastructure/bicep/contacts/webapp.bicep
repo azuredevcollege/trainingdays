@@ -8,6 +8,8 @@ param resourceTag object
 
 param sqlConnectionString string
 
+param location string = resourceGroup().location
+
 // ContactsAPI WebApp
 var webAppName = 'app-contactsapi-${env}-${uniqueString(resourceGroup().id)}'
 // AppService Plan Windows
@@ -18,7 +20,6 @@ var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbtContactsName = 'sbt-contacts'
 
-var location = resourceGroup().location
 
 resource appi 'Microsoft.Insights/components@2015-05-01' existing = {
   name: appiName

@@ -44,12 +44,15 @@ param sqlUserName string
 @description('Sql server\'s admin password')
 param sqlUserPwd string
 
+param location string = resourceGroup().location
+
 module common 'common/commonmain.bicep' = {
   name: 'deployCommon'
   params: {
     env: env
     planWindowsSku: planWindowsSku
     planLinuxSku: planLinuxSku
+    location: location
   }
 }
 
@@ -59,6 +62,7 @@ module contacts 'contacts/contactsmain.bicep' = {
     env: env
     sqlUserName: sqlUserName
     sqlUserPwd: sqlUserPwd
+    location: location
   }
   dependsOn:[
     common
