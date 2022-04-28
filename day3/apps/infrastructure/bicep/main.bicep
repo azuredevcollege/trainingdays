@@ -93,6 +93,7 @@ module search 'search/searchmain.bicep' = {
   name: 'deploySearch'
   params: {
     env: env
+    location: location
   }
 
   dependsOn: [
