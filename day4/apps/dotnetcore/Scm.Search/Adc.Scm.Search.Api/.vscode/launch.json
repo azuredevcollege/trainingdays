@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "day4buildScmSearch",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Adc.Scm.Search.Api.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/Adc.Scm.Search.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
