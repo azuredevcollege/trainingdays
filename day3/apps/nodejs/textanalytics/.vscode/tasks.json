@@ -4,7 +4,7 @@
     {
       "label": "host start",
       "type": "func",
-      "command": "host start --port 7073",
+      "command": "host start --javascript --port 7073",
       "problemMatcher": "$func-node-watch",
       "isBackground": true,
       "dependsOn": "npm install"

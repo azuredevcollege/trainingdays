@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Search.Documents" Version="11.3.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
     <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Azure.Search" Version="10.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
   </ItemGroup>
 

@@ -59,8 +59,8 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
     clientAffinityEnabled: false
     siteConfig: {
       alwaysOn: true
-      linuxFxVersion: 'NODE|12-lts'
-      nodeVersion: '12-lts'
+      linuxFxVersion: 'NODE|14-lts'
+      nodeVersion: '14-lts'
       appSettings: [
         {
           name: 'AzureWebJobsStorage'
@@ -72,7 +72,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
