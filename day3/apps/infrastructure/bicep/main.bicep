@@ -73,6 +73,7 @@ module resources 'resources/resourcesmain.bicep' = {
   name: 'deployResources'
   params: {
     env: env
+    location: location
   }
   dependsOn:[
     common
