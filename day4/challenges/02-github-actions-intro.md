@@ -485,6 +485,15 @@ using VuePress.
 
 ![vuepress](./images/vuepressreadme.png)
 
+:::warning
+
+Should you stylesheet be broken you might have created a repository with a diffrent
+name from the suggestion above. To fix the stylesheet you'll have to set the
+vuepress base path by creating a `.vuepress/config.yaml` containing
+`base: /<replace_with_reponame>/`.
+
+:::
+
 ## What we've learned
 
 We've taken a tour of two important features of GitHub. We've seen GitHub
