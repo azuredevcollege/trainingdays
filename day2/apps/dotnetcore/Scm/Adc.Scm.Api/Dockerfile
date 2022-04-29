@@ -1,5 +1,5 @@
 # Setup environment
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 ## Setup build space
 WORKDIR /app
@@ -14,7 +14,7 @@ COPY . ./
 RUN dotnet publish -o /app/out -c Release ./Adc.Scm.Api/Adc.Scm.Api.csproj
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 
 ## Copy build
 WORKDIR /app

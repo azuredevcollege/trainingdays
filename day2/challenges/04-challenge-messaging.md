@@ -1,6 +1,6 @@
 # Challenge 3 (optional): Messaging
 
-⏲️ *Est. time to complete: 45 min.* ⏲️
+⏲️ _Est. time to complete: 45 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -35,7 +35,7 @@ Now fill out the form:
 
 When the Service Bus is created, open it in the Azure Portal and add a new _Topic_:
 
-![portal_sb_topic](./images/portal_sb_topic.png "portal_sb_topic")
+![portal_sb_topic](./images/portal_sb_topic.png 'portal_sb_topic')
 
 Give the _Topic_ a name, e.g. `message` and leave the other parameters as proposed by Azure.
 
@@ -78,7 +78,7 @@ Microsoft (R) Build Engine version 16.4.0+e901037fe for .NET Core
 Copyright (C) Microsoft Corporation. All rights reserved.
 
   Restore completed in 32.32 ms for /Users/christiandennig/dev/azure-developer-college/day2/challenges/sbtester/sbtester.csproj.
-  sbtester -> /Users/christiandennig/dev/azure-developer-college/day2/challenges/sbtester/bin/Debug/netcoreapp3.1/sbtester.dll
+  sbtester -> /Users/christiandennig/dev/azure-developer-college/day2/challenges/sbtester/bin/Debug/net6.0/sbtester.dll
 
 Build succeeded.
     0 Warning(s)
@@ -102,13 +102,13 @@ Sending message: Message d61b256c-5c8c-482c-904a-63d322003c70
 
 🎉 _Congratulations_ - you have just sent your first 10 messages to an Azure Service Bus Topic. Check that the messages have arrived in the subscription queue.
 
-![portal_sb_messages](./images/portal_sb_messages.png "portal_sb_messages")
+![portal_sb_messages](./images/portal_sb_messages.png 'portal_sb_messages')
 
 So, now let's create the subscriber that picks up the messages and processes each message. We could use another console application, but that's more than boring! We will use an Azure Logic App..._Serverless Resprise_..., so to say!
 
 ### Add a Consumer
 
-In the Portal create a new _Azure Logic App_:  
+In the Portal create a new _Azure Logic App_:
 
 - Press **"Create a resource"**
 - Give it a unique name
@@ -122,11 +122,11 @@ When the Logic App has been deployed:
 - Search for **"service bus topic"** in the search box
 - Choose **"When a message is received in a topic subscription (auto-complete)**.
 
-![portal_la_topic](./images/portal_la_topic.png "portal_la_topic")
+![portal_la_topic](./images/portal_la_topic.png 'portal_la_topic')
 
 Now give the connection a name and choose the Service Bus you created in the previous chapter. When the connection to the Service Bus is established, you can specify the _Topic_ and the _Subscription_ to use. Your Logic App should now look like this:
 
-![portal_la_trigger](./images/portal_la_trigger.png "portal_la_trigger")
+![portal_la_trigger](./images/portal_la_trigger.png 'portal_la_trigger')
 
 You have just created the trigger connection between the Logic App and your Service Bus Topic/Subscription.
 
@@ -162,17 +162,17 @@ Configure the action:
 
 The workflow in the designer should now look like that:
 
-![portal_la_creatblob](./images/portal_la_creatblob.png "portal_la_creatblob")
+![portal_la_creatblob](./images/portal_la_creatblob.png 'portal_la_creatblob')
 
 Save the Logic App and click on the **"Run"** button in the command bar.
 
 Now got back to the _sbtester_ app and run it again. A few seconds later, after the messages have been sent, you should see a successfully processed Service Bus message.
 
-![portal_la_sbsuccess](./images/portal_la_sbsuccess.png "portal_la_sbsuccess")
+![portal_la_sbsuccess](./images/portal_la_sbsuccess.png 'portal_la_sbsuccess')
 
 Also check the Storage Explorer and have a look at the files that have been written:
 
-![storage_explorer_la](./images/storage_explorer_la.png "storage_explorer_la")
+![storage_explorer_la](./images/storage_explorer_la.png 'storage_explorer_la')
 
 ## Play Time
 

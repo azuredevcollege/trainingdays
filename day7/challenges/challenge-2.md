@@ -330,7 +330,7 @@ The image needs to be built upfront and put in your container registry. Go to th
 $ docker build -t <ACR_NAME>.azurecr.io/adc-api-sql:1.0 -f ./Adc.Scm.Api/Dockerfile .
 
 Sending build context to Docker daemon  64.51kB
-Step 1/11 : FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+Step 1/11 : FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 3.1: Pulling from dotnet/core/sdk
 [...]
 [...]

@@ -293,11 +293,11 @@ Azure Function for **Image Manipulation / Resizer Service**:
 
 Configuration / Application Settings:
 
-| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                         |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue sbq-scm-thumbnails**) for listening for messages - **listen**  <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
-| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                                |
-| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                              |
+| Parameter                                               | Value / Hint                                                                                                                                                                                                                                                                        |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ServiceBusConnectionString                              | use the Connection String from the Shared Access Policy (**Queue sbq-scm-thumbnails**) for listening for messages - **listen** <br><br><span style="color:red">**Important**</span>: Please remove the _EntityPath_ variable (incl. the value) at the end of the connection string! |
+| ImageProcessorOptions\_\_ImageWidth                     | _100_                                                                                                                                                                                                                                                                               |
+| ImageProcessorOptions\_\_StorageAccountConnectionString | use the **Connection String** from your Storage Account created in the Break Out session yesterday (should be the same)                                                                                                                                                             |
 
 :::tip
 📝 You can delete the **QueueName** app settings!
@@ -335,7 +335,7 @@ So please re-deploy the Web Apps/Functions for:
 
 ## Deploy the Contacts Search Service
 
-To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use the Azure CLI) and create an Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET Core 3.1**) - use SKU / Size **S1**.
+To be able to run the Contacts Search service (where we leverage the core functionality of Azure Search), we first need an Azure Web App to host it. So, please go to the Portal (or use the Azure CLI) and create an Azure Web App (with a new Azure AppService Plan on Windows, Runtime **.NET 6**) - use SKU / Size **S1**.
 
 When finished, apply these settings to the Web App Configuration settings:
 
@@ -358,8 +358,8 @@ Create the Azure function in the **scm-breakout-rg** resource group with the fol
 | Parameter       | Value / Hint                                                       |
 | --------------- | ------------------------------------------------------------------ |
 | Publish         | _Code_                                                             |
-| Runtime         | _.NET Core_                                                        |
-| Version         | _3.1_                                                              |
+| Runtime         | _.NET_                                                             |
+| Version         | _6_                                                                |
 | Region          | _West Europe_                                                      |
 | OS              | _Windows_                                                          |
 | Storage Account | Use the storage account you created in the breakout resource group |

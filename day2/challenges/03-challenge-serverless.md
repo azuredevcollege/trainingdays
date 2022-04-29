@@ -1,6 +1,6 @@
 # Challenge 2: Serverless
 
-⏲️ *Est. time to complete: 45 min.* ⏲️
+⏲️ _Est. time to complete: 45 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -40,7 +40,7 @@ Follow the wizard to create the storage account:
 
 Leave all other options to their defaults. In the summary view, it should look like that:
 
-![create](./images/portal_storageaccount.png "create")
+![create](./images/portal_storageaccount.png 'create')
 
 Proceed and create the Storage Account.
 
@@ -56,26 +56,26 @@ The infrastructure to store files is now ready. Let's create the local Azure Fun
 
 Open a new Visual Studio Code window and switch to the Azure Tools Extension. In the section for **"Functions"**, click on **"Create New Project"** and select a new, empty folder on your local machine:
 
-![func_create](./images/function_create.png "func_create")
+![func_create](./images/function_create.png 'func_create')
 
 The Wizard will guide you through the local setup process.
 
 Choose the following options:
 
 - _Language_: C#
-  ![functions_wizard1](./images/functions_wizard1.png "functions_wizard1")
+  ![functions_wizard1](./images/functions_wizard1.png 'functions_wizard1')
 - _Template_: BlobTrigger
-  ![functions_wizard2](./images/functions_wizard2.png "functions_wizard2")
+  ![functions_wizard2](./images/functions_wizard2.png 'functions_wizard2')
 - _Function Name_: BlobTriggerCSharp
-  ![functions_wizard3](./images/functions_wizard3.png "functions_wizard3")
+  ![functions_wizard3](./images/functions_wizard3.png 'functions_wizard3')
 - _Namespace_: AzDevCollege.Function
-  ![functions_wizard4](./images/functions_wizard4.png "functions_wizard4")
+  ![functions_wizard4](./images/functions_wizard4.png 'functions_wizard4')
 - _Settings_: Create new local app setting
-  ![functions_wizard5](./images/functions_wizard5.png "functions_wizard5")
+  ![functions_wizard5](./images/functions_wizard5.png 'functions_wizard5')
 - _Storage Account_: select the storage account you created previously
-  ![functions_wizard6](./images/functions_wizard6.png "functions_wizard6")
+  ![functions_wizard6](./images/functions_wizard6.png 'functions_wizard6')
 - _Trigger Path_ (the container name we want to listen to for new files): originals
-  ![functions_wizard7](./images/functions_wizard7.png "functions_wizard7")
+  ![functions_wizard7](./images/functions_wizard7.png 'functions_wizard7')
 - _Debug_: select the same storage account as above
 
 When everything is setup, we test the function.
@@ -84,7 +84,7 @@ When everything is setup, we test the function.
 - Start the Azure Function by hitting **F5**.
 
 :::tip
-📝 If you get a message that the core function tools are required, install them by executing `npm i -g azure-functions-core-tools@3 --unsafe-perm true`. If you still see an error, it's likely that remote-signed Powershell scripts aren't allowed on your machine. To fix that, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned` in a Powershell environment (as _admin_).
+📝 If you get a message that the core function tools are required, install them by executing `npm i -g azure-functions-core-tools@4 --unsafe-perm true`. If you still see an error, it's likely that remote-signed Powershell scripts aren't allowed on your machine. To fix that, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned` in a Powershell environment (as _admin_).
 :::
 
 The debug console should print logs like that:
@@ -99,7 +99,7 @@ Function Runtime Version: 3.0.15371.0
 
 Open the _Azure Storage Explorer_, find your storage account and select the `originals` container (alternatively: go to the Portal and open the "Storage Explorer" in the Storage Account).
 
-![storage_explorer_view](./images/storage_explorer_view.png "storage_explorer_view")
+![storage_explorer_view](./images/storage_explorer_view.png 'storage_explorer_view')
 
 Drag and drop a file to the container or upload one via the menu. After a few seconds, the breakpoint in VS Code will be hit. Examine the properties of the variable `myBlob`.
 
@@ -168,13 +168,13 @@ Go to the Azure Tools Extension and click on the **"Deploy to Azure..."** button
 📝 Choose _Advanced_ mode.
 :::
 
-![functions_deploy_wizard1](./images/functions_deploy_wizard1.png "functions_deploy_wizard1")
+![functions_deploy_wizard1](./images/functions_deploy_wizard1.png 'functions_deploy_wizard1')
 
 Choose the following options, when asked:
 
 | Parameter              | Value                                    |
 | ---------------------- | ---------------------------------------- |
-| _Runtime_              | NET Core 3.1                             |
+| _Runtime_              | NET 6                                    |
 | _OS_                   | Windows                                  |
 | _Hosting Plan_         | Consumption                              |
 | _Resource Group_       | serverless-rg                            |
@@ -186,7 +186,7 @@ We still have to configure our Functions App, to be able to listen to blob chang
 - Go to the Portal and open the Functions App you previously created.
 - Open the Application settings under **Configuration**
 - Add a new application setting (you can check your `local.settings.json` file for the correct values):
-  | Parameter                      | Value                                                                                                       |
+  | Parameter | Value |
   | ------------------------------ | ----------------------------------------------------------------------------------------------------------- |
   | \<storageaccountname>\_STORAGE | enter the connection string to the storage account (you can copy that from your _local.settings.json_ file) |
 
@@ -196,7 +196,7 @@ We still have to configure our Functions App, to be able to listen to blob chang
 
 Finally, your application settings should look like that:
 
-![azure_function_settings](./images/azure_function_settings.png "azure_function_settings")
+![azure_function_settings](./images/azure_function_settings.png 'azure_function_settings')
 
 Test again (upload images) and check, if the Function App is running correctly in Azure
 

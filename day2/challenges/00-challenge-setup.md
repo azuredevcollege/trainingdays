@@ -1,6 +1,6 @@
 # Challenge 0: Setup your System
 
-⏲️ *Est. time to complete: 45 min.* ⏲️
+⏲️ _Est. time to complete: 45 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -20,13 +20,13 @@ To be able to follow all the challenges provided in this workshop, you need a fe
 
 ## .NET SDK
 
-Download and install .NET Core SDK from <https://dotnet.microsoft.com/download>.
+Download and install .NET **SDK** from <https://dotnet.microsoft.com/download>.
 
 :::tip
-📝 Choose the LTS version (currently .NET Core 3.1).
+📝 Choose the LTS version (currently .NET 6 - it must be at least 6.0.202!).
 :::
 
-![dotnet](./images/netcore.png "dotnet")
+![dotnet](./images/dotnet-logo.png 'dotnet')
 
 After the installation is complete, check if everything works as expected. Open a command prompt and execute the .NET CLI.
 
@@ -38,7 +38,7 @@ Usage: dotnet [path-to-application]
 
 Options:
   -h|--help         Display help.
-  --info            Display .NET Core information.
+  --info            Display .NET information.
   --list-sdks       Display the installed SDKs.
   --list-runtimes   Display the installed runtimes.
 
@@ -46,7 +46,7 @@ path-to-application:
   The path to an application .dll file to execute.
 
 $ dotnet --list-sdks
-3.1.405 [C:\Program Files\dotnet\sdk]
+6.0.202 [C:\Program Files\dotnet\sdk]
 ```
 
 ## Node.js
@@ -54,17 +54,17 @@ $ dotnet --list-sdks
 Download and install Node.js from <https://nodejs.org/en/download/>
 
 :::tip
-📝 Choose the LTS version (currently Node.js 14).
+📝 Choose the LTS version (for this workshop: Node.JS 14).
 :::
 
-![nodejs](./images/nodejs.png "nodejs")
+![nodejs](./images/nodejs.png 'nodejs')
 
 After the installation is complete, check if everything works as expected. Open a command prompt and execute the following commands.
 
 ```shell
 $ node --version
 
-v14.15.4
+v14.15.4 # or a similar version
 
 $ npm
 
@@ -91,12 +91,12 @@ npm help npm      involved overview
 
 ## Vue CLI
 
-![vuejs](./images/vuejs.png "vuejs")
+![vuejs](./images/vuejs.png 'vuejs')
 
 We will be using VueJS as our frontend framework. Install it from the command-line via npm:
 
 ```shell
-$ npm install -g @vue/cli
+$ npm install -g @vue/cli@4.5.15
 
 [...]
 [...]
@@ -104,7 +104,7 @@ $ npm install -g @vue/cli
 
 $ vue --version
 
-@vue/cli 4.5.10
+@vue/cli 4.5.15
 ```
 
 ## Azure CLI
@@ -176,7 +176,7 @@ Please do not use VSCodium. You will run into problems building/debugging some o
 
 After the setup is complete, open Visual Studio Code and select the "Extensions" sidebar:
 
-![Visual Studio Extensions](./images/vscode_extensions.png "VS Code Extensions")
+![Visual Studio Extensions](./images/vscode_extensions.png 'VS Code Extensions')
 
 Search and install the following extensions:
 
@@ -192,9 +192,9 @@ Search and install the following extensions:
 
 In order to work with Azure Storage Accounts, we will use the Azure Storage Explorer. Go to <https://azure.microsoft.com/features/storage-explorer/>, download and install the tool.
 
-![Azure Storage Explorer](./images/storage_explorer.png "Azure Storage Explorer")
+![Azure Storage Explorer](./images/storage_explorer.png 'Azure Storage Explorer')
 
-![Azure Storage Explorer](./images/storage_explorer_view.png "Azure Storage Explorer")
+![Azure Storage Explorer](./images/storage_explorer_view.png 'Azure Storage Explorer')
 
 ## Azure Data Studio
 
@@ -202,7 +202,7 @@ We will also work with Azure SQL Databases. You can, of course, use SQL Server M
 
 Go to <https://docs.microsoft.com/sql/azure-data-studio/download-azure-data-studio>, download and install the tool.
 
-![Azure Data Studio](./images/azure_data_studio.png "Azure Data Studio")
+![Azure Data Studio](./images/azure_data_studio.png 'Azure Data Studio')
 
 ## jq
 

@@ -1,6 +1,6 @@
 # 💎 Breakout 1: Deploy the Azure Dev College sample application to Azure 💎
 
-⏲️ *Est. time to complete: 30 min.* ⏲️
+⏲️ _Est. time to complete: 30 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -10,7 +10,7 @@ Now it's time to get familiar with our sample application. In this challenge you
 - setup your "local loop"
 - deploy a first version to Azure
 
-![architecture_bo1](./images/architecture_bo1.png "architecture_bo1")
+![architecture_bo1](./images/architecture_bo1.png 'architecture_bo1')
 
 :::tip
 📝 Please check, that all the [prerequisites](challenge-0.md) are set up in your machine.
@@ -49,7 +49,7 @@ code day2-breakout1.code-workspace
 
 The structure of the workspace is as follows:
 
-![Day2 Workspace Structure](./images/bo1_code.png "bo1_code")
+![Day2 Workspace Structure](./images/bo1_code.png 'bo1_code')
 
 The projects that are relevant for this breakout challenge are:
 
@@ -69,11 +69,11 @@ Open each folder and get familiar with the code in there.
 
 Now it's time to run the contacts API on your local machine. Therefore, a debug configuration has already been prepared for you. So, switch to the "Debug" view in Visual Studio Code and in the drop-down, choose **Day2 - Launch SCM Contacts API**. Click the **"Run"** button.
 
-![vscode_debug_contacts](./images/vscode_debug_contacts.png "vscode_debug_contacts")
+![vscode_debug_contacts](./images/vscode_debug_contacts.png 'vscode_debug_contacts')
 
 If you set up your machine correctly, a browser window will open and show the Swagger UI for the _contacts_ API after a few seconds. Get familiar with all the available operations and also test a few of them via the UI.
 
-![browser_swagger_contacts](./images/browser_swagger_contacts.png "browser_swagger_contacts")
+![browser_swagger_contacts](./images/browser_swagger_contacts.png 'browser_swagger_contacts')
 
 ### Preparing the SPA for the first run
 
@@ -107,9 +107,9 @@ When you run the config, a local build will be kicked-off. You can open a browse
 
 If you want to, you can also test the mobile experience of the app by opening the Chrome/Edge Developer Tool (**F12**) and switching to a mobile user-agent.
 
-![browser_bo1](./images/browser_bo1.png "browser_bo1")
+![browser_bo1](./images/browser_bo1.png 'browser_bo1')
 
-![browser_mobile_bo1](./images/browser_mobile_bo1.png "browser_mobile_bo1")
+![browser_mobile_bo1](./images/browser_mobile_bo1.png 'browser_mobile_bo1')
 
 ## Deploy to Azure
 
@@ -119,19 +119,19 @@ So, first of all, let's deploy the backend to Azure. You already know how to do 
 
 1. Basic Setup via Portal or Azure CLI
 
-  | Parameter        | Value                               |
-  | ---------------- | ----------------------------------- |
-  | _Resource group_ | new, name it e.g. `scm-breakout-rg` |
-  | _Location_       | West Europe                         |
+| Parameter        | Value                               |
+| ---------------- | ----------------------------------- |
+| _Resource group_ | new, name it e.g. `scm-breakout-rg` |
+| _Location_       | West Europe                         |
 
 2. Create an Azure Web App
-  
-  | Parameter      | Value                    |
-  | -------------- | ------------------------ |
-  | _OS_           | Windows                  |
-  | _RuntimeStack_ | NET Core 3.1 (LTS)       |
-  | _Size_         | S1                       |
-  | _AppInsights_  | Not needed at the moment |
+
+| Parameter      | Value                    |
+| -------------- | ------------------------ |
+| _OS_           | Windows                  |
+| _RuntimeStack_ | NET 6 (LTS)              |
+| _Size_         | S1                       |
+| _AppInsights_  | Not needed at the moment |
 
 3. Deploy the _Contacts API_ to Azure (see the tips below)
 4. After deployment, check whether the API is running by opening the Swagger UI
