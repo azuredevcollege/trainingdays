@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "day7publishScmContacts",
+    "appService.deploySubpath": "publish",
+    "appService.defaultWebAppToDeploy": "None"
+}

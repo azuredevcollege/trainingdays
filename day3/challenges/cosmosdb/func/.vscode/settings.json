@@ -2,7 +2,7 @@
     "azureFunctions.deploySubpath": ".",
     "azureFunctions.postDeployTask": "npm install",
     "azureFunctions.projectLanguage": "JavaScript",
-    "azureFunctions.projectRuntime": "~3",
+    "azureFunctions.projectRuntime": "~4",
     "debug.internalConsoleOptions": "neverOpen",
     "azureFunctions.preDeployTask": "npm prune"
 }

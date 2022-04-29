@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
@@ -20,7 +20,7 @@ namespace Adc.Scm.Resources.Api.Services
 
         public async Task NotifyImageCreated(string image)
         {
-            var client = GetQueueClient();
+            var client = GetQueueSender();
             var msg = new ImageCreatedMsg
             {
                 Image = image,
@@ -29,12 +29,15 @@ namespace Adc.Scm.Resources.Api.Services
             };
 
             var payload = JsonConvert.SerializeObject(msg);
-            await client.SendAsync(new Message(Encoding.UTF8.GetBytes(payload)));
+            await client.SendMessageAsync(new ServiceBusMessage(Encoding.UTF8.GetBytes(payload)) { ContentType = "application/json" });
         }
 
-        private QueueClient GetQueueClient()
+        private ServiceBusSender GetQueueSender()
         {
-            return new QueueClient(new ServiceBusConnectionStringBuilder(_options.ThumbnailQueueConnectionString));
+            var conn = ServiceBusConnectionStringProperties.Parse(_options.ThumbnailQueueConnectionString);
+
+            var client = new ServiceBusClient(_options.ThumbnailQueueConnectionString);
+            return client.CreateSender(conn.EntityPath);
         }
     }
 }
