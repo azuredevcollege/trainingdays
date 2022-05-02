@@ -27,12 +27,15 @@
             "defaultValue": "Standard_D2_v2",
             "allowedValues": [
                 "Standard_DS2_v2",
+                "Standard_D2s_v2",
                 "Standard_D2_v2",
                 "Standard_F2s_v2",
                 "Standard_D2_v3",
                 "Standard_E2_v3",
                 "Standard_B2ms",
-                "Standard_B2s"
+                "Standard_B2s",
+                "Standard_D2as_v4",
+                "Standard_D4_v2"
             ]
         },
         "DiskSku": {
