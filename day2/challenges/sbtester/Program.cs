@@ -8,8 +8,8 @@ namespace sbtester
 {
     class Program
     {
-        const string ServiceBusConnectionString = "<your_connection_string>";
-        const string TopicName = "<your_topic_name>";
+        const string ServiceBusConnectionString = "Endpoint=sb://spookifyservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=W7wdBKz1IqCuQHjn5a03h3evY0RPYM95/UmsXonKKPQ=";
+        const string TopicName = "message";
         static ITopicClient topicClient;
 
         public static async Task Main(string[] args)

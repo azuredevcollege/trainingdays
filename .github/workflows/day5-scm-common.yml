@@ -21,7 +21,7 @@ env:
 
 jobs:
   build:
-    if: github.repository == 'azuredevcollege/trainingdays'
+    if: github.repository == 'devcollege-daniel/trainingdays'
     runs-on: ubuntu-latest
     env:
       BICEP_FILE_PATH: "./day5/apps/infrastructure/bicep/common/commonmain.bicep"
@@ -45,13 +45,13 @@ jobs:
           retention-days: 30
 
   deploy-to-dev:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'devcollege-daniel/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day5-scm-dev
     needs: build
     env:
       RESOURCE_GROUP_NAME: rg-scm-devday5
-      RESOURCE_GROUP_LOCATION: westeurope
+      RESOURCE_GROUP_LOCATION: westus
       ENV_NAME: devd5
 
     steps:
@@ -87,7 +87,7 @@ jobs:
           parameters: env=${{ env.ENV_NAME }}
 
   deploy-to-test:
-    if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
+    if: (github.repository == 'devcollege-daniel/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
     runs-on: ubuntu-latest
     environment: day5-scm-test
     needs: deploy-to-dev

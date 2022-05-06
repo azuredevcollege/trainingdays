@@ -1,5 +1,5 @@
 var uisettings = {
-    "endpoint": "",
-    "resourcesEndpoint": "",
+    "endpoint": "https://spookifywebapp.azurewebsites.net/",
+    "resourcesEndpoint": "https://spookifywebappimages.azurewebsites.net",
     "aiKey": ""
 }
