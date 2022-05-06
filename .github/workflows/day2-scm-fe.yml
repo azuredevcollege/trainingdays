@@ -20,14 +20,14 @@ on:
   workflow_dispatch:
 
 env:
-  BICEP_FILE_NAME: "scm-fe.bicep"
+  BICEP_FILE_NAME: 'scm-fe.bicep'
 
 jobs:
   build-bicep:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      BICEP_FILE_PATH: "./day2/apps/infrastructure/bicep/scm-fe.bicep"
+      BICEP_FILE_PATH: './day2/apps/infrastructure/bicep/scm-fe.bicep'
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -50,9 +50,9 @@ jobs:
     if: github.repository == 'azuredevcollege/trainingdays'
     runs-on: ubuntu-latest
     env:
-      NODE_VERSION: "14.x"
-      FE_PROJECT_PATH: "./day2/apps/frontend/scmfe"
-      FE_DIST_PATH: "./day2/apps/frontend/scmfe/dist/"
+      NODE_VERSION: '14.x'
+      FE_PROJECT_PATH: './day2/apps/frontend/scmfe'
+      FE_DIST_PATH: './day2/apps/frontend/scmfe/dist/'
       NEED_DEPLOY: ${{ (github.event_name == 'push') || (github.event_name == 'workflow_dispatch') }}
 
     steps:
@@ -152,6 +152,7 @@ jobs:
           -d '$web' 
           --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
           -s ./scmfe
+          --overwrite
 
   deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -226,3 +227,4 @@ jobs:
           -d '$web' 
           --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
           -s ./scmfe
+          --overwrite
