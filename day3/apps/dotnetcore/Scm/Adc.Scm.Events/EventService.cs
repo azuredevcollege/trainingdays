@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure.ServiceBus;
+﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
@@ -19,11 +19,11 @@ namespace Adc.Scm.Events
         {
             try
             {
-                var client = GetClient();
+                var sender = GetSender();
                 var json = JsonConvert.SerializeObject(evt);
-                var msg = new Message(Encoding.UTF8.GetBytes(json));
+                var msg = new ServiceBusMessage(Encoding.UTF8.GetBytes(json)) { ContentType = "application/json" };
                 msg.SessionId = evt.UserId.ToString();
-                await client.SendAsync(msg);
+                await sender.SendMessageAsync(msg);
             }
             catch (System.Exception)
             {
@@ -31,9 +31,12 @@ namespace Adc.Scm.Events
             }
         }
 
-        private TopicClient GetClient()
+        private ServiceBusSender GetSender()
         {
-            return new TopicClient(new ServiceBusConnectionStringBuilder(_options.ServiceBusConnectionString));
+            var conn = ServiceBusConnectionStringProperties.Parse(_options.ServiceBusConnectionString);
+
+            var client = new ServiceBusClient(_options.ServiceBusConnectionString);
+            return client.CreateSender(conn.EntityPath);
         }
     }
 }

@@ -1,0 +1,5 @@
+{
+    "appService.preDeployTask": "day7publishScmSearch",
+    "appService.deploySubpath": "publish",
+    "appService.defaultWebAppToDeploy": "None"
+}

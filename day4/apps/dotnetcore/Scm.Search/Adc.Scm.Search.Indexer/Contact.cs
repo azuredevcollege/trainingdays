@@ -1,44 +1,68 @@
-﻿using Microsoft.Azure.Search;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Azure.Search.Documents.Indexes;
+using System.Text.Json.Serialization;
 
 namespace Adc.Scm.Search.Indexer
 {
-    [JsonObject(NamingStrategyType = typeof(JsonLowercaseNamingStrategy))]
     public class Contact
     {
-        [System.ComponentModel.DataAnnotations.Key]
-        [IsRetrievable(true)]
+        [SimpleField(IsKey = true)]
+        [JsonPropertyName("id")]
         public string Id { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("userid")]
         public string UserId { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("firstname")]
         public string Firstname { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("lastname")]
         public string Lastname { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("email")]
         public string Email { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("company")]
         public string Company { get; set; }
-        [IsRetrievable(true)]
+
+        [SimpleField]
+        [JsonPropertyName("avatarlocation")]
         public string AvatarLocation { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("phone")]
         public string Phone { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("mobile")]
         public string Mobile { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("description")]
         public string Description { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("street")]
         public string Street { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("housenumber")]
         public string HouseNumber { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("city")]
         public string City { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("postalcode")]
         public string PostalCode { get; set; }
-        [IsSearchable, IsRetrievable(true)]
+
+        [SearchableField]
+        [JsonPropertyName("country")]
         public string Country { get; set; }
     }
 }

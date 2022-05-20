@@ -40,6 +40,7 @@ param planWindowsSku string = 'B1'
   'P3V2'
 ])
 param planLinuxSku string = 'B1'
+param location string = resourceGroup().location
 
 var resourceTag = {
   Environment: env
@@ -52,6 +53,7 @@ module monitoring 'monitoring.bicep' = {
   params: {
     env: env
     resourceTag: resourceTag
+    location: location
   }
 }
 
@@ -62,6 +64,7 @@ module appplans 'appplans.bicep' = {
     resourceTag: resourceTag
     planWindowsSku: planWindowsSku
     planLinuxSku: planLinuxSku
+    location: location
   }
 }
 
@@ -70,6 +73,7 @@ module servicebus 'servicebus.bicep' = {
   params: {
     env: env
     resourceTag: resourceTag
+    location: location
   }
 }
 
@@ -77,5 +81,6 @@ module cosmos 'cosmos.bicep' = {
   name: 'deployCosmosAccount'
   params: {
     env: env
+    location: location
   }
 }

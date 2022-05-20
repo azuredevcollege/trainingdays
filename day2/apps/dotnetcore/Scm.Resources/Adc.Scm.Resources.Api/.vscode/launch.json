@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "day2buildScmResources",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/Adc.Scm.Resources.Api.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/Adc.Scm.Resources.Api.dll",
             "args": [],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,

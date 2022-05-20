@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Adc.Scm.Resources.Api.Repositories
 {
@@ -27,28 +27,28 @@ namespace Adc.Scm.Resources.Api.Repositories
 
             var container = GetInputContainer();
 
-            var blob = container.GetBlockBlobReference(blobname);
-            var uploadOne = blob.UploadFromByteArrayAsync(data, 0, data.Length);
+            var blob = container.GetBlobClient(blobname);
+            var uploadOne = blob.UploadAsync(BinaryData.FromBytes(data));
 
-            var outputBlob = GetOutputContainer().GetBlockBlobReference(blobname);
-            var uploadTwo = outputBlob.UploadFromByteArrayAsync(data, 0, data.Length);
+            var outputBlob = GetOutputContainer().GetBlobClient(blobname);
+            var uploadTwo = outputBlob.UploadAsync(BinaryData.FromBytes(data));
 
             await Task.WhenAll(uploadOne, uploadTwo);
 
-            return Tuple.Create(blobname, outputBlob.StorageUri.PrimaryUri.OriginalString);            
+            return Tuple.Create(blobname, outputBlob.Uri.AbsoluteUri);            
         }
 
         public async Task<byte[]> Get(string image)
         {
             var container = GetOutputContainer();
-            var blob = container.GetBlockBlobReference(image);
+            var blob = container.GetBlobClient(image);
 
             try
             {
                 using (var memstream = new MemoryStream())
                 {
-                    await blob.DownloadToStreamAsync(memstream);
-                    return memstream.ToArray();
+                    var res = await blob.DownloadContentAsync();
+                    return res.Value.Content.ToArray();
                 }
             }
             catch (Exception)
@@ -57,12 +57,9 @@ namespace Adc.Scm.Resources.Api.Repositories
             }                        
         }
 
-        private CloudBlobContainer GetInputContainer()
+        private BlobContainerClient GetInputContainer()
         {
-            var account = CloudStorageAccount.Parse(_options.StorageAccountConnectionString);
-            var blobClient = account.CreateCloudBlobClient();
-
-            var container = blobClient.GetContainerReference(_options.ImageContainer);
+            var blobClient = new BlobContainerClient(_options.StorageAccountConnectionString, _options.ImageContainer);
 
             if (!_inputContainerCreated)
             {
@@ -70,21 +67,18 @@ namespace Adc.Scm.Resources.Api.Repositories
                 {
                     if (!_inputContainerCreated)
                     {
-                        container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null).GetAwaiter().GetResult();
+                        blobClient.CreateIfNotExistsAsync(PublicAccessType.Blob, null, null).GetAwaiter().GetResult();
                         _inputContainerCreated = true;
                     }
                 }
             }
 
-            return container;
+            return blobClient;
         }
 
-        private CloudBlobContainer GetOutputContainer()
+        private BlobContainerClient GetOutputContainer()
         {
-            var account = CloudStorageAccount.Parse(_options.StorageAccountConnectionString);
-            var blobClient = account.CreateCloudBlobClient();
-
-            var container = blobClient.GetContainerReference(_options.ThumbnailContainer);
+            var blobClient = new BlobContainerClient(_options.StorageAccountConnectionString, _options.ThumbnailContainer);
 
             if (!_outputContainerCreated)
             {
@@ -92,13 +86,13 @@ namespace Adc.Scm.Resources.Api.Repositories
                 {
                     if (!_outputContainerCreated)
                     {
-                        container.CreateIfNotExistsAsync(BlobContainerPublicAccessType.Blob, null, null).GetAwaiter().GetResult();
+                        blobClient.CreateIfNotExistsAsync(PublicAccessType.Blob, null, null).GetAwaiter().GetResult();
                         _outputContainerCreated = true;
                     }
                 }
             }
 
-            return container;
+            return blobClient;
         }
     }
 }

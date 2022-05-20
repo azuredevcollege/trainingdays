@@ -13,11 +13,12 @@ param sqlUserPwd string
 @description('Resource tags object to use')
 param resourceTag object
 
+param location string = resourceGroup().location
+
 // SQL database server and DB names
 var sqlServerName = 'sql-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sqlDbName = 'sqldb-scm-contacts-${env}-${uniqueString(resourceGroup().id)}'
 // location and tags
-var location = resourceGroup().location
 
 resource sqlServer 'Microsoft.Sql/servers@2020-11-01-preview' = {
   name: sqlServerName

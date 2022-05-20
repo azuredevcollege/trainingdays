@@ -2,6 +2,7 @@
 @maxLength(8)
 @description('Name of environment')
 param env string = 'devd4'
+param location string = resourceGroup().location
 
 var resourceTag = {
   Environment: env
@@ -14,6 +15,7 @@ module search 'search.bicep' = {
   params: {
     env: env
     resourceTag: resourceTag
+    location: location
   }
 }
 
@@ -24,6 +26,7 @@ module webapp 'webapp.bicep' = {
     resourceTag: resourceTag
     searchServiceName: search.outputs.name
     searchServiceAdminKey: search.outputs.adminkey
+    location: location
   }
 }
 
@@ -34,6 +37,7 @@ module function 'function.bicep' = {
     resourceTag: resourceTag
     searchServiceName: search.outputs.name
     searchServiceAdminKey: search.outputs.adminkey
+    location: location
   }
 }
 

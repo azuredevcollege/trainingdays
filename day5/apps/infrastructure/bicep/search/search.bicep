@@ -5,9 +5,9 @@ param env string = 'devd4'
 
 @description('Resource tags object to use')
 param resourceTag object
+param location string = resourceGroup().location
 
 var searchName = 'srch-scm-${env}-${uniqueString(resourceGroup().id)}'
-var location = resourceGroup().location
 
 resource search 'Microsoft.Search/searchServices@2020-08-01' = {
   name: searchName

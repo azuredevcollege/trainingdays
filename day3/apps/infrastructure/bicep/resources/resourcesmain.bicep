@@ -3,6 +3,8 @@
 @description('Name of environment')
 param env string = 'devd3'
 
+param location string = resourceGroup().location
+
 var resourceTag = {
   Environment: env
   Application: 'SCM'
@@ -14,6 +16,7 @@ module storage 'storage.bicep' = {
   params: {
     env: env
     resourceTag: resourceTag
+    location: location
   }
 }
 
@@ -23,6 +26,7 @@ module webapp 'webapp.bicep' = {
     env: env
     resourceTag: resourceTag
     storageConnectionString: storage.outputs.storageConnectionString
+    location: location
   }
 }
 
@@ -32,6 +36,7 @@ module function 'function.bicep' = {
     env: env
     resourceTag: resourceTag
     storageConnectionString: storage.outputs.storageConnectionString
+    location: location
   }
 }
 

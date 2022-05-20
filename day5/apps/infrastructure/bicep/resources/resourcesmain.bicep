@@ -13,6 +13,7 @@ param aadClientId string = ''
 param aadDomain string = ''
 @description('Azure AD App URI')
 param aadClientIdUri string = ''
+param location string = resourceGroup().location
 
 var resourceTag = {
   Environment: env
@@ -25,6 +26,7 @@ module storage 'storage.bicep' = {
   params: {
     env: env
     resourceTag: resourceTag
+    location: location
   }
 }
 
@@ -39,6 +41,7 @@ module webapp 'webapp.bicep' = {
     aadTenantId: aadTenantId
     aadClientId: aadClientId
     aadClientIdUri: aadClientIdUri
+    location: location
   }
 }
 
@@ -48,6 +51,7 @@ module function 'function.bicep' = {
     env: env
     resourceTag: resourceTag
     storageConnectionString: storage.outputs.storageConnectionString
+    location: location
   }
 }
 

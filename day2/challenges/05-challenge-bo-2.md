@@ -1,6 +1,6 @@
 # 💎 Breakout 2: Add a serverless microservice to our sample app and include messaging 💎
 
-⏲️ *Est. time to complete: 45 min.* ⏲️
+⏲️ _Est. time to complete: 45 min._ ⏲️
 
 ## Here is what you will learn 🎯
 
@@ -12,7 +12,7 @@ We also add a second service, that allows us to save images for our contacts. Th
 
 At the end of the day, this will be the architecture of our SCM Contacts Management application:
 
-![architecture_day2](../images/architecture_day2.png "architecture_day2")
+![architecture_day2](../images/architecture_day2.png 'architecture_day2')
 
 ## Table Of Contents
 
@@ -59,37 +59,37 @@ Go to your resource group (`scm-breakout-rg`) and add an Azure Function. To do s
 Follow the wizard and when asked, enter the following information (only important information will be mentioned):
 
 - Basic Tab
-  | Parameter           | Value                         |
+  | Parameter | Value |
   | ------------------- | ----------------------------- |
   | _Function App name_ | choose a globally unique name |
-  | _Publish_           | Code                          |
-  | _Runtime Stack_     | .NET Core                     |
-  | _Version_           | 3.1                           |
-  | _Region:_           | West Europe                   |
+  | _Publish_ | Code |
+  | _Runtime Stack_ | .NET Core |
+  | _Version_ | 6 |
+  | _Region:_ | West Europe |
 - Hosting Tab
-  | Parameter          | Value                                               |
+  | Parameter | Value |
   | ------------------ | --------------------------------------------------- |
-  | _Storage Account_  | choose the one you created before in this challenge |
-  | _Operating System_ | Windows                                             |
-  | _Plan Type_        | Consumption (Serverless)                            |
+  | _Storage Account_ | choose the one you created before in this challenge |
+  | _Operating System_ | Windows |
+  | _Plan Type_ | Consumption (Serverless) |
 - Monitoring
-  | Parameter            | Value |
+  | Parameter | Value |
   | -------------------- | ----- |
-  | _Enable AppInsights_ | No    |
+  | _Enable AppInsights_ | No |
 
-![portal_bo2_func](./images/portal_bo2_func.png "portal_bo2_func")
+![portal_bo2_func](./images/portal_bo2_func.png 'portal_bo2_func')
 
 When the Function has been created, we need to add a few _Configuration settings_ that our image manipulation function needs to be working correctly:
 
 - Open the Azure Function and switch to the **Configuration** view.
 
 - Add the following Configuration settings
-  | Parameter                                                 | Value / Hints                                                                    |
+  | Parameter | Value / Hints |
   | --------------------------------------------------------- | -------------------------------------------------------------------------------- |
-  | _QueueName_                                               | thumbnails                                                                       |
-  | _StorageAccountConnectionString_                          | take the _Connection String_ from your Storage Account (under **_Access Keys_**) |
+  | _QueueName_ | thumbnails |
+  | _StorageAccountConnectionString_ | take the _Connection String_ from your Storage Account (under **_Access Keys_**) |
   | _ImageProcessorOptions\_\_StorageAccountConnectionString_ | take the _Connection String_ from your Storage Account (under **_Access Keys_**) |
-  | _ImageProcessorOptions\_\_ImageWidth_                     | 100                                                                              |
+  | _ImageProcessorOptions\_\_ImageWidth_ | 100 |
 
   :::tip
   📝 You should open the portal in a second tab in your browser, because you need to switch back and forth copying values from different locations.
@@ -103,7 +103,7 @@ Now it is time to deploy the Image Resizer Function App to Azure. Therefor, you 
 
 You will see the following folder structure:
 
-![Day2 Workspace Structure - Breakout 2](./images/bo2_code.png "bo2_code")
+![Day2 Workspace Structure - Breakout 2](./images/bo2_code.png 'bo2_code')
 
 You will see two more projects added to the workspace compared to `Breakout 1` (the remaining folders are the same as in the previous breakout):
 
@@ -122,20 +122,20 @@ The deployment of you function starts and after a few seconds, it is running in 
 We need to add another Azure Web App to host the "Resources API" of our SCM Contacts application:
 
 - Go to your resource group **scm-breakout-rg**
-- Create an Azure Web App (you can choose to use the Portal or the Azure CLI: OS - **Windows**, RuntimeStack - **.NET Core 3.1 (LTS)**, Size - **S1**, AppInsights is not needed at the moment). You can choose the same settings as for the Contacts API.
+- Create an Azure Web App (you can choose to use the Portal or the Azure CLI: OS - **Windows**, RuntimeStack - **.NET 6 (LTS)**, Size - **S1**, AppInsights is not needed at the moment). You can choose the same settings as for the Contacts API.
 
 When the deployment has finished, we also need to add a few settings. Open the Web App in the Portal and go to the "Configuration" view (under **Settings**):
 
 - add the following parameters:
-  | Parameter                                               | Value / Hints                                                                                                      |
+  | Parameter | Value / Hints |
   | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-  | _ImageStoreOptions\_\_StorageAccountConnectionString_   | take the _Connection String_ from your Storage Account created in this Break Out session (under **_Access Keys_**) |
+  | _ImageStoreOptions\_\_StorageAccountConnectionString_ | take the _Connection String_ from your Storage Account created in this Break Out session (under **_Access Keys_**) |
   | _StorageQueueOptions\_\_StorageAccountConnectionString_ | take the _Connection String_ from your Storage Account created in this Break Out session (under **_Access Keys_**) |
-  | _ImageStoreOptions\_\_ImageContainer_                   | rawimages                                                                                                          |
-  | _StorageQueueOptions\_\_ImageContainer_                 | rawimages                                                                                                          |
-  | _ImageStoreOptions\_\_ThumbnailContainer_               | thumbnails                                                                                                         |
-  | _StorageQueueOptions\_\_Queue_                          | thumbnails                                                                                                         |
-  | _StorageQueueOptions\_\_ThumbnailContainer_             | thumbnails                                                                                                         |
+  | _ImageStoreOptions\_\_ImageContainer_ | rawimages |
+  | _StorageQueueOptions\_\_ImageContainer_ | rawimages |
+  | _ImageStoreOptions\_\_ThumbnailContainer_ | thumbnails |
+  | _StorageQueueOptions\_\_Queue_ | thumbnails |
+  | _StorageQueueOptions\_\_ThumbnailContainer_ | thumbnails |
 
 :::tip
 Now, go back to Visual Studio Code and "right-click deploy" the API from the `Resources API` folder to the Azure Web App.
@@ -155,7 +155,7 @@ When everything has been deployed to Azure:
 
 To test everything we just set up, create a new _Contact_ and open the details of it afterwards. On the right side box, you should now see a button called "**CHANGE AVATAR**".
 
-![browser_avatar](./images/browser_avatar.png "browser_avatar")
+![browser_avatar](./images/browser_avatar.png 'browser_avatar')
 
 Upload a picture and **save the Contact**!.
 
@@ -169,7 +169,7 @@ It's very simple to use:
 - Go to **"Static website"** under **Settings** of your Azure Storage Account and enable it
 - Choose `index.html` as _Index document name_ and _Error document path_
 
-![portal_static_website](./images/portal_static_website.png "portal_static_website")
+![portal_static_website](./images/portal_static_website.png 'portal_static_website')
 
 :::tip
 📝 When you save the settings, Azure will create a new container called **\$web** where you can copy static (web) files to. Azure will serve the contents of this containers as "Static Website". See more on the [official documentation](https://docs.microsoft.com/azure/storage/blobs/storage-blob-static-website-how-to?tabs=azure-portal).
@@ -177,7 +177,7 @@ It's very simple to use:
 
 Now open a command-line for the folder `Frontend`. Right-click on it and choose "Open in Integrated Terminal":
 
-![vscode_integrated_terminal](./images/vscode_integrated_terminal.png "vscode_integrated_terminal")
+![vscode_integrated_terminal](./images/vscode_integrated_terminal.png 'vscode_integrated_terminal')
 
 In the shell, run the following command:
 
@@ -198,7 +198,7 @@ $ npm run build
 
 This starts a local build of the Vue.JS application, which puts all results/artifacts (the static website itself) into a `dist` folder under `Frontend`. When the build has finished, right-click on that `dist` folder and choose "Deploy to Static Website via Azure Storage" and select the correct storage account.
 
-![vscode_deploy_staticwebsite](./images/vscode_deploy_staticwebsite.png "vscode_deploy_staticwebsite")
+![vscode_deploy_staticwebsite](./images/vscode_deploy_staticwebsite.png 'vscode_deploy_staticwebsite')
 
 When the deployment to Azure has finished, VS Code will show a popup where you can click on "Browse to website" to open your Vue.JS app running in Azure. You can also find the URL in the settings of the static website under **"Primary Endpoint"**).
 

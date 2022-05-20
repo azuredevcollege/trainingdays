@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.Azure.Search;
-using Microsoft.Azure.Search.Models;
+using Azure;
+using Azure.Search.Documents;
+using Azure.Search.Documents.Indexes;
+using Azure.Search.Documents.Indexes.Models;
+using Azure.Search.Documents.Models;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Adc.Scm.Search.Indexer
@@ -24,7 +24,10 @@ namespace Adc.Scm.Search.Indexer
 
         public async Task Process(ContactMessage msg)
         {
-            var client = new SearchServiceClient(_options.ServiceName, new SearchCredentials(_options.AdminApiKey));
+            AzureKeyCredential credential = new AzureKeyCredential(_options.AdminApiKey);
+            SearchClient client = new SearchClient(new Uri($"https://{_options.ServiceName}.search.windows.net"), _options.IndexName, credential);
+            SearchIndexClient indexClient = new SearchIndexClient(new Uri($"https://{_options.ServiceName}.search.windows.net"), credential);
+
 
             // try to create index once
             if (!_indexExists)
@@ -33,48 +36,53 @@ namespace Adc.Scm.Search.Indexer
                 {
                     if (!_indexExists)
                     {
-                        if (!client.Indexes.ExistsAsync(_options.IndexName).Result)
+                        try
                         {
-                            var definition = new Microsoft.Azure.Search.Models.Index()
+                            var index = indexClient.GetIndex(_options.IndexName).Value;
+                        }
+                        catch (RequestFailedException)
+                        {
+                            var definition = new SearchIndex(_options.IndexName)
                             {
-                                Name = _options.IndexName,
-                                Fields = FieldBuilder.BuildForType<Contact>(new DefaultContractResolver() { NamingStrategy = new JsonLowercaseNamingStrategy() })
+
+                                Fields = new FieldBuilder().Build(typeof(Contact)),//, new DefaultContractResolver() { NamingStrategy = new JsonLowercaseNamingStrategy() })
                             };
 
-                            client.Indexes.CreateAsync(definition).Wait();
+                            indexClient.CreateIndex(definition);
                         }
-
+                        
                         _indexExists = true;
                     }
                 }
             }
 
-            var action = default(IndexAction<Contact>);
+            var action = default(IndexDocumentsAction<Contact>);
 
             if (msg.IsAddedMessage())
             {
-                action = IndexAction.Upload(_mapper.Value.Map<Contact>(msg));
+                action = IndexDocumentsAction.Upload(_mapper.Value.Map<Contact>(msg));
             }
             else if (msg.IsChangedMessage())
             {
-                action = IndexAction.MergeOrUpload(_mapper.Value.Map<Contact>(msg));
+                action = IndexDocumentsAction.MergeOrUpload(_mapper.Value.Map<Contact>(msg));
             }
             else if (msg.IsDeletedMessage())
             {
-                action = IndexAction.Delete(_mapper.Value.Map<Contact>(msg));
+                action = IndexDocumentsAction.Delete(_mapper.Value.Map<Contact>(msg));
             }
             else
-            {                
+            {
                 throw new InvalidOperationException($"Meesage type {msg.EventType} not supported.");
             }
-            
+
             try
             {
-                var indexClient = client.Indexes.GetClient(_options.IndexName);
-                indexClient.DeserializationSettings.ContractResolver = new DefaultContractResolver() { NamingStrategy = new JsonLowercaseNamingStrategy() };
-                await indexClient.Documents.IndexAsync(IndexBatch.New(new[] { action }));
+                IndexDocumentsBatch<Contact> batch = IndexDocumentsBatch.Create(action);
+                IndexDocumentsOptions options = new IndexDocumentsOptions { ThrowOnAnyError = true };
+                //client.DeserializationSettings.ContractResolver = new DefaultContractResolver() { NamingStrategy = new JsonLowercaseNamingStrategy() };
+                await client.IndexDocumentsAsync(batch,options);
             }
-            catch (IndexBatchException)
+            catch (RequestFailedException)
             {
 
             }
@@ -84,7 +92,7 @@ namespace Adc.Scm.Search.Indexer
 
         private static IMapper CreateMapper()
         {
-            var cfg = new MapperConfiguration(c => 
+            var cfg = new MapperConfiguration(c =>
             {
                 c.CreateMap<ContactMessage, Contact>()
                     .ForMember(s => s.Id, m => m.MapFrom(s => s.Id.ToString()))

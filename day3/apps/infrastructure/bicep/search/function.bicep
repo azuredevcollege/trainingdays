@@ -8,6 +8,7 @@ param resourceTag object
 
 param searchServiceName string
 param searchServiceAdminKey string
+param location string = resourceGroup().location
 
 var functionName = 'func-searchindexer-${env}-${uniqueString(resourceGroup().id)}'
 var planDynamicWindowsName = 'plan-scm-win-dyn-${env}-${uniqueString(resourceGroup().id)}'
@@ -15,7 +16,6 @@ var appiName = 'appi-scm-${env}-${uniqueString(resourceGroup().id)}'
 var stForFunctiontName = 'stfn${env}${take(uniqueString(resourceGroup().id), 11)}'
 var sbName = 'sb-scm-${env}-${uniqueString(resourceGroup().id)}'
 var sbtContactsName = 'sbt-contacts'
-var location = resourceGroup().location
 var indexerName = 'scmcontacts'
 
 var stgForFunctionConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${stgForFunction.name};AccountKey=${listKeys(stgForFunction.id, stgForFunction.apiVersion).keys[0].value}'
@@ -54,6 +54,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
     httpsOnly: true
     clientAffinityEnabled: false
     siteConfig: {
+      netFrameworkVersion: 'v6.0'
       appSettings:[
         {
           name: 'AzureWebJobsStorage'
@@ -77,7 +78,7 @@ resource funcapp 'Microsoft.Web/sites@2020-12-01' = {
         }
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
-          value: '~3'
+          value: '~4'
         }
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'

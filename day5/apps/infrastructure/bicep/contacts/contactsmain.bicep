@@ -18,6 +18,8 @@ param aadDomain string = ''
 @description('Azure AD App URI')
 param aadClientIdUri string = ''
 
+param location string = resourceGroup().location
+
 var sqlUserName = uniqueString(resourceGroup().id, env, sqlUserPwd)
 
 var resourceTag = {
@@ -33,6 +35,7 @@ module database 'databases.bicep' = {
     resourceTag: resourceTag
     sqlUserName: sqlUserName
     sqlUserPwd: sqlUserPwd
+    location: location
   }
 }
 
@@ -47,6 +50,7 @@ module webapp 'webapp.bicep' = {
     aadTenantId: aadTenantId
     aadClientId: aadClientId
     aadClientIdUri: aadClientIdUri
+    location: location
   }
 }
 

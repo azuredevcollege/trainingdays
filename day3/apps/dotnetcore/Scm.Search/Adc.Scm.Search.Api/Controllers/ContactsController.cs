@@ -29,12 +29,12 @@ namespace Adc.Scm.Search.Api.Controllers
         public async Task<object> Search([FromQuery]string phrase)
         {
             var userId = _claimsProvider.GetUserId(Request.HttpContext);
-            return Ok(await _service.Search(userId, phrase));           
+            return Ok(await _service.Search(userId, phrase));
         }
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<object> Search([FromBody]ContactSearch search)
+        public async Task<object> Search([FromBody] ContactSearch search)
         {
             var userId = _claimsProvider.GetUserId(Request.HttpContext);
             return Ok(await _service.Search(userId, search));
