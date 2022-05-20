@@ -112,6 +112,7 @@ In the Portal create a new _Azure Logic App_:
 
 - Press **"Create a resource"**
 - Give it a unique name
+- Select consumption plan
 - Use the same resource group as for the Service Bus (_messaging-rg_)
 - Put it in "West Europe".
 
