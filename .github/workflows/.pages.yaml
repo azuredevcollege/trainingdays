@@ -41,7 +41,7 @@ jobs:
 
     steps:
       - name: Download build of static website
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: static-website
           path: .vuepress/dist
