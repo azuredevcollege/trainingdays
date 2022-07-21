@@ -4,7 +4,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Storage.Blobs" Version="12.11.0" />
-		<PackageReference Include="Azure.Storage.Queues" Version="12.9.0" />
+		<PackageReference Include="Azure.Storage.Queues" Version="12.11.0" />
 		<PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.20.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
