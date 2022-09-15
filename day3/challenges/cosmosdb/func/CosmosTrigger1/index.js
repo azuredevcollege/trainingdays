@@ -30,6 +30,5 @@ module.exports = async function (context, documents) {
     if (out.length > 0) {
       context.bindings.custDocs = JSON.stringify(out)
     }
-    context.done()
   }
 }
