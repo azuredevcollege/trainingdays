@@ -14,7 +14,7 @@ In this challenge you will:
 - add additional application services
 
 :::tip
-📝 If you could not finish the breakout challenges of "Day 2", there is a [baseline deployment script](challenge-0.md) that will automatically deploy all necessary Azure services for you and put you in the position to start right away with this challenge.
+📝 If you could not finish the breakout challenges of "Day 2", there is a [baseline deployment script](00-challenge-baseline.md) that will automatically deploy all necessary Azure services for you and put you in the position to start right away with this challenge.
 :::
 
 ## Table Of Contents
