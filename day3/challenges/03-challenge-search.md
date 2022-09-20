@@ -141,6 +141,12 @@ Select the fields as shown above and click **Next: Create an indexer**
 
 Open the Search Explorer in the Azure Portal, copy the queries (see below) and get familiar with the results of the queries.
 
+When using the index in the portal for the first time (by pushing the search button), a warning with the following message will appear: `
+To search in the portal, please allow the portal origin in your index CORS settings.`
+
+In order to use the index in the portal, hit the `Allow portal` button. Now let's start exploring our data.
+
+![Create Azure Search  CORS](./images/day3_search_cors.png)
 ### Simple query with top N results
 
 #### String Query: `search=blue`
