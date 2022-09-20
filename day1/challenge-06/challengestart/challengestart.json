@@ -4,7 +4,7 @@
     "parameters": {
         "adminUser": {
             "type": "string",
-            "defaultValue": "demoadmin",
+            "defaultValue": "demouser",
             "metadata": {
                 "description": "Admin user name of vm"
             }
@@ -35,13 +35,17 @@
     },
     "variables": {
         "vmNames": [
-            "vmch-06"
+            "vmblue",
+            "vmred"
         ],
         "virtualNetworks_azurevnet_name": "[concat('vnet-',variables('vmNamePrefix'))]",
-        "VMSubnet": "snet-vmch-06",
-        "vmNamePrefix": "chall06",
+        "VMSubnet": "snet-frontend",
+        "vmNamePrefix": "wwwfarm",
         "storageAccountName": "[toLower(concat('sa',variables('vmNamePrefix'),substring(uniqueString(resourceGroup().id),0,4)))]",
-        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]"
+        "nsgName": "[concat('nsg-',variables('vmNamePrefix'))]",
+        "PIPName": "[concat('pip-',variables('vmNamePrefix'))]",
+        "pipFQDN": "[concat('mylb',substring(uniqueString(resourceGroup().id),0,4))]",
+        "availabilitySetName": "[concat('av-',variables('vmNamePrefix'))]"
     },
     "resources": [
         {
@@ -52,14 +56,14 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "10.1.0.0/16"
+                        "192.168.200.0/24"
                     ]
                 },
                 "subnets": [
                     {
                         "name": "[variables('VMSubnet')]",
                         "properties": {
-                            "addressPrefix": "10.1.0.0/24",
+                            "addressPrefix": "192.168.200.0/26",
                             "serviceEndpoints": [
                             ],
                             "delegations": [
@@ -84,7 +88,7 @@
                 "name": "Standard_LRS",
                 "tier": "Standard"
             },
-            "kind": "Storagev2",
+            "kind": "Storage",
             "properties": {
                 "networkAcls": {
                     "bypass": "AzureServices",
@@ -135,13 +139,53 @@
                             "destinationAddressPrefixes": [
                             ]
                         }
+                    },
+                    {
+                        "name": "default-allow-http",
+                        "properties": {
+                            "protocol": "Tcp",
+                            "sourcePortRange": "*",
+                            "destinationPortRange": "80",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "priority": 1001,
+                            "direction": "Inbound",
+                            "sourcePortRanges": [
+                            ],
+                            "destinationPortRanges": [
+                            ],
+                            "sourceAddressPrefixes": [
+                            ],
+                            "destinationAddressPrefixes": [
+                            ]
+                        }
                     }
                 ]
             }
         },
         {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2019-09-01",
+            "name": "[variables('PIPName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIPAddressVersion": "IPv4",
+                "publicIPAllocationMethod": "Dynamic",
+                "idleTimeoutInMinutes": 4,
+                "dnsSettings": {
+                    "domainNameLabel": "[variables('pipFQDN')]"
+                },
+                "ipTags": [
+                ]
+            }
+        },
+        {
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNames')[copyIndex()],'-nic')]",
+            "name": "[concat(variables('vmNames')[copyIndex()],'-nic1')]",
             "copy": {
                 "name": "niccopy",
                 "count": "[length(variables('vmNames'))]"
@@ -149,8 +193,7 @@
             "location": "[resourceGroup().location]",
             "apiVersion": "2018-10-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]",
-                "[concat(variables('vmNames')[copyIndex()],'-pip')]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -162,10 +205,7 @@
                                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworks_azurevnet_name'), variables('VMSubnet'))]"
                             },
                             "primary": true,
-                            "privateIPAddressVersion": "IPv4",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(variables('vmNames')[copyIndex()],'-pip'))]"
-                            }
+                            "privateIPAddressVersion": "IPv4"
                         }
                     }
                 ],
@@ -175,23 +215,17 @@
             }
         },
         {
-            "type": "Microsoft.Network/publicIPAddresses",
-            "apiVersion": "2019-09-01",
-            "name": "[concat(variables('vmNames')[copyIndex()],'-pip')]",
-            "copy": {
-                "name": "pipcopy",
-                "count": "[length(variables('vmNames'))]"
-            },
+            "type": "Microsoft.Compute/availabilitySets",
+            "name": "[variables('availabilitySetName')]",
+            "apiVersion": "2019-07-01",
             "location": "[resourceGroup().location]",
-            "sku": {
-                "name": "Basic"
-            },
             "properties": {
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "Dynamic",
-                "idleTimeoutInMinutes": 4,
-                "ipTags": [
-                ]
+
+                "platformFaultDomainCount": 2,
+                "platformUpdateDomainCount": 2
+            },
+            "sku": {
+                "name": "Aligned"
             }
         },
         {
@@ -205,9 +239,12 @@
             "apiVersion": "2019-07-01",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic')  )]"
+                "[resourceId('Microsoft.Network/networkInterfaces/', concat(variables('vmNames')[copyIndex()],'-nic1')  )]"
             ],
             "properties": {
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets',variables('availabilitySetName'))]"
+                },
                 "hardwareProfile": {
                     "vmSize": "[parameters('vmSize')]"
                 },
@@ -236,7 +273,7 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic'))]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNames')[copyIndex()],'-nic1'))]"
                         }
                     ]
                 },
@@ -245,6 +282,34 @@
                         "enabled": true,
                         "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))).primaryEndpoints.blob]"
                     }
+                }
+            }
+        },
+        {
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(variables('vmNames')[copyIndex()],'/','dscextension')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',variables('vmNames')[copyIndex()])]"
+            ],
+            "location": "[resourceGroup().location]",
+            "copy": {
+                "name": "dsccopy",
+                "count": "[length(variables('vmNames'))]"
+            },
+            "properties": {
+                "publisher": "Microsoft.Powershell",
+                "type": "DSC",
+                "typeHandlerVersion": "2.73",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "modulesUrl": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-10/scripts/wwwFarmConfig.zip",
+                    "configurationFunction": "wwwFarmConfig.ps1\\wwwFarmConfig",
+                    "properties": {
+                        "webZipURI": "https://github.com/azuredevcollege/trainingdays/raw/master/day1/challenge-10/scripts/web.zip"
+                    }
+                },
+                "protectedSettings": {
                 }
             }
         }
