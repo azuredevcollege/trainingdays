@@ -17,7 +17,7 @@
     "vue-cropperjs": "^3.0.0",
     "vue-router": "^3.5.3",
     "vue-wait": "^1.5.3",
-    "vuetify": "^2.6.4",
+    "vuetify": "^2.6.10",
     "vuex": "^3.5.1",
     "vuex-persistedstate": "^2.7.1"
   },
