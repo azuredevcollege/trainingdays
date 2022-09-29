@@ -7,7 +7,7 @@
 
 ## Table Of Contents
 
-- [Challenge 5: Cloud Shell - Coding Your Azure Resources](#challenge-5-cloud-shell---coding-your-azure-resources)
+- [Challenge 2: Cloud Shell - Coding Your Azure Resources](#challenge-2-cloud-shell---coding-your-azure-resources)
   - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
   - [Table Of Contents](#table-of-contents)
   - [Benefits of the Azure Cloud Shell](#benefits-of-the-azure-cloud-shell)

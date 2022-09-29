@@ -24,7 +24,7 @@ In this directory there is an ARM-template which includes 2 web server VMs and i
 
 !['Starting Point' Architecture](./images/startingpoint01.png)  
 
-Deploy this scenario into your subscription by **clicking** on the <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-10%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
+Deploy this scenario into your subscription by **clicking** on the <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-06%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
 button.  
 
 | Name | Value |

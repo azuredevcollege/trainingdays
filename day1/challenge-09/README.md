@@ -49,7 +49,7 @@ It comprises:
 
 ## Deploy the ARM Template
 
-**Click** on the <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-12%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a> button.  
+**Click** on the <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-09%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a> button.  
 
 | Name | Values  |
 |---|---|
@@ -193,7 +193,7 @@ To do this you need to upload a price sheet with your specific Azure rates. The 
 :::
 
 1. You find a sample price list in this directory:
-  [day1\challenge-12\challengestart\Sample_PriceSheet_EN.csv](./challengestart/Sample_PriceSheet_EN.csv)
+  [day1\challenge-09\challengestart\Sample_PriceSheet_EN.csv](./challengestart/Sample_PriceSheet_EN.csv)
 
 2. Upload this to your storage account:
 
@@ -208,7 +208,7 @@ To do this you need to upload a price sheet with your specific Azure rates. The 
 
   ![Pricelist on storage account](./images/RateCardCSV.png)  
 
-3. Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this fil. If you have done [challenge 6](../challenge-06/README.md) you know how to do this ;-)
+3. Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this fil. If you have done [challenge 3](../challenge-03/README.md) you know how to do this ;-)
 
 4. Copy & paste the URI (with the SAS token) into the AA variable `myAzureCostPriceSheetURI` so that runbooks can download the pricesheet:
 

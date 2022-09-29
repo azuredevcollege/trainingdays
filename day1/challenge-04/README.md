@@ -22,7 +22,7 @@ If you have established Continuous Integration / Deployment in your development 
 
 ## Table of Contents
 
-- [Challenge 7: ARM - Azure Resource Manager (ARM) Templates](#challenge-7-arm---azure-resource-manager-arm-templates)
+- [Challenge 4: ARM - Azure Resource Manager (ARM) Templates](#challenge-4-arm---azure-resource-manager-arm-templates)
   - [Here is what you will learn 🎯](#here-is-what-you-will-learn-)
   - [Just to be on the same page](#just-to-be-on-the-same-page)
   - [Table of Contents](#table-of-contents)
