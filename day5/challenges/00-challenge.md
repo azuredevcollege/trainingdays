@@ -97,7 +97,7 @@ This challenge showed how to create a new application in AAD and how user can be
 Remove the created resources via the Azure CLI:
 
 ```shell
-az ad app delete --id <applicationid>
+az ad app delete --id <APPLICATION_ID>
 ```
 
 | [🔼 Day 5](../README.md) | [Next challenge ▶](./01-challenge.md)

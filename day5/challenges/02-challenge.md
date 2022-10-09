@@ -31,9 +31,9 @@ First, create a new Azure AD Application, this time with
 `oauth2-allow-implicit-flow` enabled:
 
 ```shell
-az ad app create --display-name challengeimplicitgrant --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeimplicitgrantflow --oauth2-allow-implicit-flow true
+az ad app create --display-name challengeimplicitgrant --web-redirect-uris http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN_NAME.com/challengeimplicitgrantflow --enable-id-token-issuance true --enable-access-token-issuance true
 ```
-Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
+Replace `TENANT_DOMAIN_NAME` with the domain name of your Azure AD instance again.
 As before, note down the `appId`. Next, retrieve and note the ID of your current
 Azure AD tenant via:
 
@@ -55,38 +55,68 @@ In this sample we create an API that exposes four OAuth2 permissions:
 First, create a new Azure AD application and write the output to a variable:
 
 ```shell
-API_APP=$(az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeimplicitgrantapi)
+az ad app create --display-name challengeimplicitgrantapi --identifier-uris https://TENANT_DOMAIN_NAME/challengeimplicitgrantapi
 ```
-Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
+Replace `TENANT_DOMAIN_NAME` with the domain name of your Azure AD instance again.
 
-:::tip
+Now you need to add your own OAuth2 permissions. This we will do manually in the Azure portal. Navigate there. Under `Azure Active Directory --> App registrations` find the **challengeimplicitgrantapi**.
 
-📝 The example here describes how to execute the commands in a bash. If
-you don't have a bash on your system, you can use the Azure Cloud Shell
+There navigate to `Expose an API` and add four scopes.
 
-:::
+Select `+ Add a Scope`.
 
-After that we have created an Azure AD application that contains one default
-OAuth2 permission which was created by Azure AD. To make your own OAuth2
-permission, the default permission must be disabled first:
+![API Permissions](./images/addscope1.png)
 
-```shell
-# get the app id
-API_APP_ID=$(echo $API_APP | jq -r '.appId')
-# disable default exposed scope
-DEFAULT_SCOPE=$(az ad app show --id $API_APP_ID | jq '.oauth2Permissions[0].isEnabled = false' | jq -r '.oauth2Permissions')
-az ad app update --id $API_APP_ID --set oauth2Permissions="$DEFAULT_SCOPE"
-```
+Enter the following information for the new Scope:
 
-Now your own OAuth2 permissions can be added:
+| Name               | Value                                                                  |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Update |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Update contacts |
+| _Admin consent description_ | Allows the app to update contacts for the signed-in user |
+| _User consent display name_ | Update contacts |
+| _User consent description_ | Allows the app to update your contacts |
+| _State_ | Enabled |
 
-```shell
-# set needed scopes from file 'ouath2-permissions (day5/challenges/oauth2-permissions)'
-az ad app update --id $API_APP_ID --set oauth2Permissions=@oauth2-permissions.json
-```
+Select `Add scope`.
 
-To keep it simple, the needed OAuth2 permissions are defined in a
-[.json](oauth2-permissions.json) file.
+![API Permissions](./images/addscope2.png)
+
+Do the same for 3 more scopes.
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Delete |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Delete contacts |
+| _Admin consent description_ | Allows the app to delete contacts for the signed-in user |
+| _User consent display name_ | Delete contacts |
+| _User consent description_ | Allows the app to delete your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Create |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Create contacts |
+| _Admin consent description_ | Allows the app to create contacts for the signed-in user |
+| _User consent display name_ | Create contacts |
+| _User consent description_ | Allows the app to create your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Read |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Read contacts |
+| _Admin consent description_ | Allows the app to read contacts for the signed-in user |
+| _User consent display name_ | Read contacts |
+| _User consent description_ | Allows the app to read your contacts |
+| _State_ | Enabled |
+
+The permissions
+should look like this: ![API Permissions](./images/api-premissions.png)
 
 In Azure AD an _Application_ is something like a template with all necessary
 settings like ReplyUrl, required permissions, OAuth2 Permissions etc. When a
@@ -97,11 +127,9 @@ Applications**. As no user ever logs on to an API we must create the **Service
 Principal** for the API.
 
 ```shell
-az ad sp create --id $API_APP_ID
+az ad sp create --id <API_APP_ID>
 ```
 
-Go to your Azure AD and inspect at the registered application. The permissions
-should look like this: ![API Permissions](./images/api-premissions.png)
 
 ## Run the Token Echo Server
 
@@ -172,8 +200,8 @@ The full process is described
 Remove the created resources via the Azure CLI:
 
 ```shell
-az ad app delete --id <applicationid>
-az ad app delete --id $API_APP_ID
+az ad app delete --id <APP_ID>
+az ad app delete --id <API_APP_ID>
 ```
 
 [◀ Previous challenge](./01-challenge.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./03-challenge.md)

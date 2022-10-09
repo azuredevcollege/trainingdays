@@ -23,14 +23,9 @@ Before you can authenticate an user you have to register an application in your 
 ### Azure CLI
 
 ```shell
-az ad app create --display-name challengeidtokenfragment --reply-urls http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN.onmicrosoft.com/challengeidtokenfragment
+az ad app create --display-name challengeidtokenfragment --web-redirect-uris http://localhost:5001/api/tokenechofragment --identifier-uris https://TENANT_DOMAIN_NAME/challengeidtokenfragment --enable-id-token-issuance true
 ```
-Replace `TENANT_DOMAIN` with the name of your Azure AD instance again.
-Retrieve and note the ID of your current AAD tenant via:
-
-```shell
-az account show 
-```
+Replace `TENANT_DOMAIN_NAME` with the domain name of your Azure AD instance again.
 
 ## Run the Token Echo Server
 
@@ -69,7 +64,7 @@ This challenge showed how to create a new application in Azure AD and how an use
 Remove the created resources via the Azure CLI:
 
 ```shell
-az ad app delete --id <applicationid>
+az ad app delete --id <APPLICATION_ID>
 ```
 
 [◀ Previous challenge](./00-challenge.md) | [🔼 Day 5](../README.md) | [Next challenge ▶](./02-challenge.md)
