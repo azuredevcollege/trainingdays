@@ -97,7 +97,7 @@ cd publishFunc && zip -r package.zip . && az webapp deployment source config-zip
 cd ${EXECUTIONDIR}
 echo "Deploying SCM Frontend Resources."
 
-az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-fe.json --parameters storageAccountName=$BASE_STORAGEACCOUNT_FE_NAME
+cd ../../../day2/apps/frontend/scmfe && npm install && npm install --production=false && npm install @vue/cli@4.5.15 -g --prefix ./cli-bin && npm install @vue/cli-service@4.5.15 -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
 cd ${EXECUTIONDIR}
 echo "Activating Static Web site option in storage account."
 
