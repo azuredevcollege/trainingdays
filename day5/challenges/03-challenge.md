@@ -39,9 +39,7 @@ applications for you. It is located here:
 You need to run it in a bash/Shell environment.
 
 The script creates the server application first and then the client application
-for the sample application. It also uses a
-[oauth2-permissions.json](https://github.com/azuredevcollege/trainingdays/tree/master/day5/apps/infrastructure/scripts/oauth2-permissions.json)
-file where all needed OAuth2 permission are defined.
+for the sample application. After that we create the scopes manually in the Azure portal.
 
 After running the script twice, we registered the following applications in
 Azure AD:
@@ -120,6 +118,92 @@ API AppId for app <API_APP_NAME>: <please note down>
 
 After the script has been executed twice, navigate to your Azure AD and inspect
 the previously created applications. You should see four new applications.
+
+### Add the necessary scopes
+
+Now you need to add your own OAuth2 permissions. This we will do manually in the Azure portal. Start off with the dev API application **scmapi-dev**.
+
+There navigate to `Expose an API` and add eight scopes.
+
+Select `+ Add a Scope`.
+
+Enter the following information for the new Scope:
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Update |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Update contacts |
+| _Admin consent description_ | Allows the app to update contacts for the signed-in user |
+| _User consent display name_ | Update contacts |
+| _User consent description_ | Allows the app to update your contacts |
+| _State_ | Enabled |
+
+Select `Add scope`.
+
+Do the same for 7 more scopes.
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Delete |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Delete contacts |
+| _Admin consent description_ | Allows the app to delete contacts for the signed-in user |
+| _User consent display name_ | Delete contacts |
+| _User consent description_ | Allows the app to delete your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Create |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Create contacts |
+| _Admin consent description_ | Allows the app to create contacts for the signed-in user |
+| _User consent display name_ | Create contacts |
+| _User consent description_ | Allows the app to create your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Read |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Read contacts |
+| _Admin consent description_ | Allows the app to read contacts for the signed-in user |
+| _User consent display name_ | Read contacts |
+| _User consent description_ | Allows the app to read your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Delete |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Delete contacts |
+| _Admin consent description_ | Allows the app to delete contacts for the signed-in user |
+| _User consent display name_ | Delete contacts |
+| _User consent description_ | Allows the app to delete your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Create |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Create contacts |
+| _Admin consent description_ | Allows the app to create contacts for the signed-in user |
+| _User consent display name_ | Create contacts |
+| _User consent description_ | Allows the app to create your contacts |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | Contacts.Read |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | Read contacts |
+| _Admin consent description_ | Allows the app to read contacts for the signed-in user |
+| _User consent display name_ | Read contacts |
+| _User consent description_ | Allows the app to read your contacts |
+| _State_ | Enabled |
+
+Now do the same for the **scmapi-test** app registration.
 
 ## Create development and test environments
 
