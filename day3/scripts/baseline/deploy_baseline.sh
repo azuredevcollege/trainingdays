@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 
 # Deploy common stuff...
 
@@ -97,7 +97,7 @@ cd publishFunc && zip -r package.zip . && az webapp deployment source config-zip
 cd ${EXECUTIONDIR}
 echo "Deploying SCM Frontend Resources."
 
-cd ../../../day2/apps/frontend/scmfe && npm install && npm install --production=false && npm install @vue/cli@4.5.15 -g --prefix ./cli-bin && npm install @vue/cli-service@4.5.15 -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
+az deployment group create -g $BASE_RG_COMMON_NAME --template-file ../../../day2/apps/infrastructure/templates/scm-fe.json --parameters storageAccountName=$BASE_STORAGEACCOUNT_FE_NAME
 cd ${EXECUTIONDIR}
 echo "Activating Static Web site option in storage account."
 
@@ -106,7 +106,7 @@ az storage blob service-properties update --account-name $BASE_STORAGEACCOUNT_FE
 aiKey=( `az resource show -g $BASE_RG_COMMON_NAME -n $BASE_AI_NAME --resource-type "microsoft.insights/components" --query "properties.InstrumentationKey" -o tsv` )
 cd ${EXECUTIONDIR}
 echo "Building frontend..."
-cd ../../../day2/apps/frontend/scmfe && npm install && npm install --only=dev && npm install @vue/cli@4.5.15 -g --prefix ./cli-bin && npm install @vue/cli-service@4.5.15 -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
+cd ../../../day2/apps/frontend/scmfe && npm install && npm install --production=false && npm install @vue/cli@4.5.15 -g --prefix ./cli-bin && npm install @vue/cli-service@4.5.15 -g --prefix ./cli-bin && ./cli-bin/bin/vue-cli-service build && cd ../../../../day3/scripts/baseline
 cd ${EXECUTIONDIR}
 echo "var uisettings = { \"endpoint\": \"https://$BASE_API_WEBAPP_NAME.azurewebsites.net\", \"resourcesEndpoint\": \"https://$BASE_RES_WEBAPP_NAME.azurewebsites.net\", \"aiKey\": \"$aiKey\" };" > ../../../day2/apps/frontend/scmfe/dist/settings/settings.js
 az storage blob upload-batch -d '$web' --account-name $BASE_STORAGEACCOUNT_FE_NAME -s ../../../day2/apps/frontend/scmfe/dist
