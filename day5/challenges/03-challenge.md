@@ -250,7 +250,7 @@ Now, add the following secrets for the Azure AD integration:
 | Secret name           | Value                                                                    |
 | --------------------- | ------------------------------------------------------------------------ |
 | AAD_API_CLIENT_ID     | _the AppId of the Azure AD's application registration for the APIs_      |
-| AAD_API_CLIENT_ID_URI | <http://scmapi-dev>                                                      |
+| AAD_API_CLIENT_ID_URI | <http://<AZURE_AD_DOMAIN_NAME>/scmapi-dev> _e.g. azuredevcollege.onmicrosoftonline.com/scmapi-dev |
 | AAD_FE_CLIENT_ID      | _the AppId of the Azure AD's application registration for the UI client_ |
 | AAD_DOMAIN            | _your Azure AD's domain name e.g. azuredevcollege.onmicrosoftonline.com_ |
 | AAD_INSTANCE          | <https://login.microsoftonline.com>                                      |
@@ -286,7 +286,7 @@ Make sure to again configure the selected branches and the `secrets` as followin
 | Secret name           | Value                                                                    |
 | --------------------- | ------------------------------------------------------------------------ |
 | AAD_API_CLIENT_ID     | _the AppId of the Azure AD's application registration for the APIs_      |
-| AAD_API_CLIENT_ID_URI | <http://<AZURE_AD_DOMAIN_NAME>/scmapi-dev> _e.g. azuredevcollege.onmicrosoftonline.com/scmapi-dev_ |
+| AAD_API_CLIENT_ID_URI | <http://<AZURE_AD_DOMAIN_NAME>/scmapi-test> _e.g. azuredevcollege.onmicrosoftonline.com/scmapi-test_ |
 | AAD_FE_CLIENT_ID      | _the AppId of the Azure AD's application registration for the UI client_ |
 | AAD_DOMAIN            | _your Azure AD's domain name e.g. azuredevcollege.onmicrosoftonline.com_ |
 | AAD_INSTANCE          | <https://login.microsoftonline.com>                                      |
