@@ -175,32 +175,42 @@ Do the same for 7 more scopes.
 
 | Name | Value |
 | ------------------ | ---------------------------------------------------------------------- |
-| _Scope name_ | Contacts.Delete |
+| _Scope name_ | VisitReports.Delete |
 | _Who can consent?_ | Admins and users |
-| _Admin consent display name_ | Delete contacts |
-| _Admin consent description_ | Allows the app to delete contacts for the signed-in user |
-| _User consent display name_ | Delete contacts |
-| _User consent description_ | Allows the app to delete your contacts |
+| _Admin consent display name_ | Delete VisitReports |
+| _Admin consent description_ | Allows the app to delete VisitReports for the signed-in user |
+| _User consent display name_ | Delete VisitReports |
+| _User consent description_ | Allows the app to delete your VisitReports |
 | _State_ | Enabled |
 
 | Name | Value |
 | ------------------ | ---------------------------------------------------------------------- |
-| _Scope name_ | Contacts.Create |
+| _Scope name_ | VisitReports.Create |
 | _Who can consent?_ | Admins and users |
-| _Admin consent display name_ | Create contacts |
-| _Admin consent description_ | Allows the app to create contacts for the signed-in user |
-| _User consent display name_ | Create contacts |
-| _User consent description_ | Allows the app to create your contacts |
+| _Admin consent display name_ | Create VisitReports |
+| _Admin consent description_ | Allows the app to create VisitReports for the signed-in user |
+| _User consent display name_ | Create VisitReports |
+| _User consent description_ | Allows the app to create your VisitReports |
 | _State_ | Enabled |
 
 | Name | Value |
 | ------------------ | ---------------------------------------------------------------------- |
-| _Scope name_ | Contacts.Read |
+| _Scope name_ | VisitReports.Read |
 | _Who can consent?_ | Admins and users |
-| _Admin consent display name_ | Read contacts |
-| _Admin consent description_ | Allows the app to read contacts for the signed-in user |
-| _User consent display name_ | Read contacts |
-| _User consent description_ | Allows the app to read your contacts |
+| _Admin consent display name_ | Read VisitReports |
+| _Admin consent description_ | Allows the app to read VisitReports for the signed-in user |
+| _User consent display name_ | Read VisitReports |
+| _User consent description_ | Allows the app to read your VisitReports |
+| _State_ | Enabled |
+
+| Name | Value |
+| ------------------ | ---------------------------------------------------------------------- |
+| _Scope name_ | VisitReports.Update |
+| _Who can consent?_ | Admins and users |
+| _Admin consent display name_ | VisitReports contacts |
+| _Admin consent description_ | Allows the app to update VisitReports for the signed-in user |
+| _User consent display name_ | Update VisitReports |
+| _User consent description_ | Allows the app to update your VisitReports |
 | _State_ | Enabled |
 
 Now do the same for the **scmapi-test** app registration.
@@ -276,7 +286,7 @@ Make sure to again configure the selected branches and the `secrets` as followin
 | Secret name           | Value                                                                    |
 | --------------------- | ------------------------------------------------------------------------ |
 | AAD_API_CLIENT_ID     | _the AppId of the Azure AD's application registration for the APIs_      |
-| AAD_API_CLIENT_ID_URI | <http://scmapi-test>                                                     |
+| AAD_API_CLIENT_ID_URI | <http://<AZURE_AD_DOMAIN_NAME>/scmapi-dev> _e.g. azuredevcollege.onmicrosoftonline.com/scmapi-dev_ |
 | AAD_FE_CLIENT_ID      | _the AppId of the Azure AD's application registration for the UI client_ |
 | AAD_DOMAIN            | _your Azure AD's domain name e.g. azuredevcollege.onmicrosoftonline.com_ |
 | AAD_INSTANCE          | <https://login.microsoftonline.com>                                      |
@@ -513,6 +523,8 @@ Next, navigate to `Azure Active Directory > App registrations`, select `All appl
 the changes:
 
 ![Azure AD adjust Redirect URIs](./images/aad-adjust-reply-url.png)
+
+> If there currently are no Redirect URIs please click on `+ Add a platform`. There select `Single-page application` and add the endpoint of your frontend and hit `Configure`. After that add also `https;//localhost`.
 
 Please repeat these steps for the application in the `test` environment to
 adjust the Redirect URIs, too.
