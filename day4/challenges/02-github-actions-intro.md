@@ -444,6 +444,7 @@ jobs:
         with:
           node-version: '12'
 
+      - run: npm i -D vue-template-compiler
       - run: npx vuepress build
       - name: Upload result of vuepress build
         uses: actions/upload-artifact@v2
