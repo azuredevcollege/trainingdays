@@ -347,7 +347,7 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     ```shell
     npm start
     ```
-    You can have a look at it in your browser `http://localhost:3000`. If everything is working well, it will look like this. [Screenshot of the local app](./images/05_app.png)
+    You can have a look at it in your browser `http://localhost:3000`. If everything is working well, it will look like this. ![Screenshot of the local app](./images/05_app.png)
 
 ## (OPTIONAL) Use Postman to understand all features
 
@@ -377,7 +377,7 @@ We have created a Postman collection for you. Upload the collection you find in 
 
 ![Screenshot of the Postman application showing the Collections tab and highlighting the Import button.](./images/postman_collection.png)
 
-Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service. After doing so, you need to assign the created environment to your collection as shown below. [Screenshot of Postman application showing the environment assignment](./images/05_environment_select.png)
+Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service. After doing so, you need to assign the created environment to your collection as shown below. ![Screenshot of Postman application showing the environment assignment](./images/environment_select.png)
 
  Alternatively, you can replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key. Select the `POST Sentiment` API for a first try.
 
