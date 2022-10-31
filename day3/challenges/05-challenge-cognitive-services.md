@@ -210,7 +210,7 @@ ID: 0
 ## (OPTIONAL) Containerize the Cognitive Service
 
 Most Cognitive Services can be run from a container. In this case the sentiment analysis container is available. The advantage of containerization of Cognitive Services usually lie in security or data governance requirements. This way you can run the service on your own infrastructure and only billing information will be sent against the Cognitive Service. An Azure Cognitive Service needs to reside in your Subscription to take this billing information. Since we already deployed one in the previous steps we can go ahead. 
-Should you not have **Docker Desktop** installed don't worry, this part of the challenge is optional.
+Should you not have **Docker Desktop** installed don't worry, you can install it from [here](https://docs.docker.com/desktop/install/windows-install/).
 
 1. If you have Docker Desktop installed and running download the English container:
     ```shell
@@ -347,8 +347,7 @@ In the next part we integrate the API into a Node.js web app. This is optional.
     ```shell
     npm start
     ```
-    You can have a look at it in your browser `http://localhost:3000`.
-
+    You can have a look at it in your browser `http://localhost:3000`. If everything is working well, it will look like this. ![Screenshot of the local app](./images/05_app.png)
 
 ## (OPTIONAL) Use Postman to understand all features
 
@@ -378,7 +377,9 @@ We have created a Postman collection for you. Upload the collection you find in 
 
 ![Screenshot of the Postman application showing the Collections tab and highlighting the Import button.](./images/postman_collection.png)
 
-Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service, or replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key. Select the `POST Sentiment` API for a first try.
+Before you can send any of the requests you either need to set up an environment containing a variable named `api-key` with the value of the API Key of your Cognitive Service. After doing so, you need to assign the created environment to your collection as shown below. ![Screenshot of Postman application showing the environment assignment](./images/environment_select.png)
+
+ Alternatively, you can replace the `Ocp-Apim-Subscription-Key` Header value of the given request under the `Headers` tab of the request with the beforementioned key. Select the `POST Sentiment` API for a first try.
 
 ![Screenshot of the Postman application showing the environment tab and the created api_key variable.](./images/postman_environmet_variable.png)
 ![Screenshot of the Postman application showing Sentiment request and its Headers, highlighting the Ocp-Apim-Subscription-Key.](./images/postman_api_key.png)
