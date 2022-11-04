@@ -835,3 +835,5 @@ $ docker network rm first_network second_network
 __Congratulations__ you have completed the Docker Objects challenge and learned how to create and manage Docker Volume and Network objects.
 
 *** Reference: https://docs.docker.com
+
+[◀ Previous challenge](./challenge2.md) | [🔼 This challenge](./challenge3.md) | [Next challenge ▶](./challenge4.md)

@@ -778,3 +778,5 @@ Our image is ready. Now if we want, we can push it to our repository and move it
 __Congratulations__ you have completed the Image and Registry challenge and learned how to create Docker images and play with them. 
 
 *** Reference: https://docs.docker.com
+
+[◀ Previous challenge](./challenge3.md) | [🔼 This challenge](./challenge4.md) | [Next challenge ▶](./challenge5.md)
