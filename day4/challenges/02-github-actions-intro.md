@@ -438,16 +438,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2.1.5
+      - uses: actions/setup-node@v3.1.1
         with:
-          node-version: '12'
-
-      - run: npm i -D vue-template-compiler
+          node-version: '16.x'
+    
+      - run: npm install vuepress
       - run: npx vuepress build
       - name: Upload result of vuepress build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: static-website
           path: .vuepress/dist
@@ -460,12 +460,12 @@ jobs:
 
     steps:
       - name: Download build of static website
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: static-website
           path: .vuepress/dist
       - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v2
+        uses: crazy-max/ghaction-github-pages@v3
         with:
           build_dir: .vuepress/dist
         env:
