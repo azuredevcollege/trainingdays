@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Challenge 2: Basic Kubernetes Concepts | Azure Developer College</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    
+    <meta name="description" content="">
+    
+    <link rel="preload" href="/trainingdays/assets/css/0.styles.8d7a09fd.css" as="style"><link rel="preload" href="/trainingdays/assets/js/app.7ee90653.js" as="script"><link rel="preload" href="/trainingdays/assets/js/3.bac66e4c.js" as="script"><link rel="preload" href="/trainingdays/assets/js/25.5746a249.js" as="script"><link rel="prefetch" href="/trainingdays/assets/js/10.e245022a.js"><link rel="prefetch" href="/trainingdays/assets/js/11.e575ca81.js"><link rel="prefetch" href="/trainingdays/assets/js/12.4af6743d.js"><link rel="prefetch" href="/trainingdays/assets/js/13.0b26a6a5.js"><link rel="prefetch" href="/trainingdays/assets/js/14.2d92fef8.js"><link rel="prefetch" href="/trainingdays/assets/js/15.a191ca69.js"><link rel="prefetch" href="/trainingdays/assets/js/16.405c54e2.js"><link rel="prefetch" href="/trainingdays/assets/js/17.43731ef2.js"><link rel="prefetch" href="/trainingdays/assets/js/18.2984f726.js"><link rel="prefetch" href="/trainingdays/assets/js/19.a9d0edc3.js"><link rel="prefetch" href="/trainingdays/assets/js/2.0be5b509.js"><link rel="prefetch" href="/trainingdays/assets/js/20.7cffd4b4.js"><link rel="prefetch" href="/trainingdays/assets/js/21.e7fe4a64.js"><link rel="prefetch" href="/trainingdays/assets/js/22.9b14db9d.js"><link rel="prefetch" href="/trainingdays/assets/js/23.441bbca6.js"><link rel="prefetch" href="/trainingdays/assets/js/24.9c4549d9.js"><link rel="prefetch" href="/trainingdays/assets/js/26.b54d0910.js"><link rel="prefetch" href="/trainingdays/assets/js/27.17fc5e8f.js"><link rel="prefetch" href="/trainingdays/assets/js/28.dc06e268.js"><link rel="prefetch" href="/trainingdays/assets/js/29.2c678e32.js"><link rel="prefetch" href="/trainingdays/assets/js/30.da2d71da.js"><link rel="prefetch" href="/trainingdays/assets/js/31.2d6231d3.js"><link rel="prefetch" href="/trainingdays/assets/js/32.de802251.js"><link rel="prefetch" href="/trainingdays/assets/js/33.e1098fb7.js"><link rel="prefetch" href="/trainingdays/assets/js/34.b6d29e40.js"><link rel="prefetch" href="/trainingdays/assets/js/35.4c61bb7b.js"><link rel="prefetch" href="/trainingdays/assets/js/36.336fcd60.js"><link rel="prefetch" href="/trainingdays/assets/js/37.772f2fe7.js"><link rel="prefetch" href="/trainingdays/assets/js/38.ba3ea198.js"><link rel="prefetch" href="/trainingdays/assets/js/39.52fb19ee.js"><link rel="prefetch" href="/trainingdays/assets/js/4.d015fbd5.js"><link rel="prefetch" href="/trainingdays/assets/js/40.354e399e.js"><link rel="prefetch" href="/trainingdays/assets/js/41.ec595a2b.js"><link rel="prefetch" href="/trainingdays/assets/js/42.48bed577.js"><link rel="prefetch" href="/trainingdays/assets/js/43.11938683.js"><link rel="prefetch" href="/trainingdays/assets/js/44.acddabd3.js"><link rel="prefetch" href="/trainingdays/assets/js/45.a2916451.js"><link rel="prefetch" href="/trainingdays/assets/js/46.95911633.js"><link rel="prefetch" href="/trainingdays/assets/js/47.c267ffc1.js"><link rel="prefetch" href="/trainingdays/assets/js/48.37cfbfe4.js"><link rel="prefetch" href="/trainingdays/assets/js/49.9fc08260.js"><link rel="prefetch" href="/trainingdays/assets/js/5.66f1ef82.js"><link rel="prefetch" href="/trainingdays/assets/js/50.f621e07d.js"><link rel="prefetch" href="/trainingdays/assets/js/51.e77f724a.js"><link rel="prefetch" href="/trainingdays/assets/js/52.c0052e39.js"><link rel="prefetch" href="/trainingdays/assets/js/53.2fe21a43.js"><link rel="prefetch" href="/trainingdays/assets/js/54.6d6dd706.js"><link rel="prefetch" href="/trainingdays/assets/js/55.de3427a7.js"><link rel="prefetch" href="/trainingdays/assets/js/56.357453fe.js"><link rel="prefetch" href="/trainingdays/assets/js/57.2b8c0b9b.js"><link rel="prefetch" href="/trainingdays/assets/js/58.34c86dce.js"><link rel="prefetch" href="/trainingdays/assets/js/59.20afb7e5.js"><link rel="prefetch" href="/trainingdays/assets/js/6.bd3d8f89.js"><link rel="prefetch" href="/trainingdays/assets/js/60.cf52ab3d.js"><link rel="prefetch" href="/trainingdays/assets/js/61.b7ff488e.js"><link rel="prefetch" href="/trainingdays/assets/js/62.2451e01f.js"><link rel="prefetch" href="/trainingdays/assets/js/63.d86a5b86.js"><link rel="prefetch" href="/trainingdays/assets/js/64.608921b5.js"><link rel="prefetch" href="/trainingdays/assets/js/65.d90b3114.js"><link rel="prefetch" href="/trainingdays/assets/js/66.49c6fbd9.js"><link rel="prefetch" href="/trainingdays/assets/js/67.4f60f26b.js"><link rel="prefetch" href="/trainingdays/assets/js/68.208402a2.js"><link rel="prefetch" href="/trainingdays/assets/js/69.a980b450.js"><link rel="prefetch" href="/trainingdays/assets/js/7.fc9a0f7c.js"><link rel="prefetch" href="/trainingdays/assets/js/70.cf4f53b8.js"><link rel="prefetch" href="/trainingdays/assets/js/71.55c061b2.js"><link rel="prefetch" href="/trainingdays/assets/js/72.7cc4b8ba.js"><link rel="prefetch" href="/trainingdays/assets/js/73.71f272fd.js"><link rel="prefetch" href="/trainingdays/assets/js/74.d9324332.js"><link rel="prefetch" href="/trainingdays/assets/js/75.22202aba.js"><link rel="prefetch" href="/trainingdays/assets/js/76.79e1fda3.js"><link rel="prefetch" href="/trainingdays/assets/js/77.09f6ecf5.js"><link rel="prefetch" href="/trainingdays/assets/js/78.40383fd1.js"><link rel="prefetch" href="/trainingdays/assets/js/79.c5447221.js"><link rel="prefetch" href="/trainingdays/assets/js/8.45342290.js"><link rel="prefetch" href="/trainingdays/assets/js/80.5cf25ae5.js"><link rel="prefetch" href="/trainingdays/assets/js/81.e3653e94.js"><link rel="prefetch" href="/trainingdays/assets/js/82.e34ef379.js"><link rel="prefetch" href="/trainingdays/assets/js/83.a86bfa1d.js"><link rel="prefetch" href="/trainingdays/assets/js/84.147161c7.js"><link rel="prefetch" href="/trainingdays/assets/js/85.ee46661f.js"><link rel="prefetch" href="/trainingdays/assets/js/86.b933c088.js"><link rel="prefetch" href="/trainingdays/assets/js/87.0b4539ef.js"><link rel="prefetch" href="/trainingdays/assets/js/9.235ee99d.js">
+    <link rel="stylesheet" href="/trainingdays/assets/css/0.styles.8d7a09fd.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/trainingdays/" class="home-link router-link-active"><!----> <span class="site-name">Azure Developer College</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><a href="/trainingdays/" aria-current="page" class="sidebar-link">Home</a></li><li><a href="/trainingdays/day1/" class="sidebar-link">Day 1 Azure Fundamentals &amp; Infrastructure</a></li><li><a href="/trainingdays/day2/" class="sidebar-link">Day 2 Azure Development</a></li><li><a href="/trainingdays/day3/" class="sidebar-link">Day 3 Data and AI</a></li><li><a href="/trainingdays/day4/" class="sidebar-link">Day 4 DevOps and Monitoring</a></li><li><a href="/trainingdays/day5/" class="sidebar-link">Day 5 Identity and Architecture</a></li><li><a href="/trainingdays/day6/" class="sidebar-link">Day 6 Containerization</a></li><li><a href="/trainingdays/day7/" aria-current="page" class="sidebar-link">Day 7 Kubernetes</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="challenge-2-basic-kubernetes-concepts"><a href="#challenge-2-basic-kubernetes-concepts" class="header-anchor">#</a> Challenge 2: Basic Kubernetes Concepts</h1> <h2 id="here-is-what-you-will-learn-🎯"><a href="#here-is-what-you-will-learn-🎯" class="header-anchor">#</a> Here is what you will learn 🎯</h2> <p>In this challenge we will walk through the basic concepts of Kubernetes.</p> <h2 id="table-of-contents"><a href="#table-of-contents" class="header-anchor">#</a> Table Of Contents</h2> <ol><li><a href="#prerequisites">Prerequisites</a></li> <li><a href="#build-a-custom-image">Build a Custom Image</a></li> <li><a href="#run-your-custom-image">Run your Custom Image</a></li> <li><a href="#port-forwarding">Port-Forwarding</a></li> <li><a href="#running-multiple-instances-of-our-workload">Running Multiple Instances of our Workload</a></li> <li><a href="#services">Services</a></li> <li><a href="#clusterip">ClusterIP</a></li> <li><a href="#nodeport-optional">NodePort (Optional)</a></li> <li><a href="#loadbalancer">LoadBalancer</a></li> <li><a href="#ingress">Ingress</a></li> <li><a href="#create-ingress-definitions">Create Ingress Definitions</a></li> <li><a href="#add-the-ui">Add the UI</a></li> <li><a href="#wrap-up">Wrap-Up</a></li></ol> <h2 id="prerequisites"><a href="#prerequisites" class="header-anchor">#</a> Prerequisites</h2> <p>In order to be able to store the custom Docker images you will be creating throughout this workshop, we need a <em>container registry</em>. Azure provides its own service for that, the <em>Azure Container Registry</em>.</p> <p>Let's create one via the Azure CLI:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ az group create <span class="token parameter variable">--name</span> adc-acr-rg <span class="token parameter variable">--location</span> westeurope
+$ az acr create <span class="token parameter variable">--name</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> --resource-group adc-acr-rg <span class="token parameter variable">--sku</span> basic --admin-enabled
+
+<span class="token comment"># now let's attach the container registry to the cluster</span>
+
+$ az aks update --resource-group adc-aks-rg <span class="token parameter variable">--name</span> adc-cluster --attach-acr <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>
+</code></pre></div><h2 id="build-a-custom-image"><a href="#build-a-custom-image" class="header-anchor">#</a> Build a Custom Image</h2> <p>First, let's build a custom Docker image. Go to the folder <code>day7/challenges/samples/challenge-2/singlecontainer</code> and take a look at the Dockerfile.</p> <p>Run the following commands to build and run the container:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> build <span class="token parameter variable">-t</span> test:1.0 <span class="token builtin class-name">.</span>
+<span class="token function">docker</span> run <span class="token parameter variable">-p</span> <span class="token number">8080</span>:80 test:1.0
+</code></pre></div><p>Open your browser and navigate to <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">http://localhost:8080<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>. You should see a page with a welcome message.</p> <p>Now let's push the image to our registry. To be able to interact with our registry, we first need to login.</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token assign-left variable">ACRPWD</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>az acr credential show <span class="token parameter variable">-n</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> <span class="token parameter variable">--query</span> <span class="token string">&quot;passwords[0].value&quot;</span> <span class="token parameter variable">-o</span> tsv<span class="token variable">)</span></span>
+<span class="token function">docker</span> login <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io <span class="token parameter variable">-u</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> <span class="token parameter variable">-p</span> <span class="token variable">$ACRPWD</span>
+</code></pre></div><div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 In this sample, we used the <code>admin</code> account of our registry to login - basically with username/password.</p> <p>In secure/production environments, you should not enable the <code>admin</code> account on the registry and login via Azure Active Directory: <code>az acr login -n &lt;ACR_NAME&gt;</code>. The token that is issued will be valid for <em>3 hours</em>.</p></div> <p>We are now ready to push the image to our container registry:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> tag test:1.0 <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/test:1.0
+<span class="token function">docker</span> push <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/test:1.0
+</code></pre></div><p>You can also build directly <em>within</em> the Azure Container Registry service, in case you don't have Docker on your machine. Let's try:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>az acr build <span class="token parameter variable">-r</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> <span class="token parameter variable">-t</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/test:2.0 <span class="token builtin class-name">.</span>
+</code></pre></div><p>The command will send the current build context to Azure, kick off a docker build and add the image to your registry.</p> <h2 id="run-your-custom-image"><a href="#run-your-custom-image" class="header-anchor">#</a> Run your Custom Image</h2> <p>Now that we have an image in our container registry, let's create a <em>pod</em>. This time, we will be using a YAML manifest:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file myfirstpod.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstpod
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/test<span class="token punctuation">:</span><span class="token number">2.0</span>
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstpod
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+      <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+  <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Never
+</code></pre></div><p>Create a file called <code>myfirstpod.yaml</code> with the content above and apply it to your cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> myfirstpod.yaml
+</code></pre></div><div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 If you could not connect your Azure Container Registry to the cluster due to missing permissions, use an <a href="/trainingdays/day7/challenges/image-pull-secret.html">Image Pull Secret</a> to grant your Kubernetes cluster the rights to pull images from your private registry.</p></div> <p>Check that everything works as expected:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get pods <span class="token parameter variable">-w</span>
+NAME         READY   STATUS              RESTARTS   AGE
+myfirstpod   <span class="token number">0</span>/1     ContainerCreating   <span class="token number">0</span>          6s
+<span class="token punctuation">..</span>.
+<span class="token punctuation">..</span>.
+<span class="token punctuation">[</span>after a few seconds<span class="token punctuation">]</span>
+myfirstpod   <span class="token number">1</span>/1     Running             <span class="token number">0</span>          17s
+</code></pre></div><p>Also, <code>describe</code> the pod to see some more details like status, the node it is running on, events etc.:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl describe pod myfirstpod
+Name:         myfirstpod
+Namespace:    default
+Priority:     <span class="token number">0</span>
+Node:         aks-nodepool1-11985439-vmss000001/10.240.0.5
+Start Time:   Thu, 08 Oct <span class="token number">2020</span> <span class="token number">14</span>:03:55 +0200
+Labels:       <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+Annotations:  Status:  Running
+IP:           <span class="token number">10.244</span>.2.5
+IPs:
+  IP:  <span class="token number">10.244</span>.2.5
+Containers:
+  myfirstpod:
+    Container ID:   docker://2dc2e9ef913a6985fe355bd871666bd6eec859eba544c051eb3b5db5d7eeb1ab
+    Image:          adccontainerreg.azurecr.io/test:2.0
+    Image ID:       docker-pullable://adccontainerreg.azurecr.io/test@sha256:0e6b51d93fd3769bda02b5865491092a595194ea04f5b8bd8f6209f101bde724
+    Port:           <span class="token number">80</span>/TCP
+    Host Port:      <span class="token number">0</span>/TCP
+    State:          Running
+      Started:      Thu, 08 Oct <span class="token number">2020</span> <span class="token number">14</span>:03:56 +0200
+    Ready:          True
+    Restart Count:  <span class="token number">0</span>
+    Environment:    <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from default-token-9lb48 <span class="token punctuation">(</span>ro<span class="token punctuation">)</span>
+Conditions:
+  Type              Status
+  Initialized       True
+  Ready             True
+  ContainersReady   True
+  PodScheduled      True
+Volumes:
+  default-token-9lb48:
+    Type:        Secret <span class="token punctuation">(</span>a volume populated by a Secret<span class="token punctuation">)</span>
+    SecretName:  default-token-9lb48
+    Optional:    <span class="token boolean">false</span>
+QoS Class:       BestEffort
+Node-Selectors:  <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+Tolerations:     node.kubernetes.io/not-ready:NoExecute <span class="token keyword">for</span> 300s
+                 node.kubernetes.io/unreachable:NoExecute <span class="token keyword">for</span> 300s
+Events:
+  Type    Reason     Age   From                                        Message
+  ----    ------     ----  ----                                        -------
+  Normal  Scheduled  13s   default-scheduler                           Successfully assigned default/myfirstpod to aks-nodepool1-11985439-vmss000001
+  Normal  Pulled     12s   kubelet, aks-nodepool1-11985439-vmss000001  Container image <span class="token string">&quot;adccontainerreg.azurecr.io/test:2.0&quot;</span> already present on machine
+  Normal  Created    12s   kubelet, aks-nodepool1-11985439-vmss000001  Created container myfirstpod
+  Normal  Started    12s   kubelet, aks-nodepool1-11985439-vmss000001  Started container myfirstpod
+</code></pre></div><h2 id="port-forwarding"><a href="#port-forwarding" class="header-anchor">#</a> Port-Forwarding</h2> <p>The pod is running now, but how do we access it? Let's have a look at one option, that you typically would use in <em>test/debug</em> scenarios.</p> <p>With <code>kubectl</code> you can <em>port-forward</em> a local port to a port on a pod. This is how it works in our case:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl port-forward myfirstpod <span class="token number">8080</span>:80
+</code></pre></div><p>Our pod is listening on port <code>80</code> and we forward our local port <code>8080</code> to that one. You can check the result by navigating to <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">http://localhost:8080<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>.</p> <p>To proof that the requests arrive at the pod, check the logs:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl logs myfirstpod <span class="token parameter variable">-f</span><span class="token operator">=</span>true
+/docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
+/docker-entrypoint.sh: Looking <span class="token keyword">for</span> shell scripts <span class="token keyword">in</span> /docker-entrypoint.d/
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
+<span class="token number">10</span>-listen-on-ipv6-by-default.sh: Getting the checksum of /etc/nginx/conf.d/default.conf
+<span class="token number">10</span>-listen-on-ipv6-by-default.sh: Enabled listen on IPv6 <span class="token keyword">in</span> /etc/nginx/conf.d/default.conf
+/docker-entrypoint.sh: Launching /docker-entrypoint.d/20-envsubst-on-templates.sh
+/docker-entrypoint.sh: Configuration complete<span class="token punctuation">;</span> ready <span class="token keyword">for</span> start up
+<span class="token number">127.0</span>.0.1 - - <span class="token punctuation">[</span>08/Oct/2020:12:09:04 +0000<span class="token punctuation">]</span> <span class="token string">&quot;GET / HTTP/1.1&quot;</span> <span class="token number">200</span> <span class="token number">171</span> <span class="token string">&quot;-&quot;</span> <span class="token string">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.70&quot;</span> <span class="token string">&quot;-&quot;</span>
+<span class="token number">127.0</span>.0.1 - - <span class="token punctuation">[</span>08/Oct/2020:12:09:04 +0000<span class="token punctuation">]</span> <span class="token string">&quot;GET / HTTP/1.1&quot;</span> <span class="token number">304</span> <span class="token number">0</span> <span class="token string">&quot;-&quot;</span> <span class="token string">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.70&quot;</span> <span class="token string">&quot;-&quot;</span>
+<span class="token number">127.0</span>.0.1 - - <span class="token punctuation">[</span>08/Oct/2020:12:09:04 +0000<span class="token punctuation">]</span> <span class="token string">&quot;GET / HTTP/1.1&quot;</span> <span class="token number">304</span> <span class="token number">0</span> <span class="token string">&quot;-&quot;</span> <span class="token string">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.70&quot;</span> <span class="token string">&quot;-&quot;</span>
+<span class="token number">127.0</span>.0.1 - - <span class="token punctuation">[</span>08/Oct/2020:12:09:04 +0000<span class="token punctuation">]</span> <span class="token string">&quot;GET / HTTP/1.1&quot;</span> <span class="token number">304</span> <span class="token number">0</span> <span class="token string">&quot;-&quot;</span> <span class="token string">&quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Edg/85.0.564.70&quot;</span> <span class="token string">&quot;-&quot;</span>
+</code></pre></div><h2 id="running-multiple-instances-of-our-workload"><a href="#running-multiple-instances-of-our-workload" class="header-anchor">#</a> Running Multiple Instances of our Workload</h2> <p>Until now we only showed, how Kubernetes is dealing with single container/pod environments. If such a pod fails (something serious happens and the process crashes for example), Kubernetes does not take care of restarting our workload.</p> <p>On top of that, we only run a single instance - ideally, we can tell Kubernetes to run multiple instances of our container in the cluster.</p> <p>To give Kubernetes more control over the application/service we want to run, we need to use another object to deploy our container(s): <em>Deployments</em>.</p> <h3 id="deployments"><a href="#deployments" class="header-anchor">#</a> Deployments</h3> <p>In a <code>Deployment</code>, you can tell Kubernetes a few more things, that you definitely need in production environments:</p> <ul><li>Number of instances of our container/pod</li> <li>How to do the upgrade, in case we deploy the next version of our service (e.g. always keep two instances up and running)</li></ul> <p>So let's do this. The service that we are going to deploy needs an SQL server instance to connect to. Therefore, we deploy a Microsoft SQL Server 2019 instance into our cluster that we then use from our service:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file sqlserver.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mssql<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> mssql
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> mssql
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">terminationGracePeriodSeconds</span><span class="token punctuation">:</span> <span class="token number">30</span>
+      <span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+        <span class="token key atrule">fsGroup</span><span class="token punctuation">:</span> <span class="token number">10001</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> mssql
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> mcr.microsoft.com/mssql/server<span class="token punctuation">:</span>2019<span class="token punctuation">-</span>latest
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">1433</span>
+          <span class="token key atrule">env</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MSSQL_PID
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Developer'</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ACCEPT_EULA
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Y'</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> SA_PASSWORD
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Ch@ngeMe!23'</span>
+</code></pre></div><p>Create a file called <code>sqlserver.yaml</code> and apply the configuration:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> sqlserver.yaml
+
+deployment.apps/mssql-deployment created
+
+$ kubectl get pods <span class="token parameter variable">-w</span>
+
+NAME                                READY   STATUS              RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   <span class="token number">0</span>/1     ContainerCreating   <span class="token number">0</span>          5s
+mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running             <span class="token number">0</span>          39s
+</code></pre></div><p>After about 30-40 seconds, you should see that the pod with the SQL Server 2019 is up and running.</p> <p>Let's have a look at the deployment:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get deployments
+
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+mssql-deployment   <span class="token number">1</span>/1     <span class="token number">1</span>            <span class="token number">1</span>           100s
+
+$ kubectl describe deployment mssql-deployment
+
+Name:                   mssql-deployment
+Namespace:              default
+CreationTimestamp:      Tue, <span class="token number">27</span> Oct <span class="token number">2020</span> 09:34:28 +0100
+Labels:                 <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+Annotations:            deployment.kubernetes.io/revision: <span class="token number">1</span>
+Selector:               <span class="token assign-left variable">app</span><span class="token operator">=</span>mssql
+Replicas:               <span class="token number">1</span> desired <span class="token operator">|</span> <span class="token number">1</span> updated <span class="token operator">|</span> <span class="token number">1</span> total <span class="token operator">|</span> <span class="token number">1</span> available <span class="token operator">|</span> <span class="token number">0</span> unavailable
+StrategyType:           RollingUpdate
+MinReadySeconds:        <span class="token number">0</span>
+RollingUpdateStrategy:  <span class="token number">25</span>% max unavailable, <span class="token number">25</span>% max surge
+Pod Template:
+  Labels:  <span class="token assign-left variable">app</span><span class="token operator">=</span>mssql
+  Containers:
+   mssql:
+    Image:      mcr.microsoft.com/mssql/server:2019-latest
+    Port:       <span class="token number">1433</span>/TCP
+    Host Port:  <span class="token number">0</span>/TCP
+    Environment:
+      MSSQL_PID:    Developer
+      ACCEPT_EULA:  Y
+      SA_PASSWORD:  Ch@ngeMe<span class="token operator">!</span><span class="token number">23</span>
+    Mounts:         <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+  Volumes:          <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+Conditions:
+  Type           Status  Reason
+  ----           ------  ------
+  Available      True    MinimumReplicasAvailable
+  Progressing    True    NewReplicaSetAvailable
+OldReplicaSets:  <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+NewReplicaSet:   mssql-deployment-5559884974 <span class="token punctuation">(</span><span class="token number">1</span>/1 replicas created<span class="token punctuation">)</span>
+Events:
+  Type    Reason             Age    From                   Message
+  ----    ------             ----   ----                   -------
+  Normal  ScalingReplicaSet  2m25s  deployment-controller  Scaled up replica <span class="token builtin class-name">set</span> mssql-deployment-5559884974 to <span class="token number">1</span>
+</code></pre></div><p>As we need to connect to this pod over the network, let's find out what IP address has been assigned to it:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get pods <span class="token parameter variable">-o</span> wide
+
+NAME                                READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
+mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          4m44s   <span class="token number">10.244</span>.0.5   aks-nodepool1-11985439-vmss000000   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>
+</code></pre></div><p>The address may vary in your environment, for the sample here, it's <code>10.244.0.5</code>. Please note the address down, as you will need it in the next step.</p> <p>Now, we can deploy an CRUD API that is able to manage <code>Contacts</code> objects i.e. that can create/read/update/delete contacts of a CRM app.</p> <p>The image needs to be built upfront and put in your container registry. Go to the folder <code>day7/apps/dotnetcore/Scm</code> and build the API image:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">docker</span> build <span class="token parameter variable">-t</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-api-sql:1.0 <span class="token parameter variable">-f</span> ./Adc.Scm.Api/Dockerfile <span class="token builtin class-name">.</span>
+
+Sending build context to Docker daemon  <span class="token number">64</span>.51kB
+Step <span class="token number">1</span>/11 <span class="token builtin class-name">:</span> FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+<span class="token number">3.1</span>: Pulling from dotnet/core/sdk
+<span class="token punctuation">[</span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+Step <span class="token number">10</span>/11 <span class="token builtin class-name">:</span> <span class="token environment constant">USER</span> www-data
+ ---<span class="token operator">&gt;</span> Running <span class="token keyword">in</span> 50fb1d57ca84
+Removing intermediate container 50fb1d57ca84
+ ---<span class="token operator">&gt;</span> 4264f8b474b6
+Step <span class="token number">11</span>/11 <span class="token builtin class-name">:</span> ENTRYPOINT <span class="token punctuation">[</span><span class="token string">&quot;dotnet&quot;</span>, <span class="token string">&quot;Adc.Scm.Api.dll&quot;</span><span class="token punctuation">]</span>
+ ---<span class="token operator">&gt;</span> Running <span class="token keyword">in</span> bbd3e574d650
+Removing intermediate container bbd3e574d650
+ ---<span class="token operator">&gt;</span> b4a8315645be
+Successfully built b4a8315645be
+Successfully tagged adccontainerreg.azurecr.io/adc-api-sql:1.0
+</code></pre></div><p>After a successful build, push the local image to the Azure Container Registry:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">docker</span> push <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-api-sql:1.0
+
+The push refers to repository <span class="token punctuation">[</span>adccontainerreg.azurecr.io/adc-api-sql<span class="token punctuation">]</span>
+11185412b6d4: Pushed
+afe1f320f2da: Pushed
+42a28097962e: Pushed
+049b0fdaa27c: Pushed
+87e08e237115: Pushed
+1915427dc1a4: Pushed
+8a939c4fd477: Pushed
+d0fe97fa8b8c: Mounted from <span class="token builtin class-name">test</span>
+<span class="token number">1.0</span>: digest: sha256:b10195ef4c4f4efe1c8ace700ae24121f236ab73e91f2d6dce8d78d82b3967ec size: <span class="token number">2006</span>
+</code></pre></div><p>There is also another approach - you can build directly within the container registry. Let's do this:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>az acr build <span class="token parameter variable">-r</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> <span class="token parameter variable">-t</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-api-sql:1.0 <span class="token parameter variable">-f</span> ./Adc.Scm.Api/Dockerfile <span class="token builtin class-name">.</span>
+</code></pre></div><p>Now we are ready to use the image in our deployment:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file api.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myapi
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">4</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myapi
+          <span class="token key atrule">env</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ConnectionStrings__DefaultConnectionString
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> Server=tcp<span class="token punctuation">:</span>&lt;IP_OF_THE_SQL_POD<span class="token punctuation">&gt;</span><span class="token punctuation">,</span>1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe<span class="token tag">!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection</span> Timeout=30;
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/adc<span class="token punctuation">-</span>api<span class="token punctuation">-</span>sql<span class="token punctuation">:</span><span class="token number">1.0</span>
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'128Mi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'500m'</span>
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">5000</span>
+</code></pre></div><p>A few notes on the deployment above:</p> <ul><li>First and foremost, we tell Kubernetes to run <em>four replicas</em> of our service <code>replicas: 4</code>.</li> <li>We configure the pod to set an environment variable called <code>ConnectionStrings__DefaultConnectionString</code> which contains the connection string to the database (the API will use this env variable to get the connection string). Replace &lt;IP_OF_THE_SQL_POD&gt; with the correct IP address.</li> <li>We set the resource limits and expose port <code>5000</code>, so that the API can be reached from outside of the pod.</li></ul> <p>Create a file (<code>api.yaml</code>) with the contents above and apply the configuration to your cluster.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 Don't forget to replace the IP address</p></div> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> api.yaml
+
+deployment.apps/myapi created
+</code></pre></div><p>Let's have a look at the pods. We should now have four replicas running in the cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get pods
+
+NAME                                READY   STATUS    RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          23m
+myapi-7c74475b88-7hmcj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          74s
+myapi-7c74475b88-7jhtq              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          74s
+myapi-7c74475b88-jzmcx              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          74s
+myapi-7c74475b88-s5gmj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          74s
+</code></pre></div><p>We are all set to test the API and the connection to the SQL server.</p> <p>As before, &quot;port-forward&quot; a local port to a pod in the Kubernetes cluster. You can pick any of the four running API pods. In the sample here, we take pod <code>myapi-7c74475b88-7hmcj</code> - replace the pod name with one from your environment:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl port-forward myapi-7c74475b88-7hmcj <span class="token number">8080</span>:5000
+
+Forwarding from <span class="token number">127.0</span>.0.1:8080 -<span class="token operator">&gt;</span> <span class="token number">5000</span>
+Forwarding from <span class="token punctuation">[</span>::1<span class="token punctuation">]</span>:8080 -<span class="token operator">&gt;</span> <span class="token number">5000</span>
+Handling connection <span class="token keyword">for</span> <span class="token number">8080</span>
+Handling connection <span class="token keyword">for</span> <span class="token number">8080</span>
+Handling connection <span class="token keyword">for</span> <span class="token number">8080</span>
+</code></pre></div><p>You can now open a browser and navigate to <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer">http://localhost:8080<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>. If everything is fine, you will see the Swagger UI of the API:</p> <p><img src="/trainingdays/assets/img/swagger-api.2725da9f.png" alt="SwaggerUI"></p> <p>Try out the API, e.g. create a contact via the <code>POST</code> method, read (all) contacts via the <code>GET</code> operation etc.</p> <h3 id="failover-health"><a href="#failover-health" class="header-anchor">#</a> Failover / Health</h3> <p>As discussed before, Kubernetes takes care of your deployments by constantly checking the state of it and if anything is not the way it is supposed to be, Kubernetes tries to &quot;heal&quot; the corresponding deployment.</p> <p>When a pod of a deployment gets deleted (for any reason) and the deployment - as in our case - defines to have four replicas of the service, your cluster will notice the difference and re-creates the 4th pod again to reestablish the desired state.</p> <p>Let's try this. First, let's query the pods in our cluster. An this time, we are &quot;watching&quot; (<code>-w</code>) them so that we get notified of any changes of their states:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get pods <span class="token parameter variable">-w</span>
+
+NAME                                READY   STATUS    RESTARTS   AGE
+mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          58m
+myapi-7c74475b88-7hmcj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          36m
+myapi-7c74475b88-7jhtq              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          36m
+myapi-7c74475b88-jzmcx              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          36m
+myapi-7c74475b88-s5gmj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          36m
+</code></pre></div><p>Now open another tab/command line window and kill one of the pods. Here, we pick <code>myapi-7c74475b88-7jhtq</code> - replace the pod name with one from your environment.</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl delete pod myapi-7c74475b88-7jhtq
+
+pod <span class="token string">&quot;myapi-7c74475b88-7jhtq&quot;</span> deleted
+</code></pre></div><p>In the first tab/window where we are watching for pod changes, you should now see a similar output like:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>myapi-7c74475b88-7jhtq              <span class="token number">1</span>/1     Terminating   <span class="token number">0</span>          45m
+myapi-7c74475b88-rpv8x              <span class="token number">0</span>/1     Pending       <span class="token number">0</span>          0s
+myapi-7c74475b88-rpv8x              <span class="token number">0</span>/1     Pending       <span class="token number">0</span>          0s
+myapi-7c74475b88-rpv8x              <span class="token number">0</span>/1     ContainerCreating   <span class="token number">0</span>          0s
+myapi-7c74475b88-7jhtq              <span class="token number">0</span>/1     Terminating         <span class="token number">0</span>          45m
+myapi-7c74475b88-rpv8x              <span class="token number">1</span>/1     Running             <span class="token number">0</span>          2s
+myapi-7c74475b88-7jhtq              <span class="token number">0</span>/1     Terminating         <span class="token number">0</span>          45m
+myapi-7c74475b88-7jhtq              <span class="token number">0</span>/1     Terminating         <span class="token number">0</span>          45m
+</code></pre></div><p>As you can see, Kubernetes immediately starts a new pod (<code>myapi-7c74475b88-rpv8x</code>), because for a certain amount of time, there are only three pods running/available in the cluster and in the deployment, we told Kubernetes to always have four pods present.</p> <h3 id="scale-on-purpose"><a href="#scale-on-purpose" class="header-anchor">#</a> Scale on purpose</h3> <p>In addition, you can scale a deployment on purpose to e.g. three or six replicas. Therefore, you should use the <code>scale</code> command (or edit the deployment manifest).</p> <p>Kubernetes will then kill or create the corresponding amount of pods to fulfill the request. Try it out:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># Scale up to 6 replicas</span>
+$ kubectl scale deployment <span class="token parameter variable">--replicas</span> <span class="token number">6</span> myapi
+
+deployment.apps/myapi scaled
+
+<span class="token comment"># kubectl get pods should now show 6 &quot;myapi&quot;-pods</span>
+</code></pre></div><p>Now we learned how to scale containers/pods and how Kubernetes behaves when the desired state is different from the actual state. But still there is no way to access our pods, except via IP addresses within the cluster.</p> <p>It even got worse, because we now have multiple pods running. We would need to find out all IP addresses of our pods to being able to send requests to them. This is not ideal.</p> <p>So, let's introduce another object called <em>Service</em> to have a common, load-balanced endpoint for all of our pods.</p> <h2 id="services"><a href="#services" class="header-anchor">#</a> Services</h2> <p>Kubernetes comes with its own service discovery component, called <code>Service</code>. A <em>service</em> is a way to expose a set of pods as a network endpoint with a unique name.</p> <p>This is very useful, because as you saw in the previous chapters, Kubernetes automatically creates and destroys pods to match the state of your cluster, IP addresses therefore change or aren't valid the next time you would call such a pod.</p> <p>So, the <code>Service</code> is the one component that keeps track of what pods make up a certain service (and what IP addresses are valid to call) - and is also able to load-balance traffic across those pods.</p> <p>To be able to determine which pods form a service, Kubernetes uses <code>Labels</code> and <code>LabelSelectors</code>. You assign labels to a (set of) pod(s) e.g. <code>app = myapi</code> and the corresponding service uses the same key/value combination as selector.</p> <p>There are different types of services you can create in Kubernetes, let's dive into some of them.</p> <h2 id="clusterip"><a href="#clusterip" class="header-anchor">#</a> ClusterIP</h2> <p>The default service type in Kubernetes is called <code>ClusterIP</code>. If you choose that type, the service will be exposed via a cluster-internal IP address and is therefore only reachable from <em>within</em> the cluster.</p> <p>Let's see it in action. For this sample, we will be re-using the deployment and pods we created in the previous chapter (Contacts REST API and a SQL server running in the cluster).</p> <p>Let's scale the API deployment back down to four replicas in case you haven't already done so:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl scale deployment <span class="token parameter variable">--replicas</span> <span class="token number">4</span> myapi
+
+deployment.apps/myapi scaled
+</code></pre></div><p>After executing that command, the current state should look similar to this:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get pods,deployments,services
+
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          6h9m
+pod/myapi-7c74475b88-67s7w              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          49s
+pod/myapi-7c74475b88-jzmcx              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          5h47m
+pod/myapi-7c74475b88-s5gmj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          5h47m
+pod/myapi-7c74475b88-vhw6n              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          49s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mssql-deployment   <span class="token number">1</span>/1     <span class="token number">1</span>            <span class="token number">1</span>           6h9m
+deployment.apps/myapi              <span class="token number">4</span>/4     <span class="token number">4</span>            <span class="token number">4</span>           5h47m
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>   AGE
+service/kubernetes   ClusterIP   <span class="token number">10.0</span>.0.1     <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">443</span>/TCP   5d1h
+</code></pre></div><p>In the previous deployment, we already added <code>Labels</code> without really knowing what they are good for 😃.</p> <p>Here's the excerpt of one the YAML manifests:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token punctuation">[</span><span class="token punctuation">...</span><span class="token punctuation">]</span>
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+</code></pre></div><p>So, let's see, if we have these labels attached to the API pods:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl get pods --show-labels <span class="token parameter variable">-o</span> wide
+
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES   LABELS
+mssql-deployment-5559884974-q2j4w   <span class="token number">1</span>/1     Running   <span class="token number">0</span>          6h42m   <span class="token number">10.244</span>.0.5    aks-nodepool1-11985439-vmss000000   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>            <span class="token assign-left variable">app</span><span class="token operator">=</span>mssql,pod-template-hash<span class="token operator">=</span><span class="token number">5559884974</span>
+myapi-7c74475b88-67s7w              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          34m     <span class="token number">10.244</span>.0.15   aks-nodepool1-11985439-vmss000000   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>            <span class="token assign-left variable">app</span><span class="token operator">=</span>myapi,pod-template-hash<span class="token operator">=</span>7c74475b88
+myapi-7c74475b88-jzmcx              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          6h20m   <span class="token number">10.244</span>.2.4    aks-nodepool1-11985439-vmss000002   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>            <span class="token assign-left variable">app</span><span class="token operator">=</span>myapi,pod-template-hash<span class="token operator">=</span>7c74475b88
+myapi-7c74475b88-s5gmj              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          6h20m   <span class="token number">10.244</span>.1.8    aks-nodepool1-11985439-vmss000001   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>            <span class="token assign-left variable">app</span><span class="token operator">=</span>myapi,pod-template-hash<span class="token operator">=</span>7c74475b88
+myapi-7c74475b88-vhw6n              <span class="token number">1</span>/1     Running   <span class="token number">0</span>          34m     <span class="token number">10.244</span>.0.16   aks-nodepool1-11985439-vmss000000   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>            <span class="token assign-left variable">app</span><span class="token operator">=</span>myapi,pod-template-hash<span class="token operator">=</span>7c74475b88
+</code></pre></div><p>Looks good! As you can see, the SQL server pod also already has some labels (<code>app=mssql</code>).</p> <p>Now, let's add two services:</p> <ul><li>One for the SQL server (remember, we used the IP address in the connection string, which is really bad as we now know)</li> <li>One for the API pods</li></ul> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file sqlserver-service.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mssqlsvr
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> mssql
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">1433</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">1433</span> <span class="token comment"># could be omitted, because 'port' and 'targetPort' are the same</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> ClusterIP <span class="token comment"># could be omitted, because ClusterIP is the default type</span>
+</code></pre></div><div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file api-service.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> contactsapi
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span> <span class="token comment"># 'external' port...</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">5000</span> <span class="token comment"># 'internal' port...</span>
+</code></pre></div><p>Let's apply both definitions:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> sqlserver-service.yaml
+service/mssqlsvr created
+
+$ kubectl apply <span class="token parameter variable">-f</span> api-service.yaml
+service/contactsapi created
+</code></pre></div><p>So, how do we check, that the service(s) really find pods to route traffic to? Here another Kubernetes object comes into play: <code>Endpoints</code>.</p> <p>An <em>endpoint</em> tracks the IP addresses of individual pods and is created for each service you define. The service then references an endpoint to know to which pods traffic can be routed to. Any time a pod gets created or deleted (and is part of a certain service), the corresponding <code>Endpoint</code> gets updated.</p> <p>Let's see how that looks like in our case:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get services,endpoints
+
+NAME                  TYPE        CLUSTER-IP    EXTERNAL-IP   PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>    AGE
+service/contactsapi   ClusterIP   <span class="token number">10.0</span>.49.134   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">8080</span>/TCP   8m21s
+service/kubernetes    ClusterIP   <span class="token number">10.0</span>.0.1      <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">443</span>/TCP    5d1h
+service/mssqlsvr      ClusterIP   <span class="token number">10.0</span>.96.4     <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">1433</span>/TCP   8m21s
+
+NAME                    ENDPOINTS                                                       AGE
+endpoints/contactsapi   <span class="token number">10.244</span>.0.15:5000,10.244.0.16:5000,10.244.1.8:5000 + <span class="token number">1</span> more<span class="token punctuation">..</span>.   8m22s
+endpoints/kubernetes    <span class="token number">20.50</span>.162.80:443                                                5d1h
+endpoints/mssqlsvr      <span class="token number">10.244</span>.0.5:1433                                                 8m22s
+</code></pre></div><p>This looks pretty good! The services we added have been created and also their corresponding endpoints point to the correct pod IP addresses.</p> <p>In case of the <code>contactsapi</code> service/endpoint, it finds multiple pods/IP addresses to route traffic to. From now on, we could use the service name to call our pods, e.g. <a href="http://contactsapi:8080" target="_blank" rel="noopener noreferrer">http://contactsapi:8080<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>.</p> <p>Now, there is one more step to do, before we can test the setup: adjust the connection string of the <code>myapi</code> deployment:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token punctuation">[</span><span class="token punctuation">...</span><span class="token punctuation">]</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ConnectionStrings__DefaultConnectionString
+      <span class="token key atrule">value</span><span class="token punctuation">:</span> Server=tcp<span class="token punctuation">:</span>mssqlsvr<span class="token punctuation">,</span>1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe<span class="token tag">!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection</span> Timeout=30;
+<span class="token punctuation">[</span><span class="token punctuation">...</span><span class="token punctuation">]</span>
+</code></pre></div><p>Replace the IP address, with the DNS name of the service <code>mssqlsvr</code> and reapply the manifest. This will result in four re-created API pods:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> api.yaml
+deployment.apps/myapi configured
+</code></pre></div><p>Let's test the setup. We spin up another pod in the cluster, connect to the command line of that pod and run several calls against our API service:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl run <span class="token parameter variable">-it</span> <span class="token parameter variable">--rm</span> <span class="token parameter variable">--image</span> csaocpger/httpie:1.0 http <span class="token parameter variable">--restart</span> Never -- /bin/sh
+If you don't see a <span class="token builtin class-name">command</span> prompt, try pressing enter.
+</code></pre></div><p>You are now connected to the pod and should see a command prompt. We issue some requests:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>
+<span class="token comment"># CREATE a contact</span>
+$ <span class="token builtin class-name">echo</span> <span class="token string">'{ &quot;firstname&quot;: &quot;Satya&quot;, &quot;lastname&quot;: &quot;Nadella&quot;, &quot;email&quot;: &quot;satya@microsoft.com&quot;, &quot;company&quot;: &quot;Microsoft&quot;, &quot;avatarLocation&quot;: &quot;&quot;, &quot;phone&quot;: &quot;+1 32 6546 6545&quot;, &quot;mobile&quot;: &quot;+1 32 6546 6542&quot;, &quot;description&quot;: &quot;CEO of Microsoft&quot;, &quot;street&quot;: &quot;Street&quot;, &quot;houseNumber&quot;: &quot;1&quot;, &quot;city&quot;: &quot;Redmond&quot;, &quot;postalCode&quot;: &quot;123456&quot;, &quot;country&quot;: &quot;USA&quot; }'</span> <span class="token operator">|</span> http POST http://contactsapi:8080/contacts
+
+HTTP/1.1 <span class="token number">201</span> Created
+Content-Type: application/json<span class="token punctuation">;</span> <span class="token assign-left variable">charset</span><span class="token operator">=</span>utf-8
+Date: Wed, <span class="token number">28</span> Oct <span class="token number">2020</span> 08:44:43 GMT
+Location: http://contactsapi:8080/contacts/011a9848-2889-4164-a29e-d5ffca5d58cc
+Server: Kestrel
+Transfer-Encoding: chunked
+
+<span class="token punctuation">{</span>
+    <span class="token string">&quot;avatarLocation&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;&quot;</span>,
+    <span class="token string">&quot;city&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Redmond&quot;</span>,
+    <span class="token string">&quot;company&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Microsoft&quot;</span>,
+    <span class="token string">&quot;country&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;USA&quot;</span>,
+    <span class="token string">&quot;description&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;CEO of Microsoft&quot;</span>,
+    <span class="token string">&quot;email&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;satya@microsoft.com&quot;</span>,
+    <span class="token string">&quot;firstname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Satya&quot;</span>,
+    <span class="token string">&quot;houseNumber&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;1&quot;</span>,
+    <span class="token string">&quot;id&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;011a9848-2889-4164-a29e-d5ffca5d58cc&quot;</span>,
+    <span class="token string">&quot;lastname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Nadella&quot;</span>,
+    <span class="token string">&quot;mobile&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6542&quot;</span>,
+    <span class="token string">&quot;phone&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6545&quot;</span>,
+    <span class="token string">&quot;postalCode&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;123456&quot;</span>,
+    <span class="token string">&quot;street&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Street&quot;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># READ all contacts</span>
+http GET http://contactsapi:8080/contacts
+
+HTTP/1.1 <span class="token number">200</span> OK
+Content-Type: application/json<span class="token punctuation">;</span> <span class="token assign-left variable">charset</span><span class="token operator">=</span>utf-8
+Date: Wed, <span class="token number">28</span> Oct <span class="token number">2020</span> 08:45:49 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+<span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">&quot;avatarLocation&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;&quot;</span>,
+        <span class="token string">&quot;city&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Redmond&quot;</span>,
+        <span class="token string">&quot;company&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Microsoft&quot;</span>,
+        <span class="token string">&quot;country&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;USA&quot;</span>,
+        <span class="token string">&quot;description&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;CEO of Microsoft&quot;</span>,
+        <span class="token string">&quot;email&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;satya@microsoft.com&quot;</span>,
+        <span class="token string">&quot;firstname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Satya&quot;</span>,
+        <span class="token string">&quot;houseNumber&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;1&quot;</span>,
+        <span class="token string">&quot;id&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;011a9848-2889-4164-a29e-d5ffca5d58cc&quot;</span>,
+        <span class="token string">&quot;lastname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Nadella&quot;</span>,
+        <span class="token string">&quot;mobile&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6542&quot;</span>,
+        <span class="token string">&quot;phone&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6545&quot;</span>,
+        <span class="token string">&quot;postalCode&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;123456&quot;</span>,
+        <span class="token string">&quot;street&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Street&quot;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</code></pre></div><p>As you can see, the API is working perfectly <em>and</em> the traffic is load-balanced over the four running pods of the contacts API.</p> <p>In addition, the connection from an API pod to the database via the <code>Service</code> is working as expected.</p> <h2 id="nodeport-optional"><a href="#nodeport-optional" class="header-anchor">#</a> NodePort (Optional)</h2> <p>So far, we have learned about the default service type in Kubernetes (ClusterIP). The next one we'll cover is called <code>NodePort</code>.</p> <p>A <em>NodePort</em> service exposes the service on each worker node at a static port. You'll be able to call the service from outside the cluster, even the internet, if the node had a public IP address. By default, also a ClusterIP service, to which the NodePort service routes, is automatically created.</p> <p>To demonstrate the behavior, we'll create a new service called <code>nodeport-contactsapi</code> that will select all of the API pods currently running in the cluster. Basically this is the same behavior as the ClusterIP service, but accessible via &lt;NodeIp&gt;:&lt;NodePort&gt;:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file api-service-nodeport.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> nodeport<span class="token punctuation">-</span>contactsapi
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> NodePort
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span> <span class="token comment"># 'clusterip' port...</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">5000</span> <span class="token comment"># 'internal' port...</span>
+      <span class="token key atrule">nodePort</span><span class="token punctuation">:</span> <span class="token number">30010</span> <span class="token comment"># optional - Kubernetes would pick a port from the default node-port range 30000-32767</span>
+</code></pre></div><p>Create a file called <code>api-service-nodeport.yaml</code> and apply the definition to your cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> api-service-nodeport.yaml
+
+service/nodeport-contactsapi created
+
+<span class="token comment"># Check the services/endpoints created</span>
+$ kubectl get services,endpoints
+</code></pre></div><p>By using the same label selectors for the service, we get the same endpoints as for our <code>ClusterIP</code> API service.</p> <p>Let's call such a service via a node's IP address and the port <code>30010</code>. First we need to determine the IP address of each node:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># get node IP adresses</span>
+$ kubectl get nodes <span class="token parameter variable">-o</span> wide
+
+NAME                                STATUS   ROLES   AGE     VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+aks-nodepool1-11985439-vmss000000   Ready    agent   5d20h   v1.17.11   <span class="token number">10.240</span>.0.4    <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        Ubuntu <span class="token number">16.04</span>.7 LTS   <span class="token number">4.15</span>.0-1096-azure   docker://19.3.12
+aks-nodepool1-11985439-vmss000001   Ready    agent   5d20h   v1.17.11   <span class="token number">10.240</span>.0.5    <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        Ubuntu <span class="token number">16.04</span>.7 LTS   <span class="token number">4.15</span>.0-1096-azure   docker://19.3.12
+aks-nodepool1-11985439-vmss000002   Ready    agent   5d20h   v1.17.11   <span class="token number">10.240</span>.0.6    <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        Ubuntu <span class="token number">16.04</span>.7 LTS   <span class="token number">4.15</span>.0-1096-azure   docker://19.3.12
+</code></pre></div><p>In this case, we have the IP addresses <code>10.240.0.4</code>, <code>10.240.0.5</code> and <code>10.240.0.6</code>. Let's use one of them to call the contacts API:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl run <span class="token parameter variable">-it</span> <span class="token parameter variable">--rm</span> <span class="token parameter variable">--image</span> csaocpger/httpie:1.0 http <span class="token parameter variable">--restart</span> Never -- /bin/sh
+
+<span class="token comment"># inside the pod, execute...</span>
+
+$ http GET http://10.240.0.4:30010/contacts
+
+HTTP/1.1 <span class="token number">200</span> OK
+Content-Type: application/json<span class="token punctuation">;</span> <span class="token assign-left variable">charset</span><span class="token operator">=</span>utf-8
+Date: Wed, <span class="token number">28</span> Oct <span class="token number">2020</span> 09:45:58 GMT
+Server: Kestrel
+Transfer-Encoding: chunked
+
+<span class="token punctuation">[</span>
+    <span class="token punctuation">{</span>
+        <span class="token string">&quot;avatarLocation&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;&quot;</span>,
+        <span class="token string">&quot;city&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Redmond&quot;</span>,
+        <span class="token string">&quot;company&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Microsoft&quot;</span>,
+        <span class="token string">&quot;country&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;USA&quot;</span>,
+        <span class="token string">&quot;description&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;CEO of Microsoft&quot;</span>,
+        <span class="token string">&quot;email&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;satya@microsoft.com&quot;</span>,
+        <span class="token string">&quot;firstname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Satya&quot;</span>,
+        <span class="token string">&quot;houseNumber&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;1&quot;</span>,
+        <span class="token string">&quot;id&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;011a9848-2889-4164-a29e-d5ffca5d58cc&quot;</span>,
+        <span class="token string">&quot;lastname&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Nadella&quot;</span>,
+        <span class="token string">&quot;mobile&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6542&quot;</span>,
+        <span class="token string">&quot;phone&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;+1 32 6546 6545&quot;</span>,
+        <span class="token string">&quot;postalCode&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;123456&quot;</span>,
+        <span class="token string">&quot;street&quot;</span><span class="token builtin class-name">:</span> <span class="token string">&quot;Street&quot;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">]</span>
+</code></pre></div><p>Perfect! We can now also call our contacts API service via a worker node.</p> <p>But unfortunately, our worker nodes do not have a public IP adress. So how can we access our service now via the internet?</p> <p>Let's move on to the next service type: <code>LoadBalancer</code>.</p> <h2 id="loadbalancer"><a href="#loadbalancer" class="header-anchor">#</a> LoadBalancer</h2> <p>As you might already have guessed, a service of type <code>LoadBalancer</code> is the one, that enables us to expose a service via an Azure Loadbalancer with a public IP adress.</p> <p>By default, also a <code>ClusterIP</code> and <code>NodePort</code> service, to which the external load balancer routes, are automatically created.</p> <p>Let's see this in action. We create an additional service that routes traffic to our four API pods, this time with a type of <code>LoadBalancer</code>:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file api-service-loadbalancer.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> loadbalancer<span class="token punctuation">-</span>contactsapi
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> LoadBalancer
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">protocol</span><span class="token punctuation">:</span> TCP
+      <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span> <span class="token comment"># 'public' port...</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">5000</span> <span class="token comment"># 'internal' port...</span>
+</code></pre></div><p>Please create a file called <code>api-service-loadbalancer.yaml</code> and apply it:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> api-service-loadbalancer.yaml
+
+service/loadbalancer-contactsapi created
+
+<span class="token comment"># Check available services in the cluster</span>
+
+$ kubectl get services <span class="token parameter variable">-w</span>
+
+NAME                       TYPE           CLUSTER-IP    EXTERNAL-IP      PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>          AGE
+contactsapi                ClusterIP      <span class="token number">10.0</span>.49.134   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token number">8080</span>/TCP         19h
+kubernetes                 ClusterIP      <span class="token number">10.0</span>.0.1      <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token number">443</span>/TCP          5d21h
+loadbalancer-contactsapi   LoadBalancer   <span class="token number">10.0</span>.163.1    <span class="token operator">&lt;</span>pending<span class="token operator">&gt;</span>        <span class="token number">8080</span>:30320/TCP   6s
+mssqlsvr                   ClusterIP      <span class="token number">10.0</span>.96.4     <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token number">1433</span>/TCP         19h
+nodeport-contactsapi       NodePort       <span class="token number">10.0</span>.87.165   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>           <span class="token number">8080</span>:30010/TCP   69m
+loadbalancer-contactsapi   LoadBalancer   <span class="token number">10.0</span>.163.1    <span class="token number">52.236</span>.151.220   <span class="token number">8080</span>:30320/TCP   56s
+</code></pre></div><p>As you can see, after a short amount of time, the <code>loadbalancer-contactsapi</code> is receiving an external IP adress from the Azure Loadbalancer.</p> <p>Our contacts API should now be accessible - in this case - via <a href="http://52.236.151.220:8080" target="_blank" rel="noopener noreferrer">http://52.236.151.220:8080<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>. If you open that link in a browser (of course, replace the IP adress with the one your service has received), you should see the swagger UI.</p> <p><img src="/trainingdays/assets/img/swagger-external.307344cc.png" alt="swagger_external"></p> <p>We now have the tools to expose a single service to the internet via the <code>LoadBalancer</code> type. This may be okay in a scenario, where you only have few services. But to be clear, this is an <em>anti-pattern</em>.</p> <p>In a production environment, you want to limit the amount of externally available services (IP adresses) to a minimum. And if your application is made of several services or is implementing a microservice-based architectural pattern, using <code>LoadBalancer</code> services is a bad practice.</p> <p>Ideally, you only use one public IP adress and manage the external access to the cluster via <code>Ingress</code> definitions and the corresponding <code>Ingress Controller</code>.</p> <h2 id="ingress"><a href="#ingress" class="header-anchor">#</a> Ingress</h2> <p>An <code>Ingress</code> definition is a way to describe how clients are routed to your services. It manages the <em>external</em> access to your cluster, typically via HTTP(S).</p> <p>It is a core concept of Kubernetes and the <em>rules</em> defined in an <code>Ingress</code> manifest are always implemented by a third party controller, the <code>Ingress Controller</code>. Kubernetes doesn't come with one out-of-the-box, but you can install one from a variety of offerings.</p> <p>We will be using the <em>NGINX</em> Ingress Controller, but here's an awesome comparion of all the (relevant) available options: <a href="https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-oq3k/htmlview#" target="_blank" rel="noopener noreferrer">https://docs.google.com/spreadsheets/d/191WWNpjJ2za6-nbG4ZoUMXMpUK8KlCIosvQB0f-oq3k/htmlview#<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>The <code>Ingress Controller</code> sits in front of many services within a cluster and is the (most of the time) the only service of type <code>LoadBalancer</code> with a public IP in Kubernetes, routing traffic to your services and - depending on the implementation - can also add functionality like SSL termination, path rewrites, name based virtual hosts, IP whitelisting etc.</p> <p><img src="/trainingdays/assets/img/ingress_controller.fe805702.png" alt="ingress controller"></p> <h3 id="installation"><a href="#installation" class="header-anchor">#</a> Installation</h3> <p>To install the <a href="https://kubernetes.github.io/ingress-nginx/" target="_blank" rel="noopener noreferrer">NGINX ingress controller<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>, we will be using <em>Helm</em>. Helm is the de facto package manager in the Kubernetes ecosystem.</p> <p>If you haven't installed it already, please go to <a href="https://helm.sh/docs/intro/install/" target="_blank" rel="noopener noreferrer">https://helm.sh/docs/intro/install/<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> and follow the instructions depending on the OS you are using. If you follow this workshop in the Azure Cloud Shell, you are good to go - it is already installed for you.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 To keeps things cleary seperated from each other, we will be using a different namespace for the ingress controller. <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/" target="_blank" rel="noopener noreferrer">Kubernetes namespaces<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> are a way to logically group workloads within a cluster - they literally create a &quot;virtual cluster&quot; in your physical cluster.</p> <p>By the way, you are already using namespaces! Every time you were deploying pods, services etc. to the cluster, you were using the <code>default</code> namespace which has been created for you during cluster creation. You can list the available namespaces by executing <code>kubectl get namespaces</code>.</p></div> <p>Let's install the ingress controller:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ helm repo <span class="token function">add</span> ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+<span class="token string">&quot;ingress-nginx&quot;</span> has been added to your repositories
+
+$ helm upgrade my-ingress <span class="token parameter variable">--install</span> ingress-nginx <span class="token parameter variable">--repo</span> https://kubernetes.github.io/ingress-nginx <span class="token parameter variable">--namespace</span> ingress <span class="token parameter variable">--set</span> <span class="token assign-left variable">controller.service.externalTrafficPolicy</span><span class="token operator">=</span>Local --create-namespace
+
+NAME: my-ingress
+LAST DEPLOYED: Thu Oct <span class="token number">29</span> 08:11:35 <span class="token number">2020</span>
+NAMESPACE: ingress
+STATUS: deployed
+REVISION: <span class="token number">1</span>
+TEST SUITE: None
+NOTES:
+The ingress-nginx controller has been installed.
+It may take a few minutes <span class="token keyword">for</span> the LoadBalancer IP to be available.
+You can <span class="token function">watch</span> the status by running <span class="token string">'kubectl --namespace ingress get services -o wide -w my-ingress-ingress-nginx-controller'</span>
+<span class="token punctuation">[</span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+<span class="token punctuation">[</span><span class="token punctuation">..</span>.<span class="token punctuation">]</span>
+</code></pre></div><p>After the controller has been installed, check the correspondig service:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>
+$ kubectl <span class="token parameter variable">--namespace</span> ingress get services my-ingress-ingress-nginx-controller
+
+NAME                                  TYPE           CLUSTER-IP     EXTERNAL-IP     PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>                      AGE
+my-ingress-ingress-nginx-controller   LoadBalancer   <span class="token number">10.0</span>.200.226   <span class="token number">20.67</span>.122.249   <span class="token number">80</span>:32258/TCP,443:31950/TCP   2m37s
+</code></pre></div><p>The service <code>my-ingress-ingress-nginx-controller</code> successfully got a public IP and is now ready to accept traffic.</p> <p>But using an IP adress to navigate to websites/services is not the best option, correct? Let's use a fully-qualified-domain-name (FQND). The problem is, we haven't registered a domain for our sample.</p> <p>But: you can use a service called <a href="https://nip.io/" target="_blank" rel="noopener noreferrer">nip.io<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> that will give you &quot;dynamic routing&quot; by simply adding the IP adress (with dots &quot;.&quot; or dashes &quot;-&quot; as seperator) as a subdomain of the domain &quot;nip.io&quot;. In the current case, the domain looks like this: <a href="http://20-67-122-249.nip.io/" target="_blank" rel="noopener noreferrer">http://20-67-122-249.nip.io/<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>You can test the setup, by opening a browser and navigating to that URL...you should see a page similar to that one.</p> <p><img src="/trainingdays/assets/img/default_ingress.fbdd941a.png" alt="default_ingress"></p> <p>The IP adress of the ingress controller will be the <em>only one</em> exposed in our cluster now.</p> <p>Therefore, we can get rid of the one created in the previuos chapter. To have a clean environment, let's also remove the <code>NodePort</code> service:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># this one will take some time, because Kubernetes needs to delete the public IP at the Azure Loadbalancer</span>
+$ kubectl delete <span class="token function">service</span> loadbalancer-contactsapi
+
+<span class="token function">service</span> <span class="token string">&quot;loadbalancer-contactsapi&quot;</span> deleted
+
+$ kubectl delete <span class="token function">service</span> nodeport-contactsapi
+
+<span class="token function">service</span> <span class="token string">&quot;nodeport-contactsapi&quot;</span> deleted
+
+<span class="token comment"># query the service - you should have the 'mssqlsvr' and 'contactsapi' service (ClusterIP)</span>
+$ kubectl get services
+
+NAME          TYPE        CLUSTER-IP    EXTERNAL-IP   PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>    AGE
+contactsapi   ClusterIP   <span class="token number">10.0</span>.49.134   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">8080</span>/TCP   40h
+kubernetes    ClusterIP   <span class="token number">10.0</span>.0.1      <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">443</span>/TCP    6d17h
+mssqlsvr      ClusterIP   <span class="token number">10.0</span>.96.4     <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">1433</span>/TCP   40h
+</code></pre></div><p>Let's create an ingress definition for the Contacts API.</p> <h2 id="create-ingress-definitions"><a href="#create-ingress-definitions" class="header-anchor">#</a> Create Ingress Definitions</h2> <p>The controller has been successfully installed and can accept traffic. We are ready to create an <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/" target="_blank" rel="noopener noreferrer">ingress definition<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> for the Contacts API.</p> <p>To access the service, we want to be able to call an endpoint like that: <a href="http://20-67-122-249.nip.io/api/contacts" target="_blank" rel="noopener noreferrer">http://20-67-122-249.nip.io/api/contacts<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>. Therefore, we will be using path-based routing:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file api-ingress.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> networking.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Ingress
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ing<span class="token punctuation">-</span>contacts
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/enable-cors</span><span class="token punctuation">:</span> <span class="token string">'true'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/cors-allow-headers</span><span class="token punctuation">:</span> <span class="token string">'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/cors-max-age</span><span class="token punctuation">:</span> <span class="token string">'600'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/proxy-body-size</span><span class="token punctuation">:</span> <span class="token string">'12m'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/rewrite-target</span><span class="token punctuation">:</span> <span class="token string">'/contacts/$2'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/use-regex</span><span class="token punctuation">:</span> <span class="token string">'true'</span>
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ingressClassName</span><span class="token punctuation">:</span> nginx
+  <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">host</span><span class="token punctuation">:</span> 20<span class="token punctuation">-</span>67<span class="token punctuation">-</span>122<span class="token punctuation">-</span>249.nip.io <span class="token comment"># this should be replaced with YOUR OWN DOMAIN</span>
+      <span class="token key atrule">http</span><span class="token punctuation">:</span>
+        <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">path</span><span class="token punctuation">:</span> /api/contacts(\/<span class="token punctuation">|</span>$)(.<span class="token important">*)</span>
+            <span class="token key atrule">pathType</span><span class="token punctuation">:</span> Prefix
+            <span class="token key atrule">backend</span><span class="token punctuation">:</span>
+              <span class="token key atrule">service</span><span class="token punctuation">:</span>
+                <span class="token key atrule">name</span><span class="token punctuation">:</span> contactsapi
+                <span class="token key atrule">port</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">number</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre></div><p>Create the file <code>api-ingress.yaml</code> and apply it:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> api-ingress.yaml
+</code></pre></div><p>You should now be able to navigate to the adress <a href="http://20-67-122-249.nip.io/api/contacts" target="_blank" rel="noopener noreferrer">http://20-67-122-249.nip.io/api/contacts<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> and get the list of available contacts.</p> <p>Traffic is managed by the ingress controller and dynamically routed to the <code>contactsapi</code> service (that is by default not accessible publicly - only now through the ingress controller/definition).</p> <p><img src="/trainingdays/assets/img/ingress_contacts.b0be9d4b.png" alt="ingress_contacts"></p> <p>As you can see in the ingress definition, we also added a few annotations to influence how the underlying NGINX server is dealing with requests:</p> <ul><li>We enabled <a href="https://developer.mozilla.org/docs/Web/HTTP/CORS" target="_blank" rel="noopener noreferrer">Cross-Origin-Resource-Sharing (CORS)<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> (<code>nginx.ingress.kubernetes.io/enable-cors</code>).</li> <li>We defined which headers are allowed (<code>nginx.ingress.kubernetes.io/cors-allow-headers</code>).</li> <li>We defined how long the CORS response is valid until the next CORS request will be sent by the browser (<code>nginx.ingress.kubernetes.io/cors-max-age</code>).</li></ul> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 There is a long list of available annotations you can use with the NGINX ingress controller: <a href="https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/" target="_blank" rel="noopener noreferrer">https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>.</p> <p>Of course, other ingress controllers support similar definitions.</p></div> <h2 id="add-the-ui"><a href="#add-the-ui" class="header-anchor">#</a> Add the UI</h2> <p>Just having an API is pretty boring. Of course there is also a UI service, that is able to interact with the API. Let's also add that component to our cluster to have a &quot;real-life setup&quot;.</p> <p>Go to the folder <code>day7/apps/frontend/scmfe/public/settings</code> and adjust the <code>settings.js</code> file for the frontend. We need to tell the Single Page Application, where to access the Contacts API:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">var</span> uisettings <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">endpoint</span><span class="token operator">:</span> <span class="token string">'http://&lt;YOUR_NIP_DOMAIN&gt;/api/contacts/'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">enableStats</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">aiKey</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>In the current sample, the file looks like this:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">var</span> uisettings <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">endpoint</span><span class="token operator">:</span> <span class="token string">'http://20-67-122-249.nip.io/api/contacts/'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">enableStats</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">aiKey</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>Save the file and go to the folder <code>day7/apps/frontend/scmfe</code> and build/publish the Docker image:</p> <ul><li><p>Alternative 1: Build locally</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">docker</span> build <span class="token parameter variable">-t</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-frontend-ui:1.0 <span class="token builtin class-name">.</span>
+<span class="token function">docker</span> push <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-frontend-ui:1.0
+</code></pre></div></li> <li><p>Alternative 2: Use your Azure Container Registry</p> <div class="language-shell extra-class"><pre class="language-shell"><code>az acr build <span class="token parameter variable">-r</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span> <span class="token parameter variable">-t</span> <span class="token operator">&lt;</span>ACR_NAME<span class="token operator">&gt;</span>.azurecr.io/adc-frontend-ui:1.0 <span class="token builtin class-name">.</span>
+</code></pre></div></li></ul> <p>As soon as the image is present in your registry, deploy it to the cluster.</p> <p>We need three definitions: a deployment, a <code>ClusterIP</code> service and an ingress object. This time, we will deploy everything via one file, separating each object by <code>---</code>.</p> <p>Don't forget to <strong>adjust the the ingress host</strong> to the domain you are using:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token comment"># Content of file frontend.yaml</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myfrontend
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myfrontend
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/adc<span class="token punctuation">-</span>frontend<span class="token punctuation">-</span>ui<span class="token punctuation">:</span><span class="token number">1.0</span>
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'128Mi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'500m'</span>
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> frontend
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">type</span><span class="token punctuation">:</span> ClusterIP
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+      <span class="token key atrule">targetPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> networking.k8s.io/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Ingress
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> ing<span class="token punctuation">-</span>frontend
+  <span class="token key atrule">annotations</span><span class="token punctuation">:</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/enable-cors</span><span class="token punctuation">:</span> <span class="token string">'true'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/cors-allow-headers</span><span class="token punctuation">:</span> <span class="token string">'Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization,Accept-Language'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/cors-max-age</span><span class="token punctuation">:</span> <span class="token string">'600'</span>
+    <span class="token key atrule">nginx.ingress.kubernetes.io/proxy-body-size</span><span class="token punctuation">:</span> <span class="token string">'12m'</span>
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ingressClassName</span><span class="token punctuation">:</span> nginx
+  <span class="token key atrule">rules</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">host</span><span class="token punctuation">:</span> 20<span class="token punctuation">-</span>67<span class="token punctuation">-</span>122<span class="token punctuation">-</span>249.nip.io <span class="token comment"># this should be replaced with YOUR OWN DOMAIN</span>
+      <span class="token key atrule">http</span><span class="token punctuation">:</span>
+        <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">path</span><span class="token punctuation">:</span> /
+            <span class="token key atrule">pathType</span><span class="token punctuation">:</span> Prefix
+            <span class="token key atrule">backend</span><span class="token punctuation">:</span>
+              <span class="token key atrule">service</span><span class="token punctuation">:</span>
+                <span class="token key atrule">name</span><span class="token punctuation">:</span> frontend
+                <span class="token key atrule">port</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">number</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+</code></pre></div><p>Create a file called <code>frontend.yaml</code> with the content above and apply it:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl apply <span class="token parameter variable">-f</span> frontend.yaml
+
+deployment.apps/myfrontend created
+service/frontend created
+ingress.networking.k8s.io/ing-frontend created
+</code></pre></div><p>Please check, that everything is in place:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl get deployment,service,endpoints,ingress
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/mssql-deployment   <span class="token number">1</span>/1     <span class="token number">1</span>            <span class="token number">1</span>           2d2h
+deployment.apps/myapi              <span class="token number">4</span>/4     <span class="token number">4</span>            <span class="token number">4</span>           2d1h
+deployment.apps/myfrontend         <span class="token number">1</span>/1     <span class="token number">1</span>            <span class="token number">1</span>           3m5s
+
+NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT<span class="token punctuation">(</span>S<span class="token punctuation">)</span>    AGE
+service/contactsapi   ClusterIP   <span class="token number">10.0</span>.49.134    <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">8080</span>/TCP   43h
+service/frontend      ClusterIP   <span class="token number">10.0</span>.124.132   <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">8080</span>/TCP   3m5s
+service/kubernetes    ClusterIP   <span class="token number">10.0</span>.0.1       <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">443</span>/TCP    6d21h
+service/mssqlsvr      ClusterIP   <span class="token number">10.0</span>.96.4      <span class="token operator">&lt;</span>none<span class="token operator">&gt;</span>        <span class="token number">1433</span>/TCP   43h
+
+NAME                    ENDPOINTS                                                        AGE
+endpoints/contactsapi   <span class="token number">10.244</span>.0.38:5000,10.244.1.15:5000,10.244.1.16:5000 + <span class="token number">1</span> more<span class="token punctuation">..</span>.   43h
+endpoints/frontend      <span class="token number">10.244</span>.0.39:80                                                   3m5s
+endpoints/kubernetes    <span class="token number">20.50</span>.162.80:443                                                 6d21h
+endpoints/mssqlsvr      <span class="token number">10.244</span>.0.5:1433                                                  43h
+
+NAME                              HOSTS                  ADDRESS         PORTS   AGE
+ingress.extensions/ing-contacts   <span class="token number">20</span>-67-122-249.nip.io   <span class="token number">20.67</span>.122.249   <span class="token number">80</span>      45m
+ingress.extensions/ing-frontend   <span class="token number">20</span>-67-122-249.nip.io   <span class="token number">20.67</span>.122.249   <span class="token number">80</span>      3m5s
+</code></pre></div><p>That looks good! Open a browser and navigate to the website (here: <a href="http://20-67-122-249.nip.io/" target="_blank" rel="noopener noreferrer">http://20-67-122-249.nip.io/<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>), open the contacts list and create/modify a contact.</p> <p><img src="/trainingdays/assets/img/ui_home.5e34d60f.png" alt="ui_home"> <img src="/trainingdays/assets/img/ui_list.67153dd4.png" alt="ui_list"> <img src="/trainingdays/assets/img/ui_detail.c7f8e689.png" alt="ui_detail"></p> <h2 id="wrap-up"><a href="#wrap-up" class="header-anchor">#</a> Wrap-Up</h2> <p>🎉 <strong><em>Congratulations</em></strong> 🎉</p> <p>You have deployed a full-blown application to Kubernetes with a SQL server running inside the cluster.</p> <p>As you might guess, there are a few things now that need to be adjusted:</p> <ul><li>We added some of the configuration settings - even worse, passwords! - &quot;hard-coded&quot; to manifest files.</li> <li>The endpoint configuration for the UI has been baked into the image.</li></ul> <p>In the next challenge, we will adress these issues.</p> <p><a href="/trainingdays/day7/challenges/challenge-1.html">◀ Previous challenge</a> | <a href="/trainingdays/day7/" class="router-link-active">🔼 Day 7</a> | <a href="/trainingdays/day7/challenges/challenge-3.html">Next challenge ▶</a></p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/azuredevcollege/trainingdays/edit/master/day7/challenges/challenge-2.md" target="_blank" rel="noopener noreferrer">Edit this page</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/trainingdays/assets/js/app.7ee90653.js" defer></script><script src="/trainingdays/assets/js/3.bac66e4c.js" defer></script><script src="/trainingdays/assets/js/25.5746a249.js" defer></script>
+  </body>
+</html>

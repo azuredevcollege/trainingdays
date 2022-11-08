@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>💎 Challenge 05: Create a CI/CD workflow to deploy the shared Azure resources of the SCM sample application 💎 | Azure Developer College</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    
+    <meta name="description" content="">
+    
+    <link rel="preload" href="/trainingdays/assets/css/0.styles.8d7a09fd.css" as="style"><link rel="preload" href="/trainingdays/assets/js/app.7ee90653.js" as="script"><link rel="preload" href="/trainingdays/assets/js/3.bac66e4c.js" as="script"><link rel="preload" href="/trainingdays/assets/js/12.4af6743d.js" as="script"><link rel="prefetch" href="/trainingdays/assets/js/10.e245022a.js"><link rel="prefetch" href="/trainingdays/assets/js/11.e575ca81.js"><link rel="prefetch" href="/trainingdays/assets/js/13.0b26a6a5.js"><link rel="prefetch" href="/trainingdays/assets/js/14.2d92fef8.js"><link rel="prefetch" href="/trainingdays/assets/js/15.a191ca69.js"><link rel="prefetch" href="/trainingdays/assets/js/16.405c54e2.js"><link rel="prefetch" href="/trainingdays/assets/js/17.43731ef2.js"><link rel="prefetch" href="/trainingdays/assets/js/18.2984f726.js"><link rel="prefetch" href="/trainingdays/assets/js/19.a9d0edc3.js"><link rel="prefetch" href="/trainingdays/assets/js/2.0be5b509.js"><link rel="prefetch" href="/trainingdays/assets/js/20.7cffd4b4.js"><link rel="prefetch" href="/trainingdays/assets/js/21.e7fe4a64.js"><link rel="prefetch" href="/trainingdays/assets/js/22.9b14db9d.js"><link rel="prefetch" href="/trainingdays/assets/js/23.441bbca6.js"><link rel="prefetch" href="/trainingdays/assets/js/24.9c4549d9.js"><link rel="prefetch" href="/trainingdays/assets/js/25.5746a249.js"><link rel="prefetch" href="/trainingdays/assets/js/26.b54d0910.js"><link rel="prefetch" href="/trainingdays/assets/js/27.17fc5e8f.js"><link rel="prefetch" href="/trainingdays/assets/js/28.dc06e268.js"><link rel="prefetch" href="/trainingdays/assets/js/29.2c678e32.js"><link rel="prefetch" href="/trainingdays/assets/js/30.da2d71da.js"><link rel="prefetch" href="/trainingdays/assets/js/31.2d6231d3.js"><link rel="prefetch" href="/trainingdays/assets/js/32.de802251.js"><link rel="prefetch" href="/trainingdays/assets/js/33.e1098fb7.js"><link rel="prefetch" href="/trainingdays/assets/js/34.b6d29e40.js"><link rel="prefetch" href="/trainingdays/assets/js/35.4c61bb7b.js"><link rel="prefetch" href="/trainingdays/assets/js/36.336fcd60.js"><link rel="prefetch" href="/trainingdays/assets/js/37.772f2fe7.js"><link rel="prefetch" href="/trainingdays/assets/js/38.ba3ea198.js"><link rel="prefetch" href="/trainingdays/assets/js/39.52fb19ee.js"><link rel="prefetch" href="/trainingdays/assets/js/4.d015fbd5.js"><link rel="prefetch" href="/trainingdays/assets/js/40.354e399e.js"><link rel="prefetch" href="/trainingdays/assets/js/41.ec595a2b.js"><link rel="prefetch" href="/trainingdays/assets/js/42.48bed577.js"><link rel="prefetch" href="/trainingdays/assets/js/43.11938683.js"><link rel="prefetch" href="/trainingdays/assets/js/44.acddabd3.js"><link rel="prefetch" href="/trainingdays/assets/js/45.a2916451.js"><link rel="prefetch" href="/trainingdays/assets/js/46.95911633.js"><link rel="prefetch" href="/trainingdays/assets/js/47.c267ffc1.js"><link rel="prefetch" href="/trainingdays/assets/js/48.37cfbfe4.js"><link rel="prefetch" href="/trainingdays/assets/js/49.9fc08260.js"><link rel="prefetch" href="/trainingdays/assets/js/5.66f1ef82.js"><link rel="prefetch" href="/trainingdays/assets/js/50.f621e07d.js"><link rel="prefetch" href="/trainingdays/assets/js/51.e77f724a.js"><link rel="prefetch" href="/trainingdays/assets/js/52.c0052e39.js"><link rel="prefetch" href="/trainingdays/assets/js/53.2fe21a43.js"><link rel="prefetch" href="/trainingdays/assets/js/54.6d6dd706.js"><link rel="prefetch" href="/trainingdays/assets/js/55.de3427a7.js"><link rel="prefetch" href="/trainingdays/assets/js/56.357453fe.js"><link rel="prefetch" href="/trainingdays/assets/js/57.2b8c0b9b.js"><link rel="prefetch" href="/trainingdays/assets/js/58.34c86dce.js"><link rel="prefetch" href="/trainingdays/assets/js/59.20afb7e5.js"><link rel="prefetch" href="/trainingdays/assets/js/6.bd3d8f89.js"><link rel="prefetch" href="/trainingdays/assets/js/60.cf52ab3d.js"><link rel="prefetch" href="/trainingdays/assets/js/61.b7ff488e.js"><link rel="prefetch" href="/trainingdays/assets/js/62.2451e01f.js"><link rel="prefetch" href="/trainingdays/assets/js/63.d86a5b86.js"><link rel="prefetch" href="/trainingdays/assets/js/64.608921b5.js"><link rel="prefetch" href="/trainingdays/assets/js/65.d90b3114.js"><link rel="prefetch" href="/trainingdays/assets/js/66.49c6fbd9.js"><link rel="prefetch" href="/trainingdays/assets/js/67.4f60f26b.js"><link rel="prefetch" href="/trainingdays/assets/js/68.208402a2.js"><link rel="prefetch" href="/trainingdays/assets/js/69.a980b450.js"><link rel="prefetch" href="/trainingdays/assets/js/7.fc9a0f7c.js"><link rel="prefetch" href="/trainingdays/assets/js/70.cf4f53b8.js"><link rel="prefetch" href="/trainingdays/assets/js/71.55c061b2.js"><link rel="prefetch" href="/trainingdays/assets/js/72.7cc4b8ba.js"><link rel="prefetch" href="/trainingdays/assets/js/73.71f272fd.js"><link rel="prefetch" href="/trainingdays/assets/js/74.d9324332.js"><link rel="prefetch" href="/trainingdays/assets/js/75.22202aba.js"><link rel="prefetch" href="/trainingdays/assets/js/76.79e1fda3.js"><link rel="prefetch" href="/trainingdays/assets/js/77.09f6ecf5.js"><link rel="prefetch" href="/trainingdays/assets/js/78.40383fd1.js"><link rel="prefetch" href="/trainingdays/assets/js/79.c5447221.js"><link rel="prefetch" href="/trainingdays/assets/js/8.45342290.js"><link rel="prefetch" href="/trainingdays/assets/js/80.5cf25ae5.js"><link rel="prefetch" href="/trainingdays/assets/js/81.e3653e94.js"><link rel="prefetch" href="/trainingdays/assets/js/82.e34ef379.js"><link rel="prefetch" href="/trainingdays/assets/js/83.a86bfa1d.js"><link rel="prefetch" href="/trainingdays/assets/js/84.147161c7.js"><link rel="prefetch" href="/trainingdays/assets/js/85.ee46661f.js"><link rel="prefetch" href="/trainingdays/assets/js/86.b933c088.js"><link rel="prefetch" href="/trainingdays/assets/js/87.0b4539ef.js"><link rel="prefetch" href="/trainingdays/assets/js/9.235ee99d.js">
+    <link rel="stylesheet" href="/trainingdays/assets/css/0.styles.8d7a09fd.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/trainingdays/" class="home-link router-link-active"><!----> <span class="site-name">Azure Developer College</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><a href="/trainingdays/" aria-current="page" class="sidebar-link">Home</a></li><li><a href="/trainingdays/day1/" class="sidebar-link">Day 1 Azure Fundamentals &amp; Infrastructure</a></li><li><a href="/trainingdays/day2/" class="sidebar-link">Day 2 Azure Development</a></li><li><a href="/trainingdays/day3/" class="sidebar-link">Day 3 Data and AI</a></li><li><a href="/trainingdays/day4/" aria-current="page" class="sidebar-link">Day 4 DevOps and Monitoring</a></li><li><a href="/trainingdays/day5/" class="sidebar-link">Day 5 Identity and Architecture</a></li><li><a href="/trainingdays/day6/" class="sidebar-link">Day 6 Containerization</a></li><li><a href="/trainingdays/day7/" class="sidebar-link">Day 7 Kubernetes</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="💎-challenge-05-create-a-ci-cd-workflow-to-deploy-the-shared-azure-resources-of-the-scm-sample-application-💎"><a href="#💎-challenge-05-create-a-ci-cd-workflow-to-deploy-the-shared-azure-resources-of-the-scm-sample-application-💎" class="header-anchor">#</a> 💎 Challenge 05: Create a CI/CD workflow to deploy the shared Azure resources of the SCM sample application 💎</h1> <p>⏲️ <em>Est. time to complete: 30 min.</em> ⏲️</p> <h2 id="here-is-what-you-will-learn-🎯"><a href="#here-is-what-you-will-learn-🎯" class="header-anchor">#</a> Here is what you will learn 🎯</h2> <p>In this challenge you will learn how to:</p> <ul><li>Create a GitHub CI/CD workflow to deploy shared Azure resources of the
+SCM sample application</li> <li>Add approval reviewer to a pull request</li> <li>See a pull requests status checks in action</li> <li>Deploy changes to the master branch to a development environment</li> <li>Approve deployment requests to a Testing environment</li></ul> <h2 id="table-of-content"><a href="#table-of-content" class="header-anchor">#</a> Table of content</h2> <ol><li><a href="#get-started">Get started</a></li> <li><a href="#goal">Goal</a></li> <li><a href="#plan-your-work">Plan your work</a></li> <li><a href="#create-dev-and-test-environments">Create Dev and Test environments</a></li> <li><a href="#create-a-service-principal-and-store-the-secret">Create a service principal and store the secret</a></li> <li><a href="#activate-the-cicd-workflow">Activate the CI/CD workflow</a></li> <li><a href="#summary">Summary</a></li></ol> <h2 id="get-started"><a href="#get-started" class="header-anchor">#</a> Get started</h2> <p>Now it's time to come back to the Azure Developer College's sample application.
+We want to introduce a professional CI/CD workflow to continuously and constantly
+deploy changes and features to multiple environments. A best practice is to
+first deploy changes in a separate environment before those changes eventually
+go live. We can look for potential errors and ensure the quality of our
+application. Such an environment is usually referred to as the <em>testing</em> stage.
+But that is not enough, because it also makes sense to continuously provide the
+current development status in an environment during the development period. This
+gives us the opportunity to request feedback from the product owners within a
+sprint. Such an environment is called the <em>development</em> stage.</p> <p>In this challenge we want to start preparing for deployment in two environments.
+After changes were pushed to the master branch we deploy these changes to the
+development environment. A deployment to the testing environment is only
+triggered, after a manual approval. In addition, we want to check within a pull
+request whether all application components can also be built. These are the
+status checks of a pull request that we addressed in the last challenge.</p> <p>The following graphic illustrates the workflow:</p> <p><img src="/trainingdays/assets/img/ci-cd-flow.919a7dc6.png" alt="CI/CD Workflow"></p> <p>The sample application is composed of various micro-services. Each service
+belongs to a bounded context of the SCM domain. A bounded context defines its
+own domain model and it comprises the business logic for a specific technical
+area of the application. The SCM sample application consist of the following
+bounded contexts:</p> <p><img src="/trainingdays/assets/img/ddd-bounded-contexts.93c54f0e.png" alt="Domain Driven Design bounded contexts"></p> <p>Each context provides an API which the frontend accesses and presents the domain
+to the user:</p> <p><img src="/trainingdays/assets/img/frontend-apis.595f8d12.png" alt="Frontend accesses APIs"></p> <p>A bounded context should be the responsibility of a single team. However, a team
+can also be responsible for several bounded contexts, but it is not recommended
+that several teams work on one bounded context.</p> <p>What does this mean for our CI/CD workflow?</p> <p>Regardless of the teams, we should be able to roll out each bounded context
+independently. This way we reduce the time for deployment, as the complete
+application does not have to be deployed. We can implement independent release
+cycles and roll out targeted features and fixes. However, this approach also
+supports the development of an application by several teams.</p> <p>Later in the day we will create the following CI/CD workflows to deploy to a
+development and testing environment:</p> <ul><li>scm-contactsapi</li> <li>scm-resourcesapi</li> <li>scm-searchapi</li> <li>scm-visitreportapi</li> <li>scm-frontend</li></ul> <p>In the SCM sample application's architecture no service within a bounded context
+communicates directly with services from another bounded context. Instead
+changes to a domain object within a bounded context are published through
+events, which describe the changes. Technically, a message bus is used to
+notify other bounded contexts about the changes. With this approach we can
+decouple the bounded contexts. Decoupling increases the availability of our
+application, because when a request is made to the API, not all services have to
+be addressed. A bounded context is informed of changes via the message bus.
+These changes can then be processed asynchronously and the own domain model can
+be updated. This approach is also used within a bounded context. The Resource
+Context for example, stores uploaded images in an Azure blob first and uses a
+message queue to notify the image resizer that a new image is available. The
+image resizer loads the image asynchronously in the background and creates a
+thumbnail of the image.</p> <h2 id="goal"><a href="#goal" class="header-anchor">#</a> Goal</h2> <p>The goal of this challenge is to create a CI/CD workflow for shared Azure
+resources. Before we can deploy all other services we need to create a set of
+Azure resources, which are used by all services. We will create the necessary
+GitHub Actions workflow. Don't worry, the workflow is already created, but we
+need to take a few steps to activate it. This will also give us the opportunity
+to introduce GitHub environments and understand how a pull request workflow
+works, including status checks and reviewers. At the end of this challenge we
+will have created one Azure resource group for each environment (Dev, Test).
+Each resource group contains the shared components:</p> <ul><li><strong>Azure ApplicationInsights</strong>, to get a continuous monitoring of the
+application</li> <li><strong>Azure ServiceBus</strong>, used to transport events from one bounded context to
+another and for events within a bounded context</li> <li><strong>AppServicePlan Windows</strong>, for Windows based workloads</li> <li><strong>AppServicePlan Linux</strong>, for Linux based workloads</li> <li><strong>Consumption based AppServicePlan Windows</strong>, for Windows based Azure
+Functions</li> <li><strong>Storage Account</strong>, needed for Azure Functions</li> <li><strong>Cosmos DB Account</strong>, account for Cosmos DB</li></ul> <h2 id="plan-your-work"><a href="#plan-your-work" class="header-anchor">#</a> Plan your work</h2> <p>First we want to reflect our work for this challenge on the project board. We
+have already created a <em>note</em> on our project board, which says:</p> <blockquote><p>Deploy the sample application</p></blockquote> <p>To describe the outstanding work for this challenge, we create the following
+issue in the imported trainingdays repository, set the label <code>azdc-challenge</code>
+and link it to the <em>note</em>:</p> <div class="language-Text extra-class"><pre class="language-text"><code>Deploy SCM shared Azure resources
+
+Prepare GitHub Actions workflow to deploy shared Azure resources to your Azure
+subscription.
+</code></pre></div><div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 We have already seen how to link an issue to a note in
+<a href="/trainingdays/day4/challenges/01-challenge-boards.html#working-with-cards">challenge-boards</a></p></div> <p>Now drag and drop the note to the <em>In progess</em> column.</p> <p>Your board should now look like this:</p> <p><img src="/trainingdays/assets/img/gh-board-overview-05.52d6ff08.png" alt="GitHub board overview 05"></p> <h2 id="create-dev-and-test-environments"><a href="#create-dev-and-test-environments" class="header-anchor">#</a> Create Dev and Test environments</h2> <p>Now it's time to prepare GitHub environments to deploy the sample application to
+a <em>Dev</em> and <em>Test</em> stage. A GitHub environment can be configured with
+protection rules and secrets. A workflow job can reference environments to use
+environment's protection rules and secrets.</p> <h3 id="dev-environment"><a href="#dev-environment" class="header-anchor">#</a> Dev environment</h3> <p>Let us first create the environment for the Development stage.</p> <p>Navigate to the imported <em>trainigdays</em> repository in your organization and go to
+the repository's settings. Open the <em>Environments</em> view and create the
+environment <code>day4-scm-dev</code>. As we only want to deploy the master branch to that
+environment, we limit what branches can deploy to that environment.</p> <p>Select the <code>Deployment branches</code> dropdown and choose the <code>Selected branches</code>
+option. Add the <code>master</code> branch as allowed branch.</p> <p>We need to add a secret, because we will create an Azure SQL Database and need
+to provide an initial password, which we can securely store as an environment
+secret and access it later in the GitHub Actions workflow.</p> <p>Use the <code>Add Secret</code> button to add a new secret named <code>SQL_PASSWORD</code>.</p> <p>You can generate a strong password by using the following command:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>pwgen <span class="token parameter variable">-n</span> <span class="token number">20</span> <span class="token parameter variable">-y</span>
+</code></pre></div><p><img src="/trainingdays/assets/img/gh-env-dev-config.bbc50dcd.png" alt="GitHub Dev environment config"></p> <h3 id="test-environment"><a href="#test-environment" class="header-anchor">#</a> Test environment</h3> <p>Create another environment for the Test stage and name it <code>day4-scm-test</code>. As we
+want a manual approval, before a deployment is executed to that environment, we
+set <em>Environment protection rules</em>. Activate <code>Required reviewers</code> and add a
+reviewer.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 Add yourself as a Reviewer, otherwise you will have to wait until the
+selected reviewer approves the deployment request.</p></div> <p>Make sure to again configure the selected branches and the <code>SQL_PASSWORD</code>
+environment secret. The password should differ for each environment.</p> <p><img src="/trainingdays/assets/img/gh-env-test-config.c3faedd0.png" alt="GitHub test environment config"></p> <h2 id="create-a-service-principal-and-store-the-secret"><a href="#create-a-service-principal-and-store-the-secret" class="header-anchor">#</a> Create a service principal and store the secret</h2> <p>To allow GitHub to interact with our Azure Subscription we need to create a
+Service principal in our Azure Active Directory. We have already learned in
+<a href="/trainingdays/day4/challenges/03-challenge-bicep.html#programmatic-access-to-azure">challenge 3</a> how we can
+programmatically access an Azure subscription.</p> <p>If you don't remember your Service Principal's credentials, just create a new
+one and copy the credentials from the output of the following command:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token comment"># Change the name and use your subscription-id to create a Service Principal.</span>
+az ad sp create-for-rbac <span class="token parameter variable">--name</span> <span class="token string">&quot;{name}-github-actions-sp&quot;</span> --sdk-auth <span class="token parameter variable">--role</span> contributor <span class="token parameter variable">--scopes</span> /subscriptions/<span class="token punctuation">{</span>subscription-id<span class="token punctuation">}</span>
+</code></pre></div><p>Now we need to store the Service Principal's credentials. Navigate to the
+<em>trainingdays</em> repository <code>Settings &gt; Secrets</code>page and add a new repository
+secret named <code>AZURE_CREDENTIALS</code>.</p> <h2 id="activate-the-ci-cd-workflow"><a href="#activate-the-ci-cd-workflow" class="header-anchor">#</a> Activate the CI/CD workflow</h2> <p>Now we have everything prepared to active the CI/CD workflow. First, clone the
+repository, create a new branch named <code>cicd/common</code>and check it out:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> clone <span class="token operator">&lt;</span>your repository<span class="token operator">&gt;</span>
+
+<span class="token function">git</span> branch cicd/common
+<span class="token function">git</span> checkout cicd/common
+
+<span class="token comment"># or</span>
+<span class="token function">git</span> checkout <span class="token parameter variable">-b</span> cicd/common
+</code></pre></div><p>There is already a Visual Studio Code workspace prepared which we can simple
+open with:</p> <div class="language-shell extra-class"><pre class="language-shell"><code><span class="token builtin class-name">cd</span> day4
+code ./day4.code-workspace
+</code></pre></div><p>All known application components are already available in this workspace. In
+addition, we see two more directories:</p> <ul><li><strong>workflows</strong>, here we find all prepared GitHub Actions workflow for the Azure
+Developer College</li> <li><strong>infrastructure</strong>, here we find all bicep modules to deploy the needed Azure
+infrastructure for all components</li></ul> <h3 id="infrastructure-as-code"><a href="#infrastructure-as-code" class="header-anchor">#</a> Infrastructure as code</h3> <p>Take your time and have a look at the structure of the bicep files. Under the
+directory <code>infrastructure</code> we can find all bounded contexts of the sample
+application:</p> <ul><li><strong>common</strong> &gt; the shared Azure resource</li> <li><strong>contacts</strong> &gt; Contact Context</li> <li><strong>resources</strong> &gt; Resource Context</li> <li><strong>search</strong> &gt; Search Context</li> <li><strong>visitreports</strong> &gt; VisitREport Context</li> <li><strong>frontend</strong> &gt; Frontend</li></ul> <p>Each bounded context describes its own infrastructure using code. Azure Bicep
+modules are used to make the Bicep code more maintainable.</p> <p>In this challenge we will deploy the shared Azure resources used by all bounded
+contexts. You can find the needed Bicep code in the workspace folder
+<code>infrastructure/common</code>. There is one main Bicep module <code>commonmain.bicep</code> which
+references other Bicep modules to describe the infrastructure.</p> <p><img src="/trainingdays/assets/img/common-bicep-module.033ef7b1.png" alt="Common Bicep modules"></p> <p>After the shared Azure resources are deployed, each bounded context references
+these resources using the Azure naming convention and the Bicep <code>existing</code>
+keyword. You can find the naming conventions
+<a href="https://docs.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/resource-naming" target="_blank" rel="noopener noreferrer">here<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>.</p> <p>Here is an example:</p> <p>The <code>ContactsAPI</code> is deployed to an Azure WebApp, which needs an AppService
+Plan. The AppService Plan is deployed as a shared Azure resource, which means
+that the plan is used by multiple bounded contexts (remember, three plans are
+provided, as described above). To reference the plan in the <code>Contact Context</code>
+bicep files we use the <code>existing</code> keyword and the Azure naming conventions:</p> <div class="language-bicep extra-class"><pre class="language-bicep"><code><span class="token comment">// naming conventions helps us to reference a resource by name</span>
+<span class="token comment">// the resource group's id is joined as a unique string to make the resource name unique</span>
+<span class="token keyword">var</span> planWindowsName <span class="token operator">=</span> <span class="token interpolated-string"><span class="token string">'plan-scm-win-</span><span class="token interpolation"><span class="token punctuation">${</span><span class="token expression">env</span><span class="token punctuation">}</span></span><span class="token string">-</span><span class="token interpolation"><span class="token punctuation">${</span><span class="token expression"><span class="token function">uniqueString</span><span class="token punctuation">(</span><span class="token function">resourceGroup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>id<span class="token punctuation">)</span></span><span class="token punctuation">}</span></span><span class="token string">'</span></span>
+
+<span class="token comment">// we can reference existing Azure resources by their type and name with the `existing` keyword ...</span>
+<span class="token keyword">resource</span> appplan <span class="token string">'Microsoft.Web/serverfarms@2020-12-01'</span> <span class="token keyword">existing</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token property">name</span><span class="token operator">:</span> planWindowsName
+<span class="token punctuation">}</span>
+
+<span class="token comment">// .. and use the symbolic name to access properties</span>
+<span class="token keyword">resource</span> webapp <span class="token string">'Microsoft.Web/sites@2020-12-01'</span> <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token property">name</span><span class="token operator">:</span> webAppName
+  <span class="token property">location</span><span class="token operator">:</span> location
+  <span class="token property">tags</span><span class="token operator">:</span> resourceTag
+  <span class="token property">properties</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token comment">// use the plan's symbolic name</span>
+    <span class="token property">serverFarmId</span><span class="token operator">:</span> appplan<span class="token punctuation">.</span>id
+    <span class="token operator">...</span>
+</code></pre></div><p>You can find the code for the <code>Contact Context</code>in the workspace folder
+<code>infrastructure/contacts</code>. Again, there is a main module that references other
+modules to produce maintainable code.</p> <h3 id="github-actions-workflows"><a href="#github-actions-workflows" class="header-anchor">#</a> GitHub Actions workflows</h3> <p>Now it's time to have a look at the already prepared GitHub Actions workflows
+for Day4. You can find all workflows in the workspace folder <code>workflows</code>. Today
+we focus on all workflows with the prefix <code>day4-</code>. First, we will prepare the
+workflow for the shared Azure resources. Open the workflow
+<code>workflows/day4-scm-common.yml</code>. This workflow, like all others, is triggered
+when a pull request is opened or changes were pushed to the master branch. In
+addition, filters are applied to individual files:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">name</span><span class="token punctuation">:</span> day4<span class="token punctuation">-</span>scm<span class="token punctuation">-</span>common
+
+<span class="token key atrule">on</span><span class="token punctuation">:</span>
+  <span class="token key atrule">push</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> master
+    <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> day4/apps/infrastructure/bicep/common/<span class="token important">**</span>
+      <span class="token punctuation">-</span> .github/workflows/day4<span class="token punctuation">-</span>scm<span class="token punctuation">-</span>common.yml
+  <span class="token key atrule">pull_request</span><span class="token punctuation">:</span>
+    <span class="token key atrule">branches</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> master
+    <span class="token key atrule">paths</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> day4/apps/infrastructure/bicep/common/<span class="token important">**</span>
+      <span class="token punctuation">-</span> .github/workflows/day4<span class="token punctuation">-</span>scm<span class="token punctuation">-</span>common.yml
+
+  <span class="token key atrule">workflow_dispatch</span><span class="token punctuation">:</span>
+</code></pre></div><p>With the trigger <code>workflow_dispatch</code>it is possible to trigger the workflow
+manually.</p> <p>The workflows consists of three jobs:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">build</span><span class="token punctuation">:</span> <span class="token comment"># to build all needed artefacts</span>
+  <span class="token punctuation">...</span>
+  <span class="token key atrule">deploy-to-dev</span><span class="token punctuation">:</span>
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span> day4<span class="token punctuation">-</span>scm<span class="token punctuation">-</span>dev <span class="token comment"># deploy to dev environment</span>
+  <span class="token punctuation">...</span>
+  <span class="token key atrule">delpoy-to-test</span><span class="token punctuation">:</span>
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span> day4<span class="token punctuation">-</span>scm<span class="token punctuation">-</span>test <span class="token comment"># deploy to test environment</span>
+</code></pre></div><p>As you see, first all artifacts, needed for the deployment, are created and
+validated. With the <code>build</code>job we can make sure that everything can be created,
+even if we only try to transpile Bicep code to Azure ARM templates.</p> <p>If everything can be created the next job <code>deploy-to-dev</code>is executed, but only
+if the trigger event is of type <code>push</code>or <code>workflow_dispatch</code>. This means, that
+the deployment will only be executed, if changes were pushed to the master
+branch or the workflows is triggered manually. Within a pull request, only the
+step <code>build</code> is executed to get immediately feedback if everything can be built
+or not. If the build fails, the status check of a pull request would also fail
+and the pull request cannot be merged.</p> <p>That is exactly what we want to achieve. Remember the goal of this challenge:</p> <p><img src="/trainingdays/assets/img/ci-cd-flow.919a7dc6.png" alt="CI/CD Workflow"></p> <h3 id="prepare-the-workflow-and-create-a-pull-request"><a href="#prepare-the-workflow-and-create-a-pull-request" class="header-anchor">#</a> Prepare the workflow and create a pull request</h3> <p>Now it's time to prepare the workflow which rolls out the shared Azure resources
+for the Azure Developer College's sample application. We have already cloned
+the repository and created a new branch <code>cicd/common</code>.</p> <p>Open the workflow <code>day4-scm-common.yml</code> and replace the organization name in
+each job condition with your organization's name:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">jobs</span><span class="token punctuation">:</span>
+  <span class="token key atrule">build</span><span class="token punctuation">:</span>
+    <span class="token key atrule">if</span><span class="token punctuation">:</span> github.repository == '&lt;your organisation name<span class="token punctuation">&gt;</span>/trainingdays'
+  <span class="token punctuation">...</span>
+  <span class="token key atrule">deploy-to-dev</span><span class="token punctuation">:</span>
+    <span class="token key atrule">if</span><span class="token punctuation">:</span> (github.repository == '&lt;your organisation name<span class="token punctuation">&gt;</span>/trainingdays') <span class="token important">&amp;&amp;</span> ((github.event_name == 'push') <span class="token punctuation">|</span><span class="token punctuation">|</span> (github.event_name == 'workflow_dispatch'))
+  <span class="token punctuation">...</span>
+  <span class="token key atrule">delpoy-to-test</span><span class="token punctuation">:</span>
+    <span class="token key atrule">if</span><span class="token punctuation">:</span> (github.repository == '&lt;your organisation name<span class="token punctuation">&gt;</span>/trainingdays') <span class="token important">&amp;&amp;</span> ((github.event_name == 'push') <span class="token punctuation">|</span><span class="token punctuation">|</span> (github.event_name == 'workflow_dispatch'))
+</code></pre></div><p>Save the file, commit your changes and push the branch to the remote repository:</p> <div class="language-Shell extra-class"><pre class="language-shell"><code><span class="token function">git</span> <span class="token function">add</span> <span class="token builtin class-name">.</span>
+<span class="token function">git</span> commit <span class="token parameter variable">-m</span> <span class="token string">&quot;changed org name in common workflow&quot;</span>
+<span class="token function">git</span> push --set-upstream origin cicd/common
+</code></pre></div><p>Now, create a pull request to merge the branch <code>cicd/common</code> into the <code>master</code>
+branch. Set <code>Deploy shared Azure resources</code> as title and close the issue
+<code>Deploy SCM shared Azure resources</code> using the keyword <code>closes #&lt;issue id&gt;</code> in
+the pull requests body.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 If you want, you can add a reviewer. However, since you as the Administrator
+are excluded from the branch rules, you can merge the pull request without a
+review approval.</p></div> <p>Wait a few seconds, until the status checks are triggered:</p> <p><img src="/trainingdays/assets/img/gh-action-status-checks.dca6c798.png" alt="GitHub status checks"></p> <p>If everything is configured correctly, the build job of the workflow should be
+successful:</p> <p><img src="/trainingdays/assets/img/gh-action-status-successful.552797f3.png" alt="GitHub status check successful"></p> <p>Now merge the pull request and navigate to your repository' action page. You
+should see that the <code>day4-scm-common</code> workflow is triggered after a few seconds.</p> <p><img src="/trainingdays/assets/img/gh-day4-common-triggered.e56aece2.png" alt="GitHub day4-scm-common triggered"></p> <p>In the details page of the running workflow you see all jobs.</p> <p><img src="/trainingdays/assets/img/gh-day4-common-details.3ded6489.png" alt="GitHub Day4 common workflow details"></p> <p>After the <code>dev</code> environment is deployed, go to the Azure portal an checkout the
+newly created resource group and resources. The workflow is now in the
+<code>waiting</code>state, because a reviewer must approve the deployment to the <code>test</code>
+environment:</p> <p><img src="/trainingdays/assets/img/gh-day4-common-waiting.63b3fc80.png" alt="GitHub Day4 common waiting"></p> <p>Review the pending deployment, leave a comment and <code>Approve and deploy</code>:</p> <p><img src="/trainingdays/assets/img/gh-day4-common-approve.6d70dbf4.png" alt="GitHUb day4 approve"></p> <p>Now the test environment will be deployed. After the deployment is finished, we
+have another resource group with all shared Azure resources in the test
+environment.</p> <p>Take your time and investigate the created resources.</p> <p>Check your Project Board, it should look something like this:</p> <p><img src="/trainingdays/assets/img/gh-board-overview-06.43ad71b9.png" alt="GitHub Board overview 06"></p> <h2 id="summary"><a href="#summary" class="header-anchor">#</a> Summary</h2> <p>We have seen how to create a CI/CD workflow where a reviewer has to approve a
+deployment to the test environment. This workflow can also be used to validate
+all artifacts within a pull request. This helps us to avoid build breaks. Of
+course, there would be many other scenarios that can be implemented with the
+GitHub Actions workflow. Maybe it is a good idea to deploy directly to a
+development environment within a pull request to even validate the deployment
+before pushing changes to the master branch.</p> <p>We have so far only provided the shared Azure resources for the Azure Developer
+College's sample application. There is still some work to be done. We'll move
+straight into the breakout session where we'll deploy all the rest of the
+bounded contexts. We proceed step by step in the same way as in this Challenge:</p> <ul><li>create an issue to plan and track your work</li> <li>pull changes from the master branch</li> <li>create a feature branch <code>cicd/all</code></li> <li>prepare all workflows</li> <li>commit and push changes</li> <li>create a pull request</li> <li>merge the pull request</li> <li>wait until everything is deployed</li></ul> <p><a href="/trainingdays/day4/challenges/04-challenge-azdc-repo.html">◀ Previous challenge</a> | <a href="/trainingdays/day4/" class="router-link-active">🔼 Day 4</a> | <a href="/trainingdays/day4/challenges/06-breakout.html">Next challenge ▶</a></p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/azuredevcollege/trainingdays/edit/master/day4/challenges/05-challenge-common-cicd.md" target="_blank" rel="noopener noreferrer">Edit this page</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/trainingdays/assets/js/app.7ee90653.js" defer></script><script src="/trainingdays/assets/js/3.bac66e4c.js" defer></script><script src="/trainingdays/assets/js/12.4af6743d.js" defer></script>
+  </body>
+</html>

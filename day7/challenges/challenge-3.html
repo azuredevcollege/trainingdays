@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Challenge 3: Configuration with Kubernetes - Secrets and ConfigMaps | Azure Developer College</title>
+    <meta name="generator" content="VuePress 1.9.7">
+    
+    <meta name="description" content="">
+    
+    <link rel="preload" href="/trainingdays/assets/css/0.styles.8d7a09fd.css" as="style"><link rel="preload" href="/trainingdays/assets/js/app.7ee90653.js" as="script"><link rel="preload" href="/trainingdays/assets/js/3.bac66e4c.js" as="script"><link rel="preload" href="/trainingdays/assets/js/86.b933c088.js" as="script"><link rel="prefetch" href="/trainingdays/assets/js/10.e245022a.js"><link rel="prefetch" href="/trainingdays/assets/js/11.e575ca81.js"><link rel="prefetch" href="/trainingdays/assets/js/12.4af6743d.js"><link rel="prefetch" href="/trainingdays/assets/js/13.0b26a6a5.js"><link rel="prefetch" href="/trainingdays/assets/js/14.2d92fef8.js"><link rel="prefetch" href="/trainingdays/assets/js/15.a191ca69.js"><link rel="prefetch" href="/trainingdays/assets/js/16.405c54e2.js"><link rel="prefetch" href="/trainingdays/assets/js/17.43731ef2.js"><link rel="prefetch" href="/trainingdays/assets/js/18.2984f726.js"><link rel="prefetch" href="/trainingdays/assets/js/19.a9d0edc3.js"><link rel="prefetch" href="/trainingdays/assets/js/2.0be5b509.js"><link rel="prefetch" href="/trainingdays/assets/js/20.7cffd4b4.js"><link rel="prefetch" href="/trainingdays/assets/js/21.e7fe4a64.js"><link rel="prefetch" href="/trainingdays/assets/js/22.9b14db9d.js"><link rel="prefetch" href="/trainingdays/assets/js/23.441bbca6.js"><link rel="prefetch" href="/trainingdays/assets/js/24.9c4549d9.js"><link rel="prefetch" href="/trainingdays/assets/js/25.5746a249.js"><link rel="prefetch" href="/trainingdays/assets/js/26.b54d0910.js"><link rel="prefetch" href="/trainingdays/assets/js/27.17fc5e8f.js"><link rel="prefetch" href="/trainingdays/assets/js/28.dc06e268.js"><link rel="prefetch" href="/trainingdays/assets/js/29.2c678e32.js"><link rel="prefetch" href="/trainingdays/assets/js/30.da2d71da.js"><link rel="prefetch" href="/trainingdays/assets/js/31.2d6231d3.js"><link rel="prefetch" href="/trainingdays/assets/js/32.de802251.js"><link rel="prefetch" href="/trainingdays/assets/js/33.e1098fb7.js"><link rel="prefetch" href="/trainingdays/assets/js/34.b6d29e40.js"><link rel="prefetch" href="/trainingdays/assets/js/35.4c61bb7b.js"><link rel="prefetch" href="/trainingdays/assets/js/36.336fcd60.js"><link rel="prefetch" href="/trainingdays/assets/js/37.772f2fe7.js"><link rel="prefetch" href="/trainingdays/assets/js/38.ba3ea198.js"><link rel="prefetch" href="/trainingdays/assets/js/39.52fb19ee.js"><link rel="prefetch" href="/trainingdays/assets/js/4.d015fbd5.js"><link rel="prefetch" href="/trainingdays/assets/js/40.354e399e.js"><link rel="prefetch" href="/trainingdays/assets/js/41.ec595a2b.js"><link rel="prefetch" href="/trainingdays/assets/js/42.48bed577.js"><link rel="prefetch" href="/trainingdays/assets/js/43.11938683.js"><link rel="prefetch" href="/trainingdays/assets/js/44.acddabd3.js"><link rel="prefetch" href="/trainingdays/assets/js/45.a2916451.js"><link rel="prefetch" href="/trainingdays/assets/js/46.95911633.js"><link rel="prefetch" href="/trainingdays/assets/js/47.c267ffc1.js"><link rel="prefetch" href="/trainingdays/assets/js/48.37cfbfe4.js"><link rel="prefetch" href="/trainingdays/assets/js/49.9fc08260.js"><link rel="prefetch" href="/trainingdays/assets/js/5.66f1ef82.js"><link rel="prefetch" href="/trainingdays/assets/js/50.f621e07d.js"><link rel="prefetch" href="/trainingdays/assets/js/51.e77f724a.js"><link rel="prefetch" href="/trainingdays/assets/js/52.c0052e39.js"><link rel="prefetch" href="/trainingdays/assets/js/53.2fe21a43.js"><link rel="prefetch" href="/trainingdays/assets/js/54.6d6dd706.js"><link rel="prefetch" href="/trainingdays/assets/js/55.de3427a7.js"><link rel="prefetch" href="/trainingdays/assets/js/56.357453fe.js"><link rel="prefetch" href="/trainingdays/assets/js/57.2b8c0b9b.js"><link rel="prefetch" href="/trainingdays/assets/js/58.34c86dce.js"><link rel="prefetch" href="/trainingdays/assets/js/59.20afb7e5.js"><link rel="prefetch" href="/trainingdays/assets/js/6.bd3d8f89.js"><link rel="prefetch" href="/trainingdays/assets/js/60.cf52ab3d.js"><link rel="prefetch" href="/trainingdays/assets/js/61.b7ff488e.js"><link rel="prefetch" href="/trainingdays/assets/js/62.2451e01f.js"><link rel="prefetch" href="/trainingdays/assets/js/63.d86a5b86.js"><link rel="prefetch" href="/trainingdays/assets/js/64.608921b5.js"><link rel="prefetch" href="/trainingdays/assets/js/65.d90b3114.js"><link rel="prefetch" href="/trainingdays/assets/js/66.49c6fbd9.js"><link rel="prefetch" href="/trainingdays/assets/js/67.4f60f26b.js"><link rel="prefetch" href="/trainingdays/assets/js/68.208402a2.js"><link rel="prefetch" href="/trainingdays/assets/js/69.a980b450.js"><link rel="prefetch" href="/trainingdays/assets/js/7.fc9a0f7c.js"><link rel="prefetch" href="/trainingdays/assets/js/70.cf4f53b8.js"><link rel="prefetch" href="/trainingdays/assets/js/71.55c061b2.js"><link rel="prefetch" href="/trainingdays/assets/js/72.7cc4b8ba.js"><link rel="prefetch" href="/trainingdays/assets/js/73.71f272fd.js"><link rel="prefetch" href="/trainingdays/assets/js/74.d9324332.js"><link rel="prefetch" href="/trainingdays/assets/js/75.22202aba.js"><link rel="prefetch" href="/trainingdays/assets/js/76.79e1fda3.js"><link rel="prefetch" href="/trainingdays/assets/js/77.09f6ecf5.js"><link rel="prefetch" href="/trainingdays/assets/js/78.40383fd1.js"><link rel="prefetch" href="/trainingdays/assets/js/79.c5447221.js"><link rel="prefetch" href="/trainingdays/assets/js/8.45342290.js"><link rel="prefetch" href="/trainingdays/assets/js/80.5cf25ae5.js"><link rel="prefetch" href="/trainingdays/assets/js/81.e3653e94.js"><link rel="prefetch" href="/trainingdays/assets/js/82.e34ef379.js"><link rel="prefetch" href="/trainingdays/assets/js/83.a86bfa1d.js"><link rel="prefetch" href="/trainingdays/assets/js/84.147161c7.js"><link rel="prefetch" href="/trainingdays/assets/js/85.ee46661f.js"><link rel="prefetch" href="/trainingdays/assets/js/87.0b4539ef.js"><link rel="prefetch" href="/trainingdays/assets/js/9.235ee99d.js">
+    <link rel="stylesheet" href="/trainingdays/assets/css/0.styles.8d7a09fd.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/trainingdays/" class="home-link router-link-active"><!----> <span class="site-name">Azure Developer College</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"> <a href="https://github.com/azuredevcollege/trainingdays" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><a href="/trainingdays/" aria-current="page" class="sidebar-link">Home</a></li><li><a href="/trainingdays/day1/" class="sidebar-link">Day 1 Azure Fundamentals &amp; Infrastructure</a></li><li><a href="/trainingdays/day2/" class="sidebar-link">Day 2 Azure Development</a></li><li><a href="/trainingdays/day3/" class="sidebar-link">Day 3 Data and AI</a></li><li><a href="/trainingdays/day4/" class="sidebar-link">Day 4 DevOps and Monitoring</a></li><li><a href="/trainingdays/day5/" class="sidebar-link">Day 5 Identity and Architecture</a></li><li><a href="/trainingdays/day6/" class="sidebar-link">Day 6 Containerization</a></li><li><a href="/trainingdays/day7/" aria-current="page" class="sidebar-link">Day 7 Kubernetes</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="challenge-3-configuration-with-kubernetes-secrets-and-configmaps"><a href="#challenge-3-configuration-with-kubernetes-secrets-and-configmaps" class="header-anchor">#</a> Challenge 3: Configuration with Kubernetes - Secrets and ConfigMaps</h1> <h2 id="here-is-what-you-will-learn-🎯"><a href="#here-is-what-you-will-learn-🎯" class="header-anchor">#</a> Here is what you will learn 🎯</h2> <p>In this challenge you will learn how to configure your application from outside by using standard Kubernetes objects. In detail you will learn how to use <code>ConfigMaps</code> and <code>Secrets</code>.</p> <h2 id="table-of-contents"><a href="#table-of-contents" class="header-anchor">#</a> Table Of Contents</h2> <ol><li><a href="#why-do-we-need-secrets-and-configmaps">Why do we need Secrets and ConfigMaps</a></li> <li><a href="#configmaps">ConfigMaps</a></li> <li><a href="#secrets">Secrets</a></li> <li><a href="#configure-the-demo-application-with-configmap-and-secrets">Configure the Demo Application with ConfigMap and Secrets</a></li></ol> <h2 id="why-do-we-need-secrets-and-configmaps"><a href="#why-do-we-need-secrets-and-configmaps" class="header-anchor">#</a> Why do we need Secrets and ConfigMaps</h2> <p>It is actually obvious that certain settings of an application or service should not be hard coded in the source code of the application. Instead applications load these settings from a <em>configuration file</em> at <em>runtime</em> to avoid a new build of the application or service.</p> <p>By configuration files an application can be integrated configurable into other environments.</p> <div class="custom-block tip"><p class="custom-block-title">TIP</p> <p>📝 Configuration files are not the only possibility to configure applications. <em>Environment variables</em> are even more frequently used to configure an application or service.</p></div> <p>Your containerized applications need certain data or credentials to run properly. In <a href="/trainingdays/day7/challenges/challenge-2.html">challenge 2</a> you have seen that running an SQL Server in a container you had to set a password, which was hard coded into the deployment file:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token punctuation">...</span>
+<span class="token key atrule">containers</span><span class="token punctuation">:</span>
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> mssql
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> mcr.microsoft.com/mssql/server<span class="token punctuation">:</span>2019<span class="token punctuation">-</span>latest
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">1433</span>
+    <span class="token key atrule">env</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MSSQL_PID
+        <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Developer'</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ACCEPT_EULA
+        <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Y'</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> SA_PASSWORD
+        <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Ch@ngeMe!23'</span>
+</code></pre></div><p>This is a bad approach. It is <em>not</em> possible to use the same definition in another hosting environment without setting a new password (unless you always use the same password, which of course is a no go).</p> <p>Data such as a password are sensitive data and should be treated with special care. Sensitive data should be stored in a <em>secret store</em> to which only a certain group of users has access to. With a secret store, developers do not have to store sensitive data in source code.</p> <p>The definition of a Kubernetes deployment is definitely part of the source code.</p> <p>In <a href="/trainingdays/day7/challenges/challenge-2.html">challenge 2</a> we created a deployment for the Contacts API. The API loads the connection string to the hosted SQL Server from an environment variable <code>ConnectionStringsDefaultConnectionString\_\_</code>. The connection string's value is hard coded, too.</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">containers</span><span class="token punctuation">:</span>
+<span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myapi
+    <span class="token key atrule">env</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ConnectionStrings__DefaultConnectionString
+        <span class="token key atrule">value</span><span class="token punctuation">:</span> Server=tcp<span class="token punctuation">:</span>&lt;IP_OF_THE_SQL_POD<span class="token punctuation">&gt;</span><span class="token punctuation">,</span>1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe<span class="token tag">!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection</span> Timeout=30;
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/adc<span class="token punctuation">-</span>api<span class="token punctuation">-</span>sql<span class="token punctuation">:</span><span class="token number">1.0</span>
+</code></pre></div><p>Currently, we have the Contacts API, the SQL Server and the front-end running in the cluster. Looking back at how the front-end was deployed, some of you may have wondered if this is the right way to update the configuration in source code and build a new container.</p> <p>The answer is of course: <em>No</em>.</p> <p>The configuration for the front-end which is simply a JavaScript file must be somehow configured at deployment time not at the build time of the container. We need to be able to place the following file content into the container at deployment time:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">var</span> uisettings <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">endpoint</span><span class="token operator">:</span> <span class="token string">'http://&lt;YOUR_NIP_DOMAIN&gt;/api/contacts/'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">enableStats</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">aiKey</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>With <em>Secrets</em> and <em>ConfigMap</em>, Kubernetes provides two objects that help us to configure applications or services at deployment time. In the next sections we will get to know these objects better.</p> <h2 id="configmaps"><a href="#configmaps" class="header-anchor">#</a> ConfigMaps</h2> <p>A <em>ConfigMap</em> is a Kubernetes API object used to store non confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables or as configuration files in volume mounts.</p> <p>A ConfigMap allows you to decouple environment specific settings from your deployments and pod definitions or containers.</p> <p>You can use <code>kubectl create configmap</code> command to create ConfigMaps from directories, files and literal values.</p> <h3 id="create-a-configmap-from-iteral-values"><a href="#create-a-configmap-from-iteral-values" class="header-anchor">#</a> Create a ConfigMap from iteral values</h3> <p>Now, let us first create a ConfigMap from literal values and let us look at how the ConfigMap object is built up.</p> <p>Open a shell and run the <code>kubectl create configmap</code> command with the option <code>--from-literal</code> argument to define a literal value from the command line:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create configmap myfirstmap --from-literal<span class="token operator">=</span>myfirstkey<span class="token operator">=</span>myfirstvalue --from-literal<span class="token operator">=</span>mysecondkey<span class="token operator">=</span>mysecondvalue --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+</code></pre></div><p>After the command has been executed, you will see the following output:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">data</span><span class="token punctuation">:</span>
+  <span class="token key atrule">myfirstkey</span><span class="token punctuation">:</span> myfirstvalue
+  <span class="token key atrule">mysecondkey</span><span class="token punctuation">:</span> mysecondvalue
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> ConfigMap
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstmap
+</code></pre></div><p>In the data section of the object you can see that each key is mapped to a value. So far so good. But how can these key-value pairs be accessed in a Pod or Deployment definition?</p> <p>Let's first see how to use the key-value pairs in environment variables.</p> <p>First, create the ConfigMap with the name <code>myfirstmap</code>:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create configmap myfirstmap --from-literal<span class="token operator">=</span>myfirstkey<span class="token operator">=</span>myfirstvalue --from-literal<span class="token operator">=</span>mysecondkey<span class="token operator">=</span>mysecondvalue
+</code></pre></div><p>If you want, you can use kubectl describe configmap to see how the ConfigMap is created:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl describe configmap myfirstmap
+</code></pre></div><p>Now create a file named <code>myfirstconfigmapdemo.yaml</code>and add the following content:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">run</span><span class="token punctuation">:</span> myfirstconfigmapdemo
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstconfigmapdemo
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> alpine
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstconfigmapdemo
+      <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'sleep'</span><span class="token punctuation">,</span> <span class="token string">'3600'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">env</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYFIRSTVALUE
+          <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+            <span class="token key atrule">configMapKeyRef</span><span class="token punctuation">:</span>
+              <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstmap
+              <span class="token key atrule">key</span><span class="token punctuation">:</span> myfirstkey
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYSECONDVALUE
+          <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+            <span class="token key atrule">configMapKeyRef</span><span class="token punctuation">:</span>
+              <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstmap
+              <span class="token key atrule">key</span><span class="token punctuation">:</span> mysecondkey
+  <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Never
+</code></pre></div><p>In the definition you can see that we set the value for an environment variable by referencing the key of a ConfigMap.</p> <p>Now deploy the definition:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> myfirstconfigmapdemo.yaml
+</code></pre></div><p>To check if everything is setup correctly we can use the <code>kubectl exec</code> command to print all environment variables of the pod.</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl <span class="token builtin class-name">exec</span> myfirstconfigmapdemo -- /bin/sh <span class="token parameter variable">-c</span> <span class="token function">printenv</span>
+<span class="token punctuation">..</span>.
+<span class="token assign-left variable">MYFIRSTVALUE</span><span class="token operator">=</span>myfirstvalue
+<span class="token assign-left variable">MYSECONDVALUE</span><span class="token operator">=</span>mysecondvalue
+<span class="token punctuation">..</span>.
+</code></pre></div><p>We have seen how you can reference values in a ConfigMap and use them as environment variable.</p> <p>Before we continue with the next exercise and see how we can add ConfigMap's key and value pairs as files in a read-only volume, remove the deployed pod from your cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl delete pod myfirstconfigmapdemo
+</code></pre></div><p>Kubernetes supports many types of volumes. A pod can use any number of volume types simultaneously. At its core, a volume is just a directory which is accessible to the container in a pod.</p> <p>How that directory comes to be a medium is determined by the particular volume type. At the end the volume must be mounted in the container to access it. A ConfigMap provides a way to inject configuration data into pods. The data stored in a ConfigMap can be referenced in a volume of type configMap and then consumed by containerized applications running in a pod.</p> <p>Let us see it in action. First create a new file and name it <code>volumedemo.yaml</code> and add the following content:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">run</span><span class="token punctuation">:</span> volumedemo
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> volumedemo
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> alpine
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> volumedemo
+      <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'sleep'</span><span class="token punctuation">,</span> <span class="token string">'3600'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+        <span class="token comment"># mount the config volume to path /config</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+          <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> <span class="token string">'/config'</span>
+          <span class="token key atrule">readOnly</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+    <span class="token comment"># set volumes at the Pod level, then mount them into containers inside the pod</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+      <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+        <span class="token comment"># specify the name of the ConfigMap to use</span>
+        <span class="token key atrule">name</span><span class="token punctuation">:</span> myfirstmap
+        <span class="token comment"># an array of keys from the ConfigMap to create as file</span>
+        <span class="token key atrule">items</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> <span class="token string">'myfirstkey'</span>
+            <span class="token key atrule">path</span><span class="token punctuation">:</span> <span class="token string">'myfirstkey'</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> <span class="token string">'mysecondkey'</span>
+            <span class="token key atrule">path</span><span class="token punctuation">:</span> <span class="token string">'mysecondkey'</span>
+</code></pre></div><p>Use <code>kubectl apply</code> command to create the Pod in your cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./volumedemo.yaml
+</code></pre></div><p>Next we can connect to the container by running the <code>kubectl exec</code> command with argument <code>-it</code> and open a shell inside the container:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> volumedemo -- /bin/sh
+</code></pre></div><p>Now in the shell check the directory <code>/config</code>:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">ls</span> /config
+myfirstkey   mysecondkey
+$ <span class="token function">more</span> /config/myfirstkey
+myfirstvalue
+</code></pre></div><p>All ConfigMap keys, specified in the items array of the pod definition, are created as files in the mounted volume and accessible to the container.</p> <h3 id="create-a-configmap-from-file"><a href="#create-a-configmap-from-file" class="header-anchor">#</a> Create a ConfigMap from file</h3> <p>In the previous exercise we have seen how key-value pairs are added to a ConfigMap using <code>--from-literal</code>. A ConfigMap's key-value pairs can be created from files, too.</p> <p>In this exercise we learn how to create ConfigMap key-value pairs from files and how to mount a volume to make these files accessibly to the container inside a pod.</p> <p>First we need a file that contains the settings for a container. Create a file <code>demosettings.json</code> and add the following content:</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;key1&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value1&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;key2&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>We can use the <code>kubectl create configmap</code> command with argument <code>--from-file</code> to create a key-value pair from a file.</p> <p>Let us first try a dry-run to see how the ConfigMap object looks like:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl create configmap myfilemap --from-file<span class="token operator">=</span>demosettings<span class="token operator">=</span>./demosettings.json --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+
+apiVersion: v1
+data:
+  demosettings: <span class="token operator">|</span>-
+    <span class="token punctuation">{</span>
+        <span class="token string">&quot;key1&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value1&quot;</span>,
+        <span class="token string">&quot;key2&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value2&quot;</span>
+    <span class="token punctuation">}</span>
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: myfilemap
+</code></pre></div><p>The ConfigMap contains a key-value pair with key <code>demosettings</code> with the JSON file's content as value. Since the name of the key was specified with <code>demosettings</code> in <code>--from-file</code> it is the expected result. But it is also possible to leave out the name of the key.</p> <p>The name of the key will then be the name of the file.</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl create configmap myfilemap --from-file<span class="token operator">=</span>./demosettings.json --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+
+apiVersion: v1
+data:
+  demosettings.json: <span class="token operator">|</span>-
+    <span class="token punctuation">{</span>
+        <span class="token string">&quot;key1&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value1&quot;</span>,
+        <span class="token string">&quot;key2&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value2&quot;</span>
+    <span class="token punctuation">}</span>
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: myfilemap
+</code></pre></div><p>Now let us first create the ConfigMap in the cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create configmap myfilemap --from-file<span class="token operator">=</span>demosettings<span class="token operator">=</span>./demosettings.json
+</code></pre></div><p>Create a file <code>volumefiledemo.yaml</code> and add the following content:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">run</span><span class="token punctuation">:</span> volumefiledemo
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> volumefiledemo
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> alpine
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> volumefiledemo
+      <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'sleep'</span><span class="token punctuation">,</span> <span class="token string">'3600'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+        <span class="token comment"># mount the config volume to path /config</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+          <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> <span class="token string">'/config'</span>
+          <span class="token key atrule">readOnly</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+    <span class="token comment"># set volumes at the Pod level, then mount them into containers inside the pod</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+      <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+        <span class="token comment"># specify the name of the ConfigMap to use</span>
+        <span class="token key atrule">name</span><span class="token punctuation">:</span> myfilemap
+        <span class="token comment"># an array of keys from the ConfigMap to create as file</span>
+        <span class="token key atrule">items</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> <span class="token string">'demosettings'</span>
+            <span class="token key atrule">path</span><span class="token punctuation">:</span> <span class="token string">'demosettings.json'</span>
+</code></pre></div><p>This pod definition mounts the volume <code>config</code> to the path <code>/config</code> into the container. The volume is of type <code>configMap</code> and references the ConfigMap <code>myfilemap</code>.</p> <p>The content or value of the key <code>demosettings</code> is stored in a file named <code>demosettings.json</code> which is accessibly to the container under <code>/config/demosettings.json</code>.</p> <p>Let us see it in action. Use the <code>kubectl apply</code> command to create the pod:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./volumefiledemo.yaml
+</code></pre></div><p>After the pod is up and running we can use the <code>kubectl exec</code> command with argument <code>-it</code> to connect to the container inside the pod and open a shell:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> volumefiledemo -- /bin/sh
+</code></pre></div><p>Now we can check if the file and its content is available:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">ls</span> /config
+demosettings.json
+$ <span class="token function">more</span> /config/demosettings.json
+<span class="token punctuation">{</span>
+    <span class="token string">&quot;key1&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value1&quot;</span>,
+    <span class="token string">&quot;key2&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="secrets"><a href="#secrets" class="header-anchor">#</a> Secrets</h2> <p><em>ConfigMaps</em> are used to creating <em>configuration settings</em> for applications as <em>plain text</em>. The Kubernetes' <em>Secret</em> object is similar to a ConfigMap except that the value of a key value pair is <em>base64</em> encoded. It is therefore suitable for storing sensitive data like passwords or connection strings.</p> <p>A pure base64 encoding of course does not offer the best possible protection for sensitive data as it is very easy to decode a base64 encoded value. It is therefore better to use a key vault like the Azure KeyVault. But since the Secret object is a Kubernetes object the access to these objects can be controlled by the Kubernetes <em>Role-based access control</em> (RBAC) system (see <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/" target="_blank" rel="noopener noreferrer">Using RBAC Authorization<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> for details).</p> <h3 id="create-a-secret-for-literal-values"><a href="#create-a-secret-for-literal-values" class="header-anchor">#</a> Create a Secret for literal values</h3> <p>Let us first create a Secret from literal values and let us look at how the Secret object is built up. Open a shell and run the kubectl create configmap command with the option <code>--from-literal</code> argument to define a literal value from the command line:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create secret generic mysecret --from-literal<span class="token operator">=</span>myfirstkey<span class="token operator">=</span>myfirstvalue --from-literal<span class="token operator">=</span>mysecondkey<span class="token operator">=</span>mysecondvalue --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+</code></pre></div><p>After the command has been executed, you see the following output:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">data</span><span class="token punctuation">:</span>
+  <span class="token key atrule">myfirstkey</span><span class="token punctuation">:</span> bXlmaXJzdHZhbHVl
+  <span class="token key atrule">mysecondkey</span><span class="token punctuation">:</span> bXlzZWNvbmR2YWx1ZQ==
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Secret
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mysecret
+</code></pre></div><p>In the data section of the object you can see that each key is mapped to a value and the value is base64 encoded. So, how can these key-value pairs be accessed in a Pod or Deployment definition?</p> <p>Let's first see how to use the key-value pairs in environment variables.</p> <p>First, create the Secret with the name <code>mysecret</code>:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create secret generic mysecret --from-literal<span class="token operator">=</span>myfirstkey<span class="token operator">=</span>myfirstvalue --from-literal<span class="token operator">=</span>mysecondkey<span class="token operator">=</span>mysecondvalue
+</code></pre></div><p>If you want, you can use kubectl describe secret to see how it is created:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl describe secret mysecret
+</code></pre></div><p>If you want to see the encoded values you can do the following:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl get secret mysecret <span class="token parameter variable">--output</span><span class="token operator">=</span><span class="token string">&quot;jsonpath={.data}&quot;</span>
+
+</code></pre></div><p>Now create a file with the name <code>mysecretdemo.yaml</code>and add the following content:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">run</span><span class="token punctuation">:</span> mysecretdemo
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mysecretdemo
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> alpine
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> mysecretdemo
+      <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'sleep'</span><span class="token punctuation">,</span> <span class="token string">'3600'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">env</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYFIRSTVALUE
+          <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+            <span class="token key atrule">secretKeyRef</span><span class="token punctuation">:</span>
+              <span class="token key atrule">name</span><span class="token punctuation">:</span> mysecret
+              <span class="token key atrule">key</span><span class="token punctuation">:</span> myfirstkey
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MYSECONDVALUE
+          <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+            <span class="token key atrule">secretKeyRef</span><span class="token punctuation">:</span>
+              <span class="token key atrule">name</span><span class="token punctuation">:</span> mysecret
+              <span class="token key atrule">key</span><span class="token punctuation">:</span> mysecondkey
+  <span class="token key atrule">restartPolicy</span><span class="token punctuation">:</span> Never
+</code></pre></div><p>In the definition you can see that we set the value for an environment variable by referencing the key of a secret.</p> <p>Now deploy the definition:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> mysecretdemo.yaml
+</code></pre></div><p>To check if everything is setup correctly we can use the <code>kubectl exec</code> command to print all environment variables of the pod:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl <span class="token builtin class-name">exec</span> mysecretdemo -- /bin/sh <span class="token parameter variable">-c</span> <span class="token function">printenv</span>
+<span class="token punctuation">..</span>.
+<span class="token assign-left variable">MYFIRSTVALUE</span><span class="token operator">=</span>myfirstvalue
+<span class="token assign-left variable">MYSECONDVALUE</span><span class="token operator">=</span>mysecondvalue
+<span class="token punctuation">..</span>.
+</code></pre></div><p>The environment variables are set correctly and the values were set decoded.</p> <p>We have seen how you can reference values in a Secret and use them as environment variable.</p> <p>Before we continue with the next exercise and see how we can add Secret's key and value pairs as files in a read-only volume, remove the deployed pod from your cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl delete pod mysecretdemo
+</code></pre></div><h3 id="create-a-secret-from-file"><a href="#create-a-secret-from-file" class="header-anchor">#</a> Create a Secret from file</h3> <p>In the previous exercise we have seen how key-value pairs are added to a Secret using <code>--from-literal</code>. A Secret's key-value pairs can be created from files, too.</p> <p>In this exercise we learn how to create Secret's key-value pairs from files and how to mount a volume to make these files accessibly to the container inside a pod.</p> <p>First we need a file that contains the settings for a container. Create a file <code>demosecrets.json</code> and add the following content:</p> <div class="language-json extra-class"><pre class="language-json"><code><span class="token punctuation">{</span>
+  <span class="token property">&quot;key1&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value1&quot;</span><span class="token punctuation">,</span>
+  <span class="token property">&quot;key2&quot;</span><span class="token operator">:</span> <span class="token string">&quot;value2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>We can use the <code>kubectl create secret generic</code> command with argument
+<code>--from-file</code> to create a key-value pair from a file.</p> <p>Let us first try a dry-run to see how the ConfigMap object looks like:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl create secret generic myfilesecret --from-file<span class="token operator">=</span>demosecrets<span class="token operator">=</span>./demosecrets.json --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+
+apiVersion: v1
+data:
+  demosecrets: ewogICAgImtleTEiIDogInZhbHVlMSIsCiAgICAia2V5MiIgOiAidmFsdWUyIgp9
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: myfilesecret
+</code></pre></div><p>The Secret contains a key-value pair with key <code>demosecretes</code> with the JSON file's base64 encoded content. Since the name of the key was specified with <code>demosecrets</code> in <code>--from-file</code> it is the expected result.</p> <p>But it is also possible to leave out the name of the key. The name of the key will then be the name of the file.</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ kubectl create secret generic myfilesecret --from-file<span class="token operator">=</span>./demosecrets.json --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml
+
+apiVersion: v1
+data:
+  demosecrets.json: ewogICAgImtleTEiIDogInZhbHVlMSIsCiAgICAia2V5MiIgOiAidmFsdWUyIgp9
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: myfilesecret
+</code></pre></div><p>Now let us first create the Secret in the cluster:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create secret generic myfilesecret --from-file<span class="token operator">=</span>demosecrets<span class="token operator">=</span>./demosecrets.json
+</code></pre></div><p>Create a file <code>volumesecretdemo.yaml</code> and add the following content:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Pod
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">creationTimestamp</span><span class="token punctuation">:</span> <span class="token null important">null</span>
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">run</span><span class="token punctuation">:</span> volumesecretdemo
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> volumesecretdemo
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">image</span><span class="token punctuation">:</span> alpine
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> volumesecretdemo
+      <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'sleep'</span><span class="token punctuation">,</span> <span class="token string">'3600'</span><span class="token punctuation">]</span>
+      <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+        <span class="token comment"># mount the config volume to path /config</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+          <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> <span class="token string">'/config'</span>
+          <span class="token key atrule">readOnly</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+  <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+    <span class="token comment"># set volumes at the Pod level, then mount them into containers inside the pod</span>
+    <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> config
+      <span class="token key atrule">secret</span><span class="token punctuation">:</span>
+        <span class="token comment"># specify the name of the secret to use</span>
+        <span class="token key atrule">secretName</span><span class="token punctuation">:</span> myfilesecret
+        <span class="token comment"># an array of keys from the Secret to create as file</span>
+        <span class="token key atrule">items</span><span class="token punctuation">:</span>
+          <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> <span class="token string">'demosecrets'</span>
+            <span class="token key atrule">path</span><span class="token punctuation">:</span> <span class="token string">'demosecrets.json'</span>
+</code></pre></div><p>This pod definition mounts the volume <code>config</code> to the path <code>/config</code> into the container. The volume is of type <code>secret</code> and references the Secret <code>myfilesecret</code>.</p> <p>The content or value of the key <code>demosecrets</code> is stored in a file named <code>demosecrets.json</code> which is accessibly to the container under <code>/config/demosecrets.json</code>.</p> <p>Let us see it in action. Use the <code>kubectl apply</code> command to create the pod:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./volumesecretdemo.yaml
+</code></pre></div><p>After the pod is up and running we can use the <code>kubectl exec</code> command with
+argument <code>-it</code> to connect to the container inside the pod and open a shell:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> volumesecretdemo -- /bin/sh
+</code></pre></div><p>Now we can check if the file and its content is available:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>$ <span class="token function">ls</span> /config
+demosecrets.json
+$ <span class="token function">more</span> /config/demosecrets.json
+<span class="token punctuation">{</span>
+    <span class="token string">&quot;key1&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value1&quot;</span>,
+    <span class="token string">&quot;key2&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">&quot;value2&quot;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="configure-the-demo-application-with-configmap-and-secrets"><a href="#configure-the-demo-application-with-configmap-and-secrets" class="header-anchor">#</a> Configure the demo application with ConfigMap and Secrets</h2> <p>Now it's time to configure the application which we have deployed in <a href="/trainingdays/day7/challenges/challenge-2.html">challenge 2</a> with ConfigMaps and Secrets:</p> <ul><li>The SQL Server, the Contacts API and the front-end are still running in the cluster. We will create a <em>ConfigMap</em> to configure the front-end correctly to set the endpoint to access the Contacts API.</li> <li>A <em>Secret</em> will be created to store the password for the SQL Server and the connection string to the server which is needed by the Contacts API.</li></ul> <h3 id="configure-the-front-end-with-a-configmap"><a href="#configure-the-front-end-with-a-configmap" class="header-anchor">#</a> Configure the front-end with a ConfigMap</h3> <p>In <a href="/trainingdays/day7/challenges/challenge-2.html">challenge 2</a> we have adjusted already the needed <code>settings.js</code> file for the front-end and have entered the endpoint of the Contacts API (the file is located under <code>day7/apps/frontend/scmfe/public/settings</code>).</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">var</span> uisettings <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">endpoint</span><span class="token operator">:</span> <span class="token string">'http://&lt;YOUR_NIP_DOMAIN&gt;/api/contacts/'</span><span class="token punctuation">,</span>
+  <span class="token comment">// &quot;resourcesEndpoint&quot;: &quot;https://adcday3scmresourcesapi-dev.azurewebsites.net/&quot;,</span>
+  <span class="token comment">// &quot;searchEndpoint&quot;: &quot;https://adcday3scmrsearchapi-dev.azurewebsites.net/&quot;,</span>
+  <span class="token comment">// &quot;reportsEndpoint&quot;: &quot;https://adcday3scmvr-dev.azurewebsites.net&quot;,</span>
+  <span class="token literal-property property">enableStats</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">aiKey</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Your current file should look something like that, because you have already specified your nip domain:</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">var</span> uisettings <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token literal-property property">endpoint</span><span class="token operator">:</span> <span class="token string">'http://20-67-122-249.nip.io/api/contacts/'</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">enableStats</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token literal-property property">aiKey</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Create a ConfigMap by using the <code>kubectl create config map</code> command and argument <code>--from-file</code>. Make sure that you use the right path to the settings file:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create configmap frontend-settings --from-file<span class="token operator">=</span>./day7/apps/frontend/scmfe/public/settings/settings.js
+</code></pre></div><p>Now we have to adjust the front-end's deployment definition to mount the file from a volume.</p> <p>Open your front-end deployment file and add the needed volume and volume mount:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myfrontend
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> myfrontend
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myfrontend
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/adc<span class="token punctuation">-</span>frontend<span class="token punctuation">-</span>ui<span class="token punctuation">:</span><span class="token number">1.0</span>
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'128Mi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'500m'</span>
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">80</span>
+          <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+            <span class="token comment"># mount the config volume to path /usr/share/nginx/html/settings</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> frontend<span class="token punctuation">-</span>settings
+              <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> <span class="token string">'/usr/share/nginx/html/settings'</span>
+              <span class="token key atrule">readOnly</span><span class="token punctuation">:</span> <span class="token boolean important">true</span>
+      <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+        <span class="token comment"># set volumes at the Pod level, then mount them into containers inside the pod</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> frontend<span class="token punctuation">-</span>settings
+          <span class="token key atrule">configMap</span><span class="token punctuation">:</span>
+            <span class="token comment"># specify the name of the ConfigMap to use</span>
+            <span class="token comment"># we dont't need to specify an array of keys to add as file from the ConfigMap</span>
+            <span class="token comment"># as the name of the key is settings.js the file is created as settings.js</span>
+            <span class="token key atrule">name</span><span class="token punctuation">:</span> frontend<span class="token punctuation">-</span>settings
+</code></pre></div><p>Now use the <code>kubectl apply</code> command to update the frontend deployment:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./frontend.yaml
+</code></pre></div><p>Open a browser and check if the front-end is still working.</p> <h3 id="configure-the-sql-server-and-contacts-api-with-a-secret"><a href="#configure-the-sql-server-and-contacts-api-with-a-secret" class="header-anchor">#</a> Configure the SQL Server and Contacts API with a Secret</h3> <p>In <a href="/trainingdays/day7/challenges/challenge-2.html">challenge 2</a> we have set the SQL Server's admin password as plain text in an environment variable. The connection string to access the SQL Server was set in an environment variable of the Contacts API's deployment file as plain text, too.</p> <p>Now we create a Kubernetes Secret to store both sensitive data and inject the as environment variable into each deployments.</p> <p>First, we have to create a secret that contains the SQL Server's password and connection string. Therefore we use the <code>kubectl create secret generic</code> command and create the key value pairs with the argument <code>--from-literal</code>:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl create secret generic sqlsecrets --from-literal<span class="token operator">=</span>pwd<span class="token operator">=</span><span class="token string">&quot;Ch@ngeMe!23&quot;</span> --from-literal<span class="token operator">=</span>constr<span class="token operator">=</span><span class="token string">&quot;Server=tcp:mssqlsvr,1433;Initial Catalog=scmcontactsdb;Persist Security Info=False;User ID=sa;Password=Ch@ngeMe!23;MultipleActiveResultSets=False;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;&quot;</span>
+</code></pre></div><p>Now we can inject the SQL Server's password in the SQL Server's deployment file:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> mssql<span class="token punctuation">-</span>deployment
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">1</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> mssql
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> mssql
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">terminationGracePeriodSeconds</span><span class="token punctuation">:</span> <span class="token number">30</span>
+      <span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+        <span class="token key atrule">fsGroup</span><span class="token punctuation">:</span> <span class="token number">10001</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> mssql
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> mcr.microsoft.com/mssql/server<span class="token punctuation">:</span>2019<span class="token punctuation">-</span>latest
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">1433</span>
+          <span class="token key atrule">env</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> MSSQL_PID
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Developer'</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ACCEPT_EULA
+              <span class="token key atrule">value</span><span class="token punctuation">:</span> <span class="token string">'Y'</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> SA_PASSWORD
+              <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+                <span class="token key atrule">secretKeyRef</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">name</span><span class="token punctuation">:</span> sqlsecrets
+                  <span class="token key atrule">key</span><span class="token punctuation">:</span> pwd
+</code></pre></div><p>Update your SQL Server's deployment using the <code>kubectl apply</code> command:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./sqlserver.yaml
+</code></pre></div><p>After that we can update the Contact API's deployment to inject the connection string from the secret:</p> <div class="language-yaml extra-class"><pre class="language-yaml"><code><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Deployment
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> myapi
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">4</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> myapi
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> myapi
+          <span class="token key atrule">env</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> ConnectionStrings__DefaultConnectionString
+              <span class="token key atrule">valueFrom</span><span class="token punctuation">:</span>
+                <span class="token key atrule">secretKeyRef</span><span class="token punctuation">:</span>
+                  <span class="token key atrule">name</span><span class="token punctuation">:</span> sqlsecrets
+                  <span class="token key atrule">key</span><span class="token punctuation">:</span> constr
+          <span class="token key atrule">image</span><span class="token punctuation">:</span> &lt;ACR_NAME<span class="token punctuation">&gt;</span>.azurecr.io/adc<span class="token punctuation">-</span>api<span class="token punctuation">-</span>sql<span class="token punctuation">:</span><span class="token number">1.0</span>
+          <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+            <span class="token key atrule">limits</span><span class="token punctuation">:</span>
+              <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">'128Mi'</span>
+              <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">'500m'</span>
+          <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">5000</span>
+</code></pre></div><p>Update your Contact API's deployment using the <code>kubectl apply</code> command:</p> <div class="language-shell extra-class"><pre class="language-shell"><code>kubectl apply <span class="token parameter variable">-f</span> ./api.yaml
+</code></pre></div><p>Open a browser navigate to your front-end and check if everything is still working.</p> <p><a href="/trainingdays/day7/challenges/challenge-2.html">◀ Previous challenge</a> | <a href="/trainingdays/day7/" class="router-link-active">🔼 Day 7</a> | <a href="/trainingdays/day7/challenges/challenge-4.html">Next challenge ▶</a></p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/azuredevcollege/trainingdays/edit/master/day7/challenges/challenge-3.md" target="_blank" rel="noopener noreferrer">Edit this page</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/trainingdays/assets/js/app.7ee90653.js" defer></script><script src="/trainingdays/assets/js/3.bac66e4c.js" defer></script><script src="/trainingdays/assets/js/86.b933c088.js" defer></script>
+  </body>
+</html>
