@@ -23,7 +23,7 @@ group and and create our Kubernetes cluster within it:
 
 ```shell
 az group create --name adc-aks-rg --location westeurope
-az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys --kubernetes-version 1.22.6
+az aks create --resource-group adc-aks-rg --name adc-cluster --enable-managed-identity --generate-ssh-keys
 ```
 
 Let's inspect the created resources:
