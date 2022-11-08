@@ -87,7 +87,8 @@ Server:
  […]
  ```
 
- This command displays system wide information of Docker Daemon. Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any running, paused or stopped containers on our system. Also we don't have any container images pulled yet. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker Cli?"
+ This command displays system wide information of Docker Daemon. Should you get an ```ERROR: error during connect``` start the Docker Daemon again.
+ Information displayed includes the kernel version, number of containers and images. At the moment, we don't have any running, paused or stopped containers on our system. Also we don't have any container images pulled yet. This will change in a few minutes. But before running our first Docker container, let's learn "how to use Docker Cli?"
 </details>
 
 ***
@@ -114,7 +115,7 @@ Commands:
   […]
 ```
 
-It is fairly simple to figure out how the Docker Cli is used. Just type ```docker``` and after that type the command that you want to execute + options that you want to use. That simple. For example, a simple Docker command to run a container is ```docker run hello-world```. This will create a container by hello-world Docker image. ```docker run --name azuredevcol hello-world``` this will create another container using the same image but this time the container will have the name "azuredevcol". You see, it's quite simple. But it got more complicated over time. Docker had roughly 40 top-level solo commands like run, inspect, build, attach etc. While these commands worked very well for a while, they had a few issues and Docker decided to solve these issues by introducing the management commands. Docker started to group these commands logically with Docker Cli version 1.13 and called these new groups management commands. Each group represents a single Docker object or ability. For example, all the commands related to container objects are grouped together under the "container" management command. Going back to the previous example - remember the simple Docker command to run a container was ```docker run hello-world```. Now it's ```docker container run hello-world```. The Docker Cli is backward-compatible so it still supports the old way of cli but using the management command approach is the future. 
+It is fairly simple to figure out how the Docker Cli is used. Just type ```docker``` and after that type the command that you want to execute + options that you want to use. That simple. For example, a simple Docker command to run a container is ```docker run hello-world```. This will create a container by hello-world Docker image. ```docker run --name azuredevcol hello-world``` this will create another container using the same image but this time the container will have the name "azuredevcol". You see, it's quite simple. But it got more complicated over time. Docker had roughly 40 top-level solo commands like run, inspect, build, attach etc. While these commands worked very well for a while, they had a few issues and Docker decided to solve these issues by introducing the management commands. Docker started to group these commands logically with Docker Cli version 1.13 and called these new groups management commands. Each group represents a single Docker object or ability. For example, all the commands related to container objects are grouped together under the **container** management command. Going back to the previous example - remember the simple Docker command to run a container was ```docker run hello-world```. Now it's ```docker container run hello-world```. The Docker Cli is backward-compatible so it still supports the old way of cli but using the management command approach is the future. 
 
 Long story short, Docker Cli syntax is fairly simple. Just type ```docker``` and after that type the management command of the object that you want to play, like ```image```, ```container```, ```volume``` and after that type the command that you want to execute, like ```run```, ```stop```, ```pull```, ```inspect``` + options that you want to use. Couple of examples:
 
@@ -583,3 +584,5 @@ Also ```docker container prune``` command deletes all stopped containers as bulk
 __Congratulations__ you have completed the Docker 101 challenge and learned the very basics of Docker containers.
 
 *** Reference: https://docs.docker.com
+
+[◀ Overview](../../README.md) | [🔼 This challenge](./challenge1.md) | [Next challenge ▶](./challenge2.md)
