@@ -9,7 +9,7 @@ In this challenge you will learn how to:
 - Create a GitHub project board
 - Assign permissions to a team
 - Add project administrators
-- Working with cards
+- Working with items
 - Plan milestones (sprints)
 - Use GitHub labels to classify issues and pull requests
 - See how issues and pull requests flow automatically through the different board's columns
@@ -19,7 +19,7 @@ In this challenge you will learn how to:
 1. [Create a GitHub project board](#create-a-github-project-board)
 2. [Assign permissions to a team](#assign-permissions-to-a-team)
 3. [Add project Administrators](#add-project-administrators)
-4. [Working with cards](#working-with-cards)
+4. [Working with items](#working-with-items)
 5. [Use GitHub labels to classify issues and pull requests](#use-github-labels-to-classify-issues-and-pull-requests)
 6. [See how issues and pull requests flow automatically through the different board's columns](#use-github-labels-to-categorize-issues-and-pull-requests)
 7. [Plan your work for day4](#plan-your-work-for-day4)
@@ -40,9 +40,9 @@ organization level. GitHub provides different templates for a project board.
 Today, we use the template _Automated Kanban_. With this template, we get a
 simple board with three columns:
 
-- **To do**, for cards that represent future work
-- **In progress**, to display cards we are currently working on
-- **Done**, cards we have completed
+- **To do**, for items that represent future work
+- **In progress**, to display items we are currently working on
+- **Done**, items we have completed
 
 Let us create the project board. Navigate to the _Project_ section of your
 organization and create a new project. Choose the "Start from Scratch" option and the "Board" view.
@@ -59,10 +59,10 @@ In the top-right, click the three dots  to open the menu. Check the settings of 
 
 After the project has been created, we can add notes to plan and track our work.
 
-A project board is made up of issues, pull requests and notes which are displayed as items. Cards are
+A project board is made up of issues, pull requests and notes which are displayed as items. Item are
 categorized in columns of your choice. We can move items from one column to
 another. The board project template is by default made up of three columns, but you can add more columns to the board to categorize
-cards the way you want. Under settings, you can add custom fields to your project.
+items the way you want. Under settings, you can add custom fields to your project.
 
 ::: tip
 📝You can add directly issues and pull request from a repository. To do so, clock on the "+" sign on the bottom left, and choose "Add item from repository". You will see the repo you just created. As of now, we do not have anything to add. 
@@ -309,13 +309,13 @@ checkout the rules for each column.
 
 ![GitHub](./images/04_01_board_workflows_01.png)
 
-Now let's look at how both cards automatically move from the _In progress_
+Now let's look at how both items automatically move from the _In progress_
 column to the _Done_ column when we complete our pull request. To do this, we
 navigate to the open pull request and merge it into the _main_ branch.
 
 ![GitHub merge pull request](./images/gh-merge-pr.png)
 
-After the pull request is merged, we see that both cards were moved to the
+After the pull request is merged, we see that both items were moved to the
 _Done_ column.
 
 ## Plan your work for day4
