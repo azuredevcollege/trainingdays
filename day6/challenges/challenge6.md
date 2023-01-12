@@ -12,7 +12,7 @@ https://docs.microsoft.com/learn/modules/run-docker-with-azure-container-instanc
 
 **Docker Compose:** https://docs.docker.com/compose/
 
-**Docker Cheat Sheet:** [https://www.docker.com/sites/default/files/d8/2019-09/docker-cheat-sheet.pdf](https://docs.docker.com/get-started/docker_cheatsheet.pdf)
+**Docker Cheat Sheet:** https://docs.docker.com/get-started/docker_cheatsheet.pdf
 
 **Docker Desktop WSL2 Backend:** https://docs.docker.com/docker-for-windows/wsl/
 
