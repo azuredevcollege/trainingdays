@@ -195,7 +195,7 @@ Output will be something like:
 ```shell
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ```
-The list is empty. We don't have any Docker image stored locally. Let's pull this image to the system. 
+The list is empty. We don't have any Docker image stored locally. Let's pull this image from Docker Hub to the system. 
 
 Type:
 
