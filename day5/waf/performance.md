@@ -11,7 +11,7 @@ Just as you need to anticipate increases in load in on-premises environments, yo
 ### What design considerations have you made for performance efficiency in your workload?
 
 - [ ] The workload is deployed across multiple regions.
-- [x] Regions were chosen based on location, proximity to users, and resource type availability.
+- [x] **Regions were chosen based on location, proximity to users, and resource type availability.**
 - [ ] Paired regions are used appropriately.
 - [ ] You have ensured that both (all) regions in use have the same performance and scale SKUs that are currently leveraged in the primary region.
 - [ ] Within a region the application architecture is designed to use Availability Zones.
@@ -39,7 +39,7 @@ Just as you need to anticipate increases in load in on-premises environments, yo
 - [ ] A process for provisioning and de-provisioning capacity has been established.
 - [x] You have enabled auto-scaling for all PaaS and IaaS services that support it.
 - [ ] You are aware of relevant Azure service limits and quotas.
-- [ ] You have validated the SKU and configuration choices are appropriate for your anticipated loads.
+- [x] **You have validated the SKU and configuration choices are appropriate for your anticipated loads.**
 - [ ] There is a strategy in place to manage events that may cause a spike in load.
 - [ ] None of the above.
 
