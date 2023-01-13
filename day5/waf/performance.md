@@ -5,6 +5,8 @@ Performance efficiency is the **ability of your workload to scale to meet the de
 
 Just as you need to anticipate increases in load in on-premises environments, you need to expect increases in cloud environments to meet business requirements. One difference is that you may no longer need to make long-term predictions for expected changes to ensure you'll have enough capacity in the future. Another difference is in the approach used to manage performance.
 
+## Well-Architected-Framework Review
+
 ### What design considerations have you made for performance efficiency in your workload?
 
 - Regions were chosen based on location, proximity to users, and resource type availability.
