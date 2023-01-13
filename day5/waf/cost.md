@@ -42,7 +42,7 @@ In our case, we are not really paying much attention to our costs. The reason fo
 - [ ] There is an ongoing conversation between the app owner and the business.
 - [ ] There is a plan to modernize the workload.
 - [ ] Azure Tags are used to enrich Azure resources with operational metadata.
-- [x] The application has a well-defined naming standard for Azure resources.
+- [x] **The application has a well-defined naming standard for Azure resources.**
 - [ ] Role Based Access Control (RBAC) is used to control access to operational and financial dashboards and underlying data.
 - [ ] None of the above.
 
@@ -68,13 +68,13 @@ Among the many different points to be considered, such as assigning budgets to e
 
 ### How do you manage compute costs for this workload?
 
-- [x] Appropriate SKUs are used for workload servers.
-- [x] Appropriate operating systems are used in the workload.
+- [x] **Appropriate SKUs are used for workload servers.**
+- [x] **Appropriate operating systems are used in the workload.**
 - [ ] A recent review of SKUs that could benefit from Reserved Instances for 1 or 3 years or more has been performed.
 - [ ] Burstable (B) series VM sizes are used for VMs that are idle most of the time and have high usage only in certain periods.
 - [ ] VM instances which are not used are shut down.
 - [ ] Spot virtual machines are used.
-- [x] PaaS is used as an alternative to buying virtual machines.
+- [x] **PaaS is used as an alternative to buying virtual machines.**
 - [ ] Costs are optimized by using the App Service Premium (v3) plan over the Premium (Pv2) plan.
 - [ ] Zone to Zone disaster recovery is used for virtual machines.
 - [ ] The Start/Stop feature in Azure Kubernetes Services (AKS) is used.
