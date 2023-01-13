@@ -20,11 +20,34 @@ In our case, we are not really paying much attention to our costs. The reason fo
 
 Among the many different points to be considered, such as assigning budgets to each service, having cost owners, doing cost forecasting, having RBAC, or  conducting ongoing conversations between app owner and business, in our case we only contribute minimally to this by havinf well-defined naming standards for our resources. 
 
+### How are you monitoring costs of this workload?
+
+- None of the above.
+
 ### How do you optimize the design of this workload?
+
+- The application was built natively for the cloud.
+
+### How do you ensure that cloud services are appropriately provisioned?
+
+- None of the above.
+
+### What considerations for DevOps practices are you making in this workload?
+
+- There is awareness around how the application has been built and is being maintained (in house or via an external partner).
 
 ### How do you manage compute costs for this workload?
 
+- Appropriate SKUs are used for workload servers.
+- Appropriate operating systems are used in the workload-
+- PaaS is used as an alternative to buying virtual machines.
+
 As previously stated, for our application we did not really pay much attention to compute costs. As we focused fully on functionality. Nonetheless, according to the WAF, a way of managing compute costs is by using appropriate SKUs for our workloads - which we did. Also, we used PaaS instead of buying virtual machines. This were easy steps to take since our app was created with the cheapest SKUs and plan, and it is cloud native, which makes PaaS the best option in this case.
 
+### How do you manage networking costs for this workload?
+- None of the above.
+
+### How do you manage storage and data costs for this workload?
+- None of the above.
 
 
