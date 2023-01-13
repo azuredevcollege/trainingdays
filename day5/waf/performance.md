@@ -1,6 +1,10 @@
 # Performance Efficiency
 
 
+Performance efficiency is the **ability of your workload to scale to meet the demands placed on it by users in an efficient manner**. Before the cloud became popular, when it came to planning how a system would handle increases in load, many organizations intentionally provisioned oversized workloads to meet business requirements. This decision made sense in on-premises environments because it ensured capacity during peak usage. Capacity reflects resource availability (CPU and memory). Capacity was a major consideration for processes that would be in place for many years.
+
+Just as you need to anticipate increases in load in on-premises environments, you need to expect increases in cloud environments to meet business requirements. One difference is that you may no longer need to make long-term predictions for expected changes to ensure you'll have enough capacity in the future. Another difference is in the approach used to manage performance.
+
 ### What design considerations have you made for performance efficiency in your workload?
 
 - Regions were chosen based on location, proximity to users, and resource type availability.
