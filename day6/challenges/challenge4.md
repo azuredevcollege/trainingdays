@@ -602,7 +602,7 @@ total 24
 drwxr-xr-x 2 ozozturk ozozturk 4096 Aug 13 11:35 php
 ```
 
-It's a little bit crowded folder. There are 2 Dockerfiles. First one is the Dockerfile that we'll be used to build web app image. Second one will be used to build mysql database image. 
+It's a little bit crowded folder. There are 2 Dockerfiles. First one is the Dockerfile that will be used to build web app image. Second one will be used to build mysql database image. 
 
 There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. "env.list" will be passed to php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. "envmysql.list" is another environment  variable file and has couple of other environment  variables defined in it. We'll pass this values to mysql container. mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with ```ENV``` instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, these will be hardcoded to image. This means that whoever get this image can access to these values. Especially this isn't a thing that we want for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
 
