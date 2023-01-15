@@ -779,7 +779,26 @@ Output will be something like:
 ```shell
 sha256:8f5d8a8e42bd9419f6a932c0e70b0700f0618096d6c3f4a06753520fac236ed7
 ```
-Our image is ready. Now if we want, we can push it to our repository and move it to anywhere we want. 
+Our image is ready as you can check by running
+```shell
+$ docker image list
+```
+Output will be something like:
+```shell
+REPOSITORY                     TAG       IMAGE ID       CREATED              SIZE
+ozgurozturknet/commit          latest    0b04f44b2e79   About a minute ago   4.87MB
+```
+
+Now we have a usual container image that we can push to our repository. Of course, we can also create a new container from that image that contains the changes we had committed. Type: 
+```shell
+$ docker container run -it --name committed_test your_dockerhub_id/commit sh
+```
+In the shell, run following commands to check the test file is available `/test/test.txt` with the content we added above:
+```shell
+/ # cat /test/test.txt
+hello world
+```
+  
 </details>
 
 ***
