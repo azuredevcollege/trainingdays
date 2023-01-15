@@ -126,8 +126,10 @@ First, we should clone this Github repository.
 
 Type: 
 ```shell
-$ git clone https://github.com/azuredevcollege/trainingdays.git
+$ git clone https://github.com/azuredevcollege/trainingdays.git $HOME/trainingdays
 ```
+[//]: # (Note: $HOME is available on PowerShell and bash / zsh / sh)
+  
 Output will be something like:
 ```shell
 Cloning into 'trainingdays'...
@@ -141,13 +143,13 @@ Updating files: 100% (1396/1396), done.
 ```
 
 Repo has been cloned. It's time to jump to the
-```trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
+```~/trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
 list all the files.
 
 
 Type: 
 ```shell
-$ cd trainingdays/day6/apps/first_docker_image
+$ cd ~/trainingdays/day6/apps/first_docker_image
 $ ls -l
 ```
 Output will be something like:
@@ -227,12 +229,12 @@ test_container
 <details>
   <summary>Click to expand!</summary>
 
-This time we're gonna build a node.js app image. cd to the ```/trainingdays/day6/apps/nodejs``` folder and list all the files. 
+This time we're gonna build a node.js app image. cd to the ```~/trainingdays/day6/apps/nodejs``` folder and list all the files. 
 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/nodejs
+$ cd ~/trainingdays/day6/apps/nodejs
 $ ls -l
 ```
 Output will be something like:
@@ -420,11 +422,11 @@ node_container
 <details>
   <summary>Click to expand!</summary>
 
-Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
+Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```~/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/java
+$ cd ~/trainingdays/day6/apps/java
 $ ls -l
 ```
 Output will be something like:
@@ -584,11 +586,11 @@ ozgurozturknet/java            latest    30147a5579a3   17 minutes ago   251M
 <details>
   <summary>Click to expand!</summary>
 
-This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
+This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```~/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/php
+$ cd ~/trainingdays/day6/apps/php
 $ ls -l
 ```
 Output will be something like:
