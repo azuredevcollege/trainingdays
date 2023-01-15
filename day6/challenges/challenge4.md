@@ -146,18 +146,30 @@ Repo has been cloned. It's time to jump to the
 ```~/trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
 list all the files.
 
-
-Type: 
-```shell
-$ cd ~/trainingdays/day6/apps/first_docker_image
-$ ls -l
-```
-Output will be something like:
-```shell
-total 8
--rw-r--r-- 1 ozozturk ozozturk  90 Jun 12 11:56 Dockerfile
--rw-r--r-- 1 ozozturk ozozturk 211 Jun 12 11:21 index.html
-```
+- If you are on a Unix-shell (e.g., bash or zsh), type: 
+   ```shell
+   $ cd ~/trainingdays/day6/apps/first_docker_image
+   $ ls -l
+   ```
+   Output will be something like:
+   ```shell
+   total 8
+   -rw-r--r-- 1 ozozturk ozozturk  90 Jun 12 11:56 Dockerfile
+   -rw-r--r-- 1 ozozturk ozozturk 211 Jun 12 11:21 index.html
+   ```
+- If you use PowerShell, type:
+   ```shell
+   $ cd ~/trainingdays/day6/apps/first_docker_image
+   $ dir
+   ```
+   Output will be something like:
+   ```shell
+   Mode                 LastWriteTime         Length Name
+   ----                 -------------         ------ ----
+   -a----         6/12/2022  11:56 AM             92 Dockerfile
+   -a----         6/12/2022  11:21 AM            220 index.html
+   ```
+   :bulb: We will not continue listing both Unix-shell and PowerShell instructions going forward. If you are using PowerShell, please translate `ls -l` to `dir` in the remainder of this challenge.
 
 There are 2 files in that folder. ```index.html``` is a simple html file that has been created by us. We want to build a web server image with this file has been copied in it. To be able to build an image, we need a ```Dockerfile```. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. We have one in this folder. Let's check and see what's in it. This is one of the simplest form of a Dockerfile.
 
