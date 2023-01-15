@@ -114,7 +114,7 @@ Output will be something like:
 
 This output shows us which commands have been executed and which layers have been created as a result of these commands. This also gives us some clues about how an image is created. 
 
-Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using ```docker build```, users can create an automated build that executes several command-line instructions in succession. Each instruction that changes anything creates a new layer. The Docker daemon runs the instructions in the Dockerfile one-by-one, committing the result of each instruction to a new image if necessary, before finally outputting the ID of your new image. It's now time to create our first image. 
+Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using ```docker image build```, users can create an automated build that executes several command-line instructions in succession. Each instruction that changes anything creates a new layer. The Docker daemon runs the instructions in the Dockerfile one-by-one, committing the result of each instruction to a new image if necessary, before finally outputting the ID of your new image. It's now time to create our first image. 
 </details>
 
 ***
