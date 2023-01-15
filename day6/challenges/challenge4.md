@@ -497,7 +497,7 @@ Hello there! I'm App1 Java Console Application
 
 Perfect. It works. App1 has been compiled and it runs. But it seems to me that, something is wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we ran to compile our application. But, should we really send this image to our customers as is? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want our customers to be able to run this application. We don't want them to have all the unnecessary tools and our source code. Also image size is big, because of these unnecessary tools. These tools are needed for development, but they area actually not needed for running java applications that are already compiled. Instead, the "Java Runtime Environment (JRE)" contains the Java runtime only and is a smaller, more lightweight component that has all it needs to run Java applications.
 
-Instead of sending this image, It would be wise to get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
+So, instead of sending the container image that we have just built, it would be wise to only get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
 Yes there is a simple solution to handle this and it's called multi-stage build. 
 
 One of the most challenging thing about building images is keeping the image size down. Each instruction in Dockerfile adds a layer to image, and you need to remember to clean up any artifacts you don’t need before moving on to the next layer. To write a really efficient Dockerfile, you have traditionally needed to employ shell tricks and other logic to keep the layers as small as possible and to ensure that each layer has the artifacts it needs from the previous layer and nothing else. It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the “builder pattern”. But maintaining two Dockerfiles is not ideal. 
@@ -566,7 +566,17 @@ Removing intermediate container 00585394dbfb
 Successfully built 7b7c6b3a7f6a
 Successfully tagged ozgurozturknet/finaljava:latest
 ```
-Final image has been built. It's much smaller than the first one. Also only artifacts that we need are included. 
+Final image has been built. As it only only contains the artifacts that we need, the image size is much smaller as we can verify by running:
+ ```shell
+$ docker image list
+```
+Output will be something like:
+```shell
+REPOSITORY                     TAG       IMAGE ID       CREATED          SIZE
+ozgurozturknet/finaljava       latest    fde0112f0383   6 minutes ago    149MB
+ozgurozturknet/java            latest    30147a5579a3   17 minutes ago   251M
+...
+```
 </details>
 
 ***
