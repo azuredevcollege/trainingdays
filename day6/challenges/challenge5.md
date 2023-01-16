@@ -40,11 +40,11 @@ In this first task, we'll create a new [Azure Container Registry (ACR)](https://
   - SKU: Keep as is. **Standard**
 - Click **Review + create**.
 
-![Image of the "Create container registry" screen and where to find the input fields](./img/acr31.png)
+![Image of the "Create container registry" screen and where to find the input fields](./img/acr3.png)
 
 - Click **Create** and finalize the ACR creation steps. 
 
-![Image of the "Create container registry validation" screen and where to find the "create" button](./img/acr41.png)
+![Image of the "Create container registry validation" screen and where to find the "create" button](./img/acr4.png)
 
 - When done, click the **Go to resource** button and access newly created ACR instance.
 
