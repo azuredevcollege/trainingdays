@@ -14,7 +14,7 @@ A cost-effective workload is driven by business goals and the return on investme
 - Optimize workloads, aim for scalable costs
 - Continuously monitor and optimize cost management
 
-To assess your workload using the tenets found in the [Microsoft Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/framework/), reference the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/?id=azure-architecture-review&mode=pre-assessment).
+To assess your workload using the principles found in the [Microsoft Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/framework/), reference the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/?id=azure-architecture-review&mode=pre-assessment).
 
 ## Simple Contact Management
 
