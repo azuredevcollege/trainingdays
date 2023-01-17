@@ -1,16 +1,26 @@
 WIP
 
-# Cost Optimization Overview
+# Cost optimization
 
 The cost optimization pillar provides principles for balancing business goals with budget justification to create a cost-effective workload while avoiding capital-intensive solutions. Cost optimization is about looking at ways to reduce unnecessary expenses and improve operational efficiencies.
 
-Use the pay-as-you-go strategy for your architecture, and invest in scaling out, rather than delivering a large investment-first version. Consider opportunity costs in your architecture, and the balance between first mover advantage versus fast follow. Use the cost calculators to estimate the initial cost and operational costs. Finally, establish policies, budgets, and controls that set cost limits for your solution.
+## Cost Optimization guidance
+
+- Use the pay-as-you-go strategy for your architecture, and invest in scaling out, rather than delivering a large investment-first version. 
+- Use the cost calculators to estimate the initial cost and operational costs. 
+- Establish policies, budgets, and controls that set cost limits for your solution.
 
 To assess your workload using the tenets found in the [Microsoft Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/framework/), reference the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/?id=azure-architecture-review&mode=pre-assessment).
 
-We have done this review for our application and can highlight the following aspects:
+## Simple Contact Management
 
-## Well-Architected-Framework Review 
+In our case, we are building an application for testing purposes, and it is not ready for production. For instance, we did not really pay attention to our costs. Our result from the Well Architected Framework's review in this area is only 7/100!
+
+The reason for this is that we are mostly using free or development pricing tiers and SKUs. Further, we also do not expect high workloads for our application (as it will likely be just us sending a couple of requests), and thus did not care much for estimating workloads. In a real-life scenario, however, modelling costs and workloads is extremely important. You should have a clear overview of the cost implications each service has. Also, you should have some measures to control the cost of your application i.e. get key people notified if a cost is expected to exceed budget or there are anomalies. 
+
+## Well-Architected-Framework Review
+
+Tami: just added all questions and answers I gave here - for those which I found interesting and easy to answer, I added all possible alternatives :p we can check together whether they make sense.
 
 ### How are you modeling cloud costs of this workload?
 
@@ -24,10 +34,6 @@ We have done this review for our application and can highlight the following asp
 - [ ] Special discounts given to services or licenses are factored in when calculating new cost models for services being moved to the cloud.
 - [ ] Azure Hybrid Use Benefit is used to drive down cost in the cloud.
 - [x] **None of the above**.
-
-**** 
-
-In our case, we are not really paying much attention to our costs. The reason for this is that we are mostly using free / developer plans and SKUs. Further, we also do not expect high workloads for our application (as it will likely be just us sending a couple of requests). In a real-life scenarion, however, modelling costs is extremely important. You should have a clear overview of the cost implications each service has. 
 
 ### How do you govern budgets and application lifespan for this workload?
 
@@ -45,10 +51,6 @@ In our case, we are not really paying much attention to our costs. The reason fo
 - [x] **The application has a well-defined naming standard for Azure resources.**
 - [ ] Role Based Access Control (RBAC) is used to control access to operational and financial dashboards and underlying data.
 - [ ] None of the above.
-
-****
-
-Among the many different points to be considered, such as assigning budgets to each service, having cost owners, doing cost forecasting, having RBAC, or  conducting ongoing conversations between app owner and business, in our case we only contribute minimally to this by havinf well-defined naming standards for our resources. 
 
 ### How are you monitoring costs of this workload?
 
@@ -79,10 +81,6 @@ Among the many different points to be considered, such as assigning budgets to e
 - [ ] Zone to Zone disaster recovery is used for virtual machines.
 - [ ] The Start/Stop feature in Azure Kubernetes Services (AKS) is used.
 - [ ] None of the above.
-
-****
-
-As previously stated, for our application we did not really pay much attention to compute costs. As we focused fully on functionality. Nonetheless, according to the WAF, a way of managing compute costs is by using appropriate SKUs for our workloads - which we did. Also, we used PaaS instead of buying virtual machines. This were easy steps to take since our app was created with the cheapest SKUs and plan, and it is cloud native, which makes PaaS the best option in this case.
 
 ### How do you manage networking costs for this workload?
 - [x] None of the above.
