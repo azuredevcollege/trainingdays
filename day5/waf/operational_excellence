@@ -1,0 +1,30 @@
+# Operational excellence
+
+The operational excellence pillar of the Well-Architected-Framework covers the operations processes that keep an application running in production. Deployments must be reliable and predictable. Automated deployments reduce the chance of human error. Fast and routine deployment processes won't slow down the release of new features or bug fixes. Equally important, you must be able to quickly roll back or roll forward if an update has problems.
+
+## Operational excellence guidance
+
+To achieve a higher competency in operations, consider and improve how software is:
+
+- Developed
+- Deployed
+- Operated
+- Maintained
+
+Equally important, provide a team culture, which includes:
+
+- Experimentation and growth
+- Solutions for rationalizing the current state of operations
+- Incident response plans
+
+## Simple Contact Management
+
+Since this application is not build for production operational excellence is not in the forefront. Starting off with using as little services and complexity and as cheap of an architecture as possible means that going through the Well Architected Framework's review we only have a score of 11/100.
+The most important things needing consideration which were out of scope for this workshop are:
+
+- Review, identify, and classify business critical applications
+- Implement automated deployement process with rollback/roll-forward capabilities
+- Improve monitoring
+- Define RPO and REcovery time objective (RTO) and Recovery point objective (RPO) for your workload
+
+## Azure Developer College Questions
