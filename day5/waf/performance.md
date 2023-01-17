@@ -13,6 +13,8 @@ Just as you need to anticipate increases in load in on-premises environments, yo
 - Choose the right resources and right-size
 - Apply strategies in your design early
 
+To assess your workload using the principles found in the [Microsoft Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/framework/), reference the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/?id=azure-architecture-review&mode=pre-assessment).
+
 ## Simple Contact Management
 
 We took some minimal steps in terms of performance efficiency when building our applications. Nevertheless, it is not close to be production-ready. Since we did not expect high workloads and the app was just built for testing purposes, we paid little attention to scalability, networking, performance targets, etc. Due to this, we only got a score of 4/100 in the Well-Architected-Framework Review.
