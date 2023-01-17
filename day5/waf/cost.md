@@ -6,9 +6,13 @@ The cost optimization pillar provides principles for balancing business goals wi
 
 ## Cost Optimization guidance
 
-- Use the pay-as-you-go strategy for your architecture, and invest in scaling out, rather than delivering a large investment-first version. 
-- Use the cost calculators to estimate the initial cost and operational costs. 
-- Establish policies, budgets, and controls that set cost limits for your solution.
+A cost-effective workload is driven by business goals and the return on investment (ROI) while staying within a given budget. The principles of cost optimization are a series of important considerations that can help achieve both business objectives and cost justification. The following principles provide guidance to develop cost-effective Azure applications:
+
+- Choose the correct resources
+- Set up budgets and maintain cost constraints
+- Dynamically allocate and de-allocate resources
+- Optimize workloads, aim for scalable costs
+- Continuously monitor and optimize cost management
 
 To assess your workload using the tenets found in the [Microsoft Azure Well-Architected Framework](https://learn.microsoft.com/en-us/azure/architecture/framework/), reference the [Microsoft Azure Well-Architected Review](https://learn.microsoft.com/en-us/assessments/?id=azure-architecture-review&mode=pre-assessment).
 
