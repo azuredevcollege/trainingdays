@@ -58,14 +58,34 @@ Tami: just added all questions and answers I gave here - for those which I found
 
 ### How are you monitoring costs of this workload?
 
+- [ ] Alerts are set for cost thresholds and limits.
+- [ ] Specific owners and processes are defined for each alert type.
+- [ ] Application Performance Management (APM) tools and log aggregation technologies are used to collect logs and metrics from Azure resources.
+- [ ] Cost Management Tools (such as Azure Cost Management) are being used to track spending in this workload.
 - [x] None of the above.
 
 ### How do you optimize the design of this workload?
 
 - [x] The application was built natively for the cloud.
+- [ ] There is an availability strategy defined and cost implications of it are understood.
+- [ ] This workload benefits from higher density.
+- [ ] Data is being transferred between regions.
+- [ ] Multi-region deployment is supported and cost implications understood.
+- [ ] The workload is designed to use Availability Zones within a region.
+- [ ] None of the above.
 
 ### How do you ensure that cloud services are appropriately provisioned?
 
+- [ ] Performance requirements are well-defined.
+- [ ] Targets for the time it takes to perform scale operations are defined and monitored.
+- [ ] The workload is designed to scale independently.
+- [ ] The application has been designed to scale both in and out.
+- [ ] Application components and data are split into groups as part of your disaster recovery strategy.
+- [ ] Tools (such as Azure Advisor) are being used to optimise SKUs discovered in this workload.
+- [ ] Resources are reviewed weekly or bi-weekly for optimization.
+- [ ] Cost-effective regions are considered as part of the deployment selection.
+- [ ] Dev/Test offerings are used correctly.
+- [ ] Shared hosting platforms are used correctly.
 - [x] None of the above.
 
 ### What considerations for DevOps practices are you making in this workload?
