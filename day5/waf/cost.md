@@ -62,11 +62,11 @@ Tami: just added all questions and answers I gave here - for those which I found
 - [ ] Specific owners and processes are defined for each alert type.
 - [ ] Application Performance Management (APM) tools and log aggregation technologies are used to collect logs and metrics from Azure resources.
 - [ ] Cost Management Tools (such as Azure Cost Management) are being used to track spending in this workload.
-- [x] None of the above.
+- [x] **None of the above.**
 
 ### How do you optimize the design of this workload?
 
-- [x] The application was built natively for the cloud.
+- [x] **The application was built natively for the cloud.**
 - [ ] There is an availability strategy defined and cost implications of it are understood.
 - [ ] This workload benefits from higher density.
 - [ ] Data is being transferred between regions.
@@ -86,11 +86,16 @@ Tami: just added all questions and answers I gave here - for those which I found
 - [ ] Cost-effective regions are considered as part of the deployment selection.
 - [ ] Dev/Test offerings are used correctly.
 - [ ] Shared hosting platforms are used correctly.
-- [x] None of the above.
+- [x] **None of the above.**
 
 ### What considerations for DevOps practices are you making in this workload?
 
-- [x] There is awareness around how the application has been built and is being maintained (in house or via an external partner).
+- [ ] There is an automated process to deploy application releases to production.
+- [ ] There is a difference in configuration for production and non-production environments.
+- [ ] Test-environments are deployed automatically and deleted after use.
+- [x] **There is awareness around how the application has been built and is being maintained (in house or via an external partner).**
+- [ ] There is awareness regarding the ratio of cost of production and non-production environments for this workload.
+- [ ] None of the above.
 
 ### How do you manage compute costs for this workload?
 
@@ -107,9 +112,9 @@ Tami: just added all questions and answers I gave here - for those which I found
 - [ ] None of the above.
 
 ### How do you manage networking costs for this workload?
-- [x] None of the above.
+- [x] **None of the above.**
 
 ### How do you manage storage and data costs for this workload?
-- [x] None of the above.
+- [x] **None of the above.**
 
 
