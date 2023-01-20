@@ -28,3 +28,8 @@ https://docs.microsoft.com/learn/modules/run-docker-with-azure-container-instanc
 - https://azure.microsoft.com/mediahandler/files/resourcefiles/container-security-in-microsoft-azure/Open%20Container%20Security%20in%20Microsoft%20Azure.pdf
 - https://snyk.io/blog/privileged-docker-containers/
 - https://docs.docker.com/engine/security/
+
+**Layers and content-addressable storage**
+- [Section 1.10.0 (2016-02-04) in Docker Engine release notes | Docker Documentation](https://docs.docker.com/engine/release-notes/prior-releases/#1100-2016-02-04)
+- [Engine v1.10.0 content addressability migration · moby/moby Wiki](https://github.com/moby/moby/wiki/Engine-v1.10.0-content-addressability-migration)
+- [Explaining Docker Image IDs · Adventures in a Cloud Native Landscape](https://windsock.io/explaining-docker-image-ids/)
