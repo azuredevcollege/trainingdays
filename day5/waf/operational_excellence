@@ -25,7 +25,7 @@ The most important things needing consideration which were out of scope for this
 - Review, identify, and classify business critical applications
 - Implement automated deployement process with rollback/roll-forward capabilities
 - Improve monitoring
-- Define RPO and REcovery time objective (RTO) and Recovery point objective (RPO) for your workload
+- Define Recovery time objective (RTO) and Recovery point objective (RPO) for your workload
 
 ## Well-Architected-Framework Review
 
