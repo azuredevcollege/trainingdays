@@ -92,4 +92,33 @@ Tami: just added all questions and answers I gave here - for those which I found
 ### How do you manage storage and data costs for this workload?
 - [x] None of the above.
 
+# Exercise: Optimize Contact Management Application
+
+As you have seen in the answers above, there are multiple ways to optimize costs for an application. Unfortunately, we cannot do them all, but at least we can take two measures in this area to improve our score.
+
+## 1. Configure Autoscale
+
+For certain application, capacity requirements may swing over time. Autoscaling policies allow for less error-prone operations and cost savings through robust automation. For auto scaling, consider the choice of instance size. The size can significantly change the cost of your workload. Therefore, it is recommended to choose smaller instances (for instance, a 1-core instead of vs 4-core VM) where workload is highly variable and scale out (i.e. increase number of instances) to get the desired level of performance, rather than up. This choice will enable you to make your cost calculations and estimates granular. Below you can see a comparison of scalling out a 1-core VM by increasing the number of instances to 10, vs increasing instances of a 4-core VM to 3.
+
+![image](https://user-images.githubusercontent.com/114384858/214886760-bcf41cf4-3300-4e8a-a9b2-516e46ecda1e.png)
+
+### Autoscale Contact Management Application
+
+Go to your AppService Plan and click on **Scale out (AppService Plan)**
+
+Add a new **custom autoscale rule** for increasing to 2 instances, as well as to go back to 1 instance. In this example, we will create a scale-out rule which increases our instance by 1 if the average CPU usage is over 70% for 10 minutes. Further, we also need a rule to scale-in again. Thus, we added a rule to decrease the instance by 1 if average CPU usage is less than 50 percent. 
+
+![image](https://user-images.githubusercontent.com/114384858/214888408-96908c22-95d2-411c-92c1-0f078d617dc6.png)
+
+After creating both rules, it should look like this:
+
+![image](https://user-images.githubusercontent.com/114384858/214887915-10535104-72ae-4312-bf48-cdc491b752b3.png)
+
+
+## 2. Understand the costs implications of your resources
+
+In order to estimate the initial cost, use tools such as [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) to assess cost of the services you plan to use in the workload. Use [Microsoft Azure Total Cost of Ownership (TCO) Calculator](https://azure.microsoft.com/pricing/tco/calculator/) for migration projects. Accurately reflect the cost associated with right storage type. Add hidden costs, such as networking cost for large data download.
+
+Of course, we do not expect our application to be available in the long-term, therefore it is not really meaningful to spend much time analysing potential costs. However, in a production scenario, this is very important for many reasons. Firstly, it is a proper way of comparing on-prem vs. Azure costs, thereby allowing you to define whether it makes sense to migrate an application. Also, it allows you to define budgets for your application and monitor which resources might cause overspending. 
+
 
