@@ -94,7 +94,10 @@ Tami: just added all questions and answers I gave here - for those which I found
 
 # Exercise: Optimize Contact Management Application
 
-As you have seen in the answers above, there are multiple ways to optimize costs for an application. Unfortunately, we cannot do them all, but at least we can take two measures in this area to improve our score.
+As you have seen in the answers above, there are multiple ways to optimize costs for an application. Unfortunately, we cannot do them all, but at least we can take two high-priority measures in this area to improve our score.
+
+<img width="841" alt="image" src="https://user-images.githubusercontent.com/114384858/214890025-2142dece-bf60-42b6-8260-8cb7163ceb69.png">
+
 
 ## 1. Configure Autoscale
 
@@ -115,10 +118,14 @@ After creating both rules, it should look like this:
 ![image](https://user-images.githubusercontent.com/114384858/214887915-10535104-72ae-4312-bf48-cdc491b752b3.png)
 
 
-## 2. Understand the costs implications of your resources
+## 2. Use Azure Monitor
 
-In order to estimate the initial cost, use tools such as [Azure pricing calculator](https://azure.microsoft.com/en-us/pricing/calculator/) to assess cost of the services you plan to use in the workload. Use [Microsoft Azure Total Cost of Ownership (TCO) Calculator](https://azure.microsoft.com/pricing/tco/calculator/) for migration projects. Accurately reflect the cost associated with right storage type. Add hidden costs, such as networking cost for large data download.
+**Azure Monitor Logs** is a feature of Azure Monitor that **collects and organizes log and performance data from monitored resources**. Several features of Azure Monitor store their data in Logs and present this data in various ways to assist you in monitoring the performance and availability of your cloud and hybrid applications and their supporting components. There's no direct cost for creating or maintaining a workspace. You're charged for the data sent to it, which is also known as data ingestion. You're charged for how long that data is stored, which is otherwise known as data retention.
 
-Of course, we do not expect our application to be available in the long-term, therefore it is not really meaningful to spend much time analysing potential costs. However, in a production scenario, this is very important for many reasons. Firstly, it is a proper way of comparing on-prem vs. Azure costs, thereby allowing you to define whether it makes sense to migrate an application. Also, it allows you to define budgets for your application and monitor which resources might cause overspending. 
+Along with using existing Azure Monitor features, you can **analyze Logs data by using a sophisticated query language** that's capable of quickly analyzing millions of records. You might perform a simple query that retrieves a specific set of records or perform sophisticated data analysis to identify critical patterns in your monitoring data. Work with log queries and their results interactively by using Log Analytics, use them in alert rules to be proactively notified of issues, or visualize their results in a workbook or dashboard. 
 
+![image](https://user-images.githubusercontent.com/114384858/214890385-125fd816-37d9-4d59-8de9-60b26ce612c9.png)
 
+Azure Monitor Logs stores the data that it collects in one or more **Log Analytics workspaces. You must create at least one workspace to use Azure Monitor Logs. For a description of Log Analytics workspaces, see [Log Analytics workspace overview](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview).**
+
+TBC
