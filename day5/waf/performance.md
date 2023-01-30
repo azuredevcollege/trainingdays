@@ -97,3 +97,13 @@ Tami: just added all questions and answers I gave here - for those which I found
 ### What common problems do you have steps to troubleshoot in your operations playbook?
 
 - [x] None of the above.
+
+# Exercise: Optimize Contact Management Application
+
+As you have seen in the answers above, there are multiple ways to optimize performance for an application. Unfortunately, we cannot do them all, but at least we can take two high-priority measures in this area to improve our score.
+
+
+## 1. 
+
+## 2.
+
