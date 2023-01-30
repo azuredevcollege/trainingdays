@@ -103,7 +103,35 @@ Tami: just added all questions and answers I gave here - for those which I found
 As you have seen in the answers above, there are multiple ways to optimize performance for an application. Unfortunately, we cannot do them all, but at least we can take two high-priority measures in this area to improve our score.
 
 
-## 1. 
+## 1. Availability Zones
+
+**Disclaimer: You are not required to implement this challenge for our application. It simply illustrates the importance of availability zones and how the implementation would look like.**
+
+Let's pretend for the sake of the example, that our application has many requests. What would happen if, for example, the datacenter our application is running fails. Failures can range from software and hardware failures to events such as earthquakes, floods, and fires.
+
+Currently, if something of the sorts would occur, our application would not be available anymore, thereby decreasing our performance. A way to protect our application is through [availability zones](https://learn.microsoft.com/en-us/azure/reliability/availability-zones-overview). **Azure availability zones are physically separate locations within each Azure region**. To ensure resiliency, a minimum of three separate availability zones are present in all availability zone-enabled regions. West Europe and North Europe are examples of regions which support Availability Zones.
+
+![Azure Availability Zones Overview](https://user-images.githubusercontent.com/114384858/215448689-0780726e-c6ce-4173-ba5a-6f1f238bc228.png)
+
+Azure App Service Plan can be deployed into availability zones to help us achieve resiliency and reliability for your business-critical workloads. This architecture is also known as **zone redundancy**. Nonetheless, there are some requirements to deploy your App Service Plan in an availability zone.
+
+- Both Windows and Linux are supported.
+- Requires either Premium v2 or Premium v3 App Service plans.
+- Minimum instance count of three is enforced.
+- The platform will enforce this minimum count behind the scenes if you specify an instance count fewer than three.
+
+To implement Availability Zones for our application, we would need to create a new App Service Plan, since pre-existing App Service plans can't be converted to use availability zones. Afterwards, we would need to [redeploy our application](https://learn.microsoft.com/en-us/azure/reliability/migrate-app-service) in the new App Service Plan.
+
+To enable availability zones using the Azure CLI, include the --zone-redundant parameter when you create your App Service plan. You can also include the --number-of-workers parameter to specify capacity. If you don't specify a capacity, the platform defaults to three. Capacity should be set based on the workload requirement, but no less than three. A good rule of thumb to choose capacity is to ensure sufficient instances for the application such that losing one zone of instances leaves sufficient capacity to handle expected load.
+
+``` shell
+az appservice plan create --resource-group MyResourceGroup --name MyPlan --sku P1v2 --zone-redundant --number-of-workers 6
+```
+
+To create an App Service with availability zones using the Azure portal, enable the zone redundancy option during the "Create Web App" or "Create App Service Plan" step.
+
+![Create ASP with Zone Redundancy in Azure Portal](https://user-images.githubusercontent.com/114384858/215450371-ab4452c8-73d9-441c-917d-464674e5af57.png)
+
 
 ## 2.
 
