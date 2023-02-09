@@ -19,8 +19,8 @@ Equally important, provide a team culture, which includes:
 
 ## Simple Contact Management
 
-Since this application is not build for production operational excellence is not in the forefront. Starting off with using as little services and complexity and as cheap of an architecture as possible means that going through the Well Architected Framework's review we only have a score of 11/100.
-The most important things needing consideration which were out of scope for this workshop are:
+Since this application is not build for production operational excellence is not in the forefront. Starting off with using as little services and complexity and as cheap of an architecture as possible, means that going through the Well Architected Framework's review we only have a score of 11/100.
+The most important things needing consideration if you were to deploy the application into production, are the following:
 
 - Review, identify, and classify business critical applications
 - Implement automated deployement process with rollback/roll-forward capabilities
@@ -85,24 +85,30 @@ The most important things needing consideration which were out of scope for this
 
 ### How do you visualize workload data and then alert relevant teams when issues occur?
 
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
+- [ ] Application and resource level logs are either aggregated in a single data sink, or it is possible to cross-query events at both levels
+- [ ] Application level events are automatically correlated with resource-level metrics to quantify the current application state
+- [ ] A health model is used to qualify what 'healthy' and 'unhealthy' states represent for the workload
+- [ ] Critical system flows are used to inform the health model
+- [ ] The health model can distinguish between transient and non-transient faults
+- [ ] Long-term trends are analysed to predict operational issues before they occur
+- [ ] Retention times for logs and metrics have been defined and with housekeeping mechanisms configured
+- [x] None of the above.
+
+### How are you using Azure platform notifications and updates?
+
+- [x] A tool such as Azure Monitor or Grafana is used to visualize the application health model and encompassed logs and metrics
+- [ ] Dashboards are tailored to a specific audience such as developers, security or networking teams
+- [ ] A tool such as Azure Monitor or Splunk is used for alerting
+- [ ] Specific owners and processes are defined for each alert type
+- [ ] Operational events are prioritized based on business impact
+- [ ] Push notifications are used to inform responsible parties of alerts in real time
+- [ ] Alerting is integrated with an IT Service Management (ITSM) system such as ServiceNow
+- [ ] Azure Service Health alerts been created to respond to Service-level events.
+- [ ] Azure Resource Health alerts been created to respond to Resource-level events.
+- [ ] None of the above.
+
+### What is your approach to recovery and failover?
+
 - [ ]
 - [ ]
 - [ ]
