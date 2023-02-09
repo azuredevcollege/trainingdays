@@ -118,16 +118,4 @@ After creating both rules, it should look like this:
 ![image](https://user-images.githubusercontent.com/114384858/214887915-10535104-72ae-4312-bf48-cdc491b752b3.png)
 
 
-## 2. Use Azure Monitor
 
-**Not sure if this makes sense.**
-
-**Azure Monitor Logs** is a feature of Azure Monitor that **collects and organizes log and performance data from monitored resources**. Several features of Azure Monitor store their data in Logs and present this data in various ways to assist you in monitoring the performance and availability of your cloud and hybrid applications and their supporting components. There's no direct cost for creating or maintaining a workspace. You're charged for the data sent to it, which is also known as data ingestion. You're charged for how long that data is stored, which is otherwise known as data retention.
-
-Along with using existing Azure Monitor features, you can **analyze Logs data by using a sophisticated query language** that's capable of quickly analyzing millions of records. You might perform a simple query that retrieves a specific set of records or perform sophisticated data analysis to identify critical patterns in your monitoring data. Work with log queries and their results interactively by using Log Analytics, use them in alert rules to be proactively notified of issues, or visualize their results in a workbook or dashboard. 
-
-![image](https://user-images.githubusercontent.com/114384858/214890385-125fd816-37d9-4d59-8de9-60b26ce612c9.png)
-
-Azure Monitor Logs stores the data that it collects in one or more **Log Analytics workspaces. You must create at least one workspace to use Azure Monitor Logs. For a description of Log Analytics workspaces, see [Log Analytics workspace overview](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview).**
-
-TBC
