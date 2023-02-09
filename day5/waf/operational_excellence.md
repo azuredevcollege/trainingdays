@@ -109,24 +109,36 @@ The most important things needing consideration if you were to deploy the applic
 
 ### What is your approach to recovery and failover?
 
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
-- [ ]
+- [ ] Recovery steps are defined and well understood for failover and failback
+- [ ] The failover and failback approach has been tested/validated at least once
+- [ ] The health model is being used to classify failover situations
+- [ ] Automated recovery procedures are in place for common failure events
+- [ ] Automated recovery procedures are tested and validated on a regular basis
+- [ ] Critical manual processes are defined and documented for failure responses.
+- [ ] Manual operational runbooks are tested and validated on a regular basis
+- [x] None of the above.
+
+### How are scale operations performed?
+
+- [ ] There is a capacity model for the workload
+- [ ] Auto-scaling is enabled for supporting PaaS and IaaS services
+- [ ] The process to provision and de-provision capacity is codified
+- [ ] The impact of changes in application health on capacity is fully understood
+- [ ] It has been validated that the required capacity (initial and future growth) is within Azure service scale limits and quotas
+- [ ] It has been validated that the required capacity (initial and future growth) is available within targeted regions
+- [ ] Capacity utilization is monitored and used to forecast future growth
+- [x] None of the above.
+
+## Challenges
+
+### Optimize costs
+
+_in progress_: Change SKUs, services?
+
+### Improve monitoring
+
+_in progress_: Monitor all services internally and externally
+
+### Implement automated deployement process with rollback/roll-forward capabilities
+
+_in progress_: Implement using CI/CD already implemented in a separate branch, which then can be merged?
