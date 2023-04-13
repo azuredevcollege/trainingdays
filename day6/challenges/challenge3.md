@@ -62,7 +62,9 @@ Output will be something like:
     }
 ]
 ```
-I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, the folder will be created when container is created.
+I want you to pay attention to  ```"Mountpoint":``` section of this output. This is literally the path where this volume is located. Any file in this volume is actually stored in this path. Docker Desktop for Windows and Docker Desktop for Mac spin up a lightweight vm and run Docker daemon inside that. Therefore we can't access to this path but if you run Docker daemon on any Linux VM, cd to that path and you can see the files stored in it. 
+  
+Ok, now we have an empty volume. We can mount that volume to a container. It's really easy. The option that we'll use is ```-v``` and the rule is always ```volume-name``` ```:``` ```container-path```. Let's say we want to mount the volume called ```first_volume``` to the folder ```/test```. Our option would be ```-v first_volume:/test```. If this folder doesn't exist in the image, the folder will be created when container is created.
 
 Now it's time to create a container and mount that volume. We're gonna create a new interactive container from ubuntu image and connect to its bash shell. ```first_volume``` will be mounted to container's ```/test``` folder. After it's created, we'll switch to ```/test``` directory and create a file called ```test.txt``` and exit.
 

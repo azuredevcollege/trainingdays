@@ -23,7 +23,7 @@ Type:
 $ docker pull ubuntu:latest
 ```
 Output will be something like:
-```shell
+```
 latest: Pulling from library/ubuntu
 3ff22d22a855: Pull complete
 e7cb79d19722: Pull complete
@@ -39,7 +39,7 @@ Now it's time to see which images that we have on our system. For this, we're go
 $ docker image ls
 ```
 Output will be something like:
-```shell
+```
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ubuntu              latest              1e4467b07108        2 weeks ago         73.9MB
  ```
@@ -58,7 +58,7 @@ Type:
 $ docker image ls
 ```
 Output will be something like:
-```shell
+```
 REPOSITORY            TAG                 IMAGE ID            CREATED             SIZE
 ubuntu                latest              1e4467b07108        2 weeks ago         73.9MB
 ozgurozturknet/day6   ubuntu              1e4467b07108        2 weeks ago         73.9MB
@@ -73,7 +73,7 @@ Type:
 $ docker login
 ```
 Output will be something like:
-```shell
+```
 Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
 Username: ozgurozturknet
 Password:
@@ -87,7 +87,7 @@ Type:
 $ docker push your_dockerhub_id/day6:ubuntu
 ```
 Output will be something like:
-```shell
+```
 The push refers to repository [docker.io/ozgurozturknet/day6]
 095624243293: Mounted from library/ubuntu
 a37e74863e72: Mounted from library/ubuntu
@@ -104,7 +104,7 @@ Type:
 $ docker image history ubuntu:latest
 ```
 Output will be something like:
-```shell
+```
 1e4467b07108        2 weeks ago         /bin/sh -c #(nop)  CMD ["/bin/bash"]            0B
 <missing>           2 weeks ago         /bin/sh -c mkdir -p /run/systemd && echo 'do…   7B
 <missing>           2 weeks ago         /bin/sh -c set -xe   && echo '#!/bin/sh' > /…   811B
@@ -114,7 +114,7 @@ Output will be something like:
 
 This output shows us which commands have been executed and which layers have been created as a result of these commands. This also gives us some clues about how an image is created. 
 
-Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using ```docker build```, users can create an automated build that executes several command-line instructions in succession. Each instruction that changes anything creates a new layer. The Docker daemon runs the instructions in the Dockerfile one-by-one, committing the result of each instruction to a new image if necessary, before finally outputting the ID of your new image. It's now time to create our first image. 
+Docker can build images automatically by reading the instructions from a Dockerfile. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. Using ```docker image build```, users can create an automated build that executes several command-line instructions in succession. Each instruction that changes anything creates a new layer. The Docker daemon runs the instructions in the Dockerfile one-by-one, committing the result of each instruction to a new image if necessary, before finally outputting the ID of your new image. It's now time to create our first image. 
 </details>
 
 ***
@@ -126,10 +126,12 @@ First, we should clone this Github repository.
 
 Type: 
 ```shell
-$ git clone https://github.com/azuredevcollege/trainingdays.git
+$ git clone https://github.com/azuredevcollege/trainingdays.git $HOME/trainingdays
 ```
+[//]: # (Note: $HOME is available on PowerShell and bash / zsh / sh)
+  
 Output will be something like:
-```shell
+```
 Cloning into 'trainingdays'...
 remote: Enumerating objects: 42, done.
 remote: Counting objects: 100% (42/42), done.
@@ -141,21 +143,33 @@ Updating files: 100% (1396/1396), done.
 ```
 
 Repo has been cloned. It's time to jump to the
-```trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
+```~/trainingdays/day6/apps/first_docker_image``` folder. cd to that folder and
 list all the files.
 
-
-Type: 
-```shell
-$ cd trainingdays/day6/apps/first_docker_image
-$ ls -l
-```
-Output will be something like:
-```shell
-total 8
--rw-r--r-- 1 ozozturk ozozturk  90 Jun 12 11:56 Dockerfile
--rw-r--r-- 1 ozozturk ozozturk 211 Jun 12 11:21 index.html
-```
+- If you are on a Unix-shell (e.g., bash or zsh), type: 
+   ```shell
+   $ cd ~/trainingdays/day6/apps/first_docker_image
+   $ ls -l
+   ```
+   Output will be something like:
+   ```
+   total 8
+   -rw-r--r-- 1 ozozturk ozozturk  90 Jun 12 11:56 Dockerfile
+   -rw-r--r-- 1 ozozturk ozozturk 211 Jun 12 11:21 index.html
+   ```
+- If you use PowerShell, type:
+   ```
+   PS ...> cd ~/trainingdays/day6/apps/first_docker_image
+   PS ...> dir
+   ```
+   Output will be something like:
+   ```
+   Mode                 LastWriteTime         Length Name
+   ----                 -------------         ------ ----
+   -a----         6/12/2022  11:56 AM             92 Dockerfile
+   -a----         6/12/2022  11:21 AM            220 index.html
+   ```
+   :bulb: We will not continue listing both Unix-shell and PowerShell instructions going forward. If you are using PowerShell, please translate `ls -l` to `dir` in the remainder of this challenge.
 
 There are 2 files in that folder. ```index.html``` is a simple html file that has been created by us. We want to build a web server image with this file has been copied in it. To be able to build an image, we need a ```Dockerfile```. A Dockerfile is a text document that contains all the commands a user could call on the command line to assemble an image. We have one in this folder. Let's check and see what's in it. This is one of the simplest form of a Dockerfile.
 
@@ -164,7 +178,7 @@ Type:
 $ cat Dockerfile
 ```
 Output will be something like:
-```shell
+```
 FROM nginx:latest
 COPY index.html /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]
@@ -182,19 +196,24 @@ Type:
 ```shell
 $ docker image build -t your_dockerhub_id/firstimage:latest . #do not forget the dot
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  3.072kB
-Step 1/3 : FROM nginx:latest
- ---> 08393e824c32
-Step 2/3 : COPY index.html /usr/share/nginx/html
- ---> 14fb48dc6eea
-Step 3/3 : CMD ["nginx", "-g", "daemon off;"]
- ---> Running in 772fbfd4dba3
-Removing intermediate container 772fbfd4dba3
- ---> 560570bf44e5
-Successfully built 560570bf44e5
-Successfully tagged ozgurozturknet/firstimage:latest
+Output will eventually be something like:
+```
+[+] Building 2.8s (8/8) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 129B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/nginx:latest
+ => [auth] library/nginx:pull token for registry-1.docker.io
+ => [internal] load build context
+ => => transferring context: 259B
+ => [1/2] FROM docker.io/library/nginx:latest@sha256:b8f2383a95879e1ae064940d9a200f67a6c79e710ed82ac42263397367e7cc4e
+ => => resolve docker.io/library/nginx:latest@sha256:b8f2383a95879e1ae064940d9a200f67a6c79e710ed82ac42263397367e7cc4e
+ => CACHED [2/2] COPY index.html /usr/share/nginx/html
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:31c4e284f107a7d40392178bec1a02af06ddb6c58d4defe53615161a8c02284e
+ => => naming to docker.io/ozgurozturknet/firstimage:latest
 ```
 Congrats! We have built our first image. Let's create a container to see if it's working as expect.
 
@@ -203,7 +222,7 @@ Type:
 $ docker container run --rm -d -p 80:80 --name test_container your_dockerhub_id/firstimage:latest
 ```
 Output will be something like:
-```shell
+```
 25e7fe3f3e57dd2eab07bf672501dde69d81eb156347607e0b378757b41d859b
 ```
 Open a browser and visit http://127.0.0.1 You would see a page like that. 
@@ -217,7 +236,7 @@ Type:
 $ docker container stop test_container
 ```
 Output will be something like:
-```shell
+```
 test_container
 ```
 </details>
@@ -227,16 +246,16 @@ test_container
 <details>
   <summary>Click to expand!</summary>
 
-This time we're gonna build a node.js app image. cd to the ```/trainingdays/day6/apps/nodejs``` folder and list all the files. 
+This time we're gonna build a node.js app image. cd to the ```~/trainingdays/day6/apps/nodejs``` folder and list all the files. 
 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/nodejs
+$ cd ~/trainingdays/day6/apps/nodejs
 $ ls -l
 ```
 Output will be something like:
-```shell
+```
 total 12
 -rw-r--r-- 1 ozozturk ozozturk 292 Aug 12 20:27 Dockerfile
 -rw-r--r-- 1 ozozturk ozozturk 288 Aug 12 20:14 package.json
@@ -250,7 +269,7 @@ Type:
 $ cat Dockerfile
 ```
 Output will be something like:
-```shell
+```
 # source: https://nodejs.org/en/docs/guides/nodejs-docker-webapp/
 FROM node:12
 
@@ -282,110 +301,79 @@ Type:
 ```shell
 $ docker image build -t your_dockerhub_id/node:latest .
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  4.096kB
-Step 1/7 : FROM node:12
- ---> cfcf3e70099d
-Step 2/7 : WORKDIR /usr/src/app
- ---> Running in 0784285bb528
-Removing intermediate container 0784285bb528
- ---> 548e712ed3ef
-Step 3/7 : COPY package.json .
- ---> 3f85bf98e435
-Step 4/7 : COPY server.js .
- ---> beb25f72bb6a
-Step 5/7 : RUN npm install
- ---> Running in e3eed8b0c46d
-npm notice created a lockfile as package-lock.json. You should commit this file.
-npm WARN docker_web_app@1.0.0 No repository field.
-npm WARN docker_web_app@1.0.0 No license field.
-
-added 50 packages from 37 contributors and audited 50 packages in 2.167s
-found 0 vulnerabilities
-
-Removing intermediate container e3eed8b0c46d
- ---> 8d3082c10a9e
-Step 6/7 : EXPOSE 8080
- ---> Running in 0e6bd014ac73
-Removing intermediate container 0e6bd014ac73
- ---> 5143985531f3
-Step 7/7 : CMD [ "node", "server.js" ]
- ---> Running in 152317b9eafe
-Removing intermediate container 152317b9eafe
- ---> a832145edf14
-Successfully built a832145edf14
-Successfully tagged ozgurozturknet/node:latest
+Output will eventually be something like:
+```
+[+] Building 36.6s (11/11) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 347B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/node:12
+ => [auth] library/node:pull token for registry-1.docker.io
+ => [1/5] FROM docker.io/library/node:12@sha256:01627afeb110b3054ba4a1405541ca095c8bfca1cb6f2be9479c767a2711879e
+ => => resolve docker.io/library/node:12@sha256:01627afeb110b3054ba4a1405541ca095c8bfca1cb6f2be9479c767a2711879e
+ => => sha256:3a69ea1270dbf4ef20477361be4b7a43400e559c6abdfaf69d73f7c755f434f5 2.21kB / 2.21kB
+ => => extracting sha256:9bed1e86f01ee95c76d2c8b4385a47ae336e6d293afade9368469d99daa9369f
+[...]
+ => [internal] load build context
+ => => transferring context: 669B
+ => [2/5] WORKDIR /usr/src/app
+ => [3/5] COPY package.json .
+ => [4/5] COPY server.js .
+ => [5/5] RUN npm install
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:19d7f5e7d22042f653082e5a84ae09f5bf808b713879c1d0edc771992dd180aa
+ => => naming to docker.io/ozgurozturknet/node:latest
 ```
 
 Image has been built successfully. But I want you to run the same command one more time. 
 
-```shell
-Sending build context to Docker daemon  4.096kB
-Step 1/7 : FROM node:12
- ---> cfcf3e70099d
-Step 2/7 : WORKDIR /usr/src/app
- ---> Using cache
- ---> 3d04799d4f2a
-Step 3/7 : COPY package.json .
- ---> Using cache
- ---> a348cb47ad20
-Step 4/7 : COPY server.js .
- ---> Using cache
- ---> 5affbe5fce86
-Step 5/7 : RUN npm install
- ---> Using cache
- ---> ad11b36a3604
-Step 6/7 : EXPOSE 8080
- ---> Using cache
- ---> 57b485f4eef1
-Step 7/7 : CMD [ "node", "server.js" ]
- ---> Using cache
- ---> fb0586534394
-Successfully built fb0586534394
-Successfully tagged ozgurozturknet/node:latest
+```
+[+] Building 1.0s (10/10) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 32B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/node:12
+ => [1/5] FROM docker.io/library/node:12@sha256:01627afeb110b3054ba4a1405541ca095c8bfca1cb6f2be9479c767a2711879e
+ => [internal] load build context
+ => => transferring context: 63B
+ => CACHED [2/5] WORKDIR /usr/src/app
+ => CACHED [3/5] COPY package.json .
+ => CACHED [4/5] COPY server.js .
+ => CACHED [5/5] RUN npm install
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:19d7f5e7d22042f653082e5a84ae09f5bf808b713879c1d0edc771992dd180aa
+ => => naming to docker.io/ozgurozturknet/node:latest
 ```
 
-Something strange has happened. We built that image a few seconds ago and we didn't change any source file after that. Then we reran the docker image build command second time but we received lots of ``` ---> Using cache``` messages this time. What does that mean? 
+Something strange has happened. We built that image a few seconds ago and we didn't change any source file after that. Then we reran the docker image build command second time but we received lots of ```=> CACHED [...]``` messages this time. What does that mean? 
 
 When building an image, Docker steps through the instructions in your Dockerfile, executing each in the order specified. As each instruction is examined, Docker looks for an existing layers in its cache that it can reuse, rather than creating a new (duplicate) layer. If you don't change any source file or didn't change anything in the Dockerfile, this means that nothing has changed, so Docker doesn't run the instruction again and again. Instead of that, Docker uses the cached layers. That makes the build process fast. Let's simulate that and see what happens if we change something. Open ```server.js``` file with a text editor, go to line 12 and change the ```Hello World``` message with another message something like ```build cache test```. Save the file and rerun ```docker image build -t your_dockerhub_id/node:latest .``` command one more time. 
 
-```shell
-Sending build context to Docker daemon  4.096kB
-Step 1/7 : FROM node:12
- ---> cfcf3e70099d
-Step 2/7 : WORKDIR /usr/src/app
- ---> Using cache
- ---> 3d04799d4f2a
-Step 3/7 : COPY package.json .
- ---> Using cache
- ---> a348cb47ad20
-Step 4/7 : COPY server.js .
- ---> 800aa5cd76d2
-Step 5/7 : RUN npm install
- ---> Running in 20f6c9a2c4e0
-npm notice created a lockfile as package-lock.json. You should commit this file.
-npm WARN docker_web_app@1.0.0 No repository field.
-npm WARN docker_web_app@1.0.0 No license field.
-
-added 50 packages from 37 contributors and audited 50 packages in 2.521s
-found 0 vulnerabilities
-
-Removing intermediate container 20f6c9a2c4e0
- ---> eac206f9957e
-Step 6/7 : EXPOSE 8080
- ---> Running in 3084d34a448f
-Removing intermediate container 3084d34a448f
- ---> 1e4c0a700aa6
-Step 7/7 : CMD [ "node", "server.js" ]
- ---> Running in b0fae2027731
-Removing intermediate container b0fae2027731
- ---> 729b13c3276f
-Successfully built 729b13c3276f
-Successfully tagged ozgurozturknet/node:latest
+```
+[+] Building 5.1s (10/10) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 32B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/node:12
+ => [1/5] FROM docker.io/library/node:12@sha256:01627afeb110b3054ba4a1405541ca095c8bfca1cb6f2be9479c767a2711879e
+ => [internal] load build context
+ => => transferring context: 367B
+ => CACHED [2/5] WORKDIR /usr/src/app
+ => CACHED [3/5] COPY package.json .
+ => [4/5] COPY server.js .
+ => [5/5] RUN npm install
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:57ad34e1ef47e1cf8b88aa76eede371445d6706714c94d72700282d36c34f369
+ => => naming to docker.io/ozgurozturknet/node:latest
 ```
 
-Docker started to build an image again. First step, nothing changed, used the cache. Second step, nothing changed, used the cache. Third step, nothing changed, used the cache. But fourth step, we wanted to copy server.js file, which has been changed. Old layer that Docker has created and cached before is invalid now. So Docker started to execute that instruction and created a new layer and didn't use the cached version. And each instruction after that has been executed again and Docker didn't use the cache. Because something has changed and the rest of the layers should be affected too. Therefore, Docker can't use cache for them too. That's kind of important thing to know. Because you can speed up build process by leveraging build cache. But order of Dockerfile instructions is important.
+Docker started to build an image again. Step [1/5] used the already downloaded base image. Step [2/5], nothing changed, used the cache. Step [3/5], nothing changed, used the cache. Step [4/5], we wanted to copy server.js file, which had been changed. Old layer that Docker had created and cached before is invalid now. So, Docker started to execute that instruction and created a new layer and didn't use the cached version. And each instruction after that has been executed again and Docker didn't use the cache. Because something has changed and the rest of the layers should be affected too. Therefore, Docker can't use cache for them either. That's kind of important thing to know. Because you can speed up build process by leveraging build cache. But order of Dockerfile instructions is important.
 
 For example, if your Dockerfile contains several instruction, like ours, you can order them from the less frequently changed (to ensure the build cache is reusable) to the more frequently changed. If we move  ```COPY server.js .``` from 4. step to anywhere after the ```RUN npm install``` instruction, this means that, we can change anything in this server.js file and Docker will not rerun npm install each time when we build that image again and use cache for that step. 
 (Visit https://docs.docker.com/develop/develop-images/dockerfile_best-practices/  for Dockerfile best practices)
@@ -397,7 +385,7 @@ Type:
 $ docker container run --rm -d -p 80:8080 --name node_container your_dockerhub_id/node:latest
 ```
 Output will be something like:
-```shell
+```
 09a4d1789cdab19a0f3af9c66a4f6e68503e5b8a1f46d6c512e88b10c5e70011
 ```
 
@@ -410,7 +398,7 @@ Type:
 $ docker container stop node_container
 ```
 Output will be something like:
-```shell
+```
 node_container
 ```
 </details>
@@ -420,15 +408,15 @@ node_container
 <details>
   <summary>Click to expand!</summary>
 
-Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
+Let's imagine that we're java developers and working on a new shiny project called App1 (Do you remember our old friend :)). Application has been written and it's ready. Now it is time to check the source code. It's located at ```~/trainingdays/day6/apps/java``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/java
+$ cd ~/trainingdays/day6/apps/java
 $ ls -l
 ```
 Output will be something like:
-```shell
+```
 total 8
 -rw-r--r-- 1 ozozturk ozozturk 135 Jun 12 22:43 Dockerfile
 -rw-r--r-- 1 ozozturk ozozturk 154 Jun 12 22:35 app1.java
@@ -442,7 +430,7 @@ Type:
 $ cat Dockerfile
 ```
 Output will be something like:
-```shell
+```
 FROM mcr.microsoft.com/java/jdk:8-zulu-alpine
 COPY . /usr/src/myapp/
 WORKDIR /usr/src/myapp
@@ -450,39 +438,33 @@ RUN javac app1.java
 CMD [ "java" , "app1" ]
 ```
 
-Again, a simple Dockerfile. We want to build our image on top of the "Java Development Kit" image provided by Microsoft. JDK image has all the tools in it that we need to compile our java code and convert it to a java application. First, we copy that source code to the image and after that we jump into that folder and run ```javac app1.java``` command which compiles this source code and generates an application. At the end, we have a CMD instruction that instructs to run this application whenever we create a container from that image. Let's build the image. 
+Again, a simple Dockerfile. We want to build our image on top of the "Java Development Kit (JDK)" image provided by Microsoft. JDK image has all the tools in it that we need to compile our java code and convert it to a java application. First, we copy that source code to the image and after that we jump into that folder and run ```javac app1.java``` command which compiles this source code and generates an application. At the end, we have a CMD instruction that instructs to run this application whenever we create a container from that image. Let's build the image. 
 
 
 Type: 
 ```shell
 $ docker image build -t your_dockerhub_id/java:latest .
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  3.072kB
-Step 1/5 : FROM mcr.microsoft.com/java/jdk:8-zulu-alpine
-8-zulu-alpine: Pulling from java/jdk
-df20fa9351a1: Pull complete
-1e7717fd7ab1: Pull complete
-Digest: sha256:19712872c6dd8ca02a8f727737372477559f2659aa6294c2dcae050096234224
-Status: Downloaded newer image for mcr.microsoft.com/java/jdk:8-zulu-alpine
- ---> b7bb6dd0ee76
-Step 2/5 : COPY . /usr/src/myapp/
- ---> ed2f0977e390
-Step 3/5 : WORKDIR /usr/src/myapp
- ---> Running in d2333b9e9af3
-Removing intermediate container d2333b9e9af3
- ---> 55a151ddf81a
-Step 4/5 : RUN javac app1.java
- ---> Running in b8697de33caa
-Removing intermediate container b8697de33caa
- ---> 3bfd240a44ff
-Step 5/5 : CMD [ "java" , "app1" ]
- ---> Running in 00a6a2a448ab
-Removing intermediate container 00a6a2a448ab
- ---> ceab35948e29
-Successfully built ceab35948e29
-Successfully tagged ozgurozturknet/java:latest
+Output will eventually be something like:
+```
+[+] Building 14.7s (9/9) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 178B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for mcr.microsoft.com/java/jdk:8-zulu-alpine
+ => [internal] load build context
+ => => transferring context: 673B
+ => [1/4] FROM mcr.microsoft.com/java/jdk:8-zulu-alpine@sha256:6469590b8afcc39f0d1624eb597f2c87d8e3e2d5749d35710fb27624d541cd8d
+ => => resolve mcr.microsoft.com/java/jdk:8-zulu-alpine@sha256:6469590b8afcc39f0d1624eb597f2c87d8e3e2d5749d35710fb27624d541cd8d
+[...]
+ => [2/4] COPY . /usr/src/myapp/
+ => [3/4] WORKDIR /usr/src/myapp
+ => [4/4] RUN javac app1.java
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:30147a5579a3b8f66bc1cbce598db070254a1969e6efb187ff271a8fbff30188
+ => => naming to docker.io/ozgurozturknet/java:latest
 ```
 Image has been built. Let's test it. 
 
@@ -491,13 +473,13 @@ Type:
 $ docker container run your_dockerhub_id/java:latest
 ```
 Output will be something like:
-```shell
+```
 Hello there! I'm App1 Java Console Application
 ```
 
-Perfect. It works. App1 has been compiled and it runs. But it seems to me that, something is wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we ran to compile our application. But, should we really send this image to our customers as is? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want our customers to be able to run this application. We don't want them to have all the unnecessary tools and our source code. Also image size is big, because of these unnecessary tools. These tools are needed for development. They are not needed for running java applications. JRE, java runtime is the thing that we need to run java applications. It's just the runtime and much smaller than the jdk.
+Perfect. It works. App1 has been compiled and it runs. But it seems to me that, something is wrong with that approach. First of all, we built our image on top of the JDK image. It includes lots of tools for development. Like the one that we ran to compile our application. But, should we really send this image to our customers as is? With all of these development tools? Also our source code is copied to that image too. Maybe that is not something we want. We just wanted to compile our source code and get the application. We want our customers to be able to run this application. We don't want them to have all the unnecessary tools and our source code. Also image size is big, because of these unnecessary tools. These tools are needed for development, but they area actually not needed for running java applications that are already compiled. Instead, the "Java Runtime Environment (JRE)" contains the Java runtime only and is a smaller, more lightweight component that has all it needs to run Java applications.
 
-Instead of sending this image, It would be wise to get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
+So, instead of sending the container image that we have just built, it would be wise to only get this compiled application from that image, copy it to our computer and create another image that includes just this application + runtime, instead of application + source code + development tools. So we need to build another image. To be able to do that, we need to create a second Dockerfile. But eeeh. This is a mess. There should be a simple solution. 
 Yes there is a simple solution to handle this and it's called multi-stage build. 
 
 One of the most challenging thing about building images is keeping the image size down. Each instruction in Dockerfile adds a layer to image, and you need to remember to clean up any artifacts you don’t need before moving on to the next layer. To write a really efficient Dockerfile, you have traditionally needed to employ shell tricks and other logic to keep the layers as small as possible and to ensure that each layer has the artifacts it needs from the previous layer and nothing else. It was actually very common to have one Dockerfile to use for development (which contained everything needed to build your application), and a slimmed-down one to use for production, which only contained your application and exactly what was needed to run it. This has been referred to as the “builder pattern”. But maintaining two Dockerfiles is not ideal. 
@@ -510,7 +492,7 @@ Type:
 $ cat Dockerfile2
 ```
 Output will be something like:
-```shell
+```
 FROM mcr.microsoft.com/java/jdk:8-zulu-alpine AS builder
 COPY . /usr/src/myapp/
 WORKDIR /usr/src/myapp
@@ -531,42 +513,42 @@ Type:
 ```shell
 $ docker image build -f Dockerfile2 -t your_dockerhub_id/finaljava:latest .
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  4.096kB
-Step 1/8 : FROM mcr.microsoft.com/java/jdk:8-zulu-alpine AS builder
- ---> b7bb6dd0ee76
-Step 2/8 : COPY . /usr/src/myapp/
- ---> 786a33a37acb
-Step 3/8 : WORKDIR /usr/src/myapp
- ---> Running in 1145e3882420
-Removing intermediate container 1145e3882420
- ---> 5f16de8216fb
-Step 4/8 : RUN javac app1.java
- ---> Running in 98375300d10a
-Removing intermediate container 98375300d10a
- ---> f632a0c6f49e
-Step 5/8 : FROM  mcr.microsoft.com/java/jre:8-zulu-alpine
-8-zulu-alpine: Pulling from java/jre
-df20fa9351a1: Already exists
-b391ad10af71: Pull complete
-Digest: sha256:bb7135444a7e78448b0038d26079e6bef78c1c7839333bf9806d6c12e65a1eff
-Status: Downloaded newer image for mcr.microsoft.com/java/jre:8-zulu-alpine
- ---> 36c60fc08a2d
-Step 6/8 : WORKDIR /usr/src/myapp
- ---> Running in 25809e0fd983
-Removing intermediate container 25809e0fd983
- ---> 5b580490d819
-Step 7/8 : COPY --from=builder /usr/src/myapp .
- ---> e357def56d05
-Step 8/8 : CMD ["java", "app1"]
- ---> Running in 00585394dbfb
-Removing intermediate container 00585394dbfb
- ---> 7b7c6b3a7f6a
-Successfully built 7b7c6b3a7f6a
-Successfully tagged ozgurozturknet/finaljava:latest
+Output will eventually be something like:
 ```
-Final image has been built. It's much smaller than the first one. Also only artifacts that we need are included. 
+Sending build context to Docker daemon  4.096kB
+[+] Building 8.3s (13/13) FINISHED
+ => [internal] load build definition from Dockerfile2
+ => => transferring dockerfile: 299B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for mcr.microsoft.com/java/jre:8-zulu-alpine
+ => [internal] load metadata for mcr.microsoft.com/java/jdk:8-zulu-alpine
+ => [internal] load build context
+ => => transferring context: 92B
+ => [stage-1 1/3] FROM mcr.microsoft.com/java/jre:8-zulu-alpine@sha256:d9a50bc7f1bd6c48dd5b4a5a00f1f4776e4bdf09737fd923099d572065d9178c
+[...]
+ => [builder 1/4] FROM mcr.microsoft.com/java/jdk:8-zulu-alpine@sha256:6469590b8afcc39f0d1624eb597f2c87d8e3e2d5749d35710fb27624d541cd8d
+ => CACHED [builder 2/4] COPY . /usr/src/myapp/
+ => CACHED [builder 3/4] WORKDIR /usr/src/myapp
+ => CACHED [builder 4/4] RUN javac app1.java
+ => [stage-1 2/3] WORKDIR /usr/src/myapp
+ => [stage-1 3/3] COPY --from=builder /usr/src/myapp .
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:fde0112f0383a1e36d0a9df0a48db9891912fbca4276818c5a39c3e6eed88b15
+ => => naming to docker.io/ozgurozturknet/finaljava:latest
+```
+Final image has been built. As it only only contains the artifacts that we need, the image size is much smaller as we can verify by running:
+```shell
+$ docker image list
+```
+Output will be something like:
+```
+REPOSITORY                     TAG       IMAGE ID       CREATED          SIZE
+ozgurozturknet/finaljava       latest    fde0112f0383   6 minutes ago    149MB
+ozgurozturknet/java            latest    30147a5579a3   17 minutes ago   251M
+...
+```
 </details>
 
 ***
@@ -574,15 +556,15 @@ Final image has been built. It's much smaller than the first one. Also only arti
 <details>
   <summary>Click to expand!</summary>
 
-This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
+This time, we're gonna combine what have we learned so far. We will build 2 images. First one is a simple php application. The other one is famous mysql database. After building images, we will run these and try couple of tricks that we have learned so far. First, let's check and see what we're gonna build. All files are located at ```~/trainingdays/day6/apps/php``` folder. cd to that folder and list all the files. 
 
 Type: 
 ```shell
-$ cd /trainingdays/day6/apps/php
+$ cd ~/trainingdays/day6/apps/php
 $ ls -l
 ```
 Output will be something like:
-```shell
+```
 total 24
 -rw-r--r-- 1 ozozturk ozozturk  333 Aug 13 11:54 Dockerfile
 -rw-r--r-- 1 ozozturk ozozturk   64 Aug 13 11:36 Dockerfile.mysql
@@ -592,7 +574,7 @@ total 24
 drwxr-xr-x 2 ozozturk ozozturk 4096 Aug 13 11:35 php
 ```
 
-It's a little bit crowded folder. There are 2 Dockerfiles. First one is the Dockerfile that we'll be used to build web app image. Second one will be used to build mysql database image. 
+It's a little bit crowded folder. There are 2 Dockerfiles. First one is the Dockerfile that will be used to build web app image. Second one will be used to build mysql database image. 
 
 There are 2 other files with .list extenison in this folder. These files will be used to define environment variables while creating containers. "env.list" will be passed to php web container. There are couple of environment variables defined in this file and php web application will use these values to connect to the database -username, password etc.-. "envmysql.list" is another environment  variable file and has couple of other environment  variables defined in it. We'll pass this values to mysql container. mysql container will start and create a database using these parameters. Essentially, we could inject these variables into the Dockerfiles. Yes, it's possible. We can define environment variables with ```ENV``` instruction in any Dockerfile and any container created from that image will have these environment variables. But if we do that, these will be hardcoded to image. This means that whoever get this image can access to these values. Especially this isn't a thing that we want for sensitive data like passwords. Therefore, we didn't define them in Dockerfiles. Instead of that, we will pass these values during container creation.  
 
@@ -607,7 +589,7 @@ Type:
 $ cat Dockerfile
 ```
 Output will be something like:
-```shell
+```
 FROM php:7.3-apache
 RUN apt-get update -y && apt-get install curl mariadb-client-10.5 -y
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
@@ -626,7 +608,7 @@ Type:
 $ cat Dockerfile.mysql
 ```
 Output will be something like:
-```shell
+```
 FROM mysql:5.7
 COPY createtable.sql /docker-entrypoint-initdb.d
 ```
@@ -639,23 +621,28 @@ Type:
 ```shell
 $ docker image build -t your_dockerhub_id/php:v1 .
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  11.26kB
-Step 1/7 : FROM php:7.3-apache
-Step 2/7 : RUN apt-get update -y && apt-get install curl mariadb-client-10.3 -y
- ---> Running in dca6dcd061df
-[…]
-[…]
-[…]
-Step 6/7 : HEALTHCHECK --interval=30s --timeout=3s CMD curl -f http://localhost/ || exit 1
- ---> Running in d6dc02b8ca50
-Removing intermediate container d6dc02b8ca50
- ---> bf3e03646cc0
-Step 7/7 : COPY ./php/ /var/www/html/
- ---> 53959f571f38
-Successfully built 53959f571f38
-Successfully tagged ozgurozturknetphp:v1
+Output will eventually be something like:
+```
+[+] Building 42.2s (12/12) FINISHED
+ => [internal] load build definition from Dockerfile
+ => => transferring dockerfile: 374B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/php:7.3-apache
+ => [auth] library/php:pull token for registry-1.docker.io
+ => [1/6] FROM docker.io/library/php:7.3-apache@sha256:b9872cd287ef72bc17d45d713aa2742f3d3bcf2503fea2506fd93aa94995219f
+[...]
+ => [internal] load build context
+ => => transferring context: 2.32kB
+ => [2/6] RUN apt-get update -y && apt-get install curl mariadb-client-10.5 -y
+ => [3/6] RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+ => [4/6] RUN mkdir /var/www/html/images
+ => [5/6] RUN chmod 777 /var/www/html/images
+ => [6/6] COPY ./php/ /var/www/html/
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:27627b010329a86b659323a72119d48793ff1aa3831fbcb88dceae17c88b1c52
+ => => naming to docker.io/ozgurozturknet/php:v1
 ```
 
 Php image is ready. Let's build mysql image now. 
@@ -664,16 +651,24 @@ Type:
 ```shell
 $ docker image build -f Dockerfile.mysql -t your_dockerhub_id/mysql:v1 .
 ```
-Output will be something like:
-```shell
-Sending build context to Docker daemon  11.26kB
-Step 1/2 : FROM mysql:5.7
-Status: Downloaded newer image for mysql:5.7
- ---> 718a6da099d8
-Step 2/2 : COPY createtable.sql /docker-entrypoint-initdb.d
- ---> 2dfc8038fc98
-Successfully built 2dfc8038fc98
-Successfully tagged ozgurozturknetmysql:v1
+Output will eventually be something like:
+```
+[+] Building 24.8s (8/8) FINISHED
+ => [internal] load build definition from Dockerfile.mysql
+ => => transferring dockerfile: 107B
+ => [internal] load .dockerignore
+ => => transferring context: 2B
+ => [internal] load metadata for docker.io/library/mysql:5.7
+ => [auth] library/mysql:pull token for registry-1.docker.io
+ => [internal] load build context
+ => => transferring context: 154B
+ => [1/2] FROM docker.io/library/mysql:5.7@sha256:6306f106a056e24b3a2582a59a4c84cd199907f826eff27df36406f227cd9a7d
+[...]
+ => [2/2] COPY createtable.sql /docker-entrypoint-initdb.d
+ => exporting to image
+ => => exporting layers
+ => => writing image sha256:51c322d10c0c3ae36e69ae0a313ddf9e5790a502a87dfd154580cec55988833e
+ => => naming to docker.io/ozgurozturknet/mysql:v1
 ```
 
 Done. Images are ready. It's time to run our fancy crm application but first let's create a new bridge network. Web contaier should access to mysql database container via its name. Therefore, these containers must be able to resolve each others name. 
@@ -683,7 +678,7 @@ Type:
 $ docker network create php-mysql-net
 ```
 Output will be something like:
-```shell
+```
 f3b75a829c3f7a8d5268dbf9dcb884071b3affaed642b3fe6354e78193d054c6
 ```
 Images are ready. Bridge network has been created. We're ready to create containers. 
@@ -694,7 +689,7 @@ Type:
 $ docker container run -d --name phpapp --network php-mysql-net -p 80:80 --env-file env.list your_dockerhub_id/php:v1
 ```
 Output will be something like:
-```shell
+```
 c580f355ad836c1021ee5959970bdf53c93de088c701af4110e1dfd8e976a80b
 ```
 
@@ -703,7 +698,7 @@ Type:
 $ docker container run -d --name mysqldb --network php-mysql-net --env-file envmysql.list your_dockerhub_id/mysql:v1
 ```
 Output will be something like:
-```shell
+```
 02d51c5ad53c0f1fd0679a5b0f4b60a742a07eecd9eb2f7eebbb8eb800bed73e
 ```
 
@@ -712,7 +707,7 @@ Type:
 $ docker ps
 ```
 Output will be something like:
-```shell
+```
 CONTAINER ID        IMAGE                    COMMAND                  CREATED              STATUS                        PORTS                 NAMES
 02d51c5ad53c        ozgurozturknetmysql:v1   "docker-entrypoint.s…"   53 seconds ago       Up 52 seconds                 3306/tcp, 33060/tcp   mysqldb
 c580f355ad83        ozgurozturknetphp:v1     "docker-php-entrypoi…"   About a minute ago   Up About a minute (healthy)   0.0.0.0:80->80/tcp    phpapp
@@ -766,10 +761,29 @@ Type:
 $ docker commit commit_test your_dockerhub_id/commit:latest
 ```
 Output will be something like:
-```shell
+```
 sha256:8f5d8a8e42bd9419f6a932c0e70b0700f0618096d6c3f4a06753520fac236ed7
 ```
-Our image is ready. Now if we want, we can push it to our repository and move it to anywhere we want. 
+Our image is ready as you can check by running
+```shell
+$ docker image list
+```
+Output will be something like:
+```
+REPOSITORY                     TAG       IMAGE ID       CREATED              SIZE
+ozgurozturknet/commit          latest    0b04f44b2e79   About a minute ago   4.87MB
+```
+
+Now we have a usual container image that we can push to our repository. Of course, we can also create a new container from that image that contains the changes we had committed. Type: 
+```shell
+$ docker container run -it --name committed_test your_dockerhub_id/commit sh
+```
+In the shell, run following commands to check the test file is available `/test/test.txt` with the content we added above:
+```shell
+/ # cat /test/test.txt
+hello world
+```
+  
 </details>
 
 ***
