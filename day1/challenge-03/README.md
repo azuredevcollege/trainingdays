@@ -28,7 +28,6 @@
   | _Resource Group_  |  **(new)** rg-sachallenge |
   | _Storage account name_  |  %unique lowercase value% |
   | _Location_ | West Europe |
-  | _Account kind_  |  StorageV2 |
   | _Performance_  |  Standard |
   | _Replication:  |  Locally-redundant storage (LRS) |
   | _Access tier_  |  Hot |
@@ -90,7 +89,7 @@
   📝 If a SAS:
 
 - is leaked, it can be used by anyone who obtains it, which can potentially compromise your storage account.
-- is provided to a client application expires and the application is unable to retrieve a new SAS from your service, then the application's functionality may be hindered.
+- is provided to a client application, expires, the application is unable to retrieve a new SAS from your service, then the application's functionality may be hindered.
 
   :::
 
@@ -106,7 +105,7 @@
 
 > ❔ **Questions:**
 >
-> - Can you still download the file in the browser using aboves URL [No]
+> - Can you still download the file in the browser using above URL [No]
 > - Why? [Because the SAS key was generated using the previous key1 -> which is no longer valid.]
 
 ### Create a stored access policy to control permissions after SAS token is issued
@@ -179,18 +178,17 @@ However, apps might want to use 'service accounts' as users (aka Service Princip
 
 ```PowerShell
 $servicePrincipalName = "myADCServicePrincipal$(get-random -min 100 -max 999)"   #must be unique within AAD tenant
+#Get your AAD ID
+$tenantID = (Get-AzContext).Tenant.Id  # e.g. '11111111-1111-1111-1111-111111111111'
+$subscriptionID = (Get-AzContext).Subscription.Id # e.g. '22222222-2222-2222-2222-222222222222'
 
 #using Azure CLI is more comfortable to use for creating a Service Principal
-$jsonResult = &az ad sp create-for-rbac --name $servicePrincipalName 
+$jsonResult = &az ad sp create-for-rbac --name $servicePrincipalName --role 'Contributor' --scopes "/subscriptions/$subscriptionID" 
 
 $SPPassword = ($jsonResult | convertfrom-json).password
 $SPName = ($jsonResult | convertfrom-json).displayName
 
-#Get your AAD ID
-$tenantID = $((Get-AzContext).Tenant.Id)  #e.g. '72f988bf-8.....'
-
-Write-Host "You created SP: $servicePrincipalName with password: $SPPassword in tenant: $tenantID" -ForegroundColor Cyan  
-
+Write-Host "You created service principal [$servicePrincipalName] with password [$SPPassword] in tenant [$tenantID] with access to subscription [$subscriptionID]" -ForegroundColor 'Cyan'  
 ```
 
 Below is some PowerShell Code that simulates your app. It will login to Azure as Service Principal and access the storage account.  
@@ -199,7 +197,8 @@ Run this in the Cloud Shell:
 ```PowerShell
 #Now sign in as this service principal
 $passwd = ConvertTo-SecureString $SPPassword -AsPlainText -Force
-$pscredential = New-Object System.Management.Automation.PSCredential($SPName, $passwd)
+$spData = Get-AzADApplication -DisplayName $SPName
+$pscredential = New-Object System.Management.Automation.PSCredential($spData.AppId, $passwd)
 Connect-AzAccount -ServicePrincipal -Credential $pscredential -Tenant $tenantID
 ```
 
@@ -226,8 +225,12 @@ You need to give this 'user' or better 'service principal' permissions to your s
     Select: "myADCServicePrincipal..."
 ```
 
+Now, let's try to access the file in the container using the service principal.
+
+> **Note:** As you can only use the service principal to log in via the command line (as opposed to the portal), we also have to access the storage account via the command line.
+
 ```PowerShell
-Write-Host "Select the proper storage account" -ForegroundColor Blue
+Write-Host "Select the proper storage account" -ForegroundColor 'Blue'
 
 #select your storage account
 do {
@@ -239,9 +242,9 @@ do {
     $saccts | Format-Wide { $_ } -Column 4 -Force
     $r = Read-Host "Select the storage account"
     $SA = $saccts[$r].Split()[1]
-    if ($SA -eq $null) { Write-Host "You must make a valid selection" -ForegroundColor Red }
+    if ($SA -eq $null) { Write-Host "You must make a valid selection" -ForegroundColor 'Red' }
     else {
-        Write-Host "Selecting storage account: $($saccts[$r])" -ForegroundColor Green
+        Write-Host ('Selecting storage account: {0}' -f $saccts[$r]) -ForegroundColor 'Green'
     }
 }
 until ($SA -ne $null)
@@ -249,20 +252,19 @@ until ($SA -ne $null)
 $ctx = $null
 $ctx = New-AzStorageContext -StorageAccountName $SA -UseConnectedAccount
 $container = Get-AzStorageContainer -Context $ctx -Name 'secured'
-Get-AzStorageBlob -Container $($container.Name) -Context $ctx
+Get-AzStorageBlob -Container $container.Name -Context $ctx
 
 #in case of error - do you have the correct role permissions? (e.g. Storage Blob Data Contributor)
 #Get-AzRoleAssignment -ServicePrincipalName $SPName
 
 #Display the content of the first file
-$myfiles = Get-AzStorageBlob -Container $($container.Name) -Context $ctx 
+$myfiles = Get-AzStorageBlob -Container $container.Name -Context $ctx 
 $myfile = ($myfiles | Select-Object -First 1).Name
-Get-AzStorageBlobContent $myfile -Force -Context $ctx -container $($container.Name)
-Write-Host "the content...."  -ForegroundColor Cyan
-$content = get-content -path $myfile
-Write-Host -ForegroundColor DarkYellow $content
-":-)"  
-
+Get-AzStorageBlobContent $myfile -Force -Context $ctx -container $container.Name
+Write-Host "the content...."  -ForegroundColor 'Cyan'
+$content = Get-Content -path $myfile
+Write-Host $content -ForegroundColor 'DarkYellow'
+'(:'  
 ```
 
 You now want to delete your service principal? Do this:
@@ -272,7 +274,7 @@ You now want to delete your service principal? Do this:
 Logout-AzAccount -Username $SPName 
 Read-Host -Prompt "Ready to cleanup? (key)"
 $SPDisplayName = ($jsonResult | convertfrom-json).displayName
-Remove-AzADApplication -DisplayName $SPDisplayName -Force
+Remove-AzADApplication -DisplayName $SPDisplayName
 ```  
   
 ## Add an Azure file share to a server
@@ -283,41 +285,62 @@ Remove-AzADApplication -DisplayName $SPDisplayName -Force
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fazuredevcollege%2Ftrainingdays%2Fmaster%2Fday1%2Fchallenge-03%2Fchallengestart%2Fchallengestart.json"><img src="./challengestart/deploytoazure.png"/></a>
 button.
 
-2. Create a file share via the portal:  
+   > **Note:** This deployment will also create a storage account for you.
 
-  ```
-  [Azure Portal] 
-  -> Storage Account 
-  -> File Shares 
-  -> "+" File Share
-  ```
+1. Connect to you VM via the portal:
 
-  | Name | Value |
-  |---|---|
-  | _Name_  |  myfiles |
-  | _Quota_  |  %empty% |
-  
-3. In your Azure VM mount the share as drive by executing the command taken from:
+   ```
+   [Azure Portal] 
+   -> Virtual machines
+   -> Your Virtual machine
+   -> Select `Connect` via `RDP`
+   -> Download the RDP file
+   ```
 
-  ```
-  [Azure Portal] 
-  -> Storage Account 
-  -> File Shares 
-  -> 'myfiles' 
-  -> Connect 
-  -> copy the code into the clipboard
-  ```  
+   ![Azure Files](./images/vmRDP.png) 
+
+   ```
+   -> Open the downloaded RDP file on your device
+   -> If Windows tries to connect you via Windows Hello, select 'More choices' and 'Use a different account' as we have to use the credentials you set the VM up with
+   -> Provide the username & password you created the VM with and select 'OK'
+   -> You can disregard the warning that the remote computer's identity cannot be verified
+   ```
+
+1. Create a file share via the portal:  
+
+   ```
+   [Azure Portal] 
+   -> Storage Account 
+   -> File Shares 
+   -> "+" File Share
+   ```
+ 
+   | Name | Value |
+   |---|---|
+   | _Name_  |  myfiles |
+
+1. In your Azure VM mount the share as drive by executing the command taken from:
+
+   ```
+   [Azure Portal] 
+   -> Storage Account 
+   -> File Shares 
+   -> 'myfiles' 
+   -> Connect 
+   -> 'Show Script'
+   -> copy the code into the clipboard
+   ```  
+   
+   ![Azure Files](./images/azfiles01.png)  
   
-  ![Azure Files](./images/azfiles01.png))  
-  
-4. In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted:
+1. In your VM paste the code into a PowerShell window and execute it. Once successful your 'drive' has been mounted:
   
   ![Mounted Azure File Share](./images/azfiles02.png)
 
 >❔ **Question:**
 >
-> - What is the default quota of an Azure file share?
-> - Which user account is used for establishing the connection?
+> - What is the default quota of an Azure file share? [5TB]
+> - Which user account is used for establishing the connection? [In this case none, but the storage account key]
 > - Is the 'drive' available to other users that logon to the VM? [No]
 > - Is the 'drive' mounted 'automatically' after a reboot? [Yes]
 > - Can I mount a file share located in e.g. North Europe from a machine located in e.g. West Europe [Yes]  
