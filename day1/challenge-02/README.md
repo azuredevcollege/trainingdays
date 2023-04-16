@@ -36,7 +36,7 @@ Using the Cloud Shell saves you time as:
 -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
 ```
 
-![Cloud Shell](./images/CloudShell.png))
+![Cloud Shell](./images/CloudShell.png)
 
 - The Azure Cloud Shell is an in-browser-accessible shell for managing Azure resources.
 - It already has the required SDKs and tools installed to interact with Azure.
