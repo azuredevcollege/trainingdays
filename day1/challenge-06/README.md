@@ -57,7 +57,7 @@ Now let's add an external Azure load balancer in front of the two parallel web s
 | _Region_  |  West Europe |
 | _Type_  |  Public |
 | _SKU_  |  Basic |
-|Frontend Configuration  |  %Use existing public IP% `pip-wwwfarm` |
+| Frontend Configuration  |  %Use existing public IP% `pip-wwwfarm` |
 
 ## Configure the Load Balancer
 
