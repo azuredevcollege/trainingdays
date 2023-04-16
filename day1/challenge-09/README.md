@@ -41,11 +41,11 @@ It comprises:
 ## Table Of Contents
 
 1. [Deploy the ARM Template](#deploy-the-arm-template)  
-2. [Create an Azure Run As Account](#create-an-azure-run-as-account)  
-3. [Create a Table and see AA Variables Section](#create-a-table-and-see-aa-variables-section)  
-4. [Upload a Price Sheet](#upload-a-price-sheet)  
-5. [Run a Report](#run-a-report)
-6. [Cleanup](#cleanup)
+1. [Create an Azure Run As Account](#create-an-azure-run-as-account)  
+1. [Create a Table and see AA Variables Section](#create-a-table-and-see-aa-variables-section)  
+1. [Upload a Price Sheet](#upload-a-price-sheet)  
+1. [Run a Report](#run-a-report)
+1. [Cleanup](#cleanup)
 
 ## Deploy the ARM Template
 
@@ -192,35 +192,34 @@ To do this you need to upload a price sheet with your specific Azure rates. The 
 📝 Price information for Azure resources is accessible through the [RateCard API](https://docs.microsoft.com/azure/cost-management-billing/manage/usage-rate-card-overview#azure-resource-ratecard-api-preview). If you want to dig into some details go [here for a sample](https://github.com/bfrankMS/myAzureCost/tree/master/SetupChallenges/GenerateAPriceSheet)
 :::
 
-1. You find a sample price list in this directory:
-  [day1\challenge-09\challengestart\Sample_PriceSheet_EN.csv](./challengestart/Sample_PriceSheet_EN.csv)
+1. You find a sample price list in this directory: [day1\challenge-09\challengestart\Sample_PriceSheet_EN.csv](./challengestart/Sample_PriceSheet_EN.csv)
 
-2. Upload this to your storage account:
+1. Upload this to your storage account:
 
-  ```
-  [Azure Portal] 
-  -> Resource Groups 
-  -> "rg-AzureCost" 
-  -> 'azconsumption...' (Your Storage Account) 
-  -> Containers 
-  -> 'consumption'
-  ```
+   ```
+   [Azure Portal] 
+   -> Resource Groups 
+   -> "rg-AzureCost" 
+   -> 'azconsumption...' (Your Storage Account) 
+   -> Containers 
+   -> 'consumption'
+   ```
+ 
+   ![Pricelist on storage account](./images/RateCardCSV.png)  
 
-  ![Pricelist on storage account](./images/RateCardCSV.png)  
+1. Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this fil. If you have done [challenge 3](../challenge-03/README.md) you know how to do this ;-)
 
-3. Generate a URI with a Read only SAS token (e.g. expiry +2 years) for this fil. If you have done [challenge 3](../challenge-03/README.md) you know how to do this ;-)
+1. Copy & paste the URI (with the SAS token) into the AA variable `myAzureCostPriceSheetURI` so that runbooks can download the price sheet: 
 
-4. Copy & paste the URI (with the SAS token) into the AA variable `myAzureCostPriceSheetURI` so that runbooks can download the pricesheet:
-
-  ```
-  [Azure Portal] 
-  -> Resource Groups 
-  -> "rg-AzureCost" 
-  -> 'aaazurecost...' (Your Automation Account) 
-  -> Variables
-  ```  
-
-  ![pricelist URI in AA variables](./images/RateCardCSVURI.png)  
+   ```
+   [Azure Portal] 
+   -> Resource Groups 
+   -> "rg-AzureCost" 
+   -> 'aaazurecost...' (Your Automation Account) 
+   -> Variables
+   ```  
+ 
+   ![pricelist URI in AA variables](./images/RateCardCSVURI.png)  
 
 ## Run a report
 
