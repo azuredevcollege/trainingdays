@@ -1,4 +1,4 @@
-# Challenge 7 (optional): VM and Custom Script Extensions - Post deployment automation  or configure / setup / install something within an empty vm
+# Challenge 7 (optional): VM and Custom Script Extensions - Post deployment automation  or configure / setup / install something within an empty VM
 
 ## Here is what you will learn 🎯
 
@@ -10,10 +10,10 @@
 ## Table Of Contents
 
 1. [Do you need a VM?](#do-you-need-a-vm)
-2. [Attach a simple HelloWorld Custom Script Extension (CSE) to a VM using the Portal](#attach-a-simple-helloworld-custom-script-extension-cse-to-a-vm-using-the-portal)
-3. [See what has happened inside the VM](#see-what-has-happened-inside-the-vm)
-4. [Attaching a CSE to a VM in an ARM Template (optional)](#attaching-a-cse-to-a-vm-in-an-arm-template-optional)
-5. [Cleanup](#cleanup)
+1. [Attach a simple HelloWorld Custom Script Extension (CSE) to a VM using the Portal](#attach-a-simple-helloworld-custom-script-extension-cse-to-a-vm-using-the-portal)
+1. [See what has happened inside the VM](#see-what-has-happened-inside-the-vm)
+1. [Attaching a CSE to a VM in an ARM Template (optional)](#attaching-a-cse-to-a-vm-in-an-arm-template-optional)
+1. [Cleanup](#cleanup)
 
 ## Do you need a VM?
 
@@ -31,23 +31,25 @@ Just **click**  <a href="https://portal.azure.com/#create/Microsoft.Template/uri
 
 ## Attach a simple HelloWorld Custom Script Extension (CSE) to a VM using the Portal
 
-- Take the following code and copy & paste it into a file named e.g. '_HelloWorld.ps1_':
+- Take the following code and copy & paste it into a file named e.g. `HelloWorld.ps1`:
 
   ```PowerShell
   ##############################################
   #   HelloWorld Custom Script Extension (CSE)
   ##############################################
 
-  $filePath = "c:\temp\CSEwasRunAt.txt"
+  $folderPath = Join-Path 'C:' 'temp'
+  $filePath = Join-Path $folderPath 'CSEwasRunAt.txt'
 
-  #create dir if it doesn't exist
-  if (!(Test-Path -Path (Split-Path $filePath -Parent))) {mkdir (Split-Path $filePath -Parent)}
+  #create directory if it doesn't exist
+  if (-not (Test-Path -Path $folderPath)) {
+    New-Item -Path $folderPath -ItemType 'Directory'
+  }
 
   #write current time to file.
   Get-Date | Out-File $filePath -Append
 
   #This is really simple but imagine what else you can do to customize a vm ...
-
   ```
 
 - Upload this file to a storage account
@@ -103,8 +105,15 @@ Now we RDP into the VM and see what has happened and where to find logs in case 
 -> 'vmblue' 
 -> Connect 
 -> Download RDP file 
--> Open 
--> Connect
+```
+
+![Azure Files](./images/vmRDP.png) 
+
+```
+-> Open the downloaded RDP file on your device
+-> If Windows tries to connect you via Windows Hello, select 'More choices' and 'Use a different account' as we have to use the credentials you set the VM up with
+-> Provide the username & password you created the VM with and select 'OK'
+-> You can disregard the warning that the remote computer's identity cannot be verified
 ```
 
 | Parameter | Value |
@@ -116,30 +125,35 @@ Within the VM:
 
 1. Navigate to `C:\temp`. The result should look similar to this:
 
-  ![CSE Result](./images/AddCSE-HelloWorldToVM4Result.png)
+   ![CSE Result](./images/AddCSE-HelloWorldToVM4Result.png)
 
-2. Navigate to `C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_\Downloads`. The CSE is software that runs within the VM. The script that will be executed is downloaded first to this location. If you don't see your script file CSE might have trouble to download the resource.
+1. Navigate to `C:\Packages\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_\Downloads`. The CSE is software that runs within the VM. The script that will be executed is downloaded first to this location. If you don't see your script file CSE might have trouble to download the resource.
 
-  ![CSE Download Folder](./images/AddCSE-HelloWorldToVM5DownloadFolder.png)  
+   ![CSE Download Folder](./images/AddCSE-HelloWorldToVM5DownloadFolder.png)  
 
-3. Navigate to `C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_` This is the place where the CSE logs its actions locally - a good place to start troubleshooting.
+1. Navigate to `C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension\ _%version%_` This is the place where the CSE logs its actions locally - a good place to start troubleshooting.
 
-  ![CSE Logs Folder](./images/AddCSE-HelloWorldToVM6LogsFolder.png)
+   ![CSE Logs Folder](./images/AddCSE-HelloWorldToVM6LogsFolder.png)
 
-4. Remove the CSE from the VM
+1. Remove the CSE from the VM
+ 
+   ```
+   [Azure Portal] 
+   -> Home 
+   -> Search 'virtual machines' 
+   -> 'vmblue' 
+   -> 'Custom Script Extension' 
+   -> 'Uninstall'
+   ```
+ 
+   ::: tip
+   📝You can only have one Custom Script Extension attached to a VM at  a time. If you want to process multiple CSE scripts you have  multiple options. 
+   
+   - The easiest would be to install & uninstall one CSE at a time:  `Install CSE ('Script1') -> deinstall CSE -> Install CSE  ('Script2') -> deinstall ->...`
+ 
+   - A better, but more demanding solution would be to deploy the  extension using an ARM/Bicep template. The template enables you to  specify multiple files to download from a storage account, of which  one could be an orchestration file. The following section provides you with an introduction to this approach.
 
-  ```
-  [Azure Portal] 
-  -> Home 
-  -> Search 'virtual machines' 
-  -> 'vmblue' 
-  -> 'Custom Script Extension' 
-  -> 'Uninstall'
-  ```
-
-  ::: tip
-  📝You can only have one Custom Script Extension attached to a VM at a time. If you want to process multiple CSE scripts you need to: `Install CSE ('Script1') -> deinstall CSE -> Install CSE ('Script2') -> deinstall ->...`
-  :::
+   :::
 
 ## Attaching a CSE to a VM in an ARM Template (optional)
 
@@ -147,61 +161,70 @@ The goal of this action is to learn how to avoid the portal, i.e. so that the CS
 
 1. In the next CSE we want to install Internet Information Services (IIS) in the VM. Take a look at the code file first ("[CSE_Install-IIS.ps1](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-07/scripts/CSE_Install-IIS.ps1)"). The relevant parts starts at _#region install IIS features_.
 
-2. When automating CSE e.g. through ARM deployment - the CSE needs a valid download location for the code file (`CSE_Install-IIS.ps1`). This could be e.g. a public github repo or another https-reachable location. In this lab we use a storage account for this. Upload ("[CSE_Install-IIS.ps1](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-07/scripts/CSE_Install-IIS.ps1)") file to a storage account.
+1. When automating CSE e.g. through ARM deployment - the CSE needs a valid download location for the code file (`CSE_Install-IIS.ps1`). This could be e.g. a public GitHub repo or another https-reachable location. In this lab we use a storage account for this. Upload ("[CSE_Install-IIS.ps1](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-07/scripts/CSE_Install-IIS.ps1)") file to a storage account.
 
-```
-[Azure Portal] -> Resource Group -> rg-www -> sawww... (%your storage account%)  -> containers -> 'csescripts' -> Upload ->File "CSE_Install-IIS.ps1" -> Upload
-```  
+   ```
+   [Azure Portal] 
+   -> Resource Group 
+   -> rg-www 
+   -> sawww... (%your storage account%)  
+   -> containers 
+   -> 'csescripts' 
+   -> Upload
+   -> File "CSE_Install-IIS.ps1" 
+   -> Upload
+   ```  
   
-3. Edit the CSE ARM template to use the correct scripts location. Once uploaded you can copy the blobs URL from the Azure portal
+1. Edit the CSE ARM template to use the correct scripts location. Once uploaded you can copy the blobs URL from the Azure portal
 
-  ![Copy the URL of the IIS install script](./images/saUploadCSE2.png)
+   ![Copy the URL of the IIS install script](./images/saUploadCSE2.png)
 
-  > ❔ **Question** Can you download the file in your browser using the URL? If not have you set the correct access level at the container?
+   > ❔ **Question** Can you download the file in your browser using  the URL? If not have you set the correct access level at the  container?
+ 
+   Edit this: [CSE ARM template](https://raw.githubusercontent.com/ azuredevcollege/trainingdays/master/day1/challenge-07/scripts/ ARMCSE.json) template to use the scripts location:
+ 
+   ![Edit following ARM section](./images/ModifyARM.png)  
+ 
+   with your value
+ 
+   ```JSON
+   ...
+   "fileUris": [
+     "https://sawww....blob.core.windows.net/cse/CSE_Install-IIS.ps1"
+   ],
+   ...
+   ```
+ 
+   Copy the template into the clipboard.
 
-  Edit this: [CSE ARM template](https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-07/scripts/ARMCSE.json) template to use the scripts location:
+1. Deploy the ARM Template.
 
-  ![Edit following ARM section](./images/ModifyARM.png)  
+   ```
+   [Azure Portal] 
+   -> Resource Groups 
+   -> 'rg-www' 
+   -> '+' 
+   -> Template deployment 
+   -> "Build your own template in the editor" 
+   -> Paste the clipboard
+   ```
+ 
+   Select the right resource group and VM and deploy:
+   | Name | Value |
+   |---|---|
+   | _Resource group_  |  e.g. rg-www-test-001 |
+   | _Region_  |  e.g. North Europe |
+   | _VM name_  |  vmblue |
+ 
+   Deployment will take some minutes: A role is installed and an IIS  feature is downloaded and installed.  
 
-  with your value
+1. At the end the result should look like this:
 
-  ```PowerShell
-  ...
-  "fileUris": [
-    "https://sawww....blob.core.windows.net/cse/CSE_Install-IIS.ps1"
-  ],
-  ...
-  ```
-
-  Copy the template into the clipboard.
-
-4. Deploy the ARM Template.
-
-  ```
-  [Azure Portal] 
-  -> Resource Groups 
-  -> 'rg-www' -> '+' 
-  -> Template deployment 
-  -> "Build your own template in the editor" 
-  -> Paste the clipboard
-  ```
-
-  Select the right resource group and VM and deploy:
-  | Name | Value |
-  |---|---|
-  | _Resource group_  |  e.g. rg-www-test-001 |
-  | _Region_  |  e.g. North Europe |
-  | _VM name_  |  vmblue |
-
-Deployment will take some minutes: A role is installed and an IIS feature is downloaded and installed.  
-
-5. At the end the result should look like this:
-
-  ![CSE deployment](./images/CSE-Deployment.png)  
-
-  Now you have a web server in your VM - you should test by browsing to the public IP address: 
-   
-  ![Running IIS](./images/CSEIIS-Success.png)  
+   ![CSE deployment](./images/CSE-Deployment.png)  
+ 
+   Now you have a web server in your VM - you should test by browsing  to the public IP address: 
+    
+   ![Running IIS](./images/CSEIIS-Success.png)  
 
 ## Cleanup
 
