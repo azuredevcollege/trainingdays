@@ -14,11 +14,12 @@ Before we can get into Azure Resource Manager and the related templates, we need
 - **Resource** – an element manageable via Azure. For example: a virtual machine, a database, a web app etc.
 - **Resource Group** – a container for resources. A resource can not exist in Azure without a ResourceGroup (RG). Deployments of resources are always executed on an RG. Typically, resources with the same lifecycle are grouped into one resource group.
 - **Resource Provider** – an Azure service for creating a resource through the Azure Resource Manager. For example, “Microsoft.Web” to create a web app, “Microsoft.Storage” to create a storage account etc.
-- **Azure Resource Manager (ARM) Templates** – a JSON file that describes one or more resources that are deployed into a Resource Group. The template can be used to consistently and repeatedly provision the resources.
+- **Azure Resource Manager (ARM) Templates** – a JSON file that describes one or more resources that are deployed into a given scope (i.e., Resource Group, Subscription, Management Group or Tenant). The template can be used to consistently and repeatedly provision the resources.
+- **Bicep** - An abstraction for ARM templates that (similar to TypeScript for JavaScript) make it a lot easier to create & maintain templates. While this training will use ARM templates to teach you the basics, it is highly recommended to check Bicep out once you got the general idea.
 
-One great advantage when using ARM templates, is the _traceability_ of changes to your infrastructure. Templates can be stored together with the _source code_ of your application in the code repository (_Infratructure as Code_).
+One great advantage when using ARM templates, is the _traceability_ of changes to your infrastructure. Templates can be stored together with the _source code_ of your application in the code repository (_Infrastructure as Code_).
 
-If you have established Continuous Integration / Deployment in your development process (which we will do on [Day 4](../day4/README.md)), you can execute the deployment of the infrastructure from Jenkins, TeamCity or Azure DevOps. No one has to worry about an update of the environment – web apps, databases, caches etc. will be created and configured automatically – no manual steps are necessary (which can be error-prone, as we all know).
+If you have established Continuous Integration / Deployment in your development process (which we will do on [Day 4](../day4/README.md)), you can execute the deployment of the infrastructure from Jenkins, TeamCity, GitHub or Azure DevOps. No one has to worry about an update of the environment – web apps, databases, caches etc. will be created and configured automatically – no manual steps are necessary (which can be error-prone, as we all know).
 
 ## Table of Contents
 
@@ -41,12 +42,12 @@ If you have established Continuous Integration / Deployment in your development 
 
 ## Azure Resource Manager and Resource Providers
 
-The _Azure Resource Manager_ is the deployment and management service for Azure. It provides a management layer that enables you to create, update, and delete resources in your Azure subscription.
+The _Azure Resource Manager_ is the deployment and management service for Azure. It provides a management layer that enables you to create, update, and delete resources in your Azure environment.
 
 You can access the resource manager through several ways:
 
 - Azure Portal
-- Azure Powershell
+- Azure PowerShell
 - Azure CLI
 - plain REST Calls
 - SDKs
@@ -78,21 +79,24 @@ Microsoft.Cdn                           RegistrationRequired  Registered
 Microsoft.Cache                         RegistrationRequired  Registered
 Microsoft.ResourceHealth                RegistrationRequired  Registered
 Microsoft.Sql                           RegistrationRequired  Registered
-...
-...
-...
+(...)
 ```
 
 ![providers](./images/portal_resource_providers.png 'providers')
 
-:::tip  
-📝 Resource providers talk REST (what a surprise ;-))  
+:::tip
+📝 Resource providers talk REST (what a surprise ;-))
 Here is an example of a REST call that creates a storage account:
 
-```http
+REQUEST HEADER
+```txt
 PUT
+
 https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Storage/storageAccounts/mystorageaccount?api-version=2016-01-01
+```
+
 REQUEST BODY
+```JSON
 {
   "location": "westus",
   "sku": {
@@ -102,21 +106,20 @@ REQUEST BODY
   "properties": {}
 }
 ```
-
 :::
 
-As you can see, deployments in Azure will always be executed against a _resource group_, as mentioned before! In this sample, the template will be ultimately picked-up by the _Microsoft.Storage_ resource provider, which then will be responsible for creating a Storage Account for you.
+As you can see, this deployment is executed against the _resource group_ scope. In this sample, the template will be ultimately picked-up by the _Microsoft.Storage_ resource provider, which then will be responsible for creating a Storage Account for you.
 
-But of course - nobody wants to construct native REST calls. Instead we focus on the json payload and let Azure CLI or powershell do the REST communication/transmission part.  
-The json document we are about to create is an _ARM Template_
+But of course - nobody wants to construct native REST calls. Instead we focus on the JSON payload and let Azure CLI or PowerShell do the REST communication/transmission part.
+The JSON document we are about to create is an _ARM Template_.
 
 ## ARM Templates
 
-A full ARM template is more than just a REST json payload. It usually consists of several parts:
+A full ARM template is more than just a REST JSON payload. It usually consists of several parts:
 
-```json
+```JSON
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {},
   "variables": {},
@@ -134,15 +137,22 @@ A full ARM template is more than just a REST json payload. It usually consists o
 
 Sticking to our sample from above (Storage Account), let's create a basic template that will create a Storage Account and makes use of a very helpful feature (_Template Functions_). Here it is:
 
-```json
+```JSON
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "storageAccountName": {
       "type": "string",
       "metadata": {
         "description": "The name of the storage account to be created."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "The location of the storage account to be created."
       }
     },
     "storageAccountType": {
@@ -165,7 +175,7 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
       "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2015-06-15",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
       "tags": {
         "displayName": "[parameters('storageAccountName')]"
       },
@@ -183,15 +193,53 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
 }
 ```
 
+<details>
+<summary>Alternative Bicep visual</summary>
+
+```Bicep
+@description('The name of the storage account to be created.')
+param storageAccountName string
+
+@description('The location of the storage account to be created.')
+param location string = resourceGroup().location
+
+@description('Storage Account type')
+@allowed([
+  'Standard_LRS'
+  'Standard_GRS'
+  'Standard_ZRS'
+  'Premium_LRS'
+])
+param storageAccountType string = 'Standard_LRS'
+
+resource storageAccount 'Microsoft.Storage/storageAccounts@2015-06-15' = {
+  name: storageAccountName
+  location: location
+  tags: {
+    displayName: storageAccountName
+  }
+  properties: {
+    accountType: storageAccountType
+  }
+}
+
+output storageAccountConnectionString string = storageAccount.listKeys().key1
+```
+
+</details>
+</p>
+
 :::tip
 📝 As you can see, we are able to use functions to do dynamic stuff within a template, e.g. reading keys (`listKeys()`) or using parameter (`parameters()`). There are, of course, other functions e.g. for string manipulation (_concatenate_, _padLeft_, _split_...), numeric functions, comparison functions, conditionals etc. You can find all available template functions and their documentation here: [ARM template functions](https://docs.microsoft.com/azure/azure-resource-manager/templates/template-functions). Please make yourself familiar with the list!
 :::
+
+> **Note:** The template is only intended for illustration purposes. Currently, ARM-Outputs (as opposed to inputs) cannot be obscured. This means, the above template would expose the Storage Account key in plain text.
 
 ### Let's deploy the template
 
 There are several ways to kick off an ARM template deployment:
 
-- Azure cli
+- Azure CLI
 - PowerShell
 - Azure Portal -> '+' -> 'Template Deployment'
 - ...
@@ -200,39 +248,46 @@ We will try each of these to learn its haptic.
 
 1. We use the Azure Portal. You may find it strange to use a web portal that offers wizards and use it to process our template. However, when testing/developing templates errors will occur. In this case the portal offers immediate feedback e.g. for validation errors. So do:
 
-`[Azure Portal] -> '+' -> 'Template deployment' -> Create -> 'Build your own template in the editor'`
+   `[Azure Portal] -> '+' -> 'Template deployment' -> Create -> 'Build your own template in the editor'`
 
-2. Copy and paste the above ARM template into the portal editor window
+1. Copy and paste the above ARM template into the portal editor window
 
-![Azure Portal Template Deployment](./images/templatedeployment.png)
+   ![Azure Portal Template Deployment](./images/templatedeployment.png)
 
-3. Hit save. This will bring you to the next page.
+1. Hit save. This will bring you to the next page.
 
-:::tip
-📝 This page contains:
+   :::tip
+   📝 This page contains:
 
-- fixed elements: The deployment scope - where should your resources be deployed (subscription & RG) - dynamic elements: The parameters - defined in the template will define the 'look' and hence what the user needs to provide.  
-  :::
+   - fixed elements: The deployment scope - where should your resources be deployed (subscription & RG) -
+   - dynamic elements: The parameters - defined in the template will define the 'look' and hence what the user needs to provide.
 
-![Template Deployment Parameters](./images/templatedeploymentparameters.png)
+   :::
 
-4. Enter a unique lowercase value for the storage account and kick off the deployment.
+   ![Template Deployment Parameters](./images/templatedeploymentparameters.png)
 
-5. When finished take a look at the outputs section:
+1. Enter a unique lowercase value for the storage account and kick off the deployment.
 
-![Template Deployment Output](./images/templatedeploymentoutput.png)
+1. When finished take a look at the outputs section:
 
-:::tip
-📝 Think of it that way: You can define the outputs of a deployment in the template for later use e.g. if you want to upload something in the next step of your deployment and need the access key for this.  
- :::
+   ![Template Deployment Output](./images/templatedeploymentoutput.png)
+
+   :::tip
+   📝 Think of it that way: You can define the outputs of a deployment in the template for later use e.g. if you want to upload something in the next step of your deployment and need the access key for this.
+   :::
 
 ## ARM with Parameter File
 
-You have noticed that you have been asked to enter a value for the parameter `storageAccountName`. In a fully automated deployment, this is not really acceptable.  
-Using e.g. the [Azure CLI](https://docs.microsoft.com/cli/azure/group/deployment?view=azure-cli-latest#az_group_deployment_create) you can specify an `answer` parameter file that goes along with the deployment file.
+You have noticed that you have been asked to enter a value for the parameter `storageAccountName`. In a fully automated deployment, this is not really useful.
+Using e.g. the [Azure CLI](https://docs.microsoft.com/cli/azure/group/deployment?view=azure-cli-latest#az_group_deployment_create) you can specify an `input` parameter file that goes along with the deployment file.
 
 ```shell
 az deployment group create -g basicarm-rg -n firsttemplate --template-file=./azuredeploy.json --parameters=@azuredeploy.params.json
+```
+
+In PowerShell, the same command would look like
+```PowerShell
+New-AzResourceGroupDeployment -ResourceGroupName 'basicarm-rg' -TemplateFile './azuredeploy.json' -TemplateParameterFile './azuredeploy.params.json'
 ```
 
 Doing so you can set up parameter files for different environments, e.g.:
@@ -250,9 +305,9 @@ Doing so you can set up parameter files for different environments, e.g.:
 
 Example for our storage account parameter:
 
-```json
+```JSON
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccountName": {
@@ -261,14 +316,24 @@ Example for our storage account parameter:
                 "description": "The name of the storage account to be created."
             }
         },
-.
-.
-.
+        // (...)
+}
 ```
+
+<details>
+<summary>Alternative Bicep visual</summary>
+
+```Bicep
+@description('The name of the storage account to be created.')
+param storageAccountName string 
+```
+
+</details>
+</p>
 
 The corresponding parameter file would look like this.
 
-```json
+```JSON
 {
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
@@ -280,9 +345,11 @@ The corresponding parameter file would look like this.
 }
 ```
 
+> **Note:** ARM Parameter files can be used with Bicep templates.
+
 ## Create your first ARM Template
 
-Now I want you to create your first ARM Template. A speed course - based on the [Tutorial: Create and deploy your first ARM template](https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-create-first-template?tabs=azure-powershell)
+Now I want you to create your first ARM Template. A speed course - based on the [Tutorial: Create and deploy your first ARM template](https://docs.microsoft.com/azure/azure-resource-manager/templates/template-tutorial-create-first-template?tabs=azure-PowerShell)
 
 You will:
 
@@ -298,7 +365,7 @@ You will:
 and create an empty ARM template file (e.g. **_pip.json_**). Use the following
 code snippet
 
-```json
+```JSON
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
@@ -308,10 +375,10 @@ code snippet
 
 ### 2. Add a resource to it
 
-Put the json code snippet that defines a public IP address into the resources
+Put the JSON code snippet that defines a public IP address into the resources
 section of the template
 
-```json
+```JSON
 {
   "name": "string",
   "type": "Microsoft.Network/publicIPAddresses",
@@ -327,10 +394,29 @@ section of the template
 }
 ```
 
+<details>
+<summary>Alternative Bicep visual</summary>
+
+```Bicep
+resource string 'Microsoft.Network/publicIPAddresses@2020-06-01' = {
+  name: 'string'
+  location: 'string'
+  sku: {
+    name: 'usefulstring'
+  }
+  properties: {
+    publicIPAllocationMethod: 'usefulstring'
+    publicIPAddressVersion: 'usefulstring'
+  }
+}
+```
+
+</details>
+</p>
+
 ::: tip
 
-Try a **Shift-ALT-F to format the code after inserting**. (requires ARM
-extension to be installed)
+Try a **Shift-ALT-F to format the code after inserting**. (requires ARM extension to be installed)
 
 :::
 
@@ -343,21 +429,22 @@ You need to replace the _"usefulstring"_ with meaningful data. See the following
 
 Concentrate on
 
-```json
+```JSON
   "location": "string",
 ```
 
-Azure resources go into a resource group. A resource group is located in an azure region. So you may want to use the same region for your public IP Address as it's hosting resource group.  
- Lucky us. There is a function available - that we can use. Replace _"string"_ with "`[resourceGroup().location]`"
+Azure resources go into a resource group. A resource group is located in an azure region. So you may want to use the same region for your public IP Address as it's hosting resource group.
+
+Lucky us. There is a function available - that we can use. Replace _"string"_ with "`[resourceGroup().location]`"
 
 ### 4. Create a parameter
 
-Create a parameter so that a user can enter the name of the IP Address artefact.  
-Therefore add a parameter section to the template. Checkout [Make template reusable](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-add-parameters?tabs=azure-powershell#make-template-reusable) to see how it is done.
+Create a parameter so that a user can enter the name of the IP Address artefact.
+Therefore add a parameter section to the template. Checkout [Make template reusable](https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-tutorial-add-parameters?tabs=azure-PowerShell#make-template-reusable) to see how it is done.
 
 As example you can compare your ARM Template with the following code snippet:
 
-```json
+```JSON
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
@@ -387,6 +474,29 @@ As example you can compare your ARM Template with the following code snippet:
 }
 ```
 
+<details>
+<summary>Alternative Bicep visual</summary>
+
+```Bicep
+@description('The name of the Azure IP adress artefact')
+param IPName string
+
+resource IP 'Microsoft.Network/publicIPAddresses@2020-06-01' = {
+  name: IPName
+  location: resourceGroup().location
+  sku: {
+    name: 'Basic'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Static'
+    publicIPAddressVersion: 'IPv4'
+  }
+}
+```
+
+</details>
+</p>
+
 ### 5. Create a parameter file
 
 Use VS Code to generate a parameter file for you and enter a value:
@@ -395,7 +505,7 @@ Use VS Code to generate a parameter file for you and enter a value:
 
 As example you can compare your parameters file with the following code snippet:
 
-```json
+```JSON
 {
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
@@ -407,20 +517,20 @@ As example you can compare your parameters file with the following code snippet:
 }
 ```
 
-6. Kick off the deployment using Azure CLI. To Do this you can upload the template and parameter file to your Azure Cloud Shell:
+### 6. Kick off the deployment using the Azure CLI. To Do this you can upload the template and parameter file to your Azure Cloud Shell:
 
 ![Upload to Cloud Shell](./images/upload2cloudshell.png)
 
 Create a resource group first by executing e.g.:
 
 ```shell
-az group create -l northeurope -n rg-MyFirstARM
+az group create -l 'northeurope' -n 'rg-MyFirstARM'
 ```
 
 Kick off the deployment by executing e.g.:
 
-```json
-az deployment group create -g rg-MyFirstARM --template-file pip.json --parameters '@pip.parameters.json'
+```shell
+az deployment group create -g 'rg-MyFirstARM' --template-file 'pip.json' --parameters '@pip.parameters.json'
 ```
 
 Result:
