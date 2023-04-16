@@ -154,19 +154,6 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
       "metadata": {
         "description": "The location of the storage account to be created."
       }
-    },
-    "storageAccountType": {
-      "type": "string",
-      "defaultValue": "Standard_LRS",
-      "allowedValues": [
-        "Standard_LRS",
-        "Standard_GRS",
-        "Standard_ZRS",
-        "Premium_LRS"
-      ],
-      "metadata": {
-        "description": "Storage Account type"
-      }
     }
   },
   "variables": {},
@@ -174,14 +161,17 @@ Sticking to our sample from above (Storage Account), let's create a basic templa
     {
       "name": "[parameters('storageAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
-      "apiVersion": "2015-06-15",
+      "apiVersion": "2022-05-01",
       "location": "[parameters('location')]",
       "tags": {
         "displayName": "[parameters('storageAccountName')]"
       },
-      "properties": {
-        "accountType": "[parameters('storageAccountType')]"
-      }
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {}
     }
   ],
   "outputs": {
@@ -203,24 +193,18 @@ param storageAccountName string
 @description('The location of the storage account to be created.')
 param location string = resourceGroup().location
 
-@description('Storage Account type')
-@allowed([
-  'Standard_LRS'
-  'Standard_GRS'
-  'Standard_ZRS'
-  'Premium_LRS'
-])
-param storageAccountType string = 'Standard_LRS'
-
 resource storageAccount 'Microsoft.Storage/storageAccounts@2015-06-15' = {
   name: storageAccountName
   location: location
   tags: {
     displayName: storageAccountName
   }
-  properties: {
-    accountType: storageAccountType
-  }
+  sku: {
+    name: 'Standard_LRS'
+    tier: 'Standard'
+  }      
+  kind: 'StorageV2'
+  properties: {}
 }
 
 output storageAccountConnectionString string = storageAccount.listKeys().key1
