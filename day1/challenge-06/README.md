@@ -57,11 +57,11 @@ Now let's add an external Azure load balancer in front of the two parallel web s
 | _Region_  |  West Europe |
 | _Type_  |  Public |
 | _SKU_  |  Basic |
-| _Public IP address_  |  %Use existing% |
-| _Choose public IP address_  |  pip-wwwfarm |  
-  
-:::tip
-📝To get your load balancer working you need to configure the following:
+| Frontend Configuration  |  %Use existing public IP% `pip-wwwfarm` |
+
+## Configure the Load Balancer
+
+To get your load balancer working you need to configure the following:
 
 - A _backend pool_ that contains the endpoints i.e. the VMs to which the traffic will be routed.
 
@@ -72,7 +72,6 @@ Now let's add an external Azure load balancer in front of the two parallel web s
 - A _lb rule_ to forward incoming traffic (TCP port 80) on lb's frontend IP address to backend pool (TCP port 80)
 
   ![lb rule](./images/lbconfig03.png)
-:::
 
 To check if your lb is working do a HTTP request to the endpoint `http://%PIP of your lb%`. Depending which endpoint serves your request the result should look like:
 

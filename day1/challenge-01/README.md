@@ -17,12 +17,12 @@
 | Name | Values  |
 |---|---|
 | _Resource group_ | %use from previous lab% |
-| _Virtual machine name_ | `vm<policy name or app name><###>`|
+| _Virtual machine name_ | `vm<app name><###>`|
 | _Region_ | North Europe |
-| _Availability options_ | Availabilty set  |
+| _Availability options_ | Availability set  |
 | _Availability set_ | <ul><li>Name: `avail-<app or service name>-<subscription type>-<region>-<###>`</li><li>Fault domains: 2</li><li>Update domains: 5</li></ul> |
-| _Image_ | Windows Server 2019 Datacenter - Gen1 |
-| _Size_ | %Choose a size% |
+| _Image_ | Windows Server 2019 Datacenter - x64 Gen2 |
+| _Size_ | %Choose a size% (e.g., `Standard_B2ms`) |
 | _Username_ | **not** 'Admin' **nor** 'Administrator' **nor** 'root' |
 | _Password_ | %complex enough% |
 | _OS disk type_ | Standard SSD |

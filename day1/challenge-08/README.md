@@ -14,9 +14,9 @@ To speed things up  you will first deploy the _start point_ and then you will ad
 ## Table of Contents
 
 1. [Introduction Traffic Manager](#introduction-traffic-manager)
-2. [Deploy the Starting Point](#deploy-the-starting-point)
-3. [Deploy a Traffic Manager Instance](#deploy-a-traffic-manager-instance)
-4. [Cleanup](#cleanup)
+1. [Deploy the Starting Point](#deploy-the-starting-point)
+1. [Deploy a Traffic Manager Instance](#deploy-a-traffic-manager-instance)
+1. [Cleanup](#cleanup)
 
 ## Introduction Traffic Manager
 
@@ -35,16 +35,17 @@ Now let's create some VMs using the 'Cloud Shell' in the Azure Portal. When bein
 -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner
 ```  
 
-![Cloud Shell](./images/CloudShell.png))  
+![Cloud Shell](./images/CloudShell.png)  
 
 :::tip
 📝 The 'Cloud Shell' is an in-browser-accessible shell for managing Azure resources. It already has the required SDKs and tools installed to interact with Azure. You can use either Bash or PowerShell.  
 :::  
 
-The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. See the [documentation](https://docs.microsoft.com/azure/cloud-shell/persisting-shell-storage) formore details. 
+The first time you use the 'Cloud Shell' you will be asked to setup a storage account e.g. to store files you have uploaded persistently. See the [documentation](https://docs.microsoft.com/azure/cloud-shell/persisting-shell-storage) for more details. 
 
 ```
-[Azure Portal] -> Click 'Show advanced settings'
+[Azure Portal] 
+-> Click 'Show advanced settings'
 ```
 
 ![Cloud Shell Storage Account Setup](./images/CloudShell1.png)  
@@ -82,11 +83,6 @@ $TemplateParameters = @{
     "DiskSku" = [string]'StandardSSD_LRS'
 }
 
-```
-
-Enter the password as asked. Then execute the deployment by adding 2 lines
-
-```PowerShell
 #will create some vms in different Azure regions in parallel
 New-AzResourceGroupDeployment -Name 'NE' -TemplateUri "https://raw.githubusercontent.com/azuredevcollege/trainingdays/master/day1/challenge-08/challengestart/challengestart.json" -ResourceGroupName 'rg-wwwlb-NE' -TemplateParameterObject $TemplateParameters -AsJob
 
@@ -95,8 +91,9 @@ New-AzResourceGroupDeployment -Name 'WE' -TemplateUri "https://raw.githubusercon
 
 #wait until both deployments are done
 get-job -State Running | wait-job  
-
 ```
+
+Provide a password when asked.
 
 ## Deploy a Traffic Manager Instance
 

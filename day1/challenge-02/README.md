@@ -36,7 +36,7 @@ Using the Cloud Shell saves you time as:
 -> Click the 'Cloud Shell' symbol close to your login details on the right upper corner.
 ```
 
-![Cloud Shell](./images/CloudShell.png))
+![Cloud Shell](./images/CloudShell.png)
 
 - The Azure Cloud Shell is an in-browser-accessible shell for managing Azure resources.
 - It already has the required SDKs and tools installed to interact with Azure.
@@ -132,7 +132,7 @@ Hence, when you copy and pasted non PowerShell Core scripts, they may need some 
   ```
 
 :::tip
-📝 Ok. So there are PowerShell cmds (so-called cmdlets "_action_-_target_") to administer azure. In Azure Cloud Shell they are 'pre'-installed for you. If you would want to run them from your PC you would need to install them (`install-module Az`) & update them (`update-module Az*`) on a regular basis. In PowerShell cmdlets are grouped into modules. If you want to find out which modules are installed - try `Get-Module az* -ListAvailable`. There is not a single Azure module. Instead the Azure services have their own modules - i.e. there is a module that hosts cmdlets for treating virtual machines, one for networking,...  
+📝 Ok. So there are PowerShell commands (so-called cmdlets using the format `<action>-<target>` like `New-ResourceGroup`) to administer azure. In the Azure Cloud Shell they are 'pre'-installed for you. If you would want to run them from your PC you would need to install them (`Install-Module Az`) & update them (`Update-Module Az*`) on a regular basis. In PowerShell cmdlets are grouped into modules. If you want to find out which modules are installed - try `Get-Module az* -ListAvailable`. There is not a single Azure module. Instead the Azure services have their own modules - i.e. there is a module that hosts cmdlets for treating virtual machines, one for networking, etc.  
 :::
 
 ## PowerShell Az Modules for Azure
@@ -224,8 +224,11 @@ Hence, when you copy and pasted non PowerShell Core scripts, they may need some 
   ```PowerShell
   help New-AzVM -online
   ```
+ 
 
   This should open a new browser tab with online help for `New-AzVM`. Examine the explanation and look at the code samples.
+
+  > **Note:** This command may fail when executed in the Azure Cloud Shell and ask you to copy the URL manually into a new tab.
 
 - Try creating a simple VM by executing:
 
@@ -243,8 +246,7 @@ Hence, when you copy and pasted non PowerShell Core scripts, they may need some 
   ![MyVM in Azure Portal](./images/newvm2.png)
 
 > **Note**:  
-> **Creating a vm is not that easy**. We did not specify a network, vm size, operating system,...  
-> So **a lot of defaults are assumed**. If you want to script this the code gets much longer.  
+> **Creating a vm is not that easy**. We did not specify a network, vm size, operating system, etc. As a result, **a lot of defaults are assumed**. If you want to script this the code gets much longer.  
 > Take a look at some examples by executing:
 
 ```PowerShell
