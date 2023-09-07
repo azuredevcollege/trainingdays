@@ -1,6 +1,8 @@
 <div align="center">
   <h1>Welcome to the Azure Developer College!</h1>
   <p>The Azure Developer College is a multi-days training for developers.</p>
+
+💡 __Important: This repo has been archived and it is not being maintained.__ 💡
   
 ![ADC](./images/azdc.png)
 
