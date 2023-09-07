@@ -28,7 +28,7 @@ Here's the overview of the training week. Happy hacking!
 - [Day 6 - Containerization](day6/README.md)
 - [Day 7 - Kubernetes](day7/README.md)
 
-## Contributing ##
+## Contributing ## 
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
