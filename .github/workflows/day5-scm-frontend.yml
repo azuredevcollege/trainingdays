@@ -164,6 +164,7 @@ jobs:
           -d '$web' 
           --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
           -s ./scmfe
+          --overwrite
 
   deploy-to-test:
     if: (github.repository == 'azuredevcollege/trainingdays') && ((github.event_name == 'push') || (github.event_name == 'workflow_dispatch'))
@@ -244,3 +245,4 @@ jobs:
           -d '$web' 
           --account-name ${{ steps.infrastructure.outputs.storageAccountName }} 
           -s ./scmfe
+          --overwrite
